@@ -22,6 +22,8 @@ public class Outputs{
     private CANSparkMax climbMotor;
     
 
+
+
     public Outputs() {
 
         frontLeftMotorDrive = new CANSparkMax(0, MotorType.kBrushless);
@@ -43,5 +45,42 @@ public class Outputs{
     }
     public void run() {
         
+
     }
+
+    public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
+        frontLeftMotorDrive.set(powerLF);
+        frontRightMotorDrive.set(powerRF);
+        backLeftMotorDrive.set(powerLB);
+        backRightMotorDrive.set(powerRB);
+
+    }
+
+    public void setSwerveDriveTurn(double turnLF, double turnRF, double turnLB, double turnRB) {
+        frontLeftMotorTurn.set(turnLF);
+        frontRightMotorTurn.set(turnRF);    
+        backRightMotorTurn.set(turnLB);
+        backLeftMotorTurn.set(turnRB);
+
+    }
+
+    public void setElevatorMotor(double elevate) {
+        elevatorMotor.set(elevate);
+    }
+
+    public void setGatherMotor(double gather) {
+        gatherMotor.set(gather);
+    }
+
+    public void setGatherArm(double armGather) {
+        gatherArmMotor.set(armGather);
+    }
+
+    public void climbMotor(double climb) {
+        climbMotor.set(climb);
+    }    
+       
+    
+
+
 }
