@@ -1,45 +1,50 @@
 package frc.robot.subsystems;
 
 import frc.robot.io.K;
+import frc.robot.util.Util;
 
 public class DriveTrain extends Component{
     public DriveTrain() {
         
     }
 
+    public void run() {
+        swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
+    }
+
     double[] outR = new double[4];
     double[] outTheta = new double[4];
 
-    public void run() {
+    public void swerve(double xAxis, double yAxis, double rotAxis) {
 
-       if(Math.abs(in.xAxisDrive) < 0.05) in.xAxisDrive = 0; 
-       if(Math.abs(in.yAxisDrive) < 0.05) in.yAxisDrive = 0; 
+       if(Math.abs(xAxis) < 0.05) xAxis = 0; 
+       if(Math.abs(yAxis) < 0.05) yAxis = 0; 
 
-       if(Math.abs(in.xAxisDrive) < 0.2 && Math.abs(in.yAxisDrive) < 0.2) {
-        in.xAxisDrive = 0;
-        in.yAxisDrive = 0;
+       if(Math.abs(xAxis) < 0.2 && Math.abs(yAxis) < 0.2) {
+        xAxis = 0;
+        yAxis = 0;
        }
 
-       if(Math.abs(in.rotAxisDrive) < 0.2) in.rotAxisDrive = 0;
+       if(Math.abs(rotAxis) < 0.2) rotAxis = 0;
        
        for(int i = 0; i < 4; i++){
-            double x = K.wheelXLoc[i] - K.rotCentX;
-            double y = K.wheelYLoc[i] - K.rotCentY;
+            double x = K.DRV_WheelLocX[i] - K.DRV_RotCentX;
+            double y = K.DRV_WheelLocY[i] - K.DRV_RotCentY;
             
             double h = Math.sqrt(x*x + y*y);
  
             double theta = Math.atan2(y, x);
             theta += Math.PI/2;
  
-            double r = K.swerveAngRate * h * in.rotAxisDrive;
+            double r = K.DRV_SwerveAngRate * h * rotAxis;
  
-            double wheelX = r * Math.cos(theta) + in.xAxisDrive;
-            double wheelY = r * Math.sin(theta) + in.yAxisDrive;
+            double wheelX = r * Math.cos(theta) + xAxis;
+            double wheelY = r * Math.sin(theta) + yAxis;
             outR[i] = Math.sqrt(wheelX*wheelX + wheelY*wheelY);
             theta = Math.atan2(wheelY, wheelX) * 180/Math.PI;
             theta += 180;
 
-            double measuredValue = sense.wheelAngles[i].getDistance()/K.countsPerDegree;
+            double measuredValue = sense.wheelAngles[i].getDistance()/K.DRV_CountsPerDegree;
             measuredValue = measuredValue % 360;
             if(measuredValue < 0) measuredValue += 360;
             
@@ -54,13 +59,17 @@ public class DriveTrain extends Component{
                 outR[i] = -outR[i];
             }
             
-            double anglePower = K.swerveAngKP * error;
-            outTheta[i] = Math.max(Math.min(0.5, anglePower), -0.5);
+            double anglePower = K.DRV_SwerveAngKP * error;
+            outTheta[i] = Math.max(Math.min(K.DRV_SwerveMaxAnglePwr, anglePower), -K.DRV_SwerveMaxAnglePwr);
+       }
 
-            
-            
-
-
+       //Normalize
+       double maxPwr = Util.absMax(outR);
+       if(maxPwr > 1){
+           outR[0] /= maxPwr;
+           outR[1] /= maxPwr;
+           outR[2] /= maxPwr;
+           outR[3] /= maxPwr;
        }
     }
 }
