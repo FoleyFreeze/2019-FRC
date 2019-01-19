@@ -71,5 +71,8 @@ public class DriveTrain extends Component{
            outR[2] /= maxPwr;
            outR[3] /= maxPwr;
        }
+
+       out.setSwerveDrivePower(outR[0], outR[1], outR[2], outR[3]);
+       out.setSwerveDriveTurn(outTheta[0], outTheta[1], outTheta[2], outTheta[3]);
     }
 }
