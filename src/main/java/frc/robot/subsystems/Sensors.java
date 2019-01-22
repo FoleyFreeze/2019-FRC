@@ -1,27 +1,29 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.AnalogInput;
+//import edu.wpi.first.wpilibj.Encoder;
+import frc.robot.io.K;
 
 public class Sensors extends Component {
-    public Encoder[] wheelAngles = new Encoder[4];
+
+    public AnalogInput[] angleEnc = new AnalogInput[4];
+    public double[] angles = new double[4];
 
     public Sensors() {
-        wheelAngles[0] = new Encoder(2,3);//practice bot values
-        wheelAngles[1] = new Encoder(0,1);
-        wheelAngles[2] = new Encoder(4,5);
-        wheelAngles[3] = new Encoder(6,7);
-        wheelAngles[0].setReverseDirection(true);
-        wheelAngles[1].setReverseDirection(true);
-        wheelAngles[2].setReverseDirection(true);
-        wheelAngles[3].setReverseDirection(true);
+        angleEnc[0] = new AnalogInput(0);
+        angleEnc[1] = new AnalogInput(1);
+        angleEnc[2] = new AnalogInput(2);
+        angleEnc[3] = new AnalogInput(3);
     }
 
     public void run() {
-        if(in.resetEncoders){
-            wheelAngles[0].reset();
-            wheelAngles[1].reset();
-            wheelAngles[2].reset();
-            wheelAngles[3].reset();
-        }
+       double angleFL = angleEnc[0].getAverageVoltage()/5.0*360.0 - K.SEN_AbsAngleFL;
+       double angleFR = angleEnc[1].getAverageVoltage()/5.0*360.0 - K.SEN_AbsAngleFR;
+       double angleRL = angleEnc[2].getAverageVoltage()/5.0*360.0 - K.SEN_AbsAngleRL;
+       double angleRR = angleEnc[3].getAverageVoltage()/5.0*360.0 - K.SEN_AbsAngleRR;
+       angles[0] = angleFL;
+       angles[1] = angleFR;
+       angles[2] = angleRL;
+       angles[3] = angleRR;
     }
 }

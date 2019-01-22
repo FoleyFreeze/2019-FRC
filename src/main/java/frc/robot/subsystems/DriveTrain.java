@@ -44,7 +44,7 @@ public class DriveTrain extends Component{
             theta = Math.atan2(wheelY, wheelX) * 180/Math.PI;
             theta += 180;
 
-            double measuredValue = sense.wheelAngles[i].getDistance()/K.DRV_CountsPerDegree;
+            double measuredValue = sense.angles[i];
             measuredValue = measuredValue % 360;
             if(measuredValue < 0) measuredValue += 360;
             
