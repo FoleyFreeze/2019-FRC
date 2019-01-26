@@ -26,14 +26,14 @@ public class Outputs{
 
     public Outputs() {
 
-        frontLeftMotorDrive = new CANSparkMax(0, MotorType.kBrushless);
-        frontLeftMotorTurn = new CANSparkMax(0, MotorType.kBrushless);
-        frontRightMotorDrive = new CANSparkMax(0, MotorType.kBrushless);
-        frontRightMotorTurn = new CANSparkMax(0, MotorType.kBrushless);
-        backLeftMotorDrive = new CANSparkMax(0, MotorType.kBrushless);
-        backLeftMotorTurn = new CANSparkMax(0, MotorType.kBrushless);
-        backRightMotorTurn = new CANSparkMax(0, MotorType.kBrushless);
-        backRightMotorDrive = new CANSparkMax(0, MotorType.kBrushless);
+        frontLeftMotorDrive = new CANSparkMax(ElectroJendz.FL_DRIVE_ID, MotorType.kBrushless);
+        frontLeftMotorTurn = new CANSparkMax(ElectroJendz.FL_TURN_ID, MotorType.kBrushless);
+        frontRightMotorDrive = new CANSparkMax(ElectroJendz.FR_DRIVE_ID, MotorType.kBrushless);
+        frontRightMotorTurn = new CANSparkMax(ElectroJendz.FR_TURN_ID, MotorType.kBrushless);
+        backLeftMotorDrive = new CANSparkMax(ElectroJendz.BL_DRIVE_ID, MotorType.kBrushless);
+        backLeftMotorTurn = new CANSparkMax(ElectroJendz.BL_TURN_ID, MotorType.kBrushless);
+        backRightMotorTurn = new CANSparkMax(ElectroJendz.BR_TURN_ID, MotorType.kBrushless);
+        backRightMotorDrive = new CANSparkMax(ElectroJendz.BR_DRIVE_ID, MotorType.kBrushless);
 
         elevatorMotor = new CANSparkMax(0, MotorType.kBrushless);
 
