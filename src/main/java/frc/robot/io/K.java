@@ -15,6 +15,10 @@ public class K{
     public static final double SEN_AbsAngleRL = 203.818;
     public static final double SEN_AbsAngleRR = 162.246;
 
+    public static final double GTH_IntakeSpeed = 0;
+    public static final double GTH_ShootSpeedFast = 0;
+    public static final double GTH_ShootSpeedSlow = 0;
+
     public static final int FL_DRIVE_ID = -1;
     public static final int FR_DRIVE_ID = -1;
     public static final int BL_DRIVE_ID = -1;
