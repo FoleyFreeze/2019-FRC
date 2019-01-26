@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    Component.init();
+    Component.initAll();
   }
 
   /**
@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    
+      Component.sense.init();// zero the navx
   }
 
   /**

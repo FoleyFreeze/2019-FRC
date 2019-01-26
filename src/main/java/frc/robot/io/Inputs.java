@@ -14,6 +14,7 @@ public class Inputs {
     public boolean driveStraight = false;
     public boolean fieldOrientation;
     public boolean resetEncoders;
+    public boolean fieldOriented;
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 

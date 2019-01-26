@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.io.K;
 import frc.robot.util.Util;
 
@@ -9,12 +10,25 @@ public class DriveTrain extends Component{
     }
 
     public void run() {
-        swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
+        if(in.fieldOriented) {
+            fieldSwerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
+        }else{
+             swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
+        }
     }
 
     double[] outR = new double[4];
     double[] outTheta = new double[4];
     double[] outError = new double[4];
+
+    public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
+        double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
+        double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
+        theta -= sense.robotAngle;
+        double x = r * Math.cos(theta / 180 * Math.PI);
+        double y = r * Math.sin(theta / 180 * Math.PI);
+        swerve(x, y, in.rotAxisDrive);
+    }
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
 

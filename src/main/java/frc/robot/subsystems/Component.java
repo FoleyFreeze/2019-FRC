@@ -15,7 +15,7 @@ public class Component {
     public static DiskGatherer grabDisk;
     public static DriveTrain drive;
 
-    public static void init() {
+    public static void initAll() {
         in = new Inputs();
         out = new Outputs(); 
         sense = new Sensors();
