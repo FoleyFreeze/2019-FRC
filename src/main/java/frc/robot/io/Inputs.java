@@ -14,6 +14,7 @@ public class Inputs {
     public boolean fieldOrientation;
     public boolean resetEncoders;
     public boolean fieldOriented;
+    public boolean compassDrive;
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 
@@ -52,5 +53,24 @@ public class Inputs {
             yAxisDrive = 0;
         }
         if(Math.abs(rotAxisDrive) < 0.2) rotAxisDrive = 0;
+
+        if(gamePad.getTriggerPressed()){
+            compassDrive = true;
+        }
+
+        if(compassDrive){
+            compassDrive();
+        }
     }
+
+    public void compassDrive(){
+        double theta = Math.atan2(yAxisDrive, xAxisDrive);
+        double r = Math.sqrt(xAxisDrive * xAxisDrive + yAxisDrive * yAxisDrive);
+        theta = theta/45;
+        Math.round(theta);
+        theta = theta * 45;
+        yAxisDrive = r * Math.sin(theta);
+        xAxisDrive = r * Math.cos(theta);
+    }
+
 }

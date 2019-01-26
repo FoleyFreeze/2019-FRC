@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.io.K;
 import frc.robot.util.Util;
 
