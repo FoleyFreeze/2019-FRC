@@ -1,6 +1,7 @@
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.Elevator;
 
 public class Inputs {
    
@@ -26,7 +27,8 @@ public class Inputs {
 
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
-    public boolean elevatorTarget;
+    public boolean autoElevator;
+    public Elevator.ElevatorPosition elevatorTarget;
     //elevatorTarget means you press a button and it moves to a specific place
     
     public Inputs() {

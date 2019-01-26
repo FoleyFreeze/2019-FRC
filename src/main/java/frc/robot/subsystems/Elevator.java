@@ -1,8 +1,14 @@
 package frc.robot.subsystems;
 
+import frc.robot.io.K;
+
 public class Elevator extends Component {
     
-    
+    public enum ElevatorPosition {
+        FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, 
+        ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
+        
+    }
     
     public Elevator() {
         
@@ -10,21 +16,19 @@ public class Elevator extends Component {
 
     public void run() {
                 if (in.manualElevatorUp) {
-                    // add in code to turn on motor and go up
+                    out.setElevatorMotor(K.ELE_MotorPwr);
                 } else {
                     if (in.manualElevatorDown) {
-                        // add in code to turn on motor and go down
+                        out.setElevatorMotor(-K.ELE_MotorPwr);
                     } else {
-                        if (in.elevatorTarget) {
-                            // add in code to move elevator to specific location
+                        if (in.autoElevator) {
+                           out.setElevatorMotor(0); // temp value
                         }
-                if ((!in.manualElevatorUp) && (!in.manualElevatorDown) && (!in.elevatorTarget)) {
+                if ((!in.manualElevatorUp) && (!in.manualElevatorDown) && (!in.autoElevator)) {
                     // add in code to turn off motor
+                    out.setElevatorMotor(0);
                 }
             }
         }
     }
 }  
-
-
-                
