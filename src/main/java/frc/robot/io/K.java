@@ -32,4 +32,7 @@ public class K{
 
     public static final int CLM_MotorID = -1;
 
+    public static final double ELE_MotorPwr = 1; // set to actual value later
+        
+    }
 }
