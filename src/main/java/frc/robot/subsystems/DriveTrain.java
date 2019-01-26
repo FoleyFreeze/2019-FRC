@@ -30,18 +30,26 @@ public class DriveTrain extends Component{
         swerve(x, y, in.rotAxisDrive);
     }
 
+    boolean driveStraight = false;
+    double drvStrSetPnt;
+
     public void swerve(double xAxis, double yAxis, double rotAxis) {
+        if(rotAxis == 0){
+            if(!driveStraight){
+                drvStrSetPnt = sense.robotAngle;
+            }
+            double error = drvStrSetPnt - sense.robotAngle;
+            if(error>180.0){
+                error -= 360;
+            }else if(error<-180){
+                error += 360;
+            }
+            rotAxis = error * K.DRV_SwerveStrKP;
+            driveStraight = true;
+        }else{
+            driveStraight = false;
+        }
 
-       if(Math.abs(xAxis) < 0.05) xAxis = 0; 
-       if(Math.abs(yAxis) < 0.05) yAxis = 0; 
-
-       if(Math.abs(xAxis) < 0.2 && Math.abs(yAxis) < 0.2) {
-        xAxis = 0;
-        yAxis = 0;
-       }
-
-       if(Math.abs(rotAxis) < 0.2) rotAxis = 0;
-       
        //for each wheel calculate r,theta; power and angle
        for(int i = 0; i < 4; i++){
             double x = K.DRV_WheelLocX[i] - K.DRV_RotCentX;

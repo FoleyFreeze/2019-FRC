@@ -9,6 +9,7 @@ public class K{
     public static final double   DRV_SwerveAngRate = 0.05;
     public static final double   DRV_SwerveAngKP = -0.03;
     public static final double   DRV_SwerveMaxAnglePwr = 0.5; 
+    public static final double DRV_SwerveStrKP = 0;//rotation power per degree
 
     public static final double SEN_AbsAngleFL = 231.504;
     public static final double SEN_AbsAngleFR = 343.916;

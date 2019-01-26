@@ -11,7 +11,6 @@ public class Inputs {
     public double xAxisDrive; 
     public double yAxisDrive;
     public double rotAxisDrive;
-    public boolean driveStraight = false;
     public boolean fieldOrientation;
     public boolean resetEncoders;
     public boolean fieldOriented;
@@ -39,8 +38,19 @@ public class Inputs {
         }else{
             resetEncoders = false;
         }
-        xAxisDrive = -gamePad.getRawAxis(0);
+     
+        //read joystick
+        xAxisDrive = gamePad.getRawAxis(0);
         yAxisDrive = -gamePad.getRawAxis(1);
-        rotAxisDrive = gamePad.getRawAxis(4);
+        rotAxisDrive = -gamePad.getRawAxis(4);
+
+        //deadband if tiny
+        if(Math.abs(xAxisDrive) < 0.05) xAxisDrive = 0; 
+        if(Math.abs(yAxisDrive) < 0.05) yAxisDrive = 0; 
+        if(Math.abs(xAxisDrive) < 0.2 && Math.abs(yAxisDrive) < 0.2) {
+            xAxisDrive = 0;
+            yAxisDrive = 0;
+        }
+        if(Math.abs(rotAxisDrive) < 0.2) rotAxisDrive = 0;
     }
 }
