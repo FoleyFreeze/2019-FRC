@@ -16,7 +16,8 @@ public class Outputs {
 
     private CANSparkMax elevatorMotor;
 
-    private CANSparkMax gatherMotor;
+    private CANSparkMax gatherMotorL;
+    private CANSparkMax gatherMotorR;
     private CANSparkMax gatherArmMotor;
 
     private CANSparkMax climbMotor;
@@ -37,7 +38,8 @@ public class Outputs {
 
         elevatorMotor = new CANSparkMax(0, MotorType.kBrushless);
 
-        gatherMotor = new CANSparkMax(0, MotorType.kBrushless);
+        gatherMotorL = new CANSparkMax(0, MotorType.kBrushless);
+        gatherMotorR = new CANSparkMax(0, MotorType.kBrushless);
         gatherArmMotor = new CANSparkMax(0, MotorType.kBrushless);
         
         climbMotor = new CANSparkMax(0, MotorType.kBrushless);
@@ -68,8 +70,9 @@ public class Outputs {
         elevatorMotor.set(elevate);
     }
 
-    public void setGatherMotor(double gather) {
-        gatherMotor.set(gather);
+    public void setGatherMotor(double leftSpeed, double rightSpeed) {
+        gatherMotorL.set(leftSpeed);
+        gatherMotorR.set(rightSpeed);
     }
 
     public void setGatherArm(double armGather) {

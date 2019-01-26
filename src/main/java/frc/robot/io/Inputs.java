@@ -19,12 +19,17 @@ public class Inputs {
     public boolean ballGather;
     public boolean releaseBall; 
     public boolean discGather;
-    public boolean realeseDisc;
+    public boolean releaseDisc; 
+
     public boolean climb;
     public boolean reverseclimb;
+
     public boolean elevatorUp;
     public boolean elevatorDown; 
     public int elevatorTarget = 0;
+
+
+
 
     public Inputs() {
         controlBoard = new Joystick(0);

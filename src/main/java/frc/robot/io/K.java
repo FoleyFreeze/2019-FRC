@@ -16,5 +16,8 @@ public class K{
     public static final double SEN_AbsAngleRL = 203.818;
     public static final double SEN_AbsAngleRR = 162.246;
 
-  
+    public static final double GTH_IntakeSpeed = 0;
+    public static final double GTH_ShootSpeedFast = 0;
+    public static final double GTH_ShootSpeedSlow = 0;
+
 }
