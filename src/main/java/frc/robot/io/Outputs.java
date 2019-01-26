@@ -3,7 +3,7 @@ package frc.robot.io;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class Outputs{
+public class Outputs {
     
     private CANSparkMax frontRightMotorDrive;
     private CANSparkMax frontRightMotorTurn;

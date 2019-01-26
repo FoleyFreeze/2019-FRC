@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-//import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.io.K;
 
 public class Sensors extends Component {
