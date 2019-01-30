@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.io.K;
+import frc.robot.util.Angle;
 import frc.robot.util.Util;
 
 public class DriveTrain extends Component{
@@ -23,26 +24,23 @@ public class DriveTrain extends Component{
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
         double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
         double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
-        theta -= sense.robotAngle;
+        theta = -(sense.robotAngle.add(r));
         double x = r * Math.cos(theta / 180 * Math.PI);
         double y = r * Math.sin(theta / 180 * Math.PI);
         swerve(x, y, in.rotAxisDrive);
     }
 
     boolean driveStraight = false;
-    double drvStrSetPnt;
+    Angle drvStrSetPnt = new Angle();
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         if(rotAxis == 0){
             if(!driveStraight){
+                drvStrSetPnt.set(sense.robotAngle);
                 drvStrSetPnt = sense.robotAngle;
             }
-            double error = drvStrSetPnt - sense.robotAngle;
-            if(error>180.0){
-                error -= 360;
-            }else if(error<-180){
-                error += 360;
-            }
+            double error = drvStrSetPnt.sub(sense.robotAngle);
+            
             rotAxis = error * K.DRV_SwerveStrKP;
             driveStraight = true;
         }else{
@@ -94,13 +92,8 @@ public class DriveTrain extends Component{
 
         //pid to target angle (theta)
         for(int i=0; i<4; i++){
-            double measuredValue = sense.angles[i];
-            measuredValue = measuredValue % 360;
-            if(measuredValue < 0) measuredValue += 360;
-            
-            double error = measuredValue - outTheta[i];
-            if(error > 180) error -= 360;
-            if(error < -180) error += 360;
+
+            double error = sense.angles[i].sub(outTheta[i]);
 
             if(Math.abs(error) > 90){
                 if(error > 0) error -= 180;
