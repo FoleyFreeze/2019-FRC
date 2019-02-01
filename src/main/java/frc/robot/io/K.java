@@ -34,5 +34,4 @@ public class K{
 
     public static final double ELE_MotorPwr = 1; // set to actual value later
         
-    }
 }
