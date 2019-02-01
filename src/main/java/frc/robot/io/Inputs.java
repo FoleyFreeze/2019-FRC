@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class Inputs {
    
     private final Joystick controlBoard;
-        private final Joystick gamePad;
+    private final Joystick gamePad;
         
     //----------------------------------Driver Functions--------------------------------
     public double xAxisDrive; 
@@ -24,13 +24,11 @@ public class Inputs {
     public boolean climb;
     public boolean reverseclimb;
 
-    public boolean elevatorUp;
-    public boolean elevatorDown; 
-    public int elevatorTarget = 0;
-
-
-
-
+    public boolean manualElevatorUp;
+    public boolean manualElevatorDown; 
+    public boolean elevatorTarget;
+    //elevatorTarget means you press a button and it moves to a specific place
+    
     public Inputs() {
         controlBoard = new Joystick(0);
         gamePad = new Joystick(1);
