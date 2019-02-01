@@ -24,6 +24,7 @@ public class Inputs {
 
     public boolean climb;
     public boolean reverseclimb;
+<<<<<<< HEAD
 
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
@@ -31,6 +32,16 @@ public class Inputs {
     public Elevator.ElevatorPosition elevatorTarget;
     //elevatorTarget means you press a button and it moves to a specific place
     
+=======
+
+    public boolean elevatorUp;
+    public boolean elevatorDown; 
+    public int elevatorTarget = 0;
+
+
+
+
+>>>>>>> R.B. worked on gatherer stuff
     public Inputs() {
         controlBoard = new Joystick(0);
         gamePad = new Joystick(1);
@@ -68,6 +79,7 @@ public class Inputs {
         }
     }
 
+<<<<<<< HEAD
     public void compassDrive(){
         double theta = Math.atan2(yAxisDrive, xAxisDrive);
         double r = Math.sqrt(xAxisDrive * xAxisDrive + yAxisDrive * yAxisDrive);
@@ -77,5 +89,7 @@ public class Inputs {
         yAxisDrive = r * Math.sin(theta);
         xAxisDrive = r * Math.cos(theta);
     }
+=======
+>>>>>>> R.B. worked on gatherer stuff
 
 }
