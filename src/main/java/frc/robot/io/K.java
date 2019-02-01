@@ -21,6 +21,8 @@ public class K{
     public static final double GTH_ShootSpeedSlow = 0;
 
     public static final double ELE_MotorPwr = 1; // set to actual value later
+
+    public static final double CLM_MotorSpeed = 0;
         
     public static final double CLM_MotorSpeed = 0;
     
