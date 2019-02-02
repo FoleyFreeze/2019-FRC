@@ -4,6 +4,10 @@ import frc.robot.io.K;
 import frc.robot.util.Angle;
 import frc.robot.util.Util;
 
+import static org.junit.Assert.assertEquals;
+
+import edu.wpi.first.wpilibj.Timer;
+
 public class DriveTrain extends Component{
     public DriveTrain() {
         
@@ -21,6 +25,7 @@ public class DriveTrain extends Component{
     double[] outTheta = new double[4];
     double[] outError = new double[4];
 
+    //field oriented swerve
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
         double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
         double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
@@ -30,15 +35,18 @@ public class DriveTrain extends Component{
         swerve(x, y, in.rotAxisDrive);
     }
 
-    boolean driveStraight = false;
+    boolean driveStraight = false; 
     Angle drvStrSetPnt = new Angle();
+
+    //start timer upon robot startup
+    double startTime = Timer.getFPGATimestamp();   
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         if(rotAxis == 0){
             if(!driveStraight){
                 drvStrSetPnt.set(sense.robotAngle);
                 drvStrSetPnt = sense.robotAngle;
-            }
+            } 
             double error = drvStrSetPnt.sub(sense.robotAngle);
             
             rotAxis = error * K.DRV_SwerveStrKP;
@@ -75,9 +83,10 @@ public class DriveTrain extends Component{
             outR[2] /= maxPwr;
             outR[3] /= maxPwr;
         }
-
+         
         //park if not moving
-        if(maxPwr < 0.15) {
+         double elapsedTime = Timer.getFPGATimestamp() - startTime; 
+        if(maxPwr < 0.15 && elapsedTime > K.DRV_WaitForParkTime) {
         
             outR[0] = 0;
             outTheta[0] = 45;
@@ -87,14 +96,21 @@ public class DriveTrain extends Component{
             outTheta[2] = 315;
             outR[3] = 0;
             outTheta[3] = 45;
-
+        } else if (maxPwr > 0.15)  { 
+            startTime = Timer.getFPGATimestamp(); 
+        } else {
+            out.setSwerveDrivePower(0,0,0,0);
+            out.setSwerveDriveTurn(0,0,0,0);
+            return;
         }
+
 
         //pid to target angle (theta)
         for(int i=0; i<4; i++){
 
             double error = sense.angles[i].sub(outTheta[i]);
 
+            //pick shortest path
             if(Math.abs(error) > 90){
                 if(error > 0) error -= 180;
                 else error += 180;
