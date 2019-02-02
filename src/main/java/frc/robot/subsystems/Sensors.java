@@ -13,6 +13,7 @@ public class Sensors extends Component {
 
     public Angle robotAngle = new Angle();
     public Angle[] angles = new Angle[4];
+    public double elevatorEncoder;
 
     public Sensors() {
         angleEnc[0] = new AnalogInput(0);
