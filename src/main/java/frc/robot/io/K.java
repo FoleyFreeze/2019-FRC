@@ -43,9 +43,12 @@ public class K{
     public static final int IN_resetGyro = 1;
     public static final int IN_compassDrive = -0;//for future, unknown button values = -0
     public static final int IN_fieldOriented = -0;
+    public static final int IN_pitMode = -0;
     //Axes
     public static final int IN_xDriveAxis = 0;
     public static final int IN_yDriveAxis = 1;
     public static final int IN_rotDriveAxis = 4;
+
+    public static final double OUT_PitModeLimit = 0.25;
     
 }

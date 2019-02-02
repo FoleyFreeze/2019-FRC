@@ -50,37 +50,37 @@ public class OutputsCompBot extends Outputs {
     }
     //Assign powers to motors
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
-        frontLeftMotorDrive.set(powerLF);
-        frontRightMotorDrive.set(powerRF);
-        backLeftMotorDrive.set(powerLB);
-        backRightMotorDrive.set(powerRB);
+        frontLeftMotorDrive.set(limit(powerLF));
+        frontRightMotorDrive.set(limit(powerRF));
+        backLeftMotorDrive.set(limit(powerLB));
+        backRightMotorDrive.set(limit(powerRB));
 
     }
 
     //Assign powers to turn motors 
     public void setSwerveDriveTurn(double turnLF, double turnRF, double turnLB, double turnRB) {
-        frontLeftMotorTurn.set(turnLF);
-        frontRightMotorTurn.set(turnRF);    
-        backLeftMotorTurn.set(turnLB);
-        backRightMotorTurn.set(turnRB);
+        frontLeftMotorTurn.set(limit(turnLF));
+        frontRightMotorTurn.set(limit(turnRF));    
+        backLeftMotorTurn.set(limit(turnLB));
+        backRightMotorTurn.set(limit(turnRB));
 
     }
 
     public void setElevatorMotor(double elevate) {
-        elevatorMotor.set(elevate);
+        elevatorMotor.set(limit(elevate));
     }
 
     public void setGatherMotor(double leftSpeed, double rightSpeed) {
-        gatherMotorL.set(leftSpeed);
-        gatherMotorR.set(rightSpeed);
+        gatherMotorL.set(limit(leftSpeed));
+        gatherMotorR.set(limit(rightSpeed));
     }
 
     public void setGatherArm(double armGather) {
-        gatherArmMotor.set(armGather);
+        gatherArmMotor.set(limit(armGather));
     }
 
     public void climbMotor(double climb) {
-        climbMotor.set(climb);
+        climbMotor.set(limit(climb));
     }    
        
     

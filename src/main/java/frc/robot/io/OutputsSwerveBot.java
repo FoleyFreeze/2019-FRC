@@ -34,10 +34,10 @@ public class OutputsSwerveBot extends Outputs {
     }
 
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
-        frontLeftMotorDrive.set(powerLF);
-        frontRightMotorDrive.set(powerRF);
-        backLeftMotorDrive.set(powerLB);
-        backRightMotorDrive.set(powerRB);
+        frontLeftMotorDrive.set(limit(powerLF));
+        frontRightMotorDrive.set(limit(powerRF));
+        backLeftMotorDrive.set(limit(powerLB));
+        backRightMotorDrive.set(limit(powerRB));
 
     }
 

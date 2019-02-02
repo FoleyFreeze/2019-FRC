@@ -1,8 +1,8 @@
 package frc.robot.io;
 
+import frc.robot.subsystems.Component;
 
-
-public abstract class Outputs {
+public abstract class Outputs extends Component {
  
 
     public Outputs() {
@@ -41,7 +41,12 @@ public abstract class Outputs {
         
     }    
        
-    
+    protected double limit(double value) {
+        if(in.pitMode){
+            value = Math.min(K.OUT_PitModeLimit, Math.max(-K.OUT_PitModeLimit, value));
+        } 
+        return value;
+    }
 
 
 }

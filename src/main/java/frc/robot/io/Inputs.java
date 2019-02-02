@@ -31,6 +31,8 @@ public class Inputs extends Component {
     public Elevator.ElevatorPosition elevatorTarget;
     //elevatorTarget means you press a button and it moves to a specific place
     
+    public boolean pitMode;
+
     public Inputs() {
         controlBoard = new Joystick(ElectroJendz.CONTROL_BOARD);
         gamePad = new Joystick(ElectroJendz.GAMEPAD);
@@ -60,6 +62,7 @@ public class Inputs extends Component {
 
         compassDrive = gamePad.getRawButton(K.IN_compassDrive);
         fieldOriented = gamePad.getRawButton(K.IN_fieldOriented);
+        pitMode = gamePad.getRawButton(K.IN_pitMode);
 
         if(compassDrive){
             compassDrive();
