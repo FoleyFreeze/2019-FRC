@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 import frc.robot.io.Inputs;
+import frc.robot.io.K;
 import frc.robot.io.Outputs;
+import frc.robot.io.OutputsCompBot;
 import frc.robot.io.Vision;
 
 public class Component {
@@ -17,7 +19,6 @@ public class Component {
 
     public static void initAll() {
         in = new Inputs();
-        out = new Outputs(); 
         sense = new Sensors();
         view = new Vision();
         grabCargo = new BallGatherer();
@@ -25,6 +26,16 @@ public class Component {
         elevator = new Elevator();
         grabDisk = new DiskGatherer();
         drive = new DriveTrain(); 
+
+        switch(K.BOT_Version){
+            case COMPETITION:
+            case PRACTICE:
+                out = new OutputsCompBot();
+                break;
+            case SWERVE_BOT:
+                out = new OutputsCompBot();
+                break;
+        }
     }
 
     public static void runAll(){

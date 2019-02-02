@@ -1,6 +1,12 @@
 package frc.robot.io;
 
 public class K{
+    
+    public enum RobotType {
+        COMPETITION, PRACTICE, SWERVE_BOT
+    }
+    public static final RobotType BOT_Version = RobotType.COMPETITION;
+
     public static final double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
     public static final double[] DRV_WheelLocX = {1,2,3,4};
     public static final double[] DRV_WheelLocY = {1,2,3,4};
@@ -10,7 +16,7 @@ public class K{
     public static final double   DRV_SwerveAngKP = -0.03;
     public static final double   DRV_SwerveMaxAnglePwr = 0.5; 
     public static final double   DRV_SwerveStrKP = 0;//rotation power per degree
-
+    public static final double   DRV_WaitForParkTime = 2; 
 
     public static final double SEN_AbsAngleFL = 231.504;
     public static final double SEN_AbsAngleFR = 343.916;
