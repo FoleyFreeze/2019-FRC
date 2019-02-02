@@ -61,8 +61,8 @@ public class Outputs {
     public void setSwerveDriveTurn(double turnLF, double turnRF, double turnLB, double turnRB) {
         frontLeftMotorTurn.set(turnLF);
         frontRightMotorTurn.set(turnRF);    
-        backRightMotorTurn.set(turnLB);
-        backLeftMotorTurn.set(turnRB);
+        backLeftMotorTurn.set(turnLB);
+        backRightMotorTurn.set(turnRB);
 
     }
 
