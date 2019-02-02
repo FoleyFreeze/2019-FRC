@@ -10,8 +10,17 @@ public class DriveTrain extends Component{
         
     }
 
+    boolean prevDodge = false;
+
     public void run() {
-        if(in.fieldOriented) {
+        boolean firstDodge = (in.dodgingL || in.dodgingR) && !prevDodge;
+        prevDodge = in.dodgingL || in.dodgingR;
+
+        if(in.dodgingL){
+            dodge(firstDodge, -1);
+        }else if(in.dodgingR){
+            dodge(firstDodge, 1);
+        }else if(in.fieldOriented) {
             fieldSwerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
         }else{
              swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
@@ -22,6 +31,28 @@ public class DriveTrain extends Component{
     double[] outTheta = new double[4];
     double[] outError = new double[4];
 
+    double prevAng = 0;
+    double deltaDegSum = 0;
+    double dodgeDirX = 0;
+    double dodgeDirY = 0;
+
+    public void dodge(boolean firstTime, double turnPower){
+        if(firstTime){
+            deltaDegSum = 0;
+            prevAng = sense.robotAngle.get();
+            double rad = prevAng * Math.PI / 180.0;
+            dodgeDirX = Math.cos(rad);
+            dodgeDirY = Math.sin(rad);
+        }
+
+        double deltaDeg = sense.robotAngle.sub(prevAng);
+        deltaDegSum +=deltaDeg;
+        prevAng = sense.robotAngle.get();
+        if(Math.abs(deltaDegSum) > 360) turnPower = 0;
+
+        fieldSwerve(dodgeDirX, dodgeDirY, turnPower);
+    }
+
     //field oriented swerve
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
         double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
@@ -30,6 +61,7 @@ public class DriveTrain extends Component{
         double x = r * Math.cos(theta / 180 * Math.PI);
         double y = r * Math.sin(theta / 180 * Math.PI);
         swerve(x, y, in.rotAxisDrive);
+
     }
 
     boolean driveStraight = false; 
