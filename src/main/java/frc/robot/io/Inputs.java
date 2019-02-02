@@ -2,8 +2,9 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Component;
 
-public class Inputs {
+public class Inputs extends Component {
    
     private final Joystick controlBoard;
     private final Joystick gamePad;
@@ -12,7 +13,6 @@ public class Inputs {
     public double xAxisDrive; 
     public double yAxisDrive;
     public double rotAxisDrive;
-    public boolean fieldOrientation;
     public boolean resetEncoders;
     public boolean fieldOriented;
     public boolean compassDrive;
@@ -32,36 +32,34 @@ public class Inputs {
     //elevatorTarget means you press a button and it moves to a specific place
     
     public Inputs() {
-        controlBoard = new Joystick(0);
-        gamePad = new Joystick(1);
+        controlBoard = new Joystick(ElectroJendz.CONTROL_BOARD);
+        gamePad = new Joystick(ElectroJendz.GAMEPAD);
     }
 
     
 
     public void run() {
-        if(gamePad.getRawButton(1)){
-            resetEncoders = true;
-        }else{
-            resetEncoders = false;
+        if(gamePad.getRawButton(K.IN_resetGyro)){
+            sense.init();
         }
+
      
         //read joystick
-        xAxisDrive = gamePad.getRawAxis(0);
-        yAxisDrive = -gamePad.getRawAxis(1);
-        rotAxisDrive = -gamePad.getRawAxis(4);
+        xAxisDrive = gamePad.getRawAxis(K.IN_xDriveAxis);
+        yAxisDrive = -gamePad.getRawAxis(K.IN_yDriveAxis);
+        rotAxisDrive = -gamePad.getRawAxis(K.IN_rotDriveAxis);
 
         //deadband if tiny
-        if(Math.abs(xAxisDrive) < 0.05) xAxisDrive = 0; 
-        if(Math.abs(yAxisDrive) < 0.05) yAxisDrive = 0; 
-        if(Math.abs(xAxisDrive) < 0.2 && Math.abs(yAxisDrive) < 0.2) {
+        if(Math.abs(xAxisDrive) < K.IN_xDeadband) xAxisDrive = 0; 
+        if(Math.abs(yAxisDrive) < K.IN_xDeadband) yAxisDrive = 0; 
+        if(Math.abs(xAxisDrive) < K.IN_xyDeadband && Math.abs(yAxisDrive) < K.IN_xyDeadband) {
             xAxisDrive = 0;
             yAxisDrive = 0;
         }
-        if(Math.abs(rotAxisDrive) < 0.2) rotAxisDrive = 0;
+        if(Math.abs(rotAxisDrive) < K.IN_rotDeadband) rotAxisDrive = 0;
 
-        if(gamePad.getTriggerPressed()){
-            compassDrive = true;
-        }
+        compassDrive = gamePad.getRawButton(K.IN_compassDrive);
+        fieldOriented = gamePad.getRawButton(K.IN_fieldOriented);
 
         if(compassDrive){
             compassDrive();

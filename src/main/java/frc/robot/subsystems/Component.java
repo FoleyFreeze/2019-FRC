@@ -29,7 +29,6 @@ public class Component {
 
     public static void runAll(){
         in.run();
-        out.run();
         sense.run();
         view.run();
         grabCargo.run();
@@ -37,6 +36,7 @@ public class Component {
         elevator.run();
         grabDisk.run();
         drive.run();
+        out.run();
     }
 
 }
