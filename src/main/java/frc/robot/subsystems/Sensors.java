@@ -28,7 +28,7 @@ public class Sensors extends Component {
     }
 
     public void init() {
-        navx.zeroYaw();
+        navx.zeroYaw();//reset navx
     }
 
     public void run() {

@@ -27,6 +27,7 @@ public class Component {
         grabDisk = new DiskGatherer();
         drive = new DriveTrain(); 
 
+        //case machine to implement proper outputs
         switch(K.BOT_Version){
             case COMPETITION:
             case PRACTICE:
@@ -38,6 +39,7 @@ public class Component {
         }
     }
 
+    
     public static void runAll(){
         in.run();
         sense.run();

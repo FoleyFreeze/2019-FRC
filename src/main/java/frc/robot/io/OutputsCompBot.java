@@ -3,6 +3,8 @@ package frc.robot.io;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Solenoid;
+
 public class OutputsCompBot extends Outputs {
         
     private CANSparkMax frontRightMotorDrive;
@@ -21,7 +23,8 @@ public class OutputsCompBot extends Outputs {
     private CANSparkMax gatherArmMotor;
 
     private CANSparkMax climbMotor;
-    
+
+   
 
     public OutputsCompBot() {
        
@@ -33,6 +36,7 @@ public class OutputsCompBot extends Outputs {
         backLeftMotorTurn = new CANSparkMax(ElectroJendz.BL_TURN_ID, MotorType.kBrushless);
         backRightMotorTurn = new CANSparkMax(ElectroJendz.BR_TURN_ID, MotorType.kBrushless);
         backRightMotorDrive = new CANSparkMax(ElectroJendz.BR_DRIVE_ID, MotorType.kBrushless);
+
 
         elevatorMotor = new CANSparkMax(0, MotorType.kBrushless);
 

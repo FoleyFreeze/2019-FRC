@@ -19,7 +19,7 @@ public class Inputs extends Component {
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 
-    public boolean discGather;
+    public boolean diskGather;
     public boolean releaseDisc; 
 
     public boolean climb;
@@ -40,7 +40,7 @@ public class Inputs extends Component {
 
     public void run() {
         if(gamePad.getRawButton(K.IN_resetGyro)){
-            sense.init();
+            sense.init();//reset navx angle
         }
 
      
@@ -56,10 +56,12 @@ public class Inputs extends Component {
             xAxisDrive = 0;
             yAxisDrive = 0;
         }
-        if(Math.abs(rotAxisDrive) < K.IN_rotDeadband) rotAxisDrive = 0;
+        if(Math.abs(rotAxisDrive) < K.IN_rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
 
+        //set buttons
         compassDrive = gamePad.getRawButton(K.IN_compassDrive);
         fieldOriented = gamePad.getRawButton(K.IN_fieldOriented);
+        diskGather = gamePad.getRawButton(K.IN_diskGather);
 
         if(compassDrive){
             compassDrive();
@@ -67,6 +69,7 @@ public class Inputs extends Component {
     }
 
     public void compassDrive(){
+        //x and y to theta and r
         double theta = Math.atan2(yAxisDrive, xAxisDrive);
         double r = Math.sqrt(xAxisDrive * xAxisDrive + yAxisDrive * yAxisDrive);
         theta = theta/45;
