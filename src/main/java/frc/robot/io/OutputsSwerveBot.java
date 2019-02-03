@@ -34,18 +34,18 @@ public class OutputsSwerveBot extends Outputs {
     }
 
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
-        frontLeftMotorDrive.set(powerLF);
-        frontRightMotorDrive.set(powerRF);
-        backLeftMotorDrive.set(powerLB);
-        backRightMotorDrive.set(powerRB);
+        frontLeftMotorDrive.set(powerLF*K.DRV_SwerveDrivePwrScale);
+        frontRightMotorDrive.set(powerRF*K.DRV_SwerveDrivePwrScale);
+        backLeftMotorDrive.set(powerLB*K.DRV_SwerveDrivePwrScale);
+        backRightMotorDrive.set(powerRB*K.DRV_SwerveDrivePwrScale);
 
     }
 
     public void setSwerveDriveTurn(double turnLF, double turnRF, double turnLB, double turnRB) {
         frontLeftMotorTurn.set(ControlMode.PercentOutput, turnLF);
         frontRightMotorTurn.set(ControlMode.PercentOutput, turnRF);    
-        backRightMotorTurn.set(ControlMode.PercentOutput, turnLB);
-        backLeftMotorTurn.set(ControlMode.PercentOutput, turnRB);
+        backLeftMotorTurn.set(ControlMode.PercentOutput, turnLB);
+        backRightMotorTurn.set(ControlMode.PercentOutput, turnRB);
 
     }
 }

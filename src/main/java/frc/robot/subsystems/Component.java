@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.io.Inputs;
 import frc.robot.io.K;
 import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
+import frc.robot.io.OutputsSwerveBot;
 import frc.robot.io.Vision;
 
 public class Component {
@@ -33,7 +35,7 @@ public class Component {
                 out = new OutputsCompBot();
                 break;
             case SWERVE_BOT:
-                out = new OutputsCompBot();
+                out = new OutputsSwerveBot();
                 break;
         }
     }

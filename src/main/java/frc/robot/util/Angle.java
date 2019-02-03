@@ -16,8 +16,8 @@ public class Angle{
     }
 
     private double limit(double value){
-        while(value > 180)value -= 360;
-        while(value < -180)value += 360;
+        while(value > 180) value -= 360;
+        while(value < -180) value += 360;
         return value;
     }
 

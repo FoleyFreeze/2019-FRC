@@ -4,6 +4,7 @@ import frc.robot.io.K;
 import frc.robot.util.Angle;
 import frc.robot.util.Util;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Component{
     public DriveTrain() {
@@ -26,7 +27,7 @@ public class DriveTrain extends Component{
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
         double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
         double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
-        theta = -(sense.robotAngle.add(r));
+        theta = -(sense.robotAngle.add(r)); // = r - robotAngle
         double x = r * Math.cos(theta / 180 * Math.PI);
         double y = r * Math.sin(theta / 180 * Math.PI);
         swerve(x, y, in.rotAxisDrive);
@@ -69,6 +70,8 @@ public class DriveTrain extends Component{
             outR[i] = Math.sqrt(wheelX*wheelX + wheelY*wheelY);
             theta = Math.atan2(wheelY, wheelX) * 180/Math.PI;
             theta += 180;
+
+            outTheta[i] = theta;
        }
 
 
@@ -82,7 +85,7 @@ public class DriveTrain extends Component{
         }
          
         //park if not moving
-         double elapsedTime = Timer.getFPGATimestamp() - startTime; 
+        double elapsedTime = Timer.getFPGATimestamp() - startTime; 
         if(maxPwr < 0.15 && elapsedTime > K.DRV_WaitForParkTime) {
         
             outR[0] = 0;
@@ -101,6 +104,7 @@ public class DriveTrain extends Component{
             return;
         }
 
+        SmartDashboard.putNumberArray("TargetAngles", outTheta);
 
         //pid to target angle (theta)
         for(int i=0; i<4; i++){

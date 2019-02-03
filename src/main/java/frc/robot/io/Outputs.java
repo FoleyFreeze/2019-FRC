@@ -15,7 +15,6 @@ public abstract class Outputs {
     }
     //Assign powers to motors
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
-      
 
     }
 
