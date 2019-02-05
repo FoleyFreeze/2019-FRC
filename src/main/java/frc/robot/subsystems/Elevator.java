@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.io.K;
-
 public class Elevator extends Component {
     
     public enum ElevatorPosition {
@@ -20,9 +18,9 @@ public class Elevator extends Component {
             gotoPosition(in.elevatorTarget);
         } else { //in manual mode
             if (in.manualElevatorUp) {
-                out.setElevatorMotor(K.ELE_MotorPwr);
+                out.setElevatorMotor(k.ELE_MotorPwr);
             } else if (in.manualElevatorDown) {
-                out.setElevatorMotor(-K.ELE_MotorPwr);   
+                out.setElevatorMotor(-k.ELE_MotorPwr);   
             } else {
                 out.setElevatorMotor(0);
             }
@@ -30,10 +28,10 @@ public class Elevator extends Component {
     }
 
     public void gotoPosition (ElevatorPosition position) {
-        double setpoint = K.ELE_PositionArray[position.ordinal()];
+        double setpoint = k.ELE_PositionArray[position.ordinal()];
 
         double error = setpoint - sense.elevatorEncoder;
 
-        out.setElevatorMotor(error*K.ELE_PositionKP);
+        out.setElevatorMotor(error*k.ELE_PositionKP);
     }
 }  

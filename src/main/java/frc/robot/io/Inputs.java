@@ -43,32 +43,32 @@ public class Inputs extends Component {
     
 
     public void run() {
-        if(gamePad.getRawButton(K.IN_resetGyro)){
-            sense.init();//reset navx angle
+        if(gamePad.getRawButton(k.IN_resetGyro)){
+            sense.init();
         }
 
      
         //read joystick
-        xAxisDrive = -gamePad.getRawAxis(K.IN_xDriveAxis);
-        yAxisDrive = gamePad.getRawAxis(K.IN_yDriveAxis);
-        rotAxisDrive = -gamePad.getRawAxis(K.IN_rotDriveAxis);
+        xAxisDrive = -gamePad.getRawAxis(k.IN_xDriveAxis);
+        yAxisDrive = gamePad.getRawAxis(k.IN_yDriveAxis);
+        rotAxisDrive = -gamePad.getRawAxis(k.IN_rotDriveAxis);
 
         //deadband if tiny
-        if(Math.abs(xAxisDrive) < K.IN_xDeadband) xAxisDrive = 0; 
-        if(Math.abs(yAxisDrive) < K.IN_xDeadband) yAxisDrive = 0; 
-        if(Math.abs(xAxisDrive) < K.IN_xyDeadband && Math.abs(yAxisDrive) < K.IN_xyDeadband) {
+        if(Math.abs(xAxisDrive) < k.IN_xDeadband) xAxisDrive = 0; 
+        if(Math.abs(yAxisDrive) < k.IN_xDeadband) yAxisDrive = 0; 
+        if(Math.abs(xAxisDrive) < k.IN_xyDeadband && Math.abs(yAxisDrive) < k.IN_xyDeadband) {
             xAxisDrive = 0;
             yAxisDrive = 0;
         }
-        if(Math.abs(rotAxisDrive) < K.IN_rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
+        if(Math.abs(rotAxisDrive) < k.IN_rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
 
         //set buttons
-        compassDrive = gamePad.getRawButton(K.IN_compassDrive);
-        fieldOriented = gamePad.getRawButton(K.IN_fieldOriented);
-        pitMode = gamePad.getRawButton(K.IN_pitMode);
-        diskGather = gamePad.getRawButton(K.IN_diskGather);
-        dodgingL = gamePad.getRawAxis(K.IN_dodgingL) > K.IN_DodgingMin;
-        dodgingR = gamePad.getRawAxis(K.IN_dodgingR) > K.IN_DodgingMin;
+        compassDrive = gamePad.getRawButton(k.IN_compassDrive);
+        fieldOriented = gamePad.getRawButton(k.IN_fieldOriented);
+        pitMode = gamePad.getRawButton(k.IN_pitMode);
+        diskGather = gamePad.getRawButton(k.IN_diskGather);
+        dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
+        dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
 
         if(compassDrive){
             compassDrive();

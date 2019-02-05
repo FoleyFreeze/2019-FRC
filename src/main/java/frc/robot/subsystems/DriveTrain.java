@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.io.K;
 import frc.robot.util.Angle;
 import frc.robot.util.Util;
 import edu.wpi.first.wpilibj.Timer;
@@ -79,7 +78,7 @@ public class DriveTrain extends Component{
             } 
             double error = drvStrSetPnt.sub(sense.robotAngle);
             
-            rotAxis = error * K.DRV_SwerveStrKP;
+            rotAxis = error * k.DRV_SwerveStrKP;
             driveStraight = true;
         }else{
             driveStraight = false;
@@ -87,15 +86,15 @@ public class DriveTrain extends Component{
 
        //for each wheel calculate r,theta; power and angle
        for(int i = 0; i < 4; i++){
-            double x = K.DRV_WheelLocX[i] - K.DRV_RotCentX;
-            double y = K.DRV_WheelLocY[i] - K.DRV_RotCentY;
+            double x = k.DRV_WheelLocX[i] - k.DRV_RotCentX;
+            double y = k.DRV_WheelLocY[i] - k.DRV_RotCentY;
             
             double h = Math.sqrt(x*x + y*y);
  
             double theta = Math.atan2(y, x);
             theta += Math.PI/2;
  
-            double r = K.DRV_SwerveAngRate * h * rotAxis;
+            double r = k.DRV_SwerveAngRate * h * rotAxis;
  
             double wheelX = r * Math.cos(theta) + xAxis;
             double wheelY = r * Math.sin(theta) + yAxis;
@@ -118,7 +117,7 @@ public class DriveTrain extends Component{
          
         //park if not moving
         double elapsedTime = Timer.getFPGATimestamp() - startTime; 
-        if(maxPwr < 0.15 && elapsedTime > K.DRV_WaitForParkTime) {
+        if(maxPwr < 0.15 && elapsedTime > k.DRV_WaitForParkTime) {
         
             outR[0] = 0;
             outTheta[0] = 45;
@@ -152,8 +151,8 @@ public class DriveTrain extends Component{
             }
             SmartDashboard.putNumber("Error " + i, error);
             
-            double anglePower = K.DRV_SwerveAngKP * error;
-            outError[i] = Math.max(Math.min(K.DRV_SwerveMaxAnglePwr, anglePower), -K.DRV_SwerveMaxAnglePwr);
+            double anglePower = k.DRV_SwerveAngKP * error;
+            outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);
         }
 
         //out.swerveDriveAngle(sense.angles, relEnc, outTheta, outR);
