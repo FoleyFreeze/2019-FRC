@@ -36,7 +36,12 @@ public class K{
     public static final double GTH_ShootSpeedSlow = 0;
 
 
-    public static final double ELE_MotorPwr = 1; // set to actual value later
+    public static final double ELE_MotorPwr = 0.25; // set to actual value later
+    public static final double[] ELE_PositionArray = {
+        //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
+            0,               0,               0,              0,              0,              0,             0,               0,          0,          0
+    };
+    public static final double ELE_PositionKP = 0;
 
 
     public static final double CLM_MotorSpeed = 0;

@@ -15,20 +15,25 @@ public class Elevator extends Component {
     }
 
     public void run() {
-                if (in.manualElevatorUp) {
-                    out.setElevatorMotor(K.ELE_MotorPwr);
-                } else {
-                    if (in.manualElevatorDown) {
-                        out.setElevatorMotor(-K.ELE_MotorPwr);
-                    } else {
-                        if (in.autoElevator) {
-                           out.setElevatorMotor(0); // temp value
-                        }
-                if ((!in.manualElevatorUp) && (!in.manualElevatorDown) && (!in.autoElevator)) {
-                    // add in code to turn off motor
-                    out.setElevatorMotor(0);
-                }
+
+        if (in.autoElevator){
+            gotoPosition(in.elevatorTarget);
+        } else { //in manual mode
+            if (in.manualElevatorUp) {
+                out.setElevatorMotor(K.ELE_MotorPwr);
+            } else if (in.manualElevatorDown) {
+                out.setElevatorMotor(-K.ELE_MotorPwr);   
+            } else {
+                out.setElevatorMotor(0);
             }
         }
+    }
+
+    public void gotoPosition (ElevatorPosition position) {
+        double setpoint = K.ELE_PositionArray[position.ordinal()];
+
+        double error = setpoint - sense.elevatorEncoder;
+
+        out.setElevatorMotor(error*K.ELE_PositionKP);
     }
 }  
