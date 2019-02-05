@@ -48,6 +48,8 @@ public class Calibrations{
     public int IN_dodgingL;
     public int IN_dodgingR;
     public double OUT_PitModeLimit;
+    public boolean OUT_DriveBrakeMode;
+
 
     
     public Calibrations(){
@@ -90,5 +92,6 @@ public class Calibrations{
         IN_dodgingR = 3;
 
         OUT_PitModeLimit = 0.25;
+        OUT_DriveBrakeMode = true;
     }   
 }
