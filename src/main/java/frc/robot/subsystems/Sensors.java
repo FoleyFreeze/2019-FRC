@@ -16,10 +16,10 @@ public class Sensors extends Component {
     public Angle[] angles = new Angle[4];
 
     public Sensors() {
-        angleEnc[0] = new AnalogInput(0);
+        angleEnc[0] = new AnalogInput(2);
         angleEnc[1] = new AnalogInput(1);
-        angleEnc[2] = new AnalogInput(2);
-        angleEnc[3] = new AnalogInput(3);
+        angleEnc[2] = new AnalogInput(3);
+        angleEnc[3] = new AnalogInput(0);
         navx = new AHRS(Port.kMXP);
 
         //init angle objects

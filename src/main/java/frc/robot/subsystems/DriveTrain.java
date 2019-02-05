@@ -118,6 +118,7 @@ public class DriveTrain extends Component{
 
                 outR[i] = -outR[i];
             }
+            SmartDashboard.putNumber("Error " + i, error);
             
             double anglePower = K.DRV_SwerveAngKP * error;
             outError[i] = Math.max(Math.min(K.DRV_SwerveMaxAnglePwr, anglePower), -K.DRV_SwerveMaxAnglePwr);

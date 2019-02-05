@@ -1,6 +1,7 @@
 package frc.robot.io;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class OutputsCompBot extends Outputs {
@@ -34,6 +35,16 @@ public class OutputsCompBot extends Outputs {
         backRightMotorTurn = new CANSparkMax(ElectroJendz.BR_TURN_ID, MotorType.kBrushless);
         backRightMotorDrive = new CANSparkMax(ElectroJendz.BR_DRIVE_ID, MotorType.kBrushless);
 
+        frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
+        frontRightMotorDrive.setIdleMode(IdleMode.kBrake);
+        backLeftMotorDrive.setIdleMode(IdleMode.kBrake);
+        backRightMotorDrive.setIdleMode(IdleMode.kBrake);
+
+        frontLeftMotorTurn.setIdleMode(IdleMode.kBrake);
+        frontRightMotorTurn.setIdleMode(IdleMode.kBrake);
+        backLeftMotorTurn.setIdleMode(IdleMode.kBrake);
+        backRightMotorTurn.setIdleMode(IdleMode.kBrake);
+
         elevatorMotor = new CANSparkMax(0, MotorType.kBrushless);
 
         gatherMotorL = new CANSparkMax(0, MotorType.kBrushless);
@@ -50,10 +61,10 @@ public class OutputsCompBot extends Outputs {
     }
     //Assign powers to motors
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
-        frontLeftMotorDrive.set(powerLF);
-        frontRightMotorDrive.set(powerRF);
-        backLeftMotorDrive.set(powerLB);
-        backRightMotorDrive.set(powerRB);
+        frontLeftMotorDrive.set(powerLF*K.DRV_SwerveDrivePwrScale);
+        frontRightMotorDrive.set(powerRF*K.DRV_SwerveDrivePwrScale);
+        backLeftMotorDrive.set(-powerLB*K.DRV_SwerveDrivePwrScale);
+        backRightMotorDrive.set(-powerRB*K.DRV_SwerveDrivePwrScale);
 
     }
 
