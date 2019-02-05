@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.io.K;
+import frc.robot.io.Calibrations;
 
 public class BallGatherer extends Component{
 
@@ -10,10 +10,10 @@ public class BallGatherer extends Component{
     
     public void run() {
         if(in.ballGather){
-            out.setGatherMotor(K.GTH_IntakeSpeed, K.GTH_IntakeSpeed);
+            out.setGatherMotor(Calibrations.GTH_IntakeSpeed, Calibrations.GTH_IntakeSpeed);
         }
         else if(in.releaseBall){
-            out.setGatherMotor(K.GTH_ShootSpeedFast, K.GTH_ShootSpeedSlow);
+            out.setGatherMotor(Calibrations.GTH_ShootSpeedFast, Calibrations.GTH_ShootSpeedSlow);
         }
         else {
             out.setGatherMotor(0,0); 
