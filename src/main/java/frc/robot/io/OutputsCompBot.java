@@ -3,8 +3,6 @@ package frc.robot.io;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Solenoid;
-
 public class OutputsCompBot extends Outputs {
         
     private CANSparkMax frontRightMotorDrive;
