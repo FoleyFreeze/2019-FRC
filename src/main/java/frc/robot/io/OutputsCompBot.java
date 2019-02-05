@@ -22,7 +22,8 @@ public class OutputsCompBot extends Outputs {
     private CANSparkMax gatherArmMotor;
 
     private CANSparkMax climbMotor;
-    
+
+   
 
     public OutputsCompBot() {
        

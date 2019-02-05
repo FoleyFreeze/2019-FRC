@@ -30,7 +30,7 @@ public class Sensors extends Component {
 
     double navXoffset = 90;
     public void init() {
-        navx.zeroYaw();
+        navx.zeroYaw();//reset navx
     }
 
     double[] rawAngles = {0,0,0,0};

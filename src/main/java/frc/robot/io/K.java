@@ -40,16 +40,18 @@ public class K{
 
     public static final double CLM_MotorSpeed = 0;
 
-
+    //overiding joystick if values are too small
     public static final double IN_xDeadband = 0.05;
     public static final double IN_yDeadband = 0.05;
     public static final double IN_rotDeadband = 0.2;
     public static final double IN_xyDeadband = 0.2;
+
     //Buttons
     public static final int IN_resetGyro = 1;
     public static final int IN_compassDrive = 5;//for future, unknown button values = -0
     public static final int IN_fieldOriented = 6;
     public static final int IN_pitMode = -0;
+    public static final int IN_diskGather = -0;
     //Axes
     public static final int IN_xDriveAxis = 0;
     public static final int IN_yDriveAxis = 1;

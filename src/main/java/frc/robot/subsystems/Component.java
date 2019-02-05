@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.io.Inputs;
 import frc.robot.io.K;
 import frc.robot.io.Outputs;
@@ -29,6 +28,7 @@ public class Component {
         grabDisk = new DiskGatherer();
         drive = new DriveTrain(); 
 
+        //case machine to implement proper outputs
         switch(K.BOT_Version){
             case COMPETITION:
             case PRACTICE:
@@ -40,11 +40,12 @@ public class Component {
         }
     }
 
+    
     public static void runAll(){
         in.run();
         sense.run();
         view.run();
-        //grabCargo.run();
+        //grabCargo.run();//UNCOMMENT WHEN ATTACHED
         //climb.run();
         //elevator.run();
         //grabDisk.run();

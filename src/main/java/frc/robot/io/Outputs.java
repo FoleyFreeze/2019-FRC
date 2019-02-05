@@ -1,12 +1,16 @@
 package frc.robot.io;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.subsystems.Component;
 
 public abstract class Outputs extends Component {
  
+    private Solenoid gatherSolenoid1;
+    private Solenoid gatherSolenoid2;
 
     public Outputs() {
-        
+        gatherSolenoid1 = new Solenoid(1);
+        gatherSolenoid2 = new Solenoid(2);
     }
 
     public void run() {
@@ -46,6 +50,12 @@ public abstract class Outputs extends Component {
         } 
         return value;
     }
+    
+    public void suction(boolean enable) {
+        gatherSolenoid1.set(enable);
+        gatherSolenoid2.set(enable);
+    }
+    
 
 
 }

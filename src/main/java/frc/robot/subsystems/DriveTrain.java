@@ -40,10 +40,10 @@ public class DriveTrain extends Component{
     double startTime = Timer.getFPGATimestamp();   
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
+        //drive straight
         if(rotAxis == 0){
             if(!driveStraight){
-                drvStrSetPnt.set(sense.robotAngle);
-                drvStrSetPnt = sense.robotAngle;
+                drvStrSetPnt.set(sense.robotAngle);//if first time, set angle to drive at
             } 
             double error = drvStrSetPnt.sub(sense.robotAngle);
             
