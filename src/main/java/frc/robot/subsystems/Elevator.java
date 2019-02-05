@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.io.Calibrations;
-
 public class Elevator extends Component {
     
     public enum ElevatorPosition {
@@ -16,10 +14,10 @@ public class Elevator extends Component {
 
     public void run() {
                 if (in.manualElevatorUp) {
-                    out.setElevatorMotor(Calibrations.ELE_MotorPwr);
+                    out.setElevatorMotor(k.ELE_MotorPwr);
                 } else {
                     if (in.manualElevatorDown) {
-                        out.setElevatorMotor(-Calibrations.ELE_MotorPwr);
+                        out.setElevatorMotor(-k.ELE_MotorPwr);
                     } else {
                         if (in.autoElevator) {
                            out.setElevatorMotor(0); // temp value

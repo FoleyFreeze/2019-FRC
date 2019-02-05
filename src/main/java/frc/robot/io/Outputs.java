@@ -42,7 +42,7 @@ public abstract class Outputs extends Component {
        
     protected double limit(double value) {
         if(in.pitMode){
-            value = Math.min(Calibrations.OUT_PitModeLimit, Math.max(-Calibrations.OUT_PitModeLimit, value));
+            value = Math.min(k.OUT_PitModeLimit, Math.max(-k.OUT_PitModeLimit, value));
         } 
         return value;
     }

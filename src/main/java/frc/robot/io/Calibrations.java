@@ -7,55 +7,55 @@ public class Calibrations{
     }
     public static final RobotType BOT_Version = RobotType.PRACTICE;
 
-    public static  double   DRV_CountsPerDegree;
-    public static final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
-    public static final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
-    public static  double   DRV_RotCentX;
-    public static  double   DRV_RotCentY;
-    public static  double   DRV_SwerveAngRate;
-    public static  double   DRV_SwerveAngKP;
-    public static  double   DRV_SwerveMaxAnglePwr; 
-    public static  double   DRV_SwerveDrivePwrScale;
-    public static  double   DRV_SwerveStrKP;
-    public static  double   DRV_WaitForParkTime; 
+    public double   DRV_CountsPerDegree;
+    public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
+    public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
+    public double   DRV_RotCentX;
+    public double   DRV_RotCentY;
+    public double   DRV_SwerveAngRate;
+    public double   DRV_SwerveAngKP;
+    public double   DRV_SwerveMaxAnglePwr; 
+    public double   DRV_SwerveDrivePwrScale;
+    public double   DRV_SwerveStrKP;
+    public double   DRV_WaitForParkTime; 
 
     //swerve bot values
-    //public static final double SEN_AbsAngleFL = 109.424; //109.424 for swereve bot 
-    //public static final double SEN_AbsAngleFR = 343.916;
-    //public static final double SEN_AbsAngleRL = 203.818;
-    //public static final double SEN_AbsAngleRR = 167.246;
+    //public final double SEN_AbsAngleFL = 109.424; //109.424 for swereve bot 
+    //public final double SEN_AbsAngleFR = 343.916;
+    //public final double SEN_AbsAngleRL = 203.818;
+    //public final double SEN_AbsAngleRR = 167.246;
 
-    public static  double SEN_AbsAngleFL;
-    public static  double SEN_AbsAngleFR; 
-    public static  double SEN_AbsAngleRL;
-    public static  double SEN_AbsAngleRR;
+    public double SEN_AbsAngleFL;
+    public double SEN_AbsAngleFR; 
+    public double SEN_AbsAngleRL;
+    public double SEN_AbsAngleRR;
 
-    public static  double GTH_IntakeSpeed;
-    public static  double GTH_ShootSpeedFast;
-    public static  double GTH_ShootSpeedSlow;
-
-
-    public static  double ELE_MotorPwr;
+    public double GTH_IntakeSpeed;
+    public double GTH_ShootSpeedFast;
+    public double GTH_ShootSpeedSlow;
 
 
-    public static  double CLM_MotorSpeed;
+    public double ELE_MotorPwr;
 
 
-    public static  double IN_xDeadband;
-    public static  double IN_yDeadband;
-    public static  double IN_rotDeadband;
-    public static  double IN_xyDeadband;
+    public double CLM_MotorSpeed;
+
+
+    public double IN_xDeadband;
+    public double IN_yDeadband;
+    public double IN_rotDeadband;
+    public double IN_xyDeadband;
     //Buttons
-    public static  int IN_resetGyro;
-    public static  int IN_compassDrive;
-    public static  int IN_fieldOriented;
-    public static  int IN_pitMode;
+    public int IN_resetGyro;
+    public int IN_compassDrive;
+    public int IN_fieldOriented;
+    public int IN_pitMode;
     //Axes
-    public static  int IN_xDriveAxis;
-    public static  int IN_yDriveAxis;
-    public static  int IN_rotDriveAxis;
+    public int IN_xDriveAxis;
+    public int IN_yDriveAxis;
+    public int IN_rotDriveAxis;
 
-    public static  double OUT_PitModeLimit;
+    public double OUT_PitModeLimit;
 
     
     public Calibrations(){

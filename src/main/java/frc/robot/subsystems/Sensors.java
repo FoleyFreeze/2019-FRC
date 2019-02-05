@@ -5,7 +5,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.io.Calibrations;
 import frc.robot.util.Angle;
 
 public class Sensors extends Component {
@@ -35,10 +34,10 @@ public class Sensors extends Component {
 
     double[] rawAngles = {0,0,0,0};
     public void run() {
-        double angleFL = angleEnc[0].getAverageVoltage()/5.0*360.0 - Calibrations.SEN_AbsAngleFL;
-        double angleFR = angleEnc[1].getAverageVoltage()/5.0*360.0 - Calibrations.SEN_AbsAngleFR;
-        double angleRL = angleEnc[2].getAverageVoltage()/5.0*360.0 - Calibrations.SEN_AbsAngleRL;
-        double angleRR = angleEnc[3].getAverageVoltage()/5.0*360.0 - Calibrations.SEN_AbsAngleRR;
+        double angleFL = angleEnc[0].getAverageVoltage()/5.0*360.0 - k.SEN_AbsAngleFL;
+        double angleFR = angleEnc[1].getAverageVoltage()/5.0*360.0 - k.SEN_AbsAngleFR;
+        double angleRL = angleEnc[2].getAverageVoltage()/5.0*360.0 - k.SEN_AbsAngleRL;
+        double angleRR = angleEnc[3].getAverageVoltage()/5.0*360.0 - k.SEN_AbsAngleRR;
         angles[0].set(angleFL);
         angles[1].set(angleFR);
         angles[2].set(angleRL);

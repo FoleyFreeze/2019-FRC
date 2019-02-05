@@ -41,28 +41,28 @@ public class Inputs extends Component {
     
 
     public void run() {
-        if(gamePad.getRawButton(Calibrations.IN_resetGyro)){
+        if(gamePad.getRawButton(k.IN_resetGyro)){
             sense.init();
         }
 
      
         //read joystick
-        xAxisDrive = -gamePad.getRawAxis(Calibrations.IN_xDriveAxis);
-        yAxisDrive = gamePad.getRawAxis(Calibrations.IN_yDriveAxis);
-        rotAxisDrive = -gamePad.getRawAxis(Calibrations.IN_rotDriveAxis);
+        xAxisDrive = -gamePad.getRawAxis(k.IN_xDriveAxis);
+        yAxisDrive = gamePad.getRawAxis(k.IN_yDriveAxis);
+        rotAxisDrive = -gamePad.getRawAxis(k.IN_rotDriveAxis);
 
         //deadband if tiny
-        if(Math.abs(xAxisDrive) < Calibrations.IN_xDeadband) xAxisDrive = 0; 
-        if(Math.abs(yAxisDrive) < Calibrations.IN_xDeadband) yAxisDrive = 0; 
-        if(Math.abs(xAxisDrive) < Calibrations.IN_xyDeadband && Math.abs(yAxisDrive) < Calibrations.IN_xyDeadband) {
+        if(Math.abs(xAxisDrive) < k.IN_xDeadband) xAxisDrive = 0; 
+        if(Math.abs(yAxisDrive) < k.IN_xDeadband) yAxisDrive = 0; 
+        if(Math.abs(xAxisDrive) < k.IN_xyDeadband && Math.abs(yAxisDrive) < k.IN_xyDeadband) {
             xAxisDrive = 0;
             yAxisDrive = 0;
         }
-        if(Math.abs(rotAxisDrive) < Calibrations.IN_rotDeadband) rotAxisDrive = 0;
+        if(Math.abs(rotAxisDrive) < k.IN_rotDeadband) rotAxisDrive = 0;
 
-        compassDrive = gamePad.getRawButton(Calibrations.IN_compassDrive);
-        fieldOriented = gamePad.getRawButton(Calibrations.IN_fieldOriented);
-        pitMode = gamePad.getRawButton(Calibrations.IN_pitMode);
+        compassDrive = gamePad.getRawButton(k.IN_compassDrive);
+        fieldOriented = gamePad.getRawButton(k.IN_fieldOriented);
+        pitMode = gamePad.getRawButton(k.IN_pitMode);
 
         if(compassDrive){
             compassDrive();
