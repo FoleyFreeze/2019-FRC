@@ -19,8 +19,9 @@ public class K{
     public static final double   DRV_SwerveStrKP = -0.1;//rotation power per degree
     public static final double   DRV_WaitForParkTime = 0.5;//seconds 
 
+
     //swerve bot values
-    //public static final double SEN_AbsAngleFL = 109.424; //109.424 for swereve bot 
+    //public static final double SEN_AbsAngleFL = 109.424;
     //public static final double SEN_AbsAngleFR = 343.916;
     //public static final double SEN_AbsAngleRL = 203.818;
     //public static final double SEN_AbsAngleRR = 167.246;
@@ -45,6 +46,7 @@ public class K{
     public static final double IN_yDeadband = 0.05;
     public static final double IN_rotDeadband = 0.2;
     public static final double IN_xyDeadband = 0.2;
+    public static final double IN_DodgingMin = 0.2;
 
     //Buttons
     public static final int IN_resetGyro = 1;
@@ -58,5 +60,7 @@ public class K{
     public static final int IN_rotDriveAxis = 4;
 
     public static final double OUT_PitModeLimit = 0.25;
+    public static final int IN_dodgingL = 2;
+    public static final int IN_dodgingR = 3;
     
 }

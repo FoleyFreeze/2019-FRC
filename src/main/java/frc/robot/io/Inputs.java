@@ -16,6 +16,8 @@ public class Inputs extends Component {
     public boolean resetEncoders;
     public boolean fieldOriented;
     public boolean compassDrive;
+    public boolean dodgingL;
+    public boolean dodgingR;
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 
@@ -65,6 +67,8 @@ public class Inputs extends Component {
         fieldOriented = gamePad.getRawButton(K.IN_fieldOriented);
         pitMode = gamePad.getRawButton(K.IN_pitMode);
         diskGather = gamePad.getRawButton(K.IN_diskGather);
+        dodgingL = gamePad.getRawAxis(K.IN_dodgingL) > K.IN_DodgingMin;
+        dodgingR = gamePad.getRawAxis(K.IN_dodgingR) > K.IN_DodgingMin;
 
         if(compassDrive){
             compassDrive();
