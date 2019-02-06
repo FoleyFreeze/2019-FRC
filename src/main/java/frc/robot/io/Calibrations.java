@@ -40,6 +40,7 @@ public class Calibrations{
     public int IN_resetGyro;
     public int IN_compassDrive;
     public int IN_fieldOriented;
+    public int IN_flipOrientation;
     public int IN_pitMode;
     public int IN_diskGather;
     public int IN_xDriveAxis;
@@ -80,6 +81,7 @@ public class Calibrations{
         IN_resetGyro = 1;
         IN_compassDrive = 5;//for future, unknown button values = -0
         IN_fieldOriented = 6;
+        IN_flipOrientation = -0;
         IN_pitMode = -0;
         IN_diskGather = -0;
         //Axes

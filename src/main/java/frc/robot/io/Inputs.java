@@ -18,6 +18,7 @@ public class Inputs extends Component {
     public boolean compassDrive;
     public boolean dodgingL;
     public boolean dodgingR;
+    public boolean flipOrientation;
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 
@@ -46,7 +47,6 @@ public class Inputs extends Component {
         if(gamePad.getRawButton(k.IN_resetGyro)){
             sense.init();
         }
-
      
         //read joystick
         xAxisDrive = -gamePad.getRawAxis(k.IN_xDriveAxis);
@@ -65,6 +65,7 @@ public class Inputs extends Component {
         //set buttons
         compassDrive = gamePad.getRawButton(k.IN_compassDrive);
         fieldOriented = gamePad.getRawButton(k.IN_fieldOriented);
+        flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = gamePad.getRawButton(k.IN_pitMode);
         diskGather = gamePad.getRawButton(k.IN_diskGather);
         dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
@@ -72,6 +73,10 @@ public class Inputs extends Component {
 
         if(compassDrive){
             compassDrive();
+        }
+
+        if(flipOrientation){
+            flipOrientation();
         }
     }
 
@@ -84,6 +89,11 @@ public class Inputs extends Component {
         theta = theta * 45;
         yAxisDrive = r * Math.sin(theta);
         xAxisDrive = r * Math.cos(theta);
+    }
+
+    public void flipOrientation(){
+        xAxisDrive = -xAxisDrive;
+        yAxisDrive = -yAxisDrive;
     }
 
 }
