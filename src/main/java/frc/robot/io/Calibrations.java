@@ -5,7 +5,7 @@ public class Calibrations{
     public enum RobotType {
         COMPETITION, PRACTICE, SWERVE_BOT
     }
-    public static final RobotType BOT_Version = RobotType.PRACTICE;
+    public static RobotType BOT_Version = RobotType.PRACTICE;
 
     public double   DRV_CountsPerDegree;
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
@@ -49,6 +49,8 @@ public class Calibrations{
     public int IN_dodgingL;
     public int IN_dodgingR;
     public double OUT_PitModeLimit;
+    public boolean OUT_DriveBrakeMode;
+
 
     
     public Calibrations(){
@@ -92,5 +94,6 @@ public class Calibrations{
         IN_dodgingR = 3;
 
         OUT_PitModeLimit = 0.25;
+        OUT_DriveBrakeMode = true;
     }   
 }

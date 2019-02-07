@@ -36,10 +36,17 @@ public class OutputsCompBot extends Outputs {
         backRightMotorTurn = new CANSparkMax(ElectroJendz.BR_TURN_ID, MotorType.kBrushless);
         backRightMotorDrive = new CANSparkMax(ElectroJendz.BR_DRIVE_ID, MotorType.kBrushless);
 
-        frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
-        frontRightMotorDrive.setIdleMode(IdleMode.kBrake);
-        backLeftMotorDrive.setIdleMode(IdleMode.kBrake);
-        backRightMotorDrive.setIdleMode(IdleMode.kBrake);
+        if (k.OUT_DriveBrakeMode){
+            frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
+            frontRightMotorDrive.setIdleMode(IdleMode.kBrake);
+            backLeftMotorDrive.setIdleMode(IdleMode.kBrake);
+            backRightMotorDrive.setIdleMode(IdleMode.kBrake);
+        } else {
+            frontLeftMotorDrive.setIdleMode(IdleMode.kCoast);
+            frontRightMotorDrive.setIdleMode(IdleMode.kCoast);
+            backLeftMotorDrive.setIdleMode(IdleMode.kCoast);
+            backRightMotorDrive.setIdleMode(IdleMode.kCoast);
+        }
 
         frontLeftMotorTurn.setIdleMode(IdleMode.kBrake);
         frontRightMotorTurn.setIdleMode(IdleMode.kBrake);

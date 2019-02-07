@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.io.Inputs;
 import frc.robot.io.K_Competition_Bot;
 import frc.robot.io.K_Swerve_Bot;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.io.Calibrations;
 import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
@@ -22,6 +23,26 @@ public class Component {
     public static Calibrations k;
 
     public static void initAll() {
+        
+        // select RobotType based on jumper position
+        DigitalInput id1 = new DigitalInput(8);
+        DigitalInput id2 = new DigitalInput(9);
+
+        if(!id1.get() && !id2.get()){
+            Calibrations.BOT_Version = Calibrations.RobotType.SWERVE_BOT;
+        } else if(!id1.get()) {
+            Calibrations.BOT_Version = Calibrations.RobotType.COMPETITION;
+        } else if(!id2.get()) {
+            Calibrations.BOT_Version = Calibrations.RobotType.PRACTICE;
+        } else {
+            System.out.println("Error: The Robot Selection Jumper is Missing!");
+            System.exit(-1);
+        }
+
+        id1.close();
+        id2.close(); 
+
+        // picks the right subsystems based on RobotType 
         switch(Calibrations.BOT_Version){
             case COMPETITION:
             case PRACTICE:
