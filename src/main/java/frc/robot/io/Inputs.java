@@ -2,6 +2,7 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorPosition;
 import frc.robot.subsystems.Component;
 
 public class Inputs extends Component {
@@ -33,6 +34,11 @@ public class Inputs extends Component {
     public boolean autoElevator;
     public Elevator.ElevatorPosition elevatorTarget;
     //elevatorTarget means you press a button and it moves to a specific place
+    public boolean rocketL1;
+    public boolean rocketL2;
+    public boolean rocketL3;
+    public boolean rocketSideLeft;
+    public boolean rocketSideRight;
     
     public boolean pitMode;
 
@@ -70,6 +76,27 @@ public class Inputs extends Component {
         diskGather = gamePad.getRawButton(k.IN_diskGather);
         dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+        rocketL1 = gamePad.getRawButton(k.IN_rocketL1);
+        rocketL2 = gamePad.getRawButton(k.IN_rocketL2);
+        rocketL3 = gamePad.getRawButton(k.IN_rocketL3);
+        rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
+        rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
+
+        if(rocketL3 && sense.hasBall){
+            elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
+        } else if (rocketL3 && sense.hasHatch) {
+            elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
+        } else if (rocketL2 && sense.hasBall) {
+            elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
+        } else if (rocketL2 && sense.hasHatch) {
+            elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
+        } else if (rocketL1 && sense.hasBall) {
+            elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
+        } else if (rocketL1 && sense.hasHatch) {
+            elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+        } else {
+            
+        }
 
         if(compassDrive){
             compassDrive();
