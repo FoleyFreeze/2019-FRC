@@ -62,7 +62,7 @@ public class Calibrations{
         DRV_SwerveAngKP = -0.003;
         DRV_SwerveMaxAnglePwr = 0.5;
         DRV_SwerveDrivePwrScale = 0.5;
-        DRV_SwerveStrKP = -0.1;//rotation power per degree
+        DRV_SwerveStrKP = -0.0;//rotation power per degree
         DRV_WaitForParkTime = 0.5;//seconds
 
         GTH_IntakeSpeed = 0;

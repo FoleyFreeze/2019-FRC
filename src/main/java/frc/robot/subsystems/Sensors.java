@@ -5,6 +5,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.io.ElectroJendz;
 import frc.robot.util.Angle;
 
 public class Sensors extends Component {
@@ -16,10 +17,10 @@ public class Sensors extends Component {
     public double elevatorEncoder;
 
     public Sensors() {
-        angleEnc[0] = new AnalogInput(2);
-        angleEnc[1] = new AnalogInput(1);
-        angleEnc[2] = new AnalogInput(3);
-        angleEnc[3] = new AnalogInput(0);
+        angleEnc[0] = new AnalogInput(ElectroJendz.FL_ENC_ID);
+        angleEnc[1] = new AnalogInput(ElectroJendz.FR_ENC_ID);
+        angleEnc[2] = new AnalogInput(ElectroJendz.RL_ENC_ID);
+        angleEnc[3] = new AnalogInput(ElectroJendz.RR_ENC_ID);
         navx = new AHRS(Port.kMXP);
 
         //init angle objects
