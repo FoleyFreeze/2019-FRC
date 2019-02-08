@@ -156,6 +156,7 @@ public class DriveTrain extends Component{
         }
 
         //out.swerveDriveAngle(sense.angles, relEnc, outTheta, outR);
+        driveMil1.check(outR[0], encValue, current);
         out.setSwerveDrivePower(outR[0], outR[1], outR[2], outR[3]);
         out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
     }

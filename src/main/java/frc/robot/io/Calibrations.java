@@ -48,6 +48,8 @@ public class Calibrations{
     public int IN_rotDriveAxis;
     public int IN_dodgingL;
     public int IN_dodgingR;
+    public int MIL_livepi;
+    public int MIL_trackpi;
     public double OUT_PitModeLimit;
     public boolean OUT_DriveBrakeMode;
 
@@ -92,6 +94,10 @@ public class Calibrations{
         IN_rotDriveAxis = 4;
         IN_dodgingL = 2;
         IN_dodgingR = 3;
+        //Mil
+        MIL_livepi = 0;
+        MIL_trackpi = 0;
+
 
         OUT_PitModeLimit = 0.25;
         OUT_DriveBrakeMode = true;
