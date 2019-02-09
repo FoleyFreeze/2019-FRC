@@ -13,7 +13,7 @@ public class DriveTrain extends Component{
     boolean prevDodge = false;
 
     public void run() {
-        if(k.CLM_disable) return;
+        if(k.DRV_disable) return;
         
         boolean firstDodge = (in.dodgingL || in.dodgingR) && !prevDodge;
         prevDodge = in.dodgingL || in.dodgingR;
