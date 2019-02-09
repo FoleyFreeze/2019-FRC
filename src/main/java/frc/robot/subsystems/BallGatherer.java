@@ -7,6 +7,8 @@ public class BallGatherer extends Component{
     }
     
     public void run() {
+        if(k.GTH_disableBall) return;
+        
         if(in.ballGather){
             out.setGatherMotor(k.GTH_IntakeSpeed, k.GTH_IntakeSpeed);
         }

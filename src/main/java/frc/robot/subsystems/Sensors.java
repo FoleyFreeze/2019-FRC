@@ -15,6 +15,10 @@ public class Sensors extends Component {
     public Angle robotAngle = new Angle();
     public Angle[] angles = new Angle[4];
     public double elevatorEncoder;
+    
+    public boolean hasBall;
+    public boolean hasHatch;
+
 
     public Sensors() {
         angleEnc[0] = new AnalogInput(ElectroJendz.FL_ENC_ID);
@@ -54,3 +58,7 @@ public class Sensors extends Component {
         robotAngle.set(-navx.getYaw() + navXoffset);
     }
 }
+
+
+
+

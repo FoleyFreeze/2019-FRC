@@ -7,6 +7,8 @@ public class DiskGatherer extends Component{
     }
 
     public void run() {
+       if(k.GTH_disableDisk) return;
+       
         out.suction(in.diskGather); 
     }
 }

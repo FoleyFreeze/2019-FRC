@@ -41,9 +41,24 @@ public class Calibrations{
     public int IN_rotDriveAxis;
     public int IN_dodgingL;
     public int IN_dodgingR;
+
+    // elevator positions 
+    public int IN_rocketL1;
+    public int IN_rocketL2;
+    public int IN_rocketL3;
+    public int IN_rocketSideLeft;
+    public int IN_rocketSideRight;
+
+
     public double OUT_PitModeLimit;
     public boolean OUT_DriveBrakeMode;
 
+    // disable cals 
+    public boolean ELE_disable;
+    public boolean CLM_disable;
+    public boolean GTH_disableBall;
+    public boolean DRV_disable;
+    public boolean GTH_disableDisk;
 
     
     public Calibrations(){
@@ -70,6 +85,12 @@ public class Calibrations{
         IN_DodgingMin = 0.2;
         IN_DixonSize = 6;
         
+        //Buttons
+        IN_rocketL1 = -0;
+        IN_rocketL2 = -0;
+        IN_rocketL3 = -0;
+        IN_rocketSideLeft = -0;
+        IN_rocketSideRight = -0;
         //Axes
         IN_xDriveAxis = 0;
         IN_yDriveAxis = 1;
@@ -79,5 +100,11 @@ public class Calibrations{
 
         OUT_PitModeLimit = 0.25;
         OUT_DriveBrakeMode = true;
+        //Disables
+        ELE_disable = false;
+        CLM_disable = false;
+        GTH_disableBall = false;
+        GTH_disableDisk = false;
+        DRV_disable = false;
     }   
 }
