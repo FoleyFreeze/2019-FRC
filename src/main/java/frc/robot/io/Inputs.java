@@ -19,6 +19,7 @@ public class Inputs extends Component {
     public boolean dodgingL;
     public boolean dodgingR;
     public boolean flipOrientation;
+    public boolean resetGyro;
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 
@@ -36,15 +37,23 @@ public class Inputs extends Component {
     
     public boolean pitMode;
 
+    public byte[] xDixon;//history of joystick directions
+    public byte[] yDixon;//history of joystick directions
+    public byte[] rotDixon;//history of joystick directions
+
     public Inputs() {
         controlBoard = new Joystick(ElectroJendz.CONTROL_BOARD);
         gamePad = new Joystick(ElectroJendz.GAMEPAD);
+        xDixon = new byte[k.IN_DixonSize];
+        yDixon = new byte[k.IN_DixonSize];
+        rotDixon = new byte[k.IN_DixonSize];
     }
 
     
 
     public void run() {
-        if(gamePad.getRawButton(k.IN_resetGyro)){
+        resetGyro = gamePad.getRawButton(k.IN_resetGyro);
+        if(resetGyro){
             sense.init();
         }
      
@@ -62,21 +71,25 @@ public class Inputs extends Component {
         }
         if(Math.abs(rotAxisDrive) < k.IN_rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
 
+        if(dixonDetector(xDixon, xAxisDrive))xAxisDrive = 0;//stop Dixon from breaking robot
+        if(dixonDetector(yDixon, yAxisDrive))yAxisDrive = 0;//stop Dixon from breaking robot
+        if(dixonDetector(rotDixon, rotAxisDrive))rotAxisDrive = 0;//stop Dixon from breaking robot
+
         //set buttons
         compassDrive = gamePad.getRawButton(k.IN_compassDrive);
         fieldOriented = gamePad.getRawButton(k.IN_fieldOriented);
-        flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
-        pitMode = gamePad.getRawButton(k.IN_pitMode);
-        diskGather = gamePad.getRawButton(k.IN_diskGather);
+        //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
+        //pitMode = gamePad.getRawButton(k.IN_pitMode);
+        //diskGather = gamePad.getRawButton(k.IN_diskGather);
         dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
 
-        if(compassDrive){
-            compassDrive();
-        }
-
         if(flipOrientation){
             flipOrientation();
+        }
+
+        if(compassDrive){
+            compassDrive();
         }
     }
 
@@ -94,6 +107,31 @@ public class Inputs extends Component {
     public void flipOrientation(){
         xAxisDrive = -xAxisDrive;
         yAxisDrive = -yAxisDrive;
+    }
+
+    public boolean dixonDetector(byte[] prevDirs, double currVal){//check if Dixon is being stupid and bouncing the joysticks
+        //store previous joystick direction as -1, 0, or 1
+        for(int i = prevDirs.length - 1; i > 0; i--){
+            prevDirs[i] = prevDirs[i-1];
+        }
+        if(currVal > 0) prevDirs[0] = 1;
+        else if(currVal < 0) prevDirs[0] = -1;
+        else prevDirs[0] = 0;
+        //count number of direction changes in the last array.length
+        byte curr = prevDirs[0];
+        int count = 0;
+        for(int i = 0; i< prevDirs.length; i++){
+            if(prevDirs[i] != 0){
+                if(curr == 0){
+                   curr = prevDirs[i]; 
+                } else if(prevDirs[i]!=curr){
+                    count++;
+                    curr = prevDirs[i];
+                }
+            }
+        }
+        //if more than 1 direction change, true
+        return count>1;
     }
 
 }

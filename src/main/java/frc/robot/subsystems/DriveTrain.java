@@ -43,6 +43,11 @@ public class DriveTrain extends Component{
             double rad = prevAng * Math.PI / 180.0;
             dodgeDirX = Math.cos(rad);
             dodgeDirY = Math.sin(rad);
+            double maxDir = Math.max(dodgeDirX,dodgeDirY);
+            if(Math.abs(maxDir) > 1){
+                dodgeDirX /= maxDir;
+                dodgeDirY /= maxDir;
+            }
         }
 
         double deltaDeg = sense.robotAngle.sub(prevAng);
@@ -57,11 +62,10 @@ public class DriveTrain extends Component{
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
         double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
         double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
-        theta = -(sense.robotAngle.add(r)); // = r - robotAngle
+        theta = sense.robotAngle.subtrahend(theta); // = r - robotAngle
         double x = r * Math.cos(theta / 180 * Math.PI);
         double y = r * Math.sin(theta / 180 * Math.PI);
         swerve(x, y, in.rotAxisDrive);
-
     }
 
     boolean driveStraight = false; 
@@ -72,6 +76,7 @@ public class DriveTrain extends Component{
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         //drive straight
+        if(in.resetGyro) driveStraight = false;
         if(rotAxis == 0){
             if(!driveStraight){
                 drvStrSetPnt.set(sense.robotAngle);//if first time, set angle to drive at

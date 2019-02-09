@@ -29,6 +29,14 @@ public class Angle{
         return limit(angle - subtrahend.get());
     }
 
+    public double subtrahend(double minuend){
+        return limit(minuend-angle);
+    }
+
+    public double subtrahend(Angle minuend){
+        return limit(minuend.get()-angle);
+    }
+
     public double add(double adder){
         return limit(angle + adder);
     }

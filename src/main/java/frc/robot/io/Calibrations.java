@@ -37,6 +37,7 @@ public class Calibrations{
     public double IN_rotDeadband;
     public double IN_xyDeadband;
     public double IN_DodgingMin;
+    public int IN_DixonSize;
     public int IN_resetGyro;
     public int IN_compassDrive;
     public int IN_fieldOriented;
@@ -74,15 +75,16 @@ public class Calibrations{
 
         CLM_MotorSpeed = 0;
 
-        IN_xDeadband = 0.05;
-        IN_yDeadband = 0.05;
-        IN_rotDeadband = 0.2;
-        IN_xyDeadband = 0.2;
+        IN_xDeadband = 0.025;
+        IN_yDeadband = 0.025;
+        IN_rotDeadband = 0.025;
+        IN_xyDeadband = 0.025;
         IN_DodgingMin = 0.2;
+        IN_DixonSize = 6;
         //Buttons
-        IN_resetGyro = 1;
-        IN_compassDrive = 5;//for future, unknown button values = -0
-        IN_fieldOriented = 6;
+        IN_resetGyro = 10;//1
+        IN_compassDrive = 1;//5;//for future, unknown button values = -0
+        IN_fieldOriented = 5;//6
         IN_flipOrientation = -0;
         IN_pitMode = -0;
         IN_diskGather = -0;
