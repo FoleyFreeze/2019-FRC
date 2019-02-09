@@ -8,10 +8,18 @@ public class Filter {
     private double lastVal;
     private double lastTime;
 
-    public Filter(double filterConst, boolean autoReset, double timeout){
+    public Filter(double filterConst, boolean autoReset, double timeout, double initialValue){
         this.filterConst = filterConst;
         this.autoReset = autoReset;
         this.timeout = timeout;
+        lastVal = initialValue;
+    }
+    public Filter(double filterConst){
+        this(filterConst, false, 0, 0);
+    }
+
+    public void setVal(double newVal){
+        lastVal = newVal;
     }
 
     public double getVal(){

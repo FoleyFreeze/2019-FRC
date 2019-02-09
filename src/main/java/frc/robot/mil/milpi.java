@@ -1,11 +1,11 @@
 package frc.robot.mil;
 
-public class milpi {
+public class MilPi {
     
     private String ip;
     private boolean active;
 
-    public milpi(String ipAddr){
+    public MilPi(String ipAddr){
         ip = ipAddr;
     }
 
