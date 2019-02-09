@@ -27,6 +27,12 @@ public class Calibrations{
     public double GTH_IntakeSpeed;
     public double GTH_ShootSpeedFast;
     public double GTH_ShootSpeedSlow;
+    public double GTH_ArmInPwr;
+    public double GTH_ArmOutPwr;
+    public double GTH_StartUpTime;
+    public double GTH_ArmInCurrent;
+    public double GTH_ArmOutCurrent;
+    public double GTH_FailSafeTimer;
     public double ELE_MotorPwr;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
@@ -76,6 +82,12 @@ public class Calibrations{
         GTH_IntakeSpeed = 0;
         GTH_ShootSpeedFast = 0;
         GTH_ShootSpeedSlow = 0;
+        GTH_ArmInPwr = 0;
+        GTH_ArmOutPwr = 0;
+        GTH_StartUpTime = 0;
+        GTH_ArmInCurrent = 0;
+        GTH_ArmOutCurrent = 0;
+        GTH_FailSafeTimer = 0;
 
         ELE_MotorPwr = 1; // set to actual value later
         ELE_PositionKP = 0;

@@ -55,7 +55,8 @@ public abstract class Outputs extends Component {
         gatherSolenoid1.set(enable);
         gatherSolenoid2.set(enable);
     }
-    
 
-
+    public double getGatherArmCurrent(){
+        return 0;
+    }
 }
