@@ -17,7 +17,10 @@ public class DiskGatherer extends Component{
     private boolean movingIn;
 
     public void run() {
-       if(k.GTH_disableDisk) return;
+        if(k.GTH_disableDisk) return;
+       
+        //make sure that if we disable in a movement we don't re-enable and immediately start moving
+        if(sense.isDisabled) gatherState = FourBarState.WAIT;
        
         out.suction(in.diskGather);
         

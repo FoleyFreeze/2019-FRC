@@ -18,7 +18,7 @@ public class Sensors extends Component {
     
     public boolean hasBall;
     public boolean hasHatch;
-
+    public boolean isDisabled;
 
     public Sensors() {
         angleEnc[0] = new AnalogInput(ElectroJendz.FL_ENC_ID);

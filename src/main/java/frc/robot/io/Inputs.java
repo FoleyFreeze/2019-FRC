@@ -33,7 +33,7 @@ public class Inputs extends Component {
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
     public boolean autoElevator;
-    public Elevator.ElevatorPosition elevatorTarget;
+    public Elevator.ElevatorPosition elevatorTarget = ElevatorPosition.DONT_MOVE;
     //elevatorTarget means you press a button and it moves to a specific place
     public boolean rocketL1;
     public boolean rocketL2;
@@ -98,7 +98,10 @@ public class Inputs extends Component {
         rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
         rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
 
-        if(rocketL3 && sense.hasBall){
+        if(sense.isDisabled) {
+            //when disabled require a new button press before moving
+            elevatorTarget = ElevatorPosition.DONT_MOVE;
+        } else if(rocketL3 && sense.hasBall){
             elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
         } else if (rocketL3 && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
@@ -110,8 +113,6 @@ public class Inputs extends Component {
             elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
         } else if (rocketL1 && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
-        } else {
-            
         }
 
         if(flipOrientation){

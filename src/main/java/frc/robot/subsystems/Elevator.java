@@ -4,8 +4,7 @@ public class Elevator extends Component {
     
     public enum ElevatorPosition {
         FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, 
-        ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-        
+        ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH, DONT_MOVE //note that DONT_MOVE must be the last enum element
     }
     
     public Elevator() {
@@ -30,10 +29,12 @@ public class Elevator extends Component {
     }
 
     public void gotoPosition (ElevatorPosition position) {
-        double setpoint = k.ELE_PositionArray[position.ordinal()];
-
-        double error = setpoint - sense.elevatorEncoder;
-
-        out.setElevatorMotor(error*k.ELE_PositionKP);
+        if(position == ElevatorPosition.DONT_MOVE){
+            out.setElevatorMotor(0);
+        } else {
+            double setpoint = k.ELE_PositionArray[position.ordinal()];
+            double error = setpoint - sense.elevatorEncoder;
+            out.setElevatorMotor(error*k.ELE_PositionKP);
+        }
     }
 }  

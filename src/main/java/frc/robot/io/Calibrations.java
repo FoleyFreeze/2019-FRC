@@ -66,6 +66,13 @@ public class Calibrations{
     
     public Calibrations(){
 
+        //Disables
+        ELE_disable = true;
+        CLM_disable = true;
+        GTH_disableBall = true;
+        GTH_disableDisk = true;
+        DRV_disable = false;
+
         DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
         DRV_RotCentX = 0.0;
         DRV_RotCentY = 0.0;
@@ -105,12 +112,6 @@ public class Calibrations{
         IN_dodgingR = 3;
 
         OUT_PitModeLimit = 0.25;
-        OUT_DriveBrakeMode = true;
-        //Disables
-        ELE_disable = false;
-        CLM_disable = false;
-        GTH_disableBall = false;
-        GTH_disableDisk = false;
-        DRV_disable = false;
+        OUT_DriveBrakeMode = true;        
     }   
 }
