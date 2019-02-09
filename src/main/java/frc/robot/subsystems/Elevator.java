@@ -14,6 +14,8 @@ public class Elevator extends Component {
 
     public void run() {
 
+        if(k.ELE_disable) return;
+
         if (in.autoElevator){
             gotoPosition(in.elevatorTarget);
         } else { //in manual mode

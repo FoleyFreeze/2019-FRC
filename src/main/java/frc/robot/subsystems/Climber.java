@@ -6,6 +6,8 @@ public class Climber extends Component{
     }
 
     public void run(){
+        if(k.CLM_disable) return;
+        
         if(in.climb){
             out.climbMotor(k.CLM_MotorSpeed);
         }

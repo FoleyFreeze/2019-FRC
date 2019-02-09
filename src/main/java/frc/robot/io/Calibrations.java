@@ -60,6 +60,12 @@ public class Calibrations{
     public double OUT_PitModeLimit;
     public boolean OUT_DriveBrakeMode;
 
+    // disable cals 
+    public boolean ELE_disable;
+    public boolean CLM_disable;
+    public boolean GTH_disable;
+    public boolean DRV_disable;
+    public boolean D_GTH_disable;
 
     
     public Calibrations(){
@@ -109,5 +115,11 @@ public class Calibrations{
 
         OUT_PitModeLimit = 0.25;
         OUT_DriveBrakeMode = true;
+        //Disables
+        ELE_disable = false;
+        CLM_disable = false;
+        GTH_disable = false;
+        DRV_disable = false;
+        D_GTH_disable = false;
     }   
 }
