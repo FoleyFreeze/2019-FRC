@@ -16,6 +16,9 @@ public class ButtonMap {
     public double yDeadband;
     public double rotDeadband;
     public double xyDeadband;
+    public int IN_xDriveAxis;
+    public int IN_yDriveAxis;
+    public int IN_rotDriveAxis;
 
     public ButtonMap(){
         Joystick joy = new Joystick(ElectroJendz.GAMEPAD);
@@ -36,6 +39,9 @@ public class ButtonMap {
             yDeadband = 0.025;
             rotDeadband = 0.025;
             xyDeadband = 0.025;
+            IN_xDriveAxis = 0;
+            IN_yDriveAxis = 1;
+            IN_rotDriveAxis = 4;
         }else{
             resetGyro = 1;
             compassDrive = 5;
@@ -47,6 +53,9 @@ public class ButtonMap {
             yDeadband = 0.05;
             rotDeadband = 0.1;
             xyDeadband = 0.1;
+            IN_xDriveAxis = 0;
+            IN_yDriveAxis = 1;
+            IN_rotDriveAxis = 4;
         }
     }
 
