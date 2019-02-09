@@ -1,5 +1,7 @@
 package frc.robot.io;
 
+import frc.robot.io.ButtonMap;
+
 public class Calibrations{
     
     public enum RobotType {
@@ -32,18 +34,8 @@ public class Calibrations{
     };
     public double ELE_PositionKP;
     public double CLM_MotorSpeed;
-    public double IN_xDeadband;
-    public double IN_yDeadband;
-    public double IN_rotDeadband;
-    public double IN_xyDeadband;
     public double IN_DodgingMin;
     public int IN_DixonSize;
-    public int IN_resetGyro;
-    public int IN_compassDrive;
-    public int IN_fieldOriented;
-    public int IN_flipOrientation;
-    public int IN_pitMode;
-    public int IN_diskGather;
     public int IN_xDriveAxis;
     public int IN_yDriveAxis;
     public int IN_rotDriveAxis;
@@ -74,20 +66,10 @@ public class Calibrations{
         ELE_PositionKP = 0;
 
         CLM_MotorSpeed = 0;
-
-        IN_xDeadband = 0.025;
-        IN_yDeadband = 0.025;
-        IN_rotDeadband = 0.025;
-        IN_xyDeadband = 0.025;
+        
         IN_DodgingMin = 0.2;
         IN_DixonSize = 6;
-        //Buttons
-        IN_resetGyro = 10;//1
-        IN_compassDrive = 1;//5;//for future, unknown button values = -0
-        IN_fieldOriented = 5;//6
-        IN_flipOrientation = -0;
-        IN_pitMode = -0;
-        IN_diskGather = -0;
+        
         //Axes
         IN_xDriveAxis = 0;
         IN_yDriveAxis = 1;

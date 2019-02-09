@@ -7,7 +7,7 @@ import frc.robot.subsystems.Component;
 public class Inputs extends Component {
    
     private final Joystick controlBoard;
-    private final Joystick gamePad;
+    public Joystick gamePad;
         
     //----------------------------------Driver Functions--------------------------------
     public double xAxisDrive; 
@@ -52,7 +52,7 @@ public class Inputs extends Component {
     
 
     public void run() {
-        resetGyro = gamePad.getRawButton(k.IN_resetGyro);
+        resetGyro = gamePad.getRawButton(bm.resetGyro);
         if(resetGyro){
             sense.init();
         }
@@ -63,21 +63,21 @@ public class Inputs extends Component {
         rotAxisDrive = gamePad.getRawAxis(k.IN_rotDriveAxis);
 
         //deadband if tiny
-        if(Math.abs(xAxisDrive) < k.IN_xDeadband) xAxisDrive = 0; 
-        if(Math.abs(yAxisDrive) < k.IN_xDeadband) yAxisDrive = 0; 
-        if(Math.abs(xAxisDrive) < k.IN_xyDeadband && Math.abs(yAxisDrive) < k.IN_xyDeadband) {
+        if(Math.abs(xAxisDrive) < bm.xDeadband) xAxisDrive = 0; 
+        if(Math.abs(yAxisDrive) < bm.xDeadband) yAxisDrive = 0; 
+        if(Math.abs(xAxisDrive) < bm.xyDeadband && Math.abs(yAxisDrive) < bm.xyDeadband) {
             xAxisDrive = 0;
             yAxisDrive = 0;
         }
-        if(Math.abs(rotAxisDrive) < k.IN_rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
+        if(Math.abs(rotAxisDrive) < bm.rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
 
         if(dixonDetector(xDixon, xAxisDrive))xAxisDrive = 0;//stop Dixon from breaking robot
         if(dixonDetector(yDixon, yAxisDrive))yAxisDrive = 0;//stop Dixon from breaking robot
         if(dixonDetector(rotDixon, rotAxisDrive))rotAxisDrive = 0;//stop Dixon from breaking robot
 
         //set buttons
-        compassDrive = gamePad.getRawButton(k.IN_compassDrive);
-        fieldOriented = gamePad.getRawButton(k.IN_fieldOriented);
+        compassDrive = gamePad.getRawButton(bm.compassDrive);
+        fieldOriented = gamePad.getRawButton(bm.fieldOriented);
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         //pitMode = gamePad.getRawButton(k.IN_pitMode);
         //diskGather = gamePad.getRawButton(k.IN_diskGather);

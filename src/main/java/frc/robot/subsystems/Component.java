@@ -1,20 +1,22 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.io.ButtonMap;
+import frc.robot.io.Calibrations;
 import frc.robot.io.Inputs;
 import frc.robot.io.K_Competition_Bot;
 import frc.robot.io.K_Swerve_Bot;
-import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.io.Calibrations;
 import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
 import frc.robot.io.OutputsSwerveBot;
 import frc.robot.io.Vision;
 
 public class Component {
+    public static ButtonMap bm;
     public static Inputs in;
-    public static Outputs out; 
-    public static Sensors sense; 
-    public static Vision view; 
+    public static Outputs out;
+    public static Sensors sense;
+    public static Vision view;
     public static BallGatherer grabCargo;
     public static Climber climb; 
     public static Elevator elevator;
@@ -38,9 +40,11 @@ public class Component {
             System.out.println("Error: The Robot Selection Jumper is Missing!");
             System.exit(-1);
         }
-
         id1.close();
         id2.close(); 
+
+        //select button map
+        bm = new ButtonMap();
 
         // picks the right subsystems based on RobotType 
         switch(Calibrations.BOT_Version){
