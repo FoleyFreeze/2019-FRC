@@ -67,9 +67,9 @@ public class Inputs extends Component {
         }
      
         //read joystick
-        xAxisDrive = -gamePad.getRawAxis(k.IN_xDriveAxis);
-        yAxisDrive = gamePad.getRawAxis(k.IN_yDriveAxis);
-        rotAxisDrive = gamePad.getRawAxis(k.IN_rotDriveAxis);
+        xAxisDrive = -gamePad.getRawAxis(bm.IN_xDriveAxis);
+        yAxisDrive = gamePad.getRawAxis(bm.IN_yDriveAxis);
+        rotAxisDrive = gamePad.getRawAxis(bm.IN_rotDriveAxis);
 
         //deadband if tiny
         if(Math.abs(xAxisDrive) < bm.xDeadband) xAxisDrive = 0; 

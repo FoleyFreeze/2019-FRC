@@ -42,9 +42,6 @@ public class Calibrations{
     public double CLM_MotorSpeed;
     public double IN_DodgingMin;
     public int IN_DixonSize;
-    public int IN_xDriveAxis;
-    public int IN_yDriveAxis;
-    public int IN_rotDriveAxis;
     public int IN_dodgingL;
     public int IN_dodgingR;
 
@@ -104,9 +101,6 @@ public class Calibrations{
         IN_rocketSideLeft = -0;
         IN_rocketSideRight = -0;
         //Axes
-        IN_xDriveAxis = 0;
-        IN_yDriveAxis = 1;
-        IN_rotDriveAxis = 4;
         IN_dodgingL = 2;
         IN_dodgingR = 3;
 
