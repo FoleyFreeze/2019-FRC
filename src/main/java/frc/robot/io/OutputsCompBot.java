@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.mil.MilEncoder;
-import sun.jvm.hotspot.types.AddressField;
 
 public class OutputsCompBot extends Outputs {
         
@@ -98,6 +97,7 @@ public class OutputsCompBot extends Outputs {
         milTurnRR.check(turnRB, sense.angles[3]);
  
         int count = 0;
+        //TODO - stop moving the wheel that isn't moving!
         if(milTurnFL.isActive()) count++;
         if(milTurnFR.isActive()) count++;
         if(milTurnRL.isActive()) count++;
