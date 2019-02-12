@@ -56,6 +56,7 @@ public class Sensors extends Component {
         SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
         robotAngle.set(-navx.getYaw() + navXoffset);
+        SmartDashboard.putNumber("Angle of Robot", robotAngle.get());
     }
 }
 

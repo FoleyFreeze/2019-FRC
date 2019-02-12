@@ -11,6 +11,7 @@ public class DriveTrain extends Component{
     }
 
     boolean prevDodge = false;
+    String mode;
 
     public void run() {
         if(k.DRV_disable) return;
@@ -20,12 +21,20 @@ public class DriveTrain extends Component{
 
         if(in.dodgingL){
             dodge(firstDodge, -1);
+            mode = "Dodge Left";
+            SmartDashboard.putString("Mode", mode);
         }else if(in.dodgingR){
             dodge(firstDodge, 1);
+            mode = "Dodge Right";
+            SmartDashboard.putString("Mode", mode);
         }else if(in.fieldOriented) {
             fieldSwerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
+            mode = "Field Oriented";
+            SmartDashboard.putString("Mode", mode);
         }else{
              swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
+             mode = "Regular Swerve";
+            SmartDashboard.putString("Mode", mode);
         }
     }
 
@@ -58,6 +67,7 @@ public class DriveTrain extends Component{
         if(Math.abs(deltaDegSum) > 360) turnPower = 0;
 
         fieldSwerve(dodgeDirX, dodgeDirY, turnPower);
+        SmartDashboard.putNumber("Turned Since Dodge:", deltaDegSum);
     }
 
     //field oriented swerve
@@ -85,11 +95,14 @@ public class DriveTrain extends Component{
             } 
             double error = drvStrSetPnt.sub(sense.robotAngle);
             
+            SmartDashboard.putNumber("Drive Straight Error", error);
+
             rotAxis = error * k.DRV_SwerveStrKP;
             driveStraight = true;
         }else{
             driveStraight = false;
         }
+        SmartDashboard.putBoolean("Driving Straight?", driveStraight);
 
        //for each wheel calculate r,theta; power and angle
        for(int i = 0; i < 4; i++){
@@ -122,6 +135,7 @@ public class DriveTrain extends Component{
             outR[3] /= maxPwr;
         }
          
+        boolean parkMode;
         //park if not moving
         double elapsedTime = Timer.getFPGATimestamp() - startTime; 
         if(maxPwr < 0.15 && elapsedTime > k.DRV_WaitForParkTime) {
@@ -134,14 +148,17 @@ public class DriveTrain extends Component{
             outTheta[2] = 315;
             outR[3] = 0;
             outTheta[3] = 45;
+            parkMode = true;
         } else if (maxPwr > 0.15)  { 
             startTime = Timer.getFPGATimestamp(); 
+            parkMode = false;
         } else {
             out.setSwerveDrivePower(0,0,0,0);
             out.setSwerveDriveTurn(0,0,0,0);
+            parkMode = true;
             return;
         }
-
+        SmartDashboard.putBoolean("Park Mode?", parkMode);
         SmartDashboard.putNumberArray("TargetAngles", outTheta);
 
         //pid to target angle (theta)
@@ -165,5 +182,7 @@ public class DriveTrain extends Component{
         //out.swerveDriveAngle(sense.angles, relEnc, outTheta, outR);
         out.setSwerveDrivePower(outR[0], outR[1], outR[2], outR[3]);
         out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
+        SmartDashboard.putNumberArray("Drive Power", outR);
+        SmartDashboard.putNumberArray("Turn Power", outError);
     }
 }

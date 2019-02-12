@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DiskGatherer extends Component{
 
@@ -17,6 +18,7 @@ public class DiskGatherer extends Component{
     private boolean movingIn;
 
     public void run() {
+        String gatherStater;
         if(k.GTH_disableDisk) return;
        
         //make sure that if we disable in a movement we don't re-enable and immediately start moving
@@ -37,6 +39,7 @@ public class DiskGatherer extends Component{
                 startTime = Timer.getFPGATimestamp();
                 gatherState = FourBarState.STARTUP;
             }
+            gatherStater = "Not Moving";
             break;
 
             case STARTUP:
@@ -47,6 +50,7 @@ public class DiskGatherer extends Component{
                 gatherState = FourBarState.WAIT_FOR_STALL;
                 startTime = Timer.getFPGATimestamp();
             }
+            gatherStater = "Starting";
             break;
 
             case WAIT_FOR_STALL:
@@ -60,8 +64,11 @@ public class DiskGatherer extends Component{
             }else if(Timer.getFPGATimestamp() - startTime > k.GTH_FailSafeTimer){
                 gatherState = FourBarState.WAIT;
             }
+            gatherStater = "Moving?? I think??";
             break;
+            
         }
+        //SmartDashboard.putString("State of Gatherer", gatherStater); Fix Later, Arianna doesn't want to break the code
 
     }
 
