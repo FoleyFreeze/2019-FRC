@@ -70,7 +70,6 @@ public class DriveTrain extends Component{
 
     boolean prevDriveStraight = false; 
     Angle drvStrSetPnt = new Angle();
-    double prevError = 0;
 
     //start timer upon robot startup
     double startTime = Timer.getFPGATimestamp();   
@@ -85,10 +84,8 @@ public class DriveTrain extends Component{
                 drvStrSetPnt.set(sense.robotAngle);//if first time, set angle to drive at
             } 
             double error = drvStrSetPnt.sub(sense.robotAngle);             
-            double deltaError = error - prevError;
-            prevError = error;
 
-            rotAxis = error * k.DRV_SwerveStrKP + deltaError * k.DRV_SwerveStrKD;
+            rotAxis = error * k.DRV_SwerveStrKP + sense.deltaRobotAngle * k.DRV_SwerveStrKD;
             prevDriveStraight = true;
         }else{
             prevDriveStraight = false;
