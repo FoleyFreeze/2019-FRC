@@ -68,25 +68,30 @@ public class DriveTrain extends Component{
         swerve(x, y, in.rotAxisDrive);
     }
 
-    boolean driveStraight = false; 
+    boolean prevDriveStraight = false; 
     Angle drvStrSetPnt = new Angle();
+    double prevError = 0;
 
     //start timer upon robot startup
     double startTime = Timer.getFPGATimestamp();   
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         //drive straight
-        if(in.resetGyro) driveStraight = false;
+        if(in.resetGyro) prevDriveStraight = false;
+
+        // drive straight when we're not turning
         if(rotAxis == 0){
-            if(!driveStraight){
+            if(!prevDriveStraight){
                 drvStrSetPnt.set(sense.robotAngle);//if first time, set angle to drive at
             } 
-            double error = drvStrSetPnt.sub(sense.robotAngle);
-            
-            rotAxis = error * k.DRV_SwerveStrKP;
-            driveStraight = true;
+            double error = drvStrSetPnt.sub(sense.robotAngle);             
+            double deltaError = error - prevError;
+            prevError = error;
+
+            rotAxis = error * k.DRV_SwerveStrKP + deltaError * k.DRV_SwerveStrKD;
+            prevDriveStraight = true;
         }else{
-            driveStraight = false;
+            prevDriveStraight = false;
         }
 
        //for each wheel calculate r,theta; power and angle

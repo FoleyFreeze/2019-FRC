@@ -16,7 +16,8 @@ public class Calibrations{
     public double   DRV_SwerveAngKP;
     public double   DRV_SwerveMaxAnglePwr; 
     public double   DRV_SwerveDrivePwrScale;
-    public double   DRV_SwerveStrKP;
+    public double   DRV_SwerveStrKP; 
+    public double   DRV_SwerveStrKD;
     public double   DRV_WaitForParkTime; 
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
@@ -64,6 +65,7 @@ public class Calibrations{
         DRV_SwerveMaxAnglePwr = 0.5;
         DRV_SwerveDrivePwrScale = 0.5;
         DRV_SwerveStrKP = -0.0;//rotation power per degree
+        DRV_SwerveStrKD = -2;
         DRV_WaitForParkTime = 0.5;//seconds
 
         GTH_IntakeSpeed = 0;
