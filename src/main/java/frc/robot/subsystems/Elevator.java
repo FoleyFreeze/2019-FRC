@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Elevator extends Component {
     
     public enum ElevatorPosition {
@@ -15,17 +17,24 @@ public class Elevator extends Component {
 
         if(k.ELE_disable) return;
 
+        String evelate;
+
         if (in.autoElevator){
             gotoPosition(in.elevatorTarget);
+            evelate = "Auto Mode";
         } else { //in manual mode
             if (in.manualElevatorUp) {
                 out.setElevatorMotor(k.ELE_MotorPwr);
+                evelate = "Going Up!";
             } else if (in.manualElevatorDown) {
                 out.setElevatorMotor(-k.ELE_MotorPwr);   
+                evelate = "Going Down!";
             } else {
                 out.setElevatorMotor(0);
+                evelate = "I'm going no where...";
             }
         }
+        SmartDashboard.putString("Elevator Status", evelate);
     }
 
     public void gotoPosition (ElevatorPosition position) {

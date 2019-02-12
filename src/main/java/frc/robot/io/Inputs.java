@@ -1,6 +1,7 @@
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
 import frc.robot.subsystems.Component;
@@ -80,9 +81,23 @@ public class Inputs extends Component {
         }
         if(Math.abs(rotAxisDrive) < bm.rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
 
+        String stopDixon;//for joy of programming
+        boolean dixon;//for joy of programming
+
         if(dixonDetector(xDixon, xAxisDrive))xAxisDrive = 0;//stop Dixon from breaking robot
         if(dixonDetector(yDixon, yAxisDrive))yAxisDrive = 0;//stop Dixon from breaking robot
         if(dixonDetector(rotDixon, rotAxisDrive))rotAxisDrive = 0;//stop Dixon from breaking robot
+        
+        if(dixonDetector(xDixon, xAxisDrive)||dixonDetector(yDixon, yAxisDrive)||dixonDetector(rotDixon, rotAxisDrive)){
+            dixon = true;
+        }else{
+            dixon = false;
+        }
+
+        if(dixon)stopDixon = "Stop messing with the joysticks, Dixon!";
+        else stopDixon = "   ";
+
+        SmartDashboard.putString("Dixon Detector", stopDixon);
 
         //set buttons
         compassDrive = gamePad.getRawButton(bm.compassDrive);
@@ -98,30 +113,46 @@ public class Inputs extends Component {
         rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
         rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
 
+        String elevatorState;
+
         if(sense.isDisabled) {
             //when disabled require a new button press before moving
             elevatorTarget = ElevatorPosition.DONT_MOVE;
+            elevatorState = "irrelevant";
         } else if(rocketL3 && sense.hasBall){
             elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
+            elevatorState = "Level 3 Cargo";
         } else if (rocketL3 && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
+            elevatorState = "Level 3 Hatch";
         } else if (rocketL2 && sense.hasBall) {
             elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
+            elevatorState = "Level 2 Cargo";
         } else if (rocketL2 && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
+            elevatorState = "Level 2 Hatch";
         } else if (rocketL1 && sense.hasBall) {
             elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
+            elevatorState = "Level 1 Cargo";
         } else if (rocketL1 && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+            elevatorState = "Level 2 Hatch";
+        }else{
+            elevatorState = "unknown";
         }
+        SmartDashboard.putString("Elevator Location", elevatorState);
 
         if(flipOrientation){
             flipOrientation();
         }
+        SmartDashboard.putBoolean("Flip Orientation", flipOrientation);
 
         if(compassDrive){
             compassDrive();
         }
+        SmartDashboard.putBoolean("Compass Drive", compassDrive);
+
+        SmartDashboard.putBoolean("Pit Mode", pitMode);
     }
 
     public void compassDrive(){

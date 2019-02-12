@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ButtonMap;
 import frc.robot.io.Calibrations;
 import frc.robot.io.Inputs;
@@ -88,6 +89,7 @@ public class Component {
         grabDisk.run();
         drive.run();
         out.run();
+        SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());
     }
 
 }
