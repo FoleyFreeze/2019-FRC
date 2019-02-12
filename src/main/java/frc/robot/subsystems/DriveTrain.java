@@ -55,7 +55,7 @@ public class DriveTrain extends Component{
         double deltaDeg = sense.robotAngle.sub(prevAng);
         deltaDegSum +=deltaDeg;
         prevAng = sense.robotAngle.get();
-        if(Math.abs(deltaDegSum) > 360) turnPower = 0;
+        if(Math.abs(deltaDegSum) >= 360) turnPower = 0;
 
         fieldSwerve(dodgeDirX, dodgeDirY, turnPower);
     }
