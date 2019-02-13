@@ -41,6 +41,7 @@ public class OutputsSwerveBot extends Outputs {
 
     }
 
+    //turn power
     public void setSwerveDriveTurn(double turnLF, double turnRF, double turnLB, double turnRB) {
         frontLeftMotorTurn.set(ControlMode.PercentOutput, turnLF);
         frontRightMotorTurn.set(ControlMode.PercentOutput, turnRF);    

@@ -51,7 +51,7 @@ public class DriveTrain extends Component{
         if(firstTime){
             deltaDegSum = 0;
             prevAng = sense.robotAngle.get();
-            double rad = prevAng * Math.PI / 180.0;
+            double rad = prevAng * Math.PI / 180.0;//set to radians
             dodgeDirX = Math.cos(rad);
             dodgeDirY = Math.sin(rad);
             double maxDir = Math.max(dodgeDirX,dodgeDirY);
@@ -74,7 +74,7 @@ public class DriveTrain extends Component{
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
         double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
         double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
-        theta = sense.robotAngle.subtrahend(theta); // = r - robotAngle
+        theta = sense.robotAngle.subtrahend(theta); // = theta - robotAngle
         double x = r * Math.cos(theta / 180 * Math.PI);
         double y = r * Math.sin(theta / 180 * Math.PI);
         swerve(x, y, in.rotAxisDrive);
@@ -88,7 +88,7 @@ public class DriveTrain extends Component{
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         //drive straight
-        if(in.resetGyro) driveStraight = false;
+        if(in.resetGyro) driveStraight = false;//prevents the spin of death(infinite spinning)
         if(rotAxis == 0){
             if(!driveStraight){
                 drvStrSetPnt.set(sense.robotAngle);//if first time, set angle to drive at
@@ -100,7 +100,7 @@ public class DriveTrain extends Component{
             rotAxis = error * k.DRV_SwerveStrKP;
             driveStraight = true;
         }else{
-            driveStraight = false;
+            driveStraight = false;//if rotating, don't try to drive in a line
         }
         SmartDashboard.putBoolean("Driving Straight?", driveStraight);
 
