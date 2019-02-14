@@ -15,6 +15,7 @@ public class Sensors extends Component {
     public Angle robotAngle = new Angle();
     public Angle[] angles = new Angle[4];
     public double elevatorEncoder;
+    public double[] driveEnc = new double[4];
     
     public boolean hasBall;
     public boolean hasHatch;
@@ -57,6 +58,7 @@ public class Sensors extends Component {
 
         robotAngle.set(-navx.getYaw() + navXoffset);
         SmartDashboard.putNumber("Angle of Robot", robotAngle.get());
+        out.getEnc();
     }
 }
 

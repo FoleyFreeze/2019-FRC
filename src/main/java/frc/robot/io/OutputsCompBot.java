@@ -65,6 +65,7 @@ public class OutputsCompBot extends Outputs {
 
     public void run() {
         
+        frontLeftMotorDrive.getEncoder().getPosition();
 
     }
     //Assign powers to motors
@@ -101,7 +102,12 @@ public class OutputsCompBot extends Outputs {
         climbMotor.set(limit(climb));
     }    
        
-    
+    public void readEnc(){
+        sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();
+        sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
+        sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
+        sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
+    }    
 
 
 }
