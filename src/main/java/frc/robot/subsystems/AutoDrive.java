@@ -1,17 +1,21 @@
 package frc.robot.subsystems;
 
+import frc.robot.util.Angle;
+
 public class AutoDrive extends Component{
     
     int wayPointIndex;
     boolean setPoint;
     double[] rSet;
     double[] thetaSet;
-    double[] endFaceAngle = new double[20];
-    double[] startAngle = new double[20];
+    double endFaceAngle;
+    Angle startAngle;
     double[] encValueInit;
+    double deltaTheta;
+    double rotRate;
 
     public AutoDrive(){
-        
+        startAngle = new Angle();
     }
 
     public void run(){
@@ -23,18 +27,17 @@ public class AutoDrive extends Component{
     }
 
     public void start(double[] r, double[] theta, double endFaceAngle){
-        if(r.length>startAngle.length)return;
+        startAngle.set(sense.robotAngle);
         setPoint = true;
         rSet = r;
         thetaSet = theta;
+        deltaTheta = startAngle.subtrahend(endFaceAngle);
 
         wayPointIndex=0;
         double sumR = 0;
         for(int i = 0; i<r.length-1; i++){
             sumR+=r[i];
         }
-        for(;;){
-
-        }
+        rotRate = deltaTheta/sumR;//DO NOT LET SUMR=0!!!!!!
     }
 }
