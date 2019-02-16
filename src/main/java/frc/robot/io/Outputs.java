@@ -54,6 +54,9 @@ public abstract class Outputs extends Component {
         if(in.pitMode){
             value = Math.min(k.OUT_PitModeLimit, Math.max(-k.OUT_PitModeLimit, value));
         } 
+        if(sense.isDisabled){
+            value = 0;
+        }
         return value;
     }
     

@@ -10,6 +10,7 @@ public class ElectroJendz {
     public static final int FR_TURN_ID = 11;
     public static final int BL_TURN_ID = 4;
     public static final int BR_TURN_ID = 10;
+    
     public static final int FL_ENC_ID = 0;
     public static final int FR_ENC_ID = 1;
     public static final int RL_ENC_ID = 2;
@@ -17,7 +18,8 @@ public class ElectroJendz {
 
     public static final int ELE_MotorID = 2;
 
-    public static final int GTH_MotorID = -1;
+    public static final int GTH_MotorL_ID = -1;
+    public static final int GTH_MotorR_ID = -1;
 
     public static final int GTH_ArmMotorID = -1;
 

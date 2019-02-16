@@ -41,40 +41,52 @@ public class OutputsCompBot extends Outputs {
         milTurnRL = new MilEncoder("RL_Turn", 20, 0.1);
         milTurnRR = new MilEncoder("RR_Turn", 20, 0.1);
 
-        frontLeftMotorDrive = new CANSparkMax(ElectroJendz.FL_DRIVE_ID, MotorType.kBrushless);
-        frontLeftMotorTurn = new CANSparkMax(ElectroJendz.FL_TURN_ID, MotorType.kBrushless);
-        frontRightMotorDrive = new CANSparkMax(ElectroJendz.FR_DRIVE_ID, MotorType.kBrushless);
-        frontRightMotorTurn = new CANSparkMax(ElectroJendz.FR_TURN_ID, MotorType.kBrushless);
-        backLeftMotorDrive = new CANSparkMax(ElectroJendz.BL_DRIVE_ID, MotorType.kBrushless);
-        backLeftMotorTurn = new CANSparkMax(ElectroJendz.BL_TURN_ID, MotorType.kBrushless);
-        backRightMotorTurn = new CANSparkMax(ElectroJendz.BR_TURN_ID, MotorType.kBrushless);
-        backRightMotorDrive = new CANSparkMax(ElectroJendz.BR_DRIVE_ID, MotorType.kBrushless);
+        if(!k.DRV_disable) {
+            frontLeftMotorDrive = new CANSparkMax(ElectroJendz.FL_DRIVE_ID, MotorType.kBrushless);
+            frontLeftMotorTurn = new CANSparkMax(ElectroJendz.FL_TURN_ID, MotorType.kBrushless);
+            frontRightMotorDrive = new CANSparkMax(ElectroJendz.FR_DRIVE_ID, MotorType.kBrushless);
+            frontRightMotorTurn = new CANSparkMax(ElectroJendz.FR_TURN_ID, MotorType.kBrushless);
+            backLeftMotorDrive = new CANSparkMax(ElectroJendz.BL_DRIVE_ID, MotorType.kBrushless);
+            backLeftMotorTurn = new CANSparkMax(ElectroJendz.BL_TURN_ID, MotorType.kBrushless);
+            backRightMotorTurn = new CANSparkMax(ElectroJendz.BR_TURN_ID, MotorType.kBrushless);
+            backRightMotorDrive = new CANSparkMax(ElectroJendz.BR_DRIVE_ID, MotorType.kBrushless);
+        
 
-        if (k.OUT_DriveBrakeMode){
-            frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
-            frontRightMotorDrive.setIdleMode(IdleMode.kBrake);
-            backLeftMotorDrive.setIdleMode(IdleMode.kBrake);
-            backRightMotorDrive.setIdleMode(IdleMode.kBrake);
-        } else {
-            frontLeftMotorDrive.setIdleMode(IdleMode.kCoast);
-            frontRightMotorDrive.setIdleMode(IdleMode.kCoast);
-            backLeftMotorDrive.setIdleMode(IdleMode.kCoast);
-            backRightMotorDrive.setIdleMode(IdleMode.kCoast);
+            if (k.OUT_DriveBrakeMode){
+                frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
+                frontRightMotorDrive.setIdleMode(IdleMode.kBrake);
+                backLeftMotorDrive.setIdleMode(IdleMode.kBrake);
+                backRightMotorDrive.setIdleMode(IdleMode.kBrake);
+            } else {
+                frontLeftMotorDrive.setIdleMode(IdleMode.kCoast);
+                frontRightMotorDrive.setIdleMode(IdleMode.kCoast);
+                backLeftMotorDrive.setIdleMode(IdleMode.kCoast);
+                backRightMotorDrive.setIdleMode(IdleMode.kCoast);
+            }
+
+            frontLeftMotorTurn.setIdleMode(IdleMode.kBrake);
+            frontRightMotorTurn.setIdleMode(IdleMode.kBrake);
+            backLeftMotorTurn.setIdleMode(IdleMode.kBrake);
+            backRightMotorTurn.setIdleMode(IdleMode.kBrake);
         }
 
-        frontLeftMotorTurn.setIdleMode(IdleMode.kBrake);
-        frontRightMotorTurn.setIdleMode(IdleMode.kBrake);
-        backLeftMotorTurn.setIdleMode(IdleMode.kBrake);
-        backRightMotorTurn.setIdleMode(IdleMode.kBrake);
+        if(!k.ELE_disable){
+            elevatorMotor = new CANSparkMax(ElectroJendz.ELE_MotorID, MotorType.kBrushless);
+            elevatorMotor.setIdleMode(IdleMode.kCoast);
+        }
 
-        elevatorMotor = new CANSparkMax(ElectroJendz.ELE_MotorID, MotorType.kBrushless);
+        if(!k.GTH_disableBall){
+            gatherMotorL = new CANSparkMax(ElectroJendz.GTH_MotorL_ID, MotorType.kBrushless);
+            gatherMotorR = new CANSparkMax(ElectroJendz.GTH_MotorR_ID, MotorType.kBrushless);
+        }
 
-        gatherMotorL = new CANSparkMax(0, MotorType.kBrushless);
-        gatherMotorR = new CANSparkMax(0, MotorType.kBrushless);
-        gatherArmMotor = new CANSparkMax(0, MotorType.kBrushless);
-        
-        climbMotor = new CANSparkMax(0, MotorType.kBrushless);
+        if(!k.GTH_disableDisk){
+            gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushless);
+        }
 
+        if(!k.CLM_disable){
+            climbMotor = new CANSparkMax(ElectroJendz.CLM_MotorID, MotorType.kBrushless);
+        }
     }
 
     public void run() {
@@ -82,15 +94,21 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void getEnc(){
-        sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();
-        sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
-        sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
-        sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
-        sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();
+        if(!k.DRV_disable) {
+            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();
+            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
+            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
+            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
+        }
+        if(!k.ELE_disable){
+            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();
+        }
+        
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
         SmartDashboard.putNumber("Enc FR", sense.driveEnc[1]);
         SmartDashboard.putNumber("Enc RL", sense.driveEnc[2]);
         SmartDashboard.putNumber("Enc RR", sense.driveEnc[3]);
+        SmartDashboard.putNumber("Enc Ele", sense.elevatorEncoder);
     }
 
     //Assign powers to motors
@@ -146,13 +164,5 @@ public class OutputsCompBot extends Outputs {
     public void climbMotor(double climb) {
         climbMotor.set(limit(climb));
     }    
-       
-    public void readEnc(){
-        sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();
-        sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
-        sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
-        sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
-    }    
-
 
 }

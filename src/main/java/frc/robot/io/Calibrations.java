@@ -72,11 +72,11 @@ public class Calibrations{
     public Calibrations(){
 
         //Disables
-        ELE_disable = true;
+        ELE_disable = false;
         CLM_disable = true;
         GTH_disableBall = true;
         GTH_disableDisk = true;
-        DRV_disable = false;
+        DRV_disable = true;
         AD_Disabled = true;
         MIL_Disabled = true;
 
@@ -103,7 +103,7 @@ public class Calibrations{
         GTH_ArmOutCurrent = 0;
         GTH_FailSafeTimer = 0;
 
-        ELE_MotorPwr = 1; // set to actual value later
+        ELE_MotorPwr = 0.1; // set to actual value later
         ELE_PositionKP = 0;
 
         CLM_MotorSpeed = 0;
