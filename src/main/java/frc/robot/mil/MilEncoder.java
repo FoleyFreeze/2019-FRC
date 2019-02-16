@@ -1,10 +1,11 @@
 package frc.robot.mil;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Component;
 import frc.robot.util.Angle;
 import frc.robot.util.Filter;
 
-public class MilEncoder {
+public class MilEncoder extends Component{
 
     private String name;
     private double distPerPwrLimit;
@@ -23,6 +24,7 @@ public class MilEncoder {
     }
 
     public boolean isActive() {
+        if(k.MIL_Disabled) return false;
         SmartDashboard.putBoolean("Mil " + name, status);
         SmartDashboard.putNumber("Mil val " + name, filt.getVal());
         return status;

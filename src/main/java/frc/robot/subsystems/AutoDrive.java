@@ -27,6 +27,7 @@ public class AutoDrive extends Component{
     }
 
     public void start(double[] r, double[] theta, double endFaceAngle){
+        if(k.AD_Disabled)return;
         startAngle.set(sense.robotAngle);
         setPoint = true;
         rSet = r;

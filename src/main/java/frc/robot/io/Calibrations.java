@@ -65,6 +65,8 @@ public class Calibrations{
     public boolean GTH_disableBall;
     public boolean DRV_disable;
     public boolean GTH_disableDisk;
+    public boolean AD_Disabled;
+    public boolean MIL_Disabled;
 
     
     public Calibrations(){
@@ -75,6 +77,8 @@ public class Calibrations{
         GTH_disableBall = true;
         GTH_disableDisk = true;
         DRV_disable = false;
+        AD_Disabled = true;
+        MIL_Disabled = true;
 
         NAVX_Offset = 0.0;//was 90.0
 
