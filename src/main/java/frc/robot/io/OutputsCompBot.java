@@ -67,7 +67,7 @@ public class OutputsCompBot extends Outputs {
         backLeftMotorTurn.setIdleMode(IdleMode.kBrake);
         backRightMotorTurn.setIdleMode(IdleMode.kBrake);
 
-        elevatorMotor = new CANSparkMax(0, MotorType.kBrushless);
+        elevatorMotor = new CANSparkMax(ElectroJendz.ELE_MotorID, MotorType.kBrushless);
 
         gatherMotorL = new CANSparkMax(0, MotorType.kBrushless);
         gatherMotorR = new CANSparkMax(0, MotorType.kBrushless);
@@ -86,6 +86,7 @@ public class OutputsCompBot extends Outputs {
         sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
         sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
         sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
+        sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
         SmartDashboard.putNumber("Enc FR", sense.driveEnc[1]);
         SmartDashboard.putNumber("Enc RL", sense.driveEnc[2]);

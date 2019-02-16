@@ -15,7 +15,7 @@ public class ElectroJendz {
     public static final int RL_ENC_ID = 2;
     public static final int RR_ENC_ID = 3;
 
-    public static final int ELE_MotorID = -1;
+    public static final int ELE_MotorID = 2;
 
     public static final int GTH_MotorID = -1;
 
