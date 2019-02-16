@@ -11,6 +11,7 @@ import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
 import frc.robot.io.OutputsSwerveBot;
 import frc.robot.io.Vision;
+import frc.robot.subsystems.RSE;
 
 public class Component {
     public static ButtonMap bm;

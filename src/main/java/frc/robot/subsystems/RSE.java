@@ -43,7 +43,8 @@ public class RSE extends Component {
 
         for(int i = 0; i < 4; i++) {
             // average of wheel angles
-            double avgWheelAng = sense.angles[i].add(prevWheelAngle[i])/2;
+            double deltaWheelAng = sense.angles[i].sub(prevWheelAngle[i]);
+            double avgWheelAng = deltaWheelAng*.5 + prevWheelAngle[i];
             prevWheelAngle[i] = sense.angles[i].get();
             SmartDashboard.putNumber("RSEwheelAngle"+i,avgWheelAng);
             
@@ -57,7 +58,7 @@ public class RSE extends Component {
             if(deltaRobotAngle != 0){
                 radius = deltaDriveEnc / deltaRobotAngle;
             } else {
-                radius = 0;
+                radius = Double.POSITIVE_INFINITY;
             }
             SmartDashboard.putNumber("RSERadius"+i, radius);
 
