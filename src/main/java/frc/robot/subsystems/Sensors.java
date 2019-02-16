@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
 import frc.robot.util.Angle;
@@ -20,6 +21,9 @@ public class Sensors extends Component {
     public boolean hasBall;
     public boolean hasHatch;
     public boolean isDisabled;
+
+    public double dt;
+    private double prevTime;
 
     public Sensors() {
         angleEnc[0] = new AnalogInput(ElectroJendz.FL_ENC_ID);
@@ -60,6 +64,11 @@ public class Sensors extends Component {
         robotAngle.set(-navx.getYaw() + navXoffset);
         SmartDashboard.putNumber("Angle of Robot", robotAngle.get());
         out.getEnc();
+
+        double time = Timer.getFPGATimestamp();
+        dt = time - prevTime;
+        prevTime = time;
+        SmartDashboard.putNumber("dt",dt);
     }
 }
 

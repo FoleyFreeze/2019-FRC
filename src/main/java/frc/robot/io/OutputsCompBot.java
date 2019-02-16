@@ -4,6 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class OutputsCompBot extends Outputs {
         
     private CANSparkMax frontRightMotorDrive;
@@ -65,9 +67,19 @@ public class OutputsCompBot extends Outputs {
 
     public void run() {
         
-        frontLeftMotorDrive.getEncoder().getPosition();
-
     }
+
+    public void getEnc(){
+        sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();
+        sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
+        sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
+        sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
+        SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
+        SmartDashboard.putNumber("Enc FR", sense.driveEnc[1]);
+        SmartDashboard.putNumber("Enc RL", sense.driveEnc[2]);
+        SmartDashboard.putNumber("Enc RR", sense.driveEnc[3]);
+    }
+
     //Assign powers to motors
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
         frontLeftMotorDrive.set(limit(powerLF*k.DRV_SwerveDrivePwrScale));
