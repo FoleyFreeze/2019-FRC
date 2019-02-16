@@ -1,12 +1,15 @@
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.mil.MilEncoder;
 import frc.robot.subsystems.Component;
 
 public abstract class Outputs extends Component {
  
     private Solenoid gatherSolenoid1;
     private Solenoid gatherSolenoid2;
+
+
 
     public Outputs() {
         gatherSolenoid1 = new Solenoid(1);
@@ -15,8 +18,8 @@ public abstract class Outputs extends Component {
 
     public void run() {
         
-
     }
+
     //Assign powers to motors
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
 
@@ -24,8 +27,7 @@ public abstract class Outputs extends Component {
 
     //Assign powers to turn motors 
     public void setSwerveDriveTurn(double turnLF, double turnRF, double turnLB, double turnRB) {
-      
-
+        
     }
 
     public void setElevatorMotor(double elevate) {
@@ -43,6 +45,10 @@ public abstract class Outputs extends Component {
     public void climbMotor(double climb) {
         
     }    
+
+    public void getEnc(){
+        
+    }
        
     protected double limit(double value) {
         if(in.pitMode){

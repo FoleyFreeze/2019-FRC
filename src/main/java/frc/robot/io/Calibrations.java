@@ -1,7 +1,5 @@
 package frc.robot.io;
 
-import frc.robot.io.ButtonMap;
-
 public class Calibrations{
     
     public enum RobotType {
@@ -20,7 +18,8 @@ public class Calibrations{
     public double   DRV_SwerveAngKP;
     public double   DRV_SwerveMaxAnglePwr; 
     public double   DRV_SwerveDrivePwrScale;
-    public double   DRV_SwerveStrKP;
+    public double   DRV_SwerveStrKP; 
+    public double   DRV_SwerveStrKD;
     public double   DRV_WaitForParkTime; 
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
@@ -55,6 +54,8 @@ public class Calibrations{
     public int IN_rocketSideRight;
 
 
+    public int MIL_livepi;
+    public int MIL_trackpi;
     public double OUT_PitModeLimit;
     public boolean OUT_DriveBrakeMode;
 
@@ -64,6 +65,8 @@ public class Calibrations{
     public boolean GTH_disableBall;
     public boolean DRV_disable;
     public boolean GTH_disableDisk;
+    public boolean AD_Disabled;
+    public boolean MIL_Disabled;
 
     
     public Calibrations(){
@@ -74,6 +77,8 @@ public class Calibrations{
         GTH_disableBall = true;
         GTH_disableDisk = true;
         DRV_disable = false;
+        AD_Disabled = true;
+        MIL_Disabled = true;
 
         NAVX_Offset = 0.0;//was 90.0
 
@@ -85,6 +90,7 @@ public class Calibrations{
         DRV_SwerveMaxAnglePwr = 0.5;
         DRV_SwerveDrivePwrScale = 0.5;
         DRV_SwerveStrKP = -0.0;//rotation power per degree
+        DRV_SwerveStrKD = -2;
         DRV_WaitForParkTime = 0.5;//seconds
 
         GTH_IntakeSpeed = 0;
@@ -114,6 +120,10 @@ public class Calibrations{
         //Axes
         IN_dodgingL = 2;
         IN_dodgingR = 3;
+        //Mil
+        MIL_livepi = 0;
+        MIL_trackpi = 0;
+
 
         OUT_PitModeLimit = 0.25;
         OUT_DriveBrakeMode = true;        

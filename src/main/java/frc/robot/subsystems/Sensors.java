@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
 import frc.robot.util.Angle;
@@ -13,12 +14,18 @@ public class Sensors extends Component {
     private AnalogInput[] angleEnc = new AnalogInput[4];
 
     public Angle robotAngle = new Angle();
+    public double deltaRobotAngle = 0;
+    private double prevRobotAngle = 0;
     public Angle[] angles = new Angle[4];
     public double elevatorEncoder;
+    public double[] driveEnc = new double[4];
     
     public boolean hasBall;
     public boolean hasHatch;
     public boolean isDisabled;
+
+    public double dt;
+    private double prevTime;
 
     public Sensors() {
         angleEnc[0] = new AnalogInput(ElectroJendz.FL_ENC_ID);
@@ -36,6 +43,7 @@ public class Sensors extends Component {
     double navXoffset = k.NAVX_Offset;
     public void init() {
         navx.zeroYaw();//reset navx
+        rse.reset(); 
     }
 
     double[] rawAngles = {0,0,0,0};
@@ -56,7 +64,15 @@ public class Sensors extends Component {
         SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
         robotAngle.set(-navx.getYaw() + navXoffset);
+        deltaRobotAngle = robotAngle.sub(prevRobotAngle);
+        prevRobotAngle = robotAngle.get();
         SmartDashboard.putNumber("Angle of Robot", robotAngle.get());
+        out.getEnc();
+
+        double time = Timer.getFPGATimestamp();
+        dt = time - prevTime;
+        prevTime = time;
+        SmartDashboard.putNumber("dt",dt);
     }
 }
 
