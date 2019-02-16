@@ -80,7 +80,7 @@ public class DriveTrain extends Component{
         swerve(x, y, in.rotAxisDrive);
     }
 
-    boolean driveStraight = false; 
+    boolean prevDriveStraight = false; 
     Angle drvStrSetPnt = new Angle();
 
     //start timer upon robot startup
@@ -88,21 +88,20 @@ public class DriveTrain extends Component{
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         //drive straight
-        if(in.resetGyro) driveStraight = false;//prevents the spin of death(infinite spinning)
+        if(in.resetGyro) prevDriveStraight = false;
+
+        // drive straight when we're not turning
         if(rotAxis == 0){
-            if(!driveStraight){
+            if(!prevDriveStraight){
                 drvStrSetPnt.set(sense.robotAngle);//if first time, set angle to drive at
             } 
-            double error = drvStrSetPnt.sub(sense.robotAngle);
-            
-            SmartDashboard.putNumber("Drive Straight Error", error);
+            double error = drvStrSetPnt.sub(sense.robotAngle);             
 
-            rotAxis = error * k.DRV_SwerveStrKP;
-            driveStraight = true;
+            rotAxis = error * k.DRV_SwerveStrKP + sense.deltaRobotAngle * k.DRV_SwerveStrKD;
+            prevDriveStraight = true;
         }else{
-            driveStraight = false;//if rotating, don't try to drive in a line
+            prevDriveStraight = false;
         }
-        SmartDashboard.putBoolean("Driving Straight?", driveStraight);
 
        //for each wheel calculate r,theta; power and angle
        for(int i = 0; i < 4; i++){

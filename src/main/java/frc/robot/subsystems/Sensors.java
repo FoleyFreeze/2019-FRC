@@ -13,6 +13,8 @@ public class Sensors extends Component {
     private AnalogInput[] angleEnc = new AnalogInput[4];
 
     public Angle robotAngle = new Angle();
+    public double deltaRobotAngle = 0;
+    private double prevRobotAngle = 0;
     public Angle[] angles = new Angle[4];
     public double elevatorEncoder;
     
@@ -56,7 +58,8 @@ public class Sensors extends Component {
         SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
         robotAngle.set(-navx.getYaw() + navXoffset);
-        SmartDashboard.putNumber("Angle of Robot", robotAngle.get());
+        deltaRobotAngle = robotAngle.sub(prevRobotAngle);
+        prevRobotAngle = robotAngle.get();
     }
 }
 
