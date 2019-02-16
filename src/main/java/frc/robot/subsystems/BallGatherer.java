@@ -22,7 +22,7 @@ public class BallGatherer extends Component{
         }
         else {
             out.setGatherMotor(0,0); 
-            gatherStatus = "Not Moving";
+            gatherStatus = "Not Moving the Wheels";
         }
         SmartDashboard.putString("Cargo Gather Status", gatherStatus);
     }

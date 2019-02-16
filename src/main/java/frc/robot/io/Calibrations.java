@@ -9,6 +9,8 @@ public class Calibrations{
     }
     public static RobotType BOT_Version = RobotType.PRACTICE;
 
+    public double NAVX_Offset;
+
     public double   DRV_CountsPerDegree;
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
@@ -72,6 +74,8 @@ public class Calibrations{
         GTH_disableBall = true;
         GTH_disableDisk = true;
         DRV_disable = false;
+
+        NAVX_Offset = 0.0;//was 90.0
 
         DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
         DRV_RotCentX = 0.0;

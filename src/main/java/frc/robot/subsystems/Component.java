@@ -83,7 +83,7 @@ public class Component {
         in.run();
         sense.run();
         view.run();
-        grabCargo.run();//UNCOMMENT WHEN ATTACHED
+        grabCargo.run();
         climb.run();
         elevator.run();
         grabDisk.run();

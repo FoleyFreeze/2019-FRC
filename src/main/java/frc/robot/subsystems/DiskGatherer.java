@@ -68,7 +68,7 @@ public class DiskGatherer extends Component{
             break;
             
         }
-        //SmartDashboard.putString("State of Gatherer", gatherStater); Fix Later, Arianna doesn't want to break the code
+        //SmartDashboard.putString("State of Gatherer", gatherStater); //Fix Later, Arianna doesn't want to break the code
 
     }
 

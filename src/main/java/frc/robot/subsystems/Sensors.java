@@ -33,7 +33,7 @@ public class Sensors extends Component {
         }
     }
 
-    double navXoffset = 90;
+    double navXoffset = k.NAVX_Offset;
     public void init() {
         navx.zeroYaw();//reset navx
     }
