@@ -37,6 +37,7 @@ public class Sensors extends Component {
     double navXoffset = k.NAVX_Offset;
     public void init() {
         navx.zeroYaw();//reset navx
+        rse.reset(); 
     }
 
     double[] rawAngles = {0,0,0,0};
