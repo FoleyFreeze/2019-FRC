@@ -43,6 +43,10 @@ public abstract class Outputs extends Component {
     public void climbMotor(double climb) {
         
     }    
+
+    public void getEnc(){
+        
+    }
        
     protected double limit(double value) {
         if(in.pitMode){

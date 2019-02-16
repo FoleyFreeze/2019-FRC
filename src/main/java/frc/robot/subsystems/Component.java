@@ -11,6 +11,7 @@ import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
 import frc.robot.io.OutputsSwerveBot;
 import frc.robot.io.Vision;
+import frc.robot.subsystems.RSE;
 
 public class Component {
     public static ButtonMap bm;
@@ -24,6 +25,7 @@ public class Component {
     public static DiskGatherer grabDisk;
     public static DriveTrain drive;
     public static Calibrations k;
+    public static RSE rse;
 
     public static void initAll() {
         
@@ -66,6 +68,7 @@ public class Component {
         elevator = new Elevator(); //F
         grabDisk = new DiskGatherer();
         drive = new DriveTrain(); 
+        rse = new RSE();
 
         switch(Calibrations.BOT_Version){
             case COMPETITION:
@@ -83,6 +86,7 @@ public class Component {
         in.run();
         sense.run();
         view.run();
+        rse.run();
         grabCargo.run();
         climb.run();
         elevator.run();
