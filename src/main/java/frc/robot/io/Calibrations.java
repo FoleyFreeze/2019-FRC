@@ -1,7 +1,5 @@
 package frc.robot.io;
 
-import frc.robot.io.ButtonMap;
-
 public class Calibrations{
     
     public enum RobotType {
@@ -56,6 +54,8 @@ public class Calibrations{
     public int IN_rocketSideRight;
 
 
+    public int MIL_livepi;
+    public int MIL_trackpi;
     public double OUT_PitModeLimit;
     public boolean OUT_DriveBrakeMode;
 
@@ -116,6 +116,10 @@ public class Calibrations{
         //Axes
         IN_dodgingL = 2;
         IN_dodgingR = 3;
+        //Mil
+        MIL_livepi = 0;
+        MIL_trackpi = 0;
+
 
         OUT_PitModeLimit = 0.25;
         OUT_DriveBrakeMode = true;        

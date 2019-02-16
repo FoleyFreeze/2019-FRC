@@ -18,6 +18,7 @@ public class OutputsSwerveBot extends Outputs {
 
 
     public OutputsSwerveBot() {
+        super();
 
         frontLeftMotorDrive = new Talon(1);
         frontLeftMotorTurn = new TalonSRX(15);
