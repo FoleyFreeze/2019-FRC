@@ -37,7 +37,6 @@ public class RSE extends Component {
         double deltaRobotAngle = sense.robotAngle.sub(prevRobotAngle);
         prevRobotAngle = sense.robotAngle.get();
         SmartDashboard.putNumber("RSEdTheta", deltaRobotAngle);
-        double deltaRobotRad = deltaRobotAngle*Math.PI/180;
         double sumDX = 0;
         double sumDY = 0;
 
@@ -53,35 +52,16 @@ public class RSE extends Component {
             prevEnc[i] = sense.driveEnc[i];
             SmartDashboard.putNumber("RSEdDriveEnc"+i, deltaDriveEnc);
 
-            // calculate radius values
-            double radius;
-            if(deltaRobotAngle != 0){
-                radius = deltaDriveEnc / deltaRobotAngle;
-            } else {
-                radius = Double.POSITIVE_INFINITY;
-            }
-            SmartDashboard.putNumber("RSERadius"+i, radius);
-
-            //use the radius values to calculate the wheel relative delta x and delta y
-            double deltaX = radius - radius*Math.cos(deltaRobotRad);
-            double deltaY = radius * Math.sin(deltaRobotRad);
-            SmartDashboard.putNumber("RSEdX"+i, deltaX);
-            SmartDashboard.putNumber("RSEdY"+i, deltaY);
-
-            // rotate delta x and delta y to field x and y 
-            double theta = Math.atan2(deltaY, deltaX);
-                // to degrees
-            theta *= 180/Math.PI;
-
-            double r = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            theta = sense.robotAngle.subtrahend(theta - avgWheelAng - 90);
+            //wheel r, theta
+            double r = deltaDriveEnc;
+            double theta = sense.robotAngle.subtrahend(avgWheelAng);
             SmartDashboard.putNumber("RSEWheeltheta"+i, theta);
 
                 // back to radians
             theta *= Math.PI/180;
 
-            deltaX = r * Math.cos(theta);
-            deltaY = r * Math.sin(theta);
+            double deltaX = r * Math.cos(theta);
+            double deltaY = r * Math.sin(theta);
             
             // sum the field delta x and delta y for average
             sumDX += deltaX;
