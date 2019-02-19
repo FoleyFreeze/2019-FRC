@@ -72,7 +72,7 @@ public class OutputsCompBot extends Outputs {
 
         if(!k.ELE_disable){
             elevatorMotor = new CANSparkMax(ElectroJendz.ELE_MotorID, MotorType.kBrushless);
-            elevatorMotor.setIdleMode(IdleMode.kCoast);
+            elevatorMotor.setIdleMode(IdleMode.kBrake);
         }
 
         if(!k.GTH_disableBall){
@@ -109,6 +109,15 @@ public class OutputsCompBot extends Outputs {
         SmartDashboard.putNumber("Enc RL", sense.driveEnc[2]);
         SmartDashboard.putNumber("Enc RR", sense.driveEnc[3]);
         SmartDashboard.putNumber("Enc Ele", sense.elevatorEncoder);
+    }
+
+    public void resetEnc(){
+        if(!k.DRV_disable){
+            frontLeftMotorDrive.getEncoder().setPosition(0);
+            frontRightMotorDrive.getEncoder().setPosition(0);
+            backLeftMotorDrive.getEncoder().setPosition(0);
+            backRightMotorDrive.getEncoder().setPosition(0);
+        }
     }
 
     //Assign powers to motors

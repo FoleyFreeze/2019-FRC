@@ -40,9 +40,9 @@ public class Sensors extends Component {
         }
     }
 
-    double navXoffset = k.NAVX_Offset;
     public void init() {
         navx.zeroYaw();//reset navx
+        out.resetEnc();
         rse.reset(); 
     }
 
@@ -61,9 +61,9 @@ public class Sensors extends Component {
         rawAngles[1] = angleFR;
         rawAngles[2] = angleRL;
         rawAngles[3] = angleRR;
-        SmartDashboard.putNumberArray("WheelAngles", rawAngles);
+        //SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
-        robotAngle.set(-navx.getYaw() + navXoffset);
+        robotAngle.set(-navx.getYaw() + k.NAVX_Offset);
         deltaRobotAngle = robotAngle.sub(prevRobotAngle);
         prevRobotAngle = robotAngle.get();
         SmartDashboard.putNumber("Angle of Robot", robotAngle.get());

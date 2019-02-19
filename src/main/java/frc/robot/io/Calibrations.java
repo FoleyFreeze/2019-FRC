@@ -38,11 +38,12 @@ public class Calibrations{
     public double ELE_MotorPwr;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            0,               0,               0,              0,              0,              0,             0,               0,          0,          0
+            0,               0,               0,              15,              0,              0,             0,               55,          0,          0
     };
     public double ELE_PositionKP;
     public double ELE_InchesPRev;
-    public double ELE_PIDLimit;
+    public double ELE_PIDLimitUp;
+    public double ELE_PIDLimitDown;
     public double CLM_MotorSpeed;
     public double IN_DodgingMin;
     public int IN_DixonSize;
@@ -75,15 +76,15 @@ public class Calibrations{
     public Calibrations(){
 
         //Disables
-        ELE_disable = false;
+        ELE_disable = true;
         CLM_disable = true;
         GTH_disableBall = true;
         GTH_disableDisk = true;
-        DRV_disable = true;
+        DRV_disable = false;
         AD_Disabled = true;
         MIL_Disabled = true;
 
-        NAVX_Offset = 0.0;//was 90.0
+        NAVX_Offset = 90.0;
 
         DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
         DRV_RotCentX = 0.0;
@@ -91,9 +92,9 @@ public class Calibrations{
         DRV_SwerveAngRate = 0.05;
         DRV_SwerveAngKP = -0.003;
         DRV_SwerveMaxAnglePwr = 0.5;
-        DRV_SwerveDrivePwrScale = 0.5;
-        DRV_SwerveStrKP = -0.0;//rotation power per degree
-        DRV_SwerveStrKD = -2;
+        DRV_SwerveDrivePwrScale = 0.25;
+        DRV_SwerveStrKP = -0.2;//rotation power per degree
+        DRV_SwerveStrKD = 0;
         DRV_WaitForParkTime = 0.5;//seconds
         DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
 
@@ -108,9 +109,10 @@ public class Calibrations{
         GTH_FailSafeTimer = 0;
 
         ELE_MotorPwr = 0.1; // set to actual value later
-        ELE_PositionKP = 0.5;
+        ELE_PositionKP = 0.1;
         ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI;
-        ELE_PIDLimit = 0.5;
+        ELE_PIDLimitUp = 0.75;
+        ELE_PIDLimitDown = 0.5;
 
         CLM_MotorSpeed = 0;
         

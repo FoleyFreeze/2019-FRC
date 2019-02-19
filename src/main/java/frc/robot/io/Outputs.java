@@ -49,6 +49,10 @@ public abstract class Outputs extends Component {
     public void getEnc(){
         
     }
+
+    public void resetEnc(){
+        
+    }
        
     protected double limit(double value) {
         if(in.pitMode){

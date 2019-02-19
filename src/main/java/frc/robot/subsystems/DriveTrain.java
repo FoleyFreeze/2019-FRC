@@ -74,7 +74,7 @@ public class DriveTrain extends Component{
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
         double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
         double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
-        theta = sense.robotAngle.subtrahend(theta); // = theta - robotAngle
+        theta = sense.robotAngle.subtrahend(theta + k.NAVX_Offset); // = theta - robotAngle
         double x = r * Math.cos(theta / 180 * Math.PI);
         double y = r * Math.sin(theta / 180 * Math.PI);
         swerve(x, y, in.rotAxisDrive);
@@ -88,7 +88,7 @@ public class DriveTrain extends Component{
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         //drive straight
-        if(in.resetGyro) prevDriveStraight = false;
+        if(in.resetGyro || sense.isDisabled) prevDriveStraight = false;
 
         // drive straight when we're not turning
         if(rotAxis == 0){

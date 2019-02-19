@@ -44,8 +44,8 @@ public class Elevator extends Component {
             double setpoint = k.ELE_PositionArray[position.ordinal()];
             double error = setpoint - sense.elevatorEncoder;
             double power = error*k.ELE_PositionKP;
-            if(power > k.ELE_PIDLimit) power = k.ELE_PIDLimit;
-            if(power < -k.ELE_PIDLimit) power = -k.ELE_PIDLimit;
+            if(power > k.ELE_PIDLimitUp) power = k.ELE_PIDLimitUp;
+            if(power < -k.ELE_PIDLimitDown) power = -k.ELE_PIDLimitDown;
             out.setElevatorMotor(power);
         }
     }
