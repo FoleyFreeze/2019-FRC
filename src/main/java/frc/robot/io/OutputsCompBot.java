@@ -95,13 +95,13 @@ public class OutputsCompBot extends Outputs {
 
     public void getEnc(){
         if(!k.DRV_disable) {
-            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();
-            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
-            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
-            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
+            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
+            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
+            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
+            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
         }
         if(!k.ELE_disable){
-            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();
+            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition()*k.ELE_InchesPRev;//value in inches
         }
         
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);

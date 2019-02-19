@@ -21,6 +21,7 @@ public class Calibrations{
     public double   DRV_SwerveStrKP; 
     public double   DRV_SwerveStrKD;
     public double   DRV_WaitForParkTime; 
+    public double   DRV_InchesPRev;
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
     public double SEN_AbsAngleRL;
@@ -40,6 +41,8 @@ public class Calibrations{
             0,               0,               0,              0,              0,              0,             0,               0,          0,          0
     };
     public double ELE_PositionKP;
+    public double ELE_InchesPRev;
+    public double ELE_PIDLimit;
     public double CLM_MotorSpeed;
     public double IN_DodgingMin;
     public int IN_DixonSize;
@@ -92,6 +95,7 @@ public class Calibrations{
         DRV_SwerveStrKP = -0.0;//rotation power per degree
         DRV_SwerveStrKD = -2;
         DRV_WaitForParkTime = 0.5;//seconds
+        DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
 
         GTH_IntakeSpeed = 0;
         GTH_ShootSpeedFast = 0;
@@ -104,7 +108,9 @@ public class Calibrations{
         GTH_FailSafeTimer = 0;
 
         ELE_MotorPwr = 0.1; // set to actual value later
-        ELE_PositionKP = 0;
+        ELE_PositionKP = 0.5;
+        ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI;
+        ELE_PIDLimit = 0.5;
 
         CLM_MotorSpeed = 0;
         

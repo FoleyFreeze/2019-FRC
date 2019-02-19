@@ -116,6 +116,11 @@ public class Inputs extends Component {
         autoElevator = false;
         manualElevatorUp = gamePad.getRawButton(2);
         manualElevatorDown = gamePad.getRawButton(3);
+        if(autoElevator){
+            if(gamePad.getRawButton(2))elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+            else if(gamePad.getRawButton(3))elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
+            else elevatorTarget = ElevatorPosition.DONT_MOVE;
+        }
 
         String elevatorState;
 
