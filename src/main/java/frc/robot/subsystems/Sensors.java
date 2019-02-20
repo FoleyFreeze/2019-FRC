@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,6 +13,7 @@ import frc.robot.util.Angle;
 public class Sensors extends Component {
     private AHRS navx;
     private AnalogInput[] angleEnc = new AnalogInput[4];
+    public PowerDistributionPanel pdp;
 
     public Angle robotAngle = new Angle();
     public double deltaRobotAngle = 0;
@@ -33,6 +35,7 @@ public class Sensors extends Component {
         angleEnc[2] = new AnalogInput(ElectroJendz.RL_ENC_ID);
         angleEnc[3] = new AnalogInput(ElectroJendz.RR_ENC_ID);
         navx = new AHRS(Port.kMXP);
+        pdp = new PowerDistributionPanel();
 
         //init angle objects
         for(int i=0; i<angles.length; i++) {

@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.mil.CurrentLimit;
 import frc.robot.mil.MilEncoder;
 
 public class OutputsCompBot extends Outputs {
@@ -26,6 +27,28 @@ public class OutputsCompBot extends Outputs {
 
     private CANSparkMax climbMotor;
 
+    //anti-fire mode for drive motors
+    private CurrentLimit fRDriveMil;
+    private CurrentLimit fLDriveMil;
+    private CurrentLimit rRDriveMil;
+    private CurrentLimit rLDriveMil;
+
+    //anti-fire mode for turn motors
+    private CurrentLimit fRTurnMil;
+    private CurrentLimit fLTurnMil;
+    private CurrentLimit rRTurnMil;
+    private CurrentLimit rLTurnMil;
+
+    //anti-fire mode for elevator motors
+    private CurrentLimit elevatorMil;
+
+    //anti-fire mode for gather motors
+    private CurrentLimit gatherLMil;
+    private CurrentLimit gatherRMil;
+    private CurrentLimit gatherArmMil;
+
+    //anti-fire mode for climb motors
+    private CurrentLimit climbMil;
 
     //output mils
     private MilEncoder milTurnFL;
@@ -40,16 +63,34 @@ public class OutputsCompBot extends Outputs {
         milTurnFR = new MilEncoder("FR_Turn", 20, 0.1);
         milTurnRL = new MilEncoder("RL_Turn", 20, 0.1);
         milTurnRR = new MilEncoder("RR_Turn", 20, 0.1);
+        
+        fRDriveMil = new CurrentLimit(40, ElectroJendz.FR_DRIVE_ID, 400);
+        fLDriveMil = new CurrentLimit(40, ElectroJendz.FL_DRIVE_ID, 400);
+        rLDriveMil = new CurrentLimit(40, ElectroJendz.RL_DRIVE_ID, 400);
+        rRDriveMil = new CurrentLimit(40, ElectroJendz.RR_DRIVE_ID, 400);
+
+        fLTurnMil = new CurrentLimit(10, ElectroJendz.FL_TURN_ID, 100);
+        fRTurnMil = new CurrentLimit(10, ElectroJendz.FR_TURN_ID, 100);
+        rLTurnMil = new CurrentLimit(10, ElectroJendz.RL_TURN_ID, 100);
+        rRTurnMil = new CurrentLimit(10, ElectroJendz.RR_TURN_ID, 100);
+
+        elevatorMil = new CurrentLimit(30, ElectroJendz.ELE_MotorID, 60);
+
+        gatherLMil = new CurrentLimit(5, ElectroJendz.GTH_MotorL_ID, 20);
+        gatherRMil = new CurrentLimit(5, ElectroJendz.GTH_MotorR_ID, 20);
+        gatherArmMil = new CurrentLimit(20, ElectroJendz.GTH_ArmMotorID, 50);
+
+        climbMil = new CurrentLimit(40, ElectroJendz.CLM_MotorID, 400);
 
         if(!k.DRV_disable) {
             frontLeftMotorDrive = new CANSparkMax(ElectroJendz.FL_DRIVE_ID, MotorType.kBrushless);
             frontLeftMotorTurn = new CANSparkMax(ElectroJendz.FL_TURN_ID, MotorType.kBrushless);
             frontRightMotorDrive = new CANSparkMax(ElectroJendz.FR_DRIVE_ID, MotorType.kBrushless);
             frontRightMotorTurn = new CANSparkMax(ElectroJendz.FR_TURN_ID, MotorType.kBrushless);
-            backLeftMotorDrive = new CANSparkMax(ElectroJendz.BL_DRIVE_ID, MotorType.kBrushless);
-            backLeftMotorTurn = new CANSparkMax(ElectroJendz.BL_TURN_ID, MotorType.kBrushless);
-            backRightMotorTurn = new CANSparkMax(ElectroJendz.BR_TURN_ID, MotorType.kBrushless);
-            backRightMotorDrive = new CANSparkMax(ElectroJendz.BR_DRIVE_ID, MotorType.kBrushless);
+            backLeftMotorDrive = new CANSparkMax(ElectroJendz.RL_DRIVE_ID, MotorType.kBrushless);
+            backLeftMotorTurn = new CANSparkMax(ElectroJendz.RL_TURN_ID, MotorType.kBrushless);
+            backRightMotorTurn = new CANSparkMax(ElectroJendz.RR_TURN_ID, MotorType.kBrushless);
+            backRightMotorDrive = new CANSparkMax(ElectroJendz.RR_DRIVE_ID, MotorType.kBrushless);
         
 
             if (k.OUT_DriveBrakeMode){
@@ -122,10 +163,10 @@ public class OutputsCompBot extends Outputs {
 
     //Assign powers to motors
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
-        frontLeftMotorDrive.set(limit(powerLF*k.DRV_SwerveDrivePwrScale));
-        frontRightMotorDrive.set(limit(powerRF*k.DRV_SwerveDrivePwrScale));
-        backLeftMotorDrive.set(limit(-powerLB*k.DRV_SwerveDrivePwrScale));
-        backRightMotorDrive.set(limit(-powerRB*k.DRV_SwerveDrivePwrScale));
+        frontLeftMotorDrive.set(limit(powerLF*k.DRV_SwerveDrivePwrScale, fLDriveMil));
+        frontRightMotorDrive.set(limit(powerRF*k.DRV_SwerveDrivePwrScale, fRDriveMil));
+        backLeftMotorDrive.set(limit(-powerLB*k.DRV_SwerveDrivePwrScale, rLDriveMil));
+        backRightMotorDrive.set(limit(-powerRB*k.DRV_SwerveDrivePwrScale, rRDriveMil));
     }
 
     //Assign powers to turn motors 
@@ -145,10 +186,10 @@ public class OutputsCompBot extends Outputs {
 
         //attempt to still drive if one encoder is bad
         if(count < 2) {
-            frontLeftMotorTurn.set(limit(turnLF));
-            frontRightMotorTurn.set(limit(turnRF));    
-            backLeftMotorTurn.set(limit(turnLB));
-            backRightMotorTurn.set(limit(turnRB));
+            frontLeftMotorTurn.set(limit(turnLF, fLTurnMil));
+            frontRightMotorTurn.set(limit(turnRF, fRTurnMil));    
+            backLeftMotorTurn.set(limit(turnLB, rLTurnMil));
+            backRightMotorTurn.set(limit(turnRB, rRTurnMil));
         } else {
             frontLeftMotorTurn.set(0);
             frontRightMotorTurn.set(0);
@@ -158,20 +199,20 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void setElevatorMotor(double elevate) {
-        elevatorMotor.set(limit(elevate));
+        elevatorMotor.set(limit(elevate, elevatorMil));
     }
 
     public void setGatherMotor(double leftSpeed, double rightSpeed) {
-        gatherMotorL.set(limit(leftSpeed));
-        gatherMotorR.set(limit(rightSpeed));
+        gatherMotorL.set(limit(leftSpeed, gatherLMil));
+        gatherMotorR.set(limit(rightSpeed, gatherRMil));
     }
 
     public void setGatherArm(double armGather) {
-        gatherArmMotor.set(limit(armGather));
+        gatherArmMotor.set(limit(armGather, gatherArmMil));
     }
 
     public void climbMotor(double climb) {
-        climbMotor.set(limit(climb));
+        climbMotor.set(limit(climb, climbMil));
     }    
 
 }
