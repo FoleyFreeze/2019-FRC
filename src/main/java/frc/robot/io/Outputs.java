@@ -1,7 +1,7 @@
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Solenoid;
-import frc.robot.mil.MilEncoder;
+import frc.robot.mil.CurrentLimit;
 import frc.robot.subsystems.Component;
 
 public abstract class Outputs extends Component {
@@ -54,6 +54,21 @@ public abstract class Outputs extends Component {
         
     }
        
+    protected double limit(double value, CurrentLimit cLIM) {
+        if(in.pitMode){
+            value = Math.min(k.OUT_PitModeLimit, Math.max(-k.OUT_PitModeLimit, value));
+        } 
+        if(sense.isDisabled){
+            value = 0;
+        }
+        cLIM.run();
+        if(cLIM.isActive()){
+            value = Math.min(k.OUT_PitModeLimit, Math.max(-k.OUT_PitModeLimit, value));
+        }
+
+        return value;
+    }
+
     protected double limit(double value) {
         if(in.pitMode){
             value = Math.min(k.OUT_PitModeLimit, Math.max(-k.OUT_PitModeLimit, value));
@@ -63,7 +78,7 @@ public abstract class Outputs extends Component {
         }
         return value;
     }
-    
+
     public void suction(boolean enable) {
         gatherSolenoid1.set(enable);
         gatherSolenoid2.set(enable);

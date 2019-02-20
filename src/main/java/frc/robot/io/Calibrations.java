@@ -60,6 +60,9 @@ public class Calibrations{
 
     public int MIL_livepi;
     public int MIL_trackpi;
+    public double MIL_CurrResetTime;
+    public double MIL_CurrFilt;
+    public boolean MIL_CLDisabled;
     public double OUT_PitModeLimit;
     public boolean OUT_DriveBrakeMode;
 
@@ -83,6 +86,7 @@ public class Calibrations{
         DRV_disable = false;
         AD_Disabled = true;
         MIL_Disabled = true;
+        MIL_CLDisabled = true;
 
         NAVX_Offset = 90.0;
 
@@ -131,6 +135,8 @@ public class Calibrations{
         //Mil
         MIL_livepi = 0;
         MIL_trackpi = 0;
+        MIL_CurrFilt = 0.2; //time constant of 1/val
+        MIL_CurrResetTime = 30;
 
 
         OUT_PitModeLimit = 0.25;
