@@ -38,7 +38,7 @@ public class Calibrations{
     public double ELE_MotorPwr;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            0,               0,               0,              15,              0,              0,             0,               55,          0,          0
+            0,               0,               0,              2,              0,              0,             0,               70,          0,          0
     };
     public double ELE_PositionKP;
     public double ELE_InchesPRev;
@@ -76,7 +76,7 @@ public class Calibrations{
     public Calibrations(){
 
         //Disables
-        ELE_disable = true;
+        ELE_disable = false;
         CLM_disable = true;
         GTH_disableBall = true;
         GTH_disableDisk = true;
@@ -110,9 +110,9 @@ public class Calibrations{
 
         ELE_MotorPwr = 0.1; // set to actual value later
         ELE_PositionKP = 0.1;
-        ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI;
-        ELE_PIDLimitUp = 0.75;
-        ELE_PIDLimitDown = 0.5;
+        ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
+        ELE_PIDLimitUp = 0.1;
+        ELE_PIDLimitDown = 0.1;
 
         CLM_MotorSpeed = 0;
         
