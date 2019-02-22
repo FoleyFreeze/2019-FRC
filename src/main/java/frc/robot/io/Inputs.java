@@ -100,26 +100,29 @@ public class Inputs extends Component {
         SmartDashboard.putString("Dixon Detector", stopDixon);
 
         //set buttons
-        compassDrive = gamePad.getRawButton(bm.compassDrive);
-        fieldOriented = gamePad.getRawButton(bm.fieldOriented);
+        if(!k.DRV_disable){
+            compassDrive = gamePad.getRawButton(bm.compassDrive);
+            fieldOriented = gamePad.getRawButton(bm.fieldOriented);
+            dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
+            dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+        }
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         //pitMode = gamePad.getRawButton(k.IN_pitMode);
         //diskGather = gamePad.getRawButton(k.IN_diskGather);
-        dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
-        dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-        rocketL1 = gamePad.getRawButton(k.IN_rocketL1);
-        rocketL2 = gamePad.getRawButton(k.IN_rocketL2);
-        rocketL3 = gamePad.getRawButton(k.IN_rocketL3);
-        rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
-        rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
-
-        autoElevator = true;
-        manualElevatorUp = gamePad.getRawButton(2);
-        manualElevatorDown = gamePad.getRawButton(3);
-        if(autoElevator){
-            if(gamePad.getRawButton(2))elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
-            else if(gamePad.getRawButton(3))elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
-            else elevatorTarget = ElevatorPosition.DONT_MOVE;
+        if(!k.ELE_disable){
+            rocketL1 = gamePad.getRawButton(k.IN_rocketL1);
+            rocketL2 = gamePad.getRawButton(k.IN_rocketL2);
+            rocketL3 = gamePad.getRawButton(k.IN_rocketL3);
+            rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
+            rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
+            autoElevator = true;
+            manualElevatorUp = gamePad.getRawButton(2);
+            manualElevatorDown = gamePad.getRawButton(3);
+            if(autoElevator){
+                if(gamePad.getRawButton(2))elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+                else if(gamePad.getRawButton(3))elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
+                else elevatorTarget = ElevatorPosition.DONT_MOVE;
+            }
         }
 
         String elevatorState;
