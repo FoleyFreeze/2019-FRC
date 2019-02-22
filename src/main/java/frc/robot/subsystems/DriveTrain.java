@@ -181,4 +181,7 @@ public class DriveTrain extends Component{
         SmartDashboard.putNumberArray("Drive Power", outR);
         SmartDashboard.putNumberArray("Turn Power", outError);
     }
+    public void cameraDrive(double distance, double pathAngle, double targetAngle){
+        
+    }
 }
