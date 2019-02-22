@@ -72,12 +72,10 @@ public class DriveTrain extends Component{
 
     //field oriented swerve
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
-        double theta = Math.atan2(yAxis, xAxis) * 180 / Math.PI;
-        double r = Math.sqrt(xAxis * xAxis + yAxis * yAxis);
-        theta = sense.robotAngle.subtrahend(theta + k.NAVX_Offset); // = theta - robotAngle
-        double x = r * Math.cos(theta / 180 * Math.PI);
-        double y = r * Math.sin(theta / 180 * Math.PI);
-        swerve(x, y, in.rotAxisDrive);
+        double theta = sense.robotAngle.get();
+        double x = xAxis * Math.cos(theta) - yAxis * Math.sin(theta);
+        double y = xAxis * Math.sin(theta) + yAxis * Math.cos(theta);
+        swerve(x, y, rotAxis);
     }
 
     boolean prevDriveStraight = false; 
