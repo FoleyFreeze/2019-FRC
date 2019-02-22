@@ -54,7 +54,7 @@ public class RSE extends Component {
 
             //wheel r, theta
             double r = deltaDriveEnc;
-            double theta = sense.robotAngle.subtrahend(avgWheelAng + deltaWheelAng/2);
+            double theta = sense.robotAngle.add(avgWheelAng + deltaWheelAng/2);
             SmartDashboard.putNumber("RSEWheeltheta"+i, theta);
 
                 // back to radians
