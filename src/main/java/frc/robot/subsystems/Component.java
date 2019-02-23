@@ -10,8 +10,8 @@ import frc.robot.io.K_Swerve_Bot;
 import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
 import frc.robot.io.OutputsSwerveBot;
-import frc.robot.io.Vision;
 import frc.robot.subsystems.RSE;
+import frc.robot.subsystems.vision.Vision;
 
 public class Component {
     public static ButtonMap bm;
@@ -86,7 +86,6 @@ public class Component {
         bm.set();
         in.run();
         sense.run();
-        view.run();
         rse.run();
         grabCargo.run();
         climb.run();
