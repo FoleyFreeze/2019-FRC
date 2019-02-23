@@ -1,18 +1,27 @@
 package frc.robot.util;
 
+
 public class Angle{
     private double angle;
 
-    public double get(){
+    public double getDeg(){
         return angle;
     }
 
-    public void set(double newAngle){
-        angle = limit(newAngle);
+    public double getRad(){
+        return toRad(angle);
     }
 
-    public void set(Angle newAngle){
-        angle = limit(newAngle.get());
+    public void setDeg(double newAngle){
+        angle = limit(newAngle);
+    }
+    
+    public void setRad(double newAngle){
+        angle = limit(toDeg(newAngle));
+    }
+
+    public void setDeg(Angle newAngle){
+        angle = limit(newAngle.getDeg());
     }
 
     private double limit(double value){
@@ -21,27 +30,47 @@ public class Angle{
         return value;
     }
 
-    public double sub(double subtrahend){
+    public double subDeg(double subtrahend){
         return limit(angle - subtrahend);
     }
-
-    public double sub(Angle subtrahend){
-        return limit(angle - subtrahend.get());
+    
+    public double subRad(double subtrahend){
+        return limit(angle - toDeg(subtrahend));
     }
 
-    public double subtrahend(double minuend){
+    public double subDeg(Angle subtrahend){
+        return limit(angle - subtrahend.getDeg());
+    }
+
+    public double subtrahendDeg(double minuend){
         return limit(minuend-angle);
     }
 
-    public double subtrahend(Angle minuend){
-        return limit(minuend.get()-angle);
+    public double subtrahendRad(double minuend){
+        return limit(toDeg(minuend) - angle);
     }
 
-    public double add(double adder){
+    public double subtrahendDeg(Angle minuend){
+        return limit(minuend.getDeg()-angle);
+    }
+
+    public double addDeg(double adder){
         return limit(angle + adder);
     }
 
-    public double add(Angle adder){
-        return limit(angle + adder.get());
+    public double addRad(double adder){
+        return limit(angle + toDeg(adder));
+    }
+
+    public double addDeg(Angle adder){
+        return limit(angle + adder.getDeg());
+    }
+
+    public static double toRad(double deg) {
+        return deg * Math.PI/180;
+    }
+    
+    public static double toDeg(double rad) {
+        return rad * 180/Math.PI;
     }
 }

@@ -22,6 +22,9 @@ public class Calibrations{
     public double   DRV_SwerveStrKD;
     public double   DRV_WaitForParkTime; 
     public double   DRV_InchesPRev;
+    public double DRV_toTargetAngleKP;
+    public double DRV_ofTargetAngleKP;
+    public double DRV_targetDistanceKP;
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
     public double SEN_AbsAngleRL;
@@ -88,7 +91,7 @@ public class Calibrations{
         MIL_Disabled = true;
         MIL_CLDisabled = true;
 
-        NAVX_Offset = 90.0;
+        NAVX_Offset = 0;
 
         DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
         DRV_RotCentX = 0.0;
@@ -101,6 +104,9 @@ public class Calibrations{
         DRV_SwerveStrKD = 0;
         DRV_WaitForParkTime = 0.5;//seconds
         DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
+        DRV_toTargetAngleKP = -0;
+        DRV_ofTargetAngleKP = -0; 
+        DRV_targetDistanceKP = -0;
 
         GTH_IntakeSpeed = 0;
         GTH_ShootSpeedFast = 0;

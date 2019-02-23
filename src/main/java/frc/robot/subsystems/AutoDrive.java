@@ -28,12 +28,12 @@ public class AutoDrive extends Component{
 
     public void start(double[] r, double[] theta, double endFaceAngle){
         if(k.AD_Disabled)return;
-        startAngle.set(sense.robotAngle);
+        startAngle.setDeg(sense.robotAngle);
         setPoint = true;
         rSet = r;
         thetaSet = theta;
-        deltaTheta = startAngle.subtrahend(endFaceAngle);
-
+        deltaTheta = startAngle.subtrahendDeg(endFaceAngle);
+ 
         wayPointIndex=0;
         double sumR = 0;
         for(int i = 0; i<r.length-1; i++){
