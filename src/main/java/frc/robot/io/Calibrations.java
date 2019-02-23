@@ -79,7 +79,7 @@ public class Calibrations{
     public Calibrations(){
 
         //Disables
-        ELE_disable = false;
+        ELE_disable = true;
         CLM_disable = true;
         GTH_disableBall = true;
         GTH_disableDisk = true;
