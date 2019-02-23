@@ -47,7 +47,10 @@ public class Calibrations{
     public double ELE_InchesPRev;
     public double ELE_PIDLimitUp;
     public double ELE_PIDLimitDown;
-    public double CLM_MotorSpeed;
+
+    public double CLM_MotorSpeedUp;
+    public double CLM_MotorSpeedDn;
+    
     public double IN_DodgingMin;
     public int IN_DixonSize;
     public int IN_dodgingL;
@@ -127,7 +130,8 @@ public class Calibrations{
         ELE_PIDLimitUp = 0.1;
         ELE_PIDLimitDown = 0.1;
 
-        CLM_MotorSpeed = 0;
+        CLM_MotorSpeedUp = 0.3;
+        CLM_MotorSpeedDn = 0.6;
         
         IN_DodgingMin = 0.2;
         IN_DixonSize = 6;

@@ -12,11 +12,11 @@ public class Climber extends Component{
         if(k.CLM_disable) return;
         
         if(in.climb){
-            out.climbMotor(k.CLM_MotorSpeed);
+            out.climbMotor(k.CLM_MotorSpeedUp);
             climb = "Climbing";
         }
-        else if(in.reverseclimb){
-            out.climbMotor(-k.CLM_MotorSpeed);
+        else if(in.reverseClimb){
+            out.climbMotor(-k.CLM_MotorSpeedDn);
             climb = "Climbing in Reverse";
         }
         else {

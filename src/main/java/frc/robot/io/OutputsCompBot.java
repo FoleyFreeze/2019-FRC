@@ -91,7 +91,11 @@ public class OutputsCompBot extends Outputs {
             backLeftMotorTurn = new CANSparkMax(ElectroJendz.RL_TURN_ID, MotorType.kBrushless);
             backRightMotorTurn = new CANSparkMax(ElectroJendz.RR_TURN_ID, MotorType.kBrushless);
             backRightMotorDrive = new CANSparkMax(ElectroJendz.RR_DRIVE_ID, MotorType.kBrushless);
-        
+            
+            frontLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
+            frontRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
+            backLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
+            backRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
 
             if (k.OUT_DriveBrakeMode){
                 frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
@@ -114,19 +118,24 @@ public class OutputsCompBot extends Outputs {
         if(!k.ELE_disable){
             elevatorMotor = new CANSparkMax(ElectroJendz.ELE_MotorID, MotorType.kBrushless);
             elevatorMotor.setIdleMode(IdleMode.kBrake);
+            elevatorMotor.getEncoder().setPositionConversionFactor(k.ELE_InchesPRev);
         }
 
         if(!k.GTH_disableBall){
             gatherMotorL = new CANSparkMax(ElectroJendz.GTH_MotorL_ID, MotorType.kBrushless);
             gatherMotorR = new CANSparkMax(ElectroJendz.GTH_MotorR_ID, MotorType.kBrushless);
+            gatherMotorL.setIdleMode(IdleMode.kBrake);
+            gatherMotorR.setIdleMode(IdleMode.kBrake);
         }
 
         if(!k.GTH_disableDisk){
             gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushless);
+            gatherArmMotor.setIdleMode(IdleMode.kBrake);
         }
 
         if(!k.CLM_disable){
             climbMotor = new CANSparkMax(ElectroJendz.CLM_MotorID, MotorType.kBrushless);
+            climbMotor.setIdleMode(IdleMode.kBrake);
         }
     }
 
@@ -136,13 +145,13 @@ public class OutputsCompBot extends Outputs {
 
     public void getEnc(){
         if(!k.DRV_disable) {
-            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
-            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
-            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
-            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition()*k.DRV_InchesPRev;//value in inches
+            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();//value in inches
         }
         if(!k.ELE_disable){
-            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition()*k.ELE_InchesPRev;//value in inches
+            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();//value in inches
         }
         
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);

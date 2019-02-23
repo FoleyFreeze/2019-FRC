@@ -29,7 +29,7 @@ public class Inputs extends Component {
     public boolean releaseDisc; 
 
     public boolean climb;
-    public boolean reverseclimb;
+    public boolean reverseClimb;
 
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
@@ -108,7 +108,9 @@ public class Inputs extends Component {
             fieldOriented = gamePad.getRawButton(bm.fieldOriented);
             dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
             dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+            visionCargo = gamePad.getRawButton(4);
         }
+
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         //pitMode = gamePad.getRawButton(k.IN_pitMode);
         //diskGather = gamePad.getRawButton(k.IN_diskGather);
@@ -126,6 +128,11 @@ public class Inputs extends Component {
                 else if(gamePad.getRawButton(3))elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
                 else elevatorTarget = ElevatorPosition.DONT_MOVE;
             }
+        }
+
+        if(!k.CLM_disable){
+            climb = gamePad.getRawButton(2);
+            reverseClimb = gamePad.getRawButton(3);
         }
 
         String elevatorState;
