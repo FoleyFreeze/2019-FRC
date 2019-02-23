@@ -47,6 +47,9 @@ public class Inputs extends Component {
     public boolean fourBarIn;
     public boolean fourBarOut;
 
+    public boolean visionCargo;
+    public boolean visionTarget;
+
     public byte[] xDixon;//history of joystick directions
     public byte[] yDixon;//history of joystick directions
     public byte[] rotDixon;//history of joystick directions

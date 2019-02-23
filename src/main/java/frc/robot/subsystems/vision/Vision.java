@@ -42,7 +42,7 @@ public class Vision extends Component {
 
             vd.distance = Double.parseDouble(parts[1]);
             vd.angleTo = Double.parseDouble(parts[2]);
-            vd.angleOf = 0;
+            vd.angleOf = 90;
             
             vd.timeStamp = Timer.getFPGATimestamp();
             vd.robotAngle = sense.robotAngle.getDeg();

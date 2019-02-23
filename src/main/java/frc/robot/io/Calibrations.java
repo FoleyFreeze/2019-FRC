@@ -78,6 +78,9 @@ public class Calibrations{
     public boolean AD_Disabled;
     public boolean MIL_Disabled;
 
+    // Vision cals
+    public double VIS_ExpireTime;
+
     
     public Calibrations(){
 
@@ -146,6 +149,8 @@ public class Calibrations{
 
 
         OUT_PitModeLimit = 0.25;
-        OUT_DriveBrakeMode = true;        
+        OUT_DriveBrakeMode = true;   
+        
+        VIS_ExpireTime = 0.5;
     }   
 }

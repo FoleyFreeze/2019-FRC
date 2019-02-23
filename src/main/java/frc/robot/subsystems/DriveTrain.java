@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.subsystems.vision.VisionData;
 import frc.robot.util.Angle;
 import frc.robot.util.Util;
 import edu.wpi.first.wpilibj.Timer;
@@ -16,6 +17,20 @@ public class DriveTrain extends Component{
     public void run() {
         if(k.DRV_disable) return;
         
+        if(in.visionTarget) {
+            VisionData vd = view.getLastVisionTarget();
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.VIS_ExpireTime) {
+                cameraDrive(vd);
+                return;
+            } 
+        } else if(in.visionCargo) {
+            VisionData vd = view.getLastCargo();
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.VIS_ExpireTime) {
+                cameraDrive(vd);
+                return;
+            }
+        }
+
         boolean firstDodge = (in.dodgingL || in.dodgingR) && !prevDodge;
         prevDodge = in.dodgingL || in.dodgingR;
 
@@ -180,10 +195,21 @@ public class DriveTrain extends Component{
         SmartDashboard.putNumberArray("Drive Power", outR);
         SmartDashboard.putNumberArray("Turn Power", outError);
     }
-    public void cameraDrive(double distance, double angleTo, double angleOf){ 
-         double X = (angleOf - 90) * k.DRV_ofTargetAngleKP;
-         double Y = distance * k.DRV_targetDistanceKP;
-         double R = angleTo * k.DRV_toTargetAngleKP;
-         swerve(X, Y, R);
+
+    public void cameraDrive(VisionData vd) { 
+        double deltaAngle = sense.robotAngle.subDeg(vd.robotAngle);
+        double X;
+
+        if(in.visionTarget) {
+            X = (vd.angleOf - 90 - deltaAngle) * k.DRV_ofTargetAngleKP;
+        } else {
+            X = 0;
+        }
+
+        double Y = vd.distance * k.DRV_targetDistanceKP;
+        double R = (vd.angleTo - deltaAngle) * k.DRV_toTargetAngleKP;
+
+        swerve(X, Y, R);
     }
+
 }
