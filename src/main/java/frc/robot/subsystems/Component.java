@@ -83,6 +83,7 @@ public class Component {
 
     
     public static void runAll(){
+        bm.set();
         in.run();
         sense.run();
         view.run();

@@ -20,7 +20,7 @@ public class ButtonMap {
     public int IN_yDriveAxis;
     public int IN_rotDriveAxis;
 
-    public ButtonMap(){
+    public void set(){
         Joystick joy = new Joystick(ElectroJendz.GAMEPAD);
         flySky = joy.getButtonCount() > 10;
         //option 2 for detecting what controller

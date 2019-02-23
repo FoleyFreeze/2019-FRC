@@ -74,8 +74,8 @@ public class RSE extends Component {
         sumDY /= 4;
 
         //convert to field dx dy
-        double DX = sumDX * Math.cos(theta) - sumDY * Math.sin(theta);
-        double DY = sumDX * Math.sin(theta) + sumDY * Math.cos(theta);
+        double DX = sumDX * Math.cos(prevRobotAngle) - sumDY * Math.sin(prevRobotAngle);
+        double DY = sumDX * Math.sin(prevRobotAngle) + sumDY * Math.cos(prevRobotAngle);
 
         // update stored x and y 
         x += DX;
