@@ -72,7 +72,7 @@ public class DriveTrain extends Component{
 
     //field oriented swerve
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
-        double theta = sense.robotAngle.get();
+        double theta = sense.robotAngle.subtrahend(k.NAVX_Offset);
         double x = xAxis * Math.cos(theta) - yAxis * Math.sin(theta);
         double y = xAxis * Math.sin(theta) + yAxis * Math.cos(theta);
         swerve(x, y, rotAxis);
@@ -181,7 +181,10 @@ public class DriveTrain extends Component{
         SmartDashboard.putNumberArray("Drive Power", outR);
         SmartDashboard.putNumberArray("Turn Power", outError);
     }
-    public void cameraDrive(double distance, double pathAngle, double targetAngle){
-        
+    public void cameraDrive(double distance, double angleTo, double angleOf){ 
+         double X = (angleOf - 90) * k.DRV_ofTargetAngleKP;
+         double Y = distance * k.DRV_targetDistanceKP;
+         double R = angleTo * k.DRV_toTargetAngleKP;
+         swerve(X, Y, R);
     }
 }

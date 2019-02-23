@@ -54,7 +54,7 @@ public class RSE extends Component {
 
             //wheel r, theta
             double r = deltaDriveEnc;
-            double theta = sense.robotAngle.add(avgWheelAng + deltaWheelAng/2);
+            double theta = avgWheelAng + deltaWheelAng/2;
             SmartDashboard.putNumber("RSEWheeltheta"+i, theta);
 
                 // back to radians
@@ -72,10 +72,14 @@ public class RSE extends Component {
         // divide total by 4 for calculating average
         sumDX /= 4;
         sumDY /= 4;
-        
+
+        //convert to field dx dy
+        double DX = sumDX * Math.cos(theta) - sumDY * Math.sin(theta);
+        double DY = sumDX * Math.sin(theta) + sumDY * Math.cos(theta);
+
         // update stored x and y 
-        x += sumDX;
-        y += sumDY;
+        x += DX;
+        y += DY;
 
         SmartDashboard.putNumber("RSE dX", sumDX);
         SmartDashboard.putNumber("RSE dY", sumDY);
