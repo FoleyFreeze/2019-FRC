@@ -1,12 +1,11 @@
 package frc.robot.subsystems.vision;
 
-//x, y, width, and height of spotted object
-
 public class VisionData {
-    public int x;
-    public int y;
-    public int w;
-    public int h;
+    public double distance;
+    public double angleTo;
+    public double angleOf;
+    public double robotDistance;
+    public double robotAngle;
     public double timeStamp;
     //subject to change
 }
