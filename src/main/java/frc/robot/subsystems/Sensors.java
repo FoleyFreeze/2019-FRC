@@ -55,10 +55,10 @@ public class Sensors extends Component {
         double angleFR = angleEnc[1].getAverageVoltage()/5.0*360.0 - k.SEN_AbsAngleFR;
         double angleRL = angleEnc[2].getAverageVoltage()/5.0*360.0 - k.SEN_AbsAngleRL;
         double angleRR = angleEnc[3].getAverageVoltage()/5.0*360.0 - k.SEN_AbsAngleRR;
-        angles[0].set(angleFL);
-        angles[1].set(angleFR);
-        angles[2].set(angleRL);
-        angles[3].set(angleRR);
+        angles[0].setDeg(angleFL);
+        angles[1].setDeg(angleFR);
+        angles[2].setDeg(angleRL);
+        angles[3].setDeg(angleRR);
         
         rawAngles[0] = angleFL;
         rawAngles[1] = angleFR;
@@ -66,10 +66,10 @@ public class Sensors extends Component {
         rawAngles[3] = angleRR;
         //SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
-        robotAngle.set(-navx.getYaw() + k.NAVX_Offset);
-        deltaRobotAngle = robotAngle.sub(prevRobotAngle);
-        prevRobotAngle = robotAngle.get();
-        SmartDashboard.putNumber("Angle of Robot", robotAngle.get());
+        robotAngle.setDeg(-navx.getYaw() + k.NAVX_Offset); 
+        deltaRobotAngle = robotAngle.subDeg(prevRobotAngle);
+        prevRobotAngle = robotAngle.getDeg();
+        SmartDashboard.putNumber("Angle of Robot", robotAngle.getDeg());
         out.getEnc();
 
         double time = Timer.getFPGATimestamp();

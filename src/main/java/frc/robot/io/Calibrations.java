@@ -91,7 +91,7 @@ public class Calibrations{
         MIL_Disabled = true;
         MIL_CLDisabled = true;
 
-        NAVX_Offset = 90.0;
+        NAVX_Offset = 0;
 
         DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
         DRV_RotCentX = 0.0;

@@ -50,10 +50,9 @@ public class DriveTrain extends Component{
     public void dodge(boolean firstTime, double turnPower){
         if(firstTime){
             deltaDegSum = 0;
-            prevAng = sense.robotAngle.get();
-            double rad = prevAng * Math.PI / 180.0;//set to radians
-            dodgeDirX = Math.cos(rad);
-            dodgeDirY = Math.sin(rad);
+            prevAng = sense.robotAngle.getRad();
+            dodgeDirX = Math.cos(prevAng);
+            dodgeDirY = Math.sin(prevAng);
             double maxDir = Math.max(dodgeDirX,dodgeDirY);
             if(Math.abs(maxDir) > 1){
                 dodgeDirX /= maxDir;
@@ -61,9 +60,9 @@ public class DriveTrain extends Component{
             }
         }
 
-        double deltaDeg = sense.robotAngle.sub(prevAng);
+        double deltaDeg = sense.robotAngle.subRad(prevAng);
         deltaDegSum +=deltaDeg;
-        prevAng = sense.robotAngle.get();
+        prevAng = sense.robotAngle.getRad();
         if(Math.abs(deltaDegSum) >= 360) turnPower = 0;
 
         fieldSwerve(dodgeDirX, dodgeDirY, turnPower);
@@ -72,7 +71,7 @@ public class DriveTrain extends Component{
 
     //field oriented swerve
     public void fieldSwerve(double xAxis, double yAxis, double rotAxis){
-        double theta = sense.robotAngle.subtrahend(k.NAVX_Offset);
+        double theta = sense.robotAngle.getRad();
         double x = xAxis * Math.cos(theta) - yAxis * Math.sin(theta);
         double y = xAxis * Math.sin(theta) + yAxis * Math.cos(theta);
         swerve(x, y, rotAxis);
@@ -91,9 +90,9 @@ public class DriveTrain extends Component{
         // drive straight when we're not turning
         if(rotAxis == 0){
             if(!prevDriveStraight){
-                drvStrSetPnt.set(sense.robotAngle);//if first time, set angle to drive at
+                drvStrSetPnt.setDeg(sense.robotAngle);//if first time, set angle to drive at
             } 
-            double error = drvStrSetPnt.sub(sense.robotAngle);             
+            double error = drvStrSetPnt.subDeg(sense.robotAngle);             
 
             rotAxis = error * k.DRV_SwerveStrKP + sense.deltaRobotAngle * k.DRV_SwerveStrKD;
             prevDriveStraight = true;
@@ -161,7 +160,7 @@ public class DriveTrain extends Component{
         //pid to target angle (theta)
         for(int i=0; i<4; i++){
 
-            double error = sense.angles[i].sub(outTheta[i]);
+            double error = sense.angles[i].subDeg(outTheta[i]);
 
             //pick shortest path
             if(Math.abs(error) > 90){

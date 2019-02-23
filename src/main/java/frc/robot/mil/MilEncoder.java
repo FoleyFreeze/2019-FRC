@@ -35,8 +35,8 @@ public class MilEncoder extends Component{
 
     //works for angle wrap around
     public void check(double powerVal, Angle angle){
-        double diff = angle.sub(lastEncVal);
-        lastEncVal = angle.get();
+        double diff = angle.subDeg(lastEncVal);
+        lastEncVal = angle.getDeg();
         checkInternal(powerVal, diff);
     }
 
@@ -45,7 +45,7 @@ public class MilEncoder extends Component{
         double diff = encVal - lastEncVal;
         lastEncVal = encVal;
         checkInternal(powerVal, diff);
-    }
+    } 
 
     private void checkInternal(double powerVal, double encDiff){
         double ratio = Math.abs(encDiff) / powerVal;

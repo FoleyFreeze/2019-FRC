@@ -21,12 +21,12 @@ public class RSE extends Component {
     public void reset() {
         x = 0;
         y = 0;
-        theta = sense.robotAngle.get();
+        theta = sense.robotAngle.getDeg();
         prevRobotAngle = theta;
 
         for(int i = 0; i< prevEnc.length;++i) {
             prevEnc[i] = sense.driveEnc[i];
-            prevWheelAngle[i] = sense.angles[i].get(); 
+            prevWheelAngle[i] = sense.angles[i].getDeg(); 
         } 
 
     }
@@ -34,17 +34,17 @@ public class RSE extends Component {
 
     public void run() {
         // read navx
-        double deltaRobotAngle = sense.robotAngle.sub(prevRobotAngle);
-        prevRobotAngle = sense.robotAngle.get();
+        double deltaRobotAngle = sense.robotAngle.subDeg(prevRobotAngle);
+        prevRobotAngle = sense.robotAngle.getDeg();
         SmartDashboard.putNumber("RSEdTheta", deltaRobotAngle);
         double sumDX = 0;
         double sumDY = 0;
 
         for(int i = 0; i < 4; i++) {
             // average of wheel angles
-            double deltaWheelAng = sense.angles[i].sub(prevWheelAngle[i]);
+            double deltaWheelAng = sense.angles[i].subDeg(prevWheelAngle[i]);
             double avgWheelAng = deltaWheelAng*.5 + prevWheelAngle[i];
-            prevWheelAngle[i] = sense.angles[i].get();
+            prevWheelAngle[i] = sense.angles[i].getDeg();
             SmartDashboard.putNumber("RSEwheelAngle"+i,avgWheelAng);
             
             // delta of wheel encoders
@@ -68,7 +68,7 @@ public class RSE extends Component {
             sumDY += deltaY;
             
         }
-        
+         
         // divide total by 4 for calculating average
         sumDX /= 4;
         sumDY /= 4;
