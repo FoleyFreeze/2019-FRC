@@ -25,6 +25,10 @@ public abstract class Outputs extends Component {
 
     }
 
+    public void setSwerveDriveVel(double lf, double rf, double lb, double rb){
+
+    }
+
     //Assign powers to turn motors 
     public void setSwerveDriveTurn(double turnLF, double turnRF, double turnLB, double turnRB) {
         

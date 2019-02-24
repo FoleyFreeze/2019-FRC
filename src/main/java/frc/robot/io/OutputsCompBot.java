@@ -1,6 +1,8 @@
 package frc.robot.io;
 
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -92,27 +94,25 @@ public class OutputsCompBot extends Outputs {
             backRightMotorTurn = new CANSparkMax(ElectroJendz.RR_TURN_ID, MotorType.kBrushless);
             backRightMotorDrive = new CANSparkMax(ElectroJendz.RR_DRIVE_ID, MotorType.kBrushless);
             
+            configDriveMotor(frontLeftMotorDrive, k.OUT_DriveBrakeMode, true);
+            configDriveMotor(frontRightMotorDrive, k.OUT_DriveBrakeMode, true);
+            configDriveMotor(backLeftMotorDrive, k.OUT_DriveBrakeMode, true);
+            configDriveMotor(backRightMotorDrive, k.OUT_DriveBrakeMode, true);
+            configDriveMotor(frontLeftMotorTurn, k.OUT_DriveBrakeMode, false);
+            configDriveMotor(frontRightMotorTurn, k.OUT_DriveBrakeMode, false);
+            configDriveMotor(backLeftMotorTurn, k.OUT_DriveBrakeMode, false);
+            configDriveMotor(backRightMotorTurn, k.OUT_DriveBrakeMode, false);
+
+            frontLeftMotorDrive.setInverted(false);
+            frontRightMotorDrive.setInverted(false);
+            backLeftMotorDrive.setInverted(true);
+            backRightMotorDrive.setInverted(true);
+            
+            //set encoder info
             frontLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
             frontRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
             backLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
             backRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
-
-            if (k.OUT_DriveBrakeMode){
-                frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
-                frontRightMotorDrive.setIdleMode(IdleMode.kBrake);
-                backLeftMotorDrive.setIdleMode(IdleMode.kBrake);
-                backRightMotorDrive.setIdleMode(IdleMode.kBrake);
-            } else {
-                frontLeftMotorDrive.setIdleMode(IdleMode.kCoast);
-                frontRightMotorDrive.setIdleMode(IdleMode.kCoast);
-                backLeftMotorDrive.setIdleMode(IdleMode.kCoast);
-                backRightMotorDrive.setIdleMode(IdleMode.kCoast);
-            }
-
-            frontLeftMotorTurn.setIdleMode(IdleMode.kBrake);
-            frontRightMotorTurn.setIdleMode(IdleMode.kBrake);
-            backLeftMotorTurn.setIdleMode(IdleMode.kBrake);
-            backRightMotorTurn.setIdleMode(IdleMode.kBrake);
         }
 
         if(!k.ELE_disable){
@@ -139,19 +139,37 @@ public class OutputsCompBot extends Outputs {
         }
     }
 
+    private void configDriveMotor(CANSparkMax m, boolean brake, boolean configPID){
+        m.restoreFactoryDefaults();
+        
+        if(brake) m.setIdleMode(IdleMode.kBrake);
+        else m.setIdleMode(IdleMode.kCoast);
+
+        if(configPID){
+            m.getEncoder().setVelocityConversionFactor(k.DRV_InchesPRev / 60); //convert to in/sec
+
+            CANPIDController pc = m.getPIDController();
+            pc.setP(k.DRV_velKp);
+            pc.setI(k.DRV_velKi);
+            pc.setD(k.DRV_velKd);
+            pc.setFF(k.DRV_velKf);
+            pc.setOutputRange(-k.DRV_velMaxPwr, k.DRV_velMaxPwr);
+        }
+    }
+
     public void run() {
         
     }
 
     public void getEnc(){
         if(!k.DRV_disable) {
-            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();//value in inches
-            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();//value in inches
-            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();//value in inches
-            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();
+            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();
+            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();
+            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();
         }
         if(!k.ELE_disable){
-            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();//value in inches
+            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();
         }
         
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
@@ -174,8 +192,15 @@ public class OutputsCompBot extends Outputs {
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
         frontLeftMotorDrive.set(limit(powerLF*k.DRV_SwerveDrivePwrScale, fLDriveMil));
         frontRightMotorDrive.set(limit(powerRF*k.DRV_SwerveDrivePwrScale, fRDriveMil));
-        backLeftMotorDrive.set(limit(-powerLB*k.DRV_SwerveDrivePwrScale, rLDriveMil));
-        backRightMotorDrive.set(limit(-powerRB*k.DRV_SwerveDrivePwrScale, rRDriveMil));
+        backLeftMotorDrive.set(limit(powerLB*k.DRV_SwerveDrivePwrScale, rLDriveMil));
+        backRightMotorDrive.set(limit(powerRB*k.DRV_SwerveDrivePwrScale, rRDriveMil));
+    }
+
+    public void setSwerveDriveVel(double lf, double rf, double lb, double rb){
+        frontLeftMotorDrive.getPIDController().setReference(lf, ControlType.kVelocity);
+        frontRightMotorDrive.getPIDController().setReference(rf, ControlType.kVelocity);
+        backLeftMotorDrive.getPIDController().setReference(lb, ControlType.kVelocity);
+        backRightMotorDrive.getPIDController().setReference(rb, ControlType.kVelocity);
     }
 
     //Assign powers to turn motors 

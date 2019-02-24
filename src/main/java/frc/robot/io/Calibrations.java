@@ -25,6 +25,13 @@ public class Calibrations{
     public double DRV_toTargetAngleKP;
     public double DRV_ofTargetAngleKP;
     public double DRV_targetDistanceKP;
+    public double DRV_velKp;
+    public double DRV_velKi;
+    public double DRV_velKd;
+    public double DRV_velKf;
+    public double DRV_velMaxPwr;
+    public double DRV_maxVel;
+
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
     public double SEN_AbsAngleRL;
@@ -113,6 +120,12 @@ public class Calibrations{
         DRV_toTargetAngleKP = -0;
         DRV_ofTargetAngleKP = -0; 
         DRV_targetDistanceKP = -0;
+        DRV_velKp = 0;
+        DRV_velKi = 0;
+        DRV_velKd = 0;
+        DRV_velKf = 0;
+        DRV_velMaxPwr = 0;
+        DRV_maxVel = 3*12; // 3ft/sec
 
         GTH_IntakeSpeed = 0;
         GTH_ShootSpeedFast = 0;
