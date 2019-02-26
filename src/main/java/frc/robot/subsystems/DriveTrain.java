@@ -96,7 +96,9 @@ public class DriveTrain extends Component{
     Angle drvStrSetPnt = new Angle();
 
     //start timer upon robot startup
-    double startTime = Timer.getFPGATimestamp();   
+    double startTime = Timer.getFPGATimestamp(); 
+    
+    public boolean parkMode;
 
     public void swerve(double xAxis, double yAxis, double rotAxis) {
         //drive straight
@@ -146,7 +148,6 @@ public class DriveTrain extends Component{
             outR[3] /= maxPwr;
         }
          
-        boolean parkMode;
         //park if not moving
         double elapsedTime = Timer.getFPGATimestamp() - startTime; 
         if(maxPwr < 0.15 && elapsedTime > k.DRV_WaitForParkTime) {
