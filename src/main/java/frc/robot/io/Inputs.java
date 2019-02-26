@@ -217,5 +217,11 @@ public class Inputs extends Component {
         //if more than 1 direction change, true
         return count>1;
     }
+   
+    public enum States { BALLSCORE, HATCHSCORE, HATCHHUMAN, HATCHGROUND, BALLGROUND, IDLE };
+    
+        private void autoGatherStates() {
+            
+        }
 
 }
