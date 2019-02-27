@@ -6,10 +6,10 @@ public class K_Competition_Bot extends Calibrations{
         super();
         
         if(Calibrations.BOT_Version == RobotType.PRACTICE){
-            SEN_AbsAngleFL = 77.5;
-            SEN_AbsAngleFR = 278.7;
-            SEN_AbsAngleRL = 232.3;
-            SEN_AbsAngleRR = 137;
+            SEN_AbsAngleFL = 75.41;
+            SEN_AbsAngleFR = -17.44;
+            SEN_AbsAngleRL = 50.80;
+            SEN_AbsAngleRR = -51.63;
         } else {
             SEN_AbsAngleFL = -24.4;
             SEN_AbsAngleFR = -36.3;
