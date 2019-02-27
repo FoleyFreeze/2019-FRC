@@ -153,13 +153,13 @@ public class DriveTrain extends Component{
         if(maxPwr < 0.15 && elapsedTime > k.DRV_WaitForParkTime) {
         
             outR[0] = 0;
-            outTheta[0] = 45;
+            outTheta[0] = 315;
             outR[1] = 0;
-            outTheta[1] = 315;
+            outTheta[1] = 45;
             outR[2] = 0;
-            outTheta[2] = 315;
+            outTheta[2] = 45;
             outR[3] = 0;
-            outTheta[3] = 45;
+            outTheta[3] = 315;
             parkMode = true;
         } else if (maxPwr > 0.15)  { 
             startTime = Timer.getFPGATimestamp(); 
