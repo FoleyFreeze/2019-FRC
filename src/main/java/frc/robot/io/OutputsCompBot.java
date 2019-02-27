@@ -174,8 +174,8 @@ public class OutputsCompBot extends Outputs {
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
         frontLeftMotorDrive.set(limit(powerLF*k.DRV_SwerveDrivePwrScale, fLDriveMil));
         frontRightMotorDrive.set(limit(powerRF*k.DRV_SwerveDrivePwrScale, fRDriveMil));
-        backLeftMotorDrive.set(limit(-powerLB*k.DRV_SwerveDrivePwrScale, rLDriveMil));
-        backRightMotorDrive.set(limit(-powerRB*k.DRV_SwerveDrivePwrScale, rRDriveMil));
+        backLeftMotorDrive.set(limit(powerLB*k.DRV_SwerveDrivePwrScale, rLDriveMil));
+        backRightMotorDrive.set(limit(powerRB*k.DRV_SwerveDrivePwrScale, rRDriveMil));
     }
 
     //Assign powers to turn motors 
