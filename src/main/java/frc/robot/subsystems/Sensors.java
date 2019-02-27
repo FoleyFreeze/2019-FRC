@@ -47,6 +47,12 @@ public class Sensors extends Component {
         navx.zeroYaw();//reset navx
         out.resetEnc();
         rse.reset(); 
+
+        nxX = 0;
+        nxY = 0;
+        nxOffsetX = 0;
+        nxOffsetY = 0;
+        navx.resetDisplacement();
     }
 
     double[] rawAngles = {0,0,0,0};
@@ -66,6 +72,8 @@ public class Sensors extends Component {
         rawAngles[3] = angleRR;
         //SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
+        estNavxPosition();
+
         robotAngle.setDeg(-navx.getYaw() + k.NAVX_Offset); 
         deltaRobotAngle = robotAngle.subDeg(prevRobotAngle);
         prevRobotAngle = robotAngle.getDeg();
@@ -76,6 +84,25 @@ public class Sensors extends Component {
         dt = time - prevTime;
         prevTime = time;
         SmartDashboard.putNumber("dt",dt);
+    }
+
+    public double nxX = 0;
+    public double nxY = 0;
+    private double nxOffsetX = 0;
+    private double nxOffsetY = 0;
+    private void estNavxPosition(){
+        //when in park mode (i.e. robot is stopped) reset the integrator
+        if(drive.parkMode){
+            nxOffsetX = nxX;
+            nxOffsetY = nxY;
+            navx.resetDisplacement();
+        }
+
+        nxX = nxOffsetX + navx.getDisplacementX();
+        nxY = nxOffsetY + navx.getDisplacementY();
+
+        SmartDashboard.putNumber("NavxX", nxX);
+        SmartDashboard.putNumber("NavxY", nxY);
     }
 }
 
