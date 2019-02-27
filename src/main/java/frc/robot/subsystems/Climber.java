@@ -11,12 +11,16 @@ public class Climber extends Component{
         String climb;
         if(k.CLM_disable) return;
         
+        double pwr = (in.gamePad.getRawAxis(6) + 1) /2;
+        SmartDashboard.putNumber("Climb Power", pwr);
+
         if(in.climb){
-            out.climbMotor(k.CLM_MotorSpeedUp);
+            
+            out.climbMotor(-pwr);
             climb = "Climbing";
         }
         else if(in.reverseClimb){
-            out.climbMotor(-k.CLM_MotorSpeedDn);
+            out.climbMotor(pwr);
             climb = "Climbing in Reverse";
         }
         else {

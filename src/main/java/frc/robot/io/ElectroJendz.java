@@ -23,7 +23,7 @@ public class ElectroJendz {
 
     public static final int GTH_ArmMotorID = -1;
 
-    public static final int CLM_MotorID = -1;
+    public static final int CLM_MotorID = 3;
 
     public static final int GAMEPAD = 0;
     public static final int CONTROL_BOARD = 1;
