@@ -124,10 +124,15 @@ public class Inputs extends Component {
             manualElevatorUp = gamePad.getRawButton(2);
             manualElevatorDown = gamePad.getRawButton(3);
             if(autoElevator){
-                if(gamePad.getRawButton(2))elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
-                else if(gamePad.getRawButton(3))elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
+                if(gamePad.getRawButton(3))elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+                else if(gamePad.getRawButton(2))elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
                 else elevatorTarget = ElevatorPosition.DONT_MOVE;
             }
+        }
+
+        if(!k.GTH_disableBall){
+            ballGather = gamePad.getRawButton(8);
+            releaseBall = gamePad.getRawButton(9);
         }
 
         if(!k.CLM_disable){

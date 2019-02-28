@@ -41,7 +41,7 @@ public class Calibrations{
     public double ELE_MotorPwr;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            0,               0,               0,              2,              0,              0,             0,               70,          0,          0
+            0,               0,               0,              0.5,              0,              0,             0,               78,          0,          0
     };
     public double ELE_PositionKP;
     public double ELE_InchesPRev;
@@ -88,10 +88,10 @@ public class Calibrations{
     public Calibrations(){
 
         //Disables
-        ELE_disable = true;
+        ELE_disable = false;
         CLM_disable = true;
-        GTH_disableBall = true;
-        GTH_disableDisk = true;
+        GTH_disableBall = false;
+        GTH_disableDisk = false;
         DRV_disable = false;
         AD_Disabled = true;
         MIL_Disabled = true;
@@ -114,9 +114,9 @@ public class Calibrations{
         DRV_ofTargetAngleKP = -0; 
         DRV_targetDistanceKP = -0.2;
 
-        GTH_IntakeSpeed = 0;
-        GTH_ShootSpeedFast = 0;
-        GTH_ShootSpeedSlow = 0;
+        GTH_IntakeSpeed = 0.5;
+        GTH_ShootSpeedFast = 0.4;
+        GTH_ShootSpeedSlow = 0.4;
         GTH_ArmInPwr = 0;
         GTH_ArmOutPwr = 0;
         GTH_StartUpTime = 0;
@@ -127,8 +127,8 @@ public class Calibrations{
         ELE_MotorPwr = 0.1; // set to actual value later
         ELE_PositionKP = 0.1;
         ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
-        ELE_PIDLimitUp = 0.1;
-        ELE_PIDLimitDown = 0.1;
+        ELE_PIDLimitUp = 0.75;
+        ELE_PIDLimitDown = 0.5;
 
         CLM_MotorSpeedUp = 0.3;
         CLM_MotorSpeedDn = 0.6;

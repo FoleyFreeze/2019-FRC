@@ -18,11 +18,10 @@ public class ElectroJendz {
 
     public static final int ELE_MotorID = 2;
 
-    public static final int GTH_MotorL_ID = -1;
-    public static final int GTH_MotorR_ID = -1;
+    public static final int GTH_MotorL_ID = 6;
+    public static final int GTH_MotorR_ID = 9;
 
-    public static final int GTH_ArmMotorID = -1;
-
+    public static final int GTH_ArmMotorID = 7;
     public static final int CLM_MotorID = 3;
 
     public static final int GAMEPAD = 0;
