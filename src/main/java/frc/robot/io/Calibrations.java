@@ -108,11 +108,11 @@ public class Calibrations{
         DRV_SwerveDrivePwrScale = 0.25;
         DRV_SwerveStrKP = -0.2;//rotation power per degree
         DRV_SwerveStrKD = 0;
-        DRV_WaitForParkTime = 0.5;//seconds
+        DRV_WaitForParkTime = 5;//seconds
         DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
-        DRV_toTargetAngleKP = -0;
+        DRV_toTargetAngleKP = 0.05;
         DRV_ofTargetAngleKP = -0; 
-        DRV_targetDistanceKP = -0;
+        DRV_targetDistanceKP = -0.2;
 
         GTH_IntakeSpeed = 0;
         GTH_ShootSpeedFast = 0;

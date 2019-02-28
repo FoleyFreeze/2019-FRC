@@ -150,7 +150,7 @@ public class DriveTrain extends Component{
          
         //park if not moving
         double elapsedTime = Timer.getFPGATimestamp() - startTime; 
-        if(maxPwr < 0.15 && elapsedTime > k.DRV_WaitForParkTime) {
+        if(maxPwr < 0.02 && elapsedTime > k.DRV_WaitForParkTime) {
         
             outR[0] = 0;
             outTheta[0] = 315;
@@ -161,7 +161,7 @@ public class DriveTrain extends Component{
             outR[3] = 0;
             outTheta[3] = 315;
             parkMode = true;
-        } else if (maxPwr > 0.15)  { 
+        } else if (maxPwr > 0.02)  { 
             startTime = Timer.getFPGATimestamp(); 
             parkMode = false;
         } else {
@@ -208,7 +208,24 @@ public class DriveTrain extends Component{
         }
 
         double Y = vd.distance * k.DRV_targetDistanceKP;
-        double R = (vd.angleTo - deltaAngle) * k.DRV_toTargetAngleKP;
+        double R = (vd.angleTo + deltaAngle) * k.DRV_toTargetAngleKP;
+
+        SmartDashboard.putNumber("vdDist", vd.distance);
+        SmartDashboard.putNumber("vdAng", vd.angleTo);
+        SmartDashboard.putNumber("CamDrvX", X);
+        SmartDashboard.putNumber("CamDrvY", Y);
+        SmartDashboard.putNumber("CamDrvR", R);
+
+        X = Math.min(Math.max(X,-0.5),0.5);
+        Y = Math.min(Math.max(Y,-0.5),0.5);
+        R = Math.min(Math.max(R,-0.5),0.5);
+
+        //do turning first
+        //should be replaced with a normalization function 
+        //if(Math.abs(R) > 0.1) {
+        //    Y = Math.max(Math.min(.1,Y),-.1);
+        //}
+        Y *= (0.5-R) / 0.5;
 
         swerve(X, Y, R);
     }
