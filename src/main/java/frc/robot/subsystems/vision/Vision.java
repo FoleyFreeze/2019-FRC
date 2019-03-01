@@ -17,7 +17,7 @@ public class Vision extends Component {
 
         visionTargetStack = new LimitedStack<>(5);
         cargoStack = new LimitedStack<>(5);
-
+        if(!k.CAM_Disabled){
         NetworkTable nt = NetworkTableInstance.getDefault().getTable("Vision");
         nt.addEntryListener("vis_trgt", (table,key,entry,value,flags) -> {
             try{
@@ -59,6 +59,7 @@ public class Vision extends Component {
                 e.printStackTrace();
             }
         }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+    }
 
     }
 

@@ -80,6 +80,7 @@ public class Calibrations{
     public boolean GTH_disableDisk;
     public boolean AD_Disabled;
     public boolean MIL_Disabled;
+    public boolean CAM_Disabled;
 
     // Vision cals
     public double VIS_ExpireTime;
@@ -96,6 +97,7 @@ public class Calibrations{
         AD_Disabled = true;
         MIL_Disabled = true;
         MIL_CLDisabled = true;
+        CAM_Disabled = false;
 
         NAVX_Offset = 0;
 
