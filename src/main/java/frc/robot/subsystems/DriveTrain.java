@@ -125,6 +125,8 @@ public class DriveTrain extends Component{
             double h = Math.sqrt(x*x + y*y);
  
             double theta = Math.atan2(y, x);
+            
+            //degrees to radians
             theta += Math.PI/2;
  
             double r = k.DRV_SwerveAngRate * h * rotAxis;
@@ -132,7 +134,10 @@ public class DriveTrain extends Component{
             double wheelX = r * Math.cos(theta) + xAxis;
             double wheelY = r * Math.sin(theta) + yAxis;
             outR[i] = Math.sqrt(wheelX*wheelX + wheelY*wheelY);
+
+            //radians to degrees
             theta = Math.atan2(wheelY, wheelX) * 180/Math.PI;
+
             theta += 180;
 
             outTheta[i] = theta;

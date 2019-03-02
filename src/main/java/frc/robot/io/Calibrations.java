@@ -45,6 +45,7 @@ public class Calibrations{
     public double GTH_ArmOutCurrent;
     public double GTH_ArmInPwr;
     public double GTH_ArmOutPwr;
+    public double GTH_CurrLimit;
     public double GTH_FailSafeTimer;
     public double GTH_IntakeSpeed;
     public double GTH_ShootSpeedFast;
@@ -125,6 +126,7 @@ public class Calibrations{
         GTH_ShootSpeedSlow = 0.4;
         GTH_ArmInPwr = 0;
         GTH_ArmOutPwr = 0;
+        GTH_CurrLimit = 14.0;
         GTH_StartUpTime = 0;
         GTH_ArmInCurrent = 0;
         GTH_ArmOutCurrent = 0;
