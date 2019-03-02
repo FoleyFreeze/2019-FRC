@@ -30,18 +30,23 @@ public class Inputs extends Component {
 
     public boolean climb;
     public boolean reverseClimb;
+    public boolean retract;
 
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
     public boolean autoElevator;
     public Elevator.ElevatorPosition elevatorTarget = ElevatorPosition.DONT_MOVE;
     //elevatorTarget means you press a button and it moves to a specific place
-    public boolean rocketL1;
-    public boolean rocketL2;
-    public boolean rocketL3;
+    public boolean rocketL1Hatch;
+    public boolean rocketL1Cargo;
+    public boolean rocketL2Hatch;
+    public boolean rocketL2Cargo;
+    public boolean rocketL3Hatch;
+    public boolean rocketL3Cargo;
     public boolean rocketSideLeft;
     public boolean rocketSideRight;
     
+    public boolean shift;
     public boolean pitMode;
 
     public boolean fourBarIn;
@@ -112,14 +117,18 @@ public class Inputs extends Component {
         }
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
-        //pitMode = gamePad.getRawButton(k.IN_pitMode);
-        //diskGather = gamePad.getRawButton(k.IN_diskGather);
+        //pitMode = controlBoard.getRawButton(cb.pitMode);
+        //shift = controlBoard.getRawButton(cb.shift);
+        //diskGather = controlBoard.getRawButton(cb.gather);
         if(!k.ELE_disable){
-            rocketL1 = gamePad.getRawButton(k.IN_rocketL1);
-            rocketL2 = gamePad.getRawButton(k.IN_rocketL2);
-            rocketL3 = gamePad.getRawButton(k.IN_rocketL3);
-            rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
-            rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
+            rocketL1Hatch = gamePad.getRawButton(cb.bottomHatch);
+            rocketL1Cargo = gamePad.getRawButton(cb.bottomCargo);
+            rocketL2Hatch = gamePad.getRawButton(cb.middleHatch);
+            rocketL2Cargo = gamePad.getRawButton(cb.middleCargo);
+            rocketL3Hatch = gamePad.getRawButton(cb.topHatch);
+            rocketL3Cargo = gamePad.getRawButton(cb.topCargo);
+            //rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
+            //rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
             autoElevator = true;
             manualElevatorUp = gamePad.getRawButton(2);
             manualElevatorDown = gamePad.getRawButton(3);
@@ -131,13 +140,15 @@ public class Inputs extends Component {
         }
 
         if(!k.GTH_disableBall){
-            ballGather = gamePad.getRawButton(8);
-            releaseBall = gamePad.getRawButton(9);
+            //FIXME!!!
+            ballGather = controlBoard.getRawButton(cb.gather);
+            releaseBall = controlBoard.getRawButton(cb.shoot);
         }
 
         if(!k.CLM_disable){
-            climb = gamePad.getRawButton(2);
+            climb = controlBoard.getRawButton(cb.climb);
             reverseClimb = gamePad.getRawButton(3);
+            retract = controlBoard.getRawButton(cb.retract);
         }
 
         String elevatorState;
@@ -146,22 +157,22 @@ public class Inputs extends Component {
             //when disabled require a new button press before moving
             elevatorTarget = ElevatorPosition.DONT_MOVE;
             elevatorState = "irrelevant";
-        } else if(rocketL3 && sense.hasBall){
+        } else if(rocketL3Hatch && sense.hasBall){
             elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
             elevatorState = "Level 3 Cargo";
-        } else if (rocketL3 && sense.hasHatch) {
+        } else if (rocketL3Hatch && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
             elevatorState = "Level 3 Hatch";
-        } else if (rocketL2 && sense.hasBall) {
+        } else if (rocketL2Hatch && sense.hasBall) {
             elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
             elevatorState = "Level 2 Cargo";
-        } else if (rocketL2 && sense.hasHatch) {
+        } else if (rocketL2Hatch && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
             elevatorState = "Level 2 Hatch";
-        } else if (rocketL1 && sense.hasBall) {
+        } else if (rocketL1Hatch && sense.hasBall) {
             elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
             elevatorState = "Level 1 Cargo";
-        } else if (rocketL1 && sense.hasHatch) {
+        } else if (rocketL1Hatch && sense.hasHatch) {
             elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
             elevatorState = "Level 2 Hatch";
         }else{

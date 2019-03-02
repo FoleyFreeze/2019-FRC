@@ -4,13 +4,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ButtonMap;
 import frc.robot.io.Calibrations;
+import frc.robot.io.ControlBoard;
 import frc.robot.io.Inputs;
 import frc.robot.io.K_Competition_Bot;
 import frc.robot.io.K_Swerve_Bot;
 import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
 import frc.robot.io.OutputsSwerveBot;
-import frc.robot.subsystems.RSE;
 import frc.robot.subsystems.vision.Vision;
 
 public class Component {
@@ -26,6 +26,7 @@ public class Component {
     public static DriveTrain drive;
     public static Calibrations k;
     public static RSE rse;
+    public static ControlBoard cb;
 
     public static void initAll() {
         
@@ -69,6 +70,7 @@ public class Component {
         grabDisk = new DiskGatherer();
         drive = new DriveTrain(); 
         rse = new RSE();
+        cb = new ControlBoard();
 
         switch(Calibrations.BOT_Version){
             case COMPETITION:
@@ -84,6 +86,7 @@ public class Component {
     
     public static void runAll(){
         bm.set();
+        cb.set();
         in.run();
         sense.run();
         rse.run();
