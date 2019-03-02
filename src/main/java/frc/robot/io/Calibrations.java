@@ -9,9 +9,18 @@ public class Calibrations{
 
     public double NAVX_Offset;
 
+    // disable cals
+    public boolean AD_Disabled;
+    public boolean CAM_Disabled;
+    public boolean CLM_disable;
+    public boolean DRV_disable;
+    public boolean ELE_disable;
+    public boolean GTH_disableBall;
+    public boolean GTH_disableDisk;
+    public boolean MIL_Disabled;
+
     public double   DRV_CountsPerDegree;
-    public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
-    public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
+    public double   DRV_InchesPRev;
     public double   DRV_RotCentX;
     public double   DRV_RotCentY;
     public double   DRV_SwerveAngRate;
@@ -19,34 +28,38 @@ public class Calibrations{
     public double   DRV_SwerveMaxAnglePwr; 
     public double   DRV_SwerveDrivePwrScale;
     public double   DRV_SwerveStrKP; 
-    public double   DRV_SwerveStrKD;
-    public double   DRV_WaitForParkTime; 
-    public double   DRV_InchesPRev;
-    public double DRV_toTargetAngleKP;
-    public double DRV_ofTargetAngleKP;
-    public double DRV_targetDistanceKP;
+    public double   DRV_SwerveStrKD; 
+    public double   DRV_toTargetAngleKP;
+    public double   DRV_ofTargetAngleKP;
+    public double   DRV_targetDistanceKP;
+    public double   DRV_WaitForParkTime;
+    public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
+    public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
+
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
     public double SEN_AbsAngleRL;
     public double SEN_AbsAngleRR;
+
+    public double GTH_ArmInCurrent;
+    public double GTH_ArmOutCurrent;
+    public double GTH_ArmInPwr;
+    public double GTH_ArmOutPwr;
+    public double GTH_FailSafeTimer;
     public double GTH_IntakeSpeed;
     public double GTH_ShootSpeedFast;
     public double GTH_ShootSpeedSlow;
-    public double GTH_ArmInPwr;
-    public double GTH_ArmOutPwr;
     public double GTH_StartUpTime;
-    public double GTH_ArmInCurrent;
-    public double GTH_ArmOutCurrent;
-    public double GTH_FailSafeTimer;
+
     public double ELE_MotorPwr;
+    public double ELE_InchesPRev;
+    public double ELE_PIDLimitUp;
+    public double ELE_PIDLimitDown;
+    public double ELE_PositionKP;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
             0,               0,               0,              0.5,              0,              0,             0,               78,          0,          0
     };
-    public double ELE_PositionKP;
-    public double ELE_InchesPRev;
-    public double ELE_PIDLimitUp;
-    public double ELE_PIDLimitDown;
 
     public double CLM_MotorSpeedUp;
     public double CLM_MotorSpeedDn;
@@ -56,31 +69,22 @@ public class Calibrations{
     public int IN_dodgingL;
     public int IN_dodgingR;
 
-    // elevator positions 
+    // elevator buttons 
     public int IN_rocketL1;
     public int IN_rocketL2;
     public int IN_rocketL3;
     public int IN_rocketSideLeft;
     public int IN_rocketSideRight;
 
-
+    //mils
     public int MIL_livepi;
     public int MIL_trackpi;
     public double MIL_CurrResetTime;
     public double MIL_CurrFilt;
     public boolean MIL_CLDisabled;
+
     public double OUT_PitModeLimit;
     public boolean OUT_DriveBrakeMode;
-
-    // disable cals 
-    public boolean ELE_disable;
-    public boolean CLM_disable;
-    public boolean GTH_disableBall;
-    public boolean DRV_disable;
-    public boolean GTH_disableDisk;
-    public boolean AD_Disabled;
-    public boolean MIL_Disabled;
-    public boolean CAM_Disabled;
 
     // Vision cals
     public double VIS_ExpireTime;
@@ -139,14 +143,16 @@ public class Calibrations{
         IN_DixonSize = 6;
         
         //Buttons
-        IN_rocketL1 = -0;
-        IN_rocketL2 = -0;
-        IN_rocketL3 = -0;
+        IN_rocketL1 = -0;//new button int in controlboard branch(ControlBoard file), yes it exists on GitHub
+        IN_rocketL2 = -0;//new button int in controlboard branch(ControlBoard file), yes it exists on GitHub
+        IN_rocketL3 = -0;//new button int in controlboard branch(ControlBoard file), yes it exists on GitHub
         IN_rocketSideLeft = -0;
         IN_rocketSideRight = -0;
+
         //Axes
         IN_dodgingL = 2;
         IN_dodgingR = 3;
+
         //Mil
         MIL_livepi = 0;
         MIL_trackpi = 0;
