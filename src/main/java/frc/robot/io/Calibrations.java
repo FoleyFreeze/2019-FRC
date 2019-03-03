@@ -38,6 +38,7 @@ public class Calibrations{
     public double GTH_ArmInCurrent;
     public double GTH_ArmOutCurrent;
     public double GTH_FailSafeTimer;
+    public double GTH_CurrLimit;
     public double ELE_MotorPwr;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
@@ -47,6 +48,8 @@ public class Calibrations{
     public double ELE_InchesPRev;
     public double ELE_PIDLimitUp;
     public double ELE_PIDLimitDown;
+    public double ELE_SpeedFast;
+    public double ELE_SpeedSlow;
 
     public double CLM_MotorSpeedUp;
     public double CLM_MotorSpeedDn;
@@ -125,12 +128,15 @@ public class Calibrations{
         GTH_ArmInCurrent = 0;
         GTH_ArmOutCurrent = 0;
         GTH_FailSafeTimer = 0;
+        GTH_CurrLimit = 14.0;
 
         ELE_MotorPwr = 0.1; // set to actual value later
         ELE_PositionKP = 0.1;
         ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
         ELE_PIDLimitUp = 0.75;
         ELE_PIDLimitDown = 0.5;
+        ELE_SpeedFast = .5;
+        ELE_SpeedSlow = .25;
 
         CLM_MotorSpeedUp = 0.3;
         CLM_MotorSpeedDn = 0.6;

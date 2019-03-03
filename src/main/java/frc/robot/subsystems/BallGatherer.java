@@ -20,7 +20,7 @@ public class BallGatherer extends Component{
             } else {
                 out.setGatherMotor(k.GTH_IntakeSpeed, -k.GTH_IntakeSpeed);
             }
-            if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > 14){
+            if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit){
                 currStop = true;
             }
             gatherStatus = "Gathering";

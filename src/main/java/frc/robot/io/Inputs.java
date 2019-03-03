@@ -2,13 +2,13 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Component;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
-import frc.robot.subsystems.Component;
 
 public class Inputs extends Component {
    
-    private final Joystick controlBoard;
+    public Joystick controlBoard;
     public Joystick gamePad;
         
     //----------------------------------Driver Functions--------------------------------
@@ -26,28 +26,22 @@ public class Inputs extends Component {
     public boolean ballGather;
     public boolean releaseBall; 
     public boolean diskGather;
-    public boolean releaseDisc; 
+    public boolean releaseDisk; 
 
     public boolean climb;
     public boolean reverseClimb;
-    public boolean retract;
 
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
     public boolean autoElevator;
     public Elevator.ElevatorPosition elevatorTarget = ElevatorPosition.DONT_MOVE;
     //elevatorTarget means you press a button and it moves to a specific place
-    public boolean rocketL1Hatch;
-    public boolean rocketL1Cargo;
-    public boolean rocketL2Hatch;
-    public boolean rocketL2Cargo;
-    public boolean rocketL3Hatch;
-    public boolean rocketL3Cargo;
-    public boolean rocketSideLeft;
-    public boolean rocketSideRight;
+    public boolean ballNotHatch;
     
     public boolean shift;
     public boolean pitMode;
+
+    public boolean leftNotRight;
 
     public boolean fourBarIn;
     public boolean fourBarOut;
@@ -59,12 +53,23 @@ public class Inputs extends Component {
     public byte[] yDixon;//history of joystick directions
     public byte[] rotDixon;//history of joystick directions
 
+    public enum RocketCargoshipPosition {
+        HI, MID, LO, FRONT, DEFAULT
+    }
+    public RocketCargoshipPosition rocketCargoState;
+    public enum NearFarCargo {
+        NEAR, FAR, CARGO, DEFAULT
+    }
+    public NearFarCargo nearFarCargo;
+
     public Inputs() {
         controlBoard = new Joystick(ElectroJendz.CONTROL_BOARD);
         gamePad = new Joystick(ElectroJendz.GAMEPAD);
         xDixon = new byte[k.IN_DixonSize];
         yDixon = new byte[k.IN_DixonSize];
         rotDixon = new byte[k.IN_DixonSize];
+        nearFarCargo = NearFarCargo.DEFAULT;
+        rocketCargoState = RocketCargoshipPosition.DEFAULT;
     }
 
     
@@ -89,6 +94,7 @@ public class Inputs extends Component {
         }
         if(Math.abs(rotAxisDrive) < bm.rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
 
+
         String stopDixon;//for joy of programming
         boolean dixon;//for joy of programming
 
@@ -107,6 +113,10 @@ public class Inputs extends Component {
 
         SmartDashboard.putString("Dixon Detector", stopDixon);
 
+        ballNotHatch = controlBoard.getRawButton(cb.ballOrHatch);
+        leftNotRight = controlBoard.getRawButton(cb.lOrR);
+
+        
         //set buttons
         if(!k.DRV_disable){
             compassDrive = gamePad.getRawButton(bm.compassDrive);
@@ -117,18 +127,32 @@ public class Inputs extends Component {
         }
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
-        //pitMode = controlBoard.getRawButton(cb.pitMode);
-        //shift = controlBoard.getRawButton(cb.shift);
-        //diskGather = controlBoard.getRawButton(cb.gather);
+        pitMode = !controlBoard.getRawButton(cb.pitMode);
+        shift = controlBoard.getRawButton(cb.shift);
+
+        if(controlBoard.getRawButton(cb.high)){
+            rocketCargoState = RocketCargoshipPosition.HI;
+        }else if(controlBoard.getRawButton(cb.middle)){
+            rocketCargoState = RocketCargoshipPosition.MID;
+        }else if(controlBoard.getRawButton(cb.low)){
+            rocketCargoState = RocketCargoshipPosition.LO;
+        }else if(controlBoard.getRawButton(cb.front)){
+            rocketCargoState = RocketCargoshipPosition.FRONT;
+        }
+
+        if(controlBoard.getRawButton(cb.farRkt)){
+            nearFarCargo = NearFarCargo.FAR;
+        }else if(controlBoard.getRawButton(cb.nearRkt)){
+            nearFarCargo = NearFarCargo.NEAR;
+        }else if(controlBoard.getRawButton(cb.cargoShip)){
+            nearFarCargo = NearFarCargo.CARGO;
+        }
+
+        if(!k.GTH_disableDisk && !ballNotHatch) {
+            diskGather = controlBoard.getRawButton(cb.gather);
+            releaseDisk = controlBoard.getRawButton(cb.shoot);
+        }
         if(!k.ELE_disable){
-            rocketL1Hatch = gamePad.getRawButton(cb.bottomHatch);
-            rocketL1Cargo = gamePad.getRawButton(cb.bottomCargo);
-            rocketL2Hatch = gamePad.getRawButton(cb.middleHatch);
-            rocketL2Cargo = gamePad.getRawButton(cb.middleCargo);
-            rocketL3Hatch = gamePad.getRawButton(cb.topHatch);
-            rocketL3Cargo = gamePad.getRawButton(cb.topCargo);
-            //rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
-            //rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
             autoElevator = true;
             manualElevatorUp = gamePad.getRawButton(2);
             manualElevatorDown = gamePad.getRawButton(3);
@@ -139,7 +163,7 @@ public class Inputs extends Component {
             }
         }
 
-        if(!k.GTH_disableBall){
+        if(!k.GTH_disableBall && ballNotHatch){
             //FIXME!!!
             ballGather = controlBoard.getRawButton(cb.gather);
             releaseBall = controlBoard.getRawButton(cb.shoot);
@@ -147,38 +171,14 @@ public class Inputs extends Component {
 
         if(!k.CLM_disable){
             climb = controlBoard.getRawButton(cb.climb);
-            reverseClimb = gamePad.getRawButton(3);
-            retract = controlBoard.getRawButton(cb.retract);
+            reverseClimb = (climb && shift);
         }
-
-        String elevatorState;
 
         if(sense.isDisabled) {
             //when disabled require a new button press before moving
             elevatorTarget = ElevatorPosition.DONT_MOVE;
-            elevatorState = "irrelevant";
-        } else if(rocketL3Hatch && sense.hasBall){
-            elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
-            elevatorState = "Level 3 Cargo";
-        } else if (rocketL3Hatch && sense.hasHatch) {
-            elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
-            elevatorState = "Level 3 Hatch";
-        } else if (rocketL2Hatch && sense.hasBall) {
-            elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
-            elevatorState = "Level 2 Cargo";
-        } else if (rocketL2Hatch && sense.hasHatch) {
-            elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
-            elevatorState = "Level 2 Hatch";
-        } else if (rocketL1Hatch && sense.hasBall) {
-            elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
-            elevatorState = "Level 1 Cargo";
-        } else if (rocketL1Hatch && sense.hasHatch) {
-            elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
-            elevatorState = "Level 2 Hatch";
-        }else{
-            elevatorState = "unknown";
         }
-        SmartDashboard.putString("Elevator Location", elevatorState);
+        SmartDashboard.putString("Elevator Location", elevatorTarget.name());
 
         if(flipOrientation){
             flipOrientation();
