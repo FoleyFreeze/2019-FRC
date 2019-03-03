@@ -50,6 +50,9 @@ public class Inputs extends Component {
     public boolean visionCargo;
     public boolean visionTarget;
 
+    public boolean actionBall;
+    public boolean actionHatch;
+
     public byte[] xDixon;//history of joystick directions
     public byte[] yDixon;//history of joystick directions
     public byte[] rotDixon;//history of joystick directions
@@ -175,6 +178,18 @@ public class Inputs extends Component {
         SmartDashboard.putBoolean("Compass Drive", compassDrive);
 
         SmartDashboard.putBoolean("Pit Mode", pitMode);
+
+        // autofunctions disable cals and ball or hatch detection
+        if(actionBall && sense.hasBall && !k.AUTO_GatherDisabled) {
+            autoGather(true);
+            autoScore(false);
+        } else if(actionHatch && sense.hasHatch && !k.AUTO_ScoreDisabled) {
+            autoGather(false);
+            autoScore(true);
+        } else {
+            autoGather(false);
+            autoScore(false);
+        }
     }
 
     public void compassDrive(){
@@ -217,11 +232,21 @@ public class Inputs extends Component {
         //if more than 1 direction change, true
         return count>1;
     }
-   
-    public enum States { BALLSCORE, HATCHSCORE, HATCHHUMAN, HATCHGROUND, BALLGROUND, IDLE };
+
+    public enum autoGatherStates { DRIVETOGATHER, CAMERAGATHER };
     
-        private void autoGatherStates() {
+    public void autoGather(boolean autoGather) {
+        
+        if(autoGather){
             
         }
+
+    } 
+
+    public enum autoScoreStates { DRIVETOGOAL, CAMERASCORE, GATHERSHOOT}
+
+    public void autoScore(boolean autoScore) {
+
+    }
 
 }

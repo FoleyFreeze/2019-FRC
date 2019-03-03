@@ -80,6 +80,8 @@ public class Calibrations{
     public boolean GTH_disableDisk;
     public boolean AD_Disabled;
     public boolean MIL_Disabled;
+    public boolean AUTO_GatherDisabled;
+    public boolean AUTO_ScoreDisabled;
 
     // Vision cals
     public double VIS_ExpireTime;
@@ -96,7 +98,9 @@ public class Calibrations{
         AD_Disabled = true;
         MIL_Disabled = true;
         MIL_CLDisabled = true;
-
+        AUTO_GatherDisabled = true;
+        AUTO_ScoreDisabled = true;
+        
         NAVX_Offset = 0;
 
         DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
