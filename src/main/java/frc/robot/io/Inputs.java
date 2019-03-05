@@ -233,19 +233,84 @@ public class Inputs extends Component {
         return count>1;
     }
 
-    public enum autoGatherStates { DRIVETOGATHER, CAMERAGATHER };
+    public enum AutoGatherStates { DRIVETOGATHER, CAMERAGATHER };
+    private AutoGatherStates autoGatherState = AutoGatherStates.DRIVETOGATHER;
     
     public void autoGather(boolean autoGather) {
         
         if(autoGather){
             
+            switch(autoGatherState){
+                case DRIVETOGATHER:
+                //pathfind
+                //face the robot in the right direction
+                //move elevator to floor/feeder station
+                //move gather to ball/hatch position
+
+                //when camera sees target
+                //when operator gather button pressed
+                //next state
+                break;
+
+                case CAMERAGATHER:
+                //camera drive, or manual drive if no image
+                //turn on gatherer
+
+                //when gather current spike
+                //set sense.hasThing to true
+                //next state
+                break;
+            }
+
+        } else { //reset to first state
+            autoGatherState = AutoGatherStates.DRIVETOGATHER;
         }
 
     } 
 
-    public enum autoScoreStates { DRIVETOGOAL, CAMERASCORE, GATHERSHOOT}
+    public enum AutoScoreStates { DRIVETOGOAL, CAMERASCORE, GATHERSHOOT }
+    private AutoScoreStates autoScoreState = AutoScoreStates.DRIVETOGOAL;
 
     public void autoScore(boolean autoScore) {
+
+        if(autoScore){
+
+            switch(autoScoreState){
+                case DRIVETOGOAL:
+                //pathfind
+                //face robot in right direction
+                //move elevator to stage height (but dont go too high, wait at level 2 if target is level 3)
+
+                //when vision spotted
+                //when shift shoot
+                //next state
+                break;
+
+                case CAMERASCORE:
+                //camera drive or manual drive if no image
+                //move elevator to final height
+                
+                //when reached target
+                //when operator shoot button pressed (or when shift released)
+                //next state
+
+                //when shoot released and no image
+                //go back to DRIVETOGOAL state
+                break;
+
+                case GATHERSHOOT:
+                //run shoot gather
+                
+                //when TIME_CAL elapses (like 0.5sec or so)
+                //turn off gather
+                //next state
+                //set sense.hasThing to false
+                break;
+            }
+
+        } else { //reset to first state
+            autoScoreState = AutoScoreStates.DRIVETOGOAL;
+        }
 
     }
 
