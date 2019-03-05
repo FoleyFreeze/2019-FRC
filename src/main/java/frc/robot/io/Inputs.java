@@ -49,6 +49,9 @@ public class Inputs extends Component {
     public boolean visionCargo;
     public boolean visionTarget;
 
+    public boolean actionBall;
+    public boolean actionHatch;
+
     public byte[] xDixon;//history of joystick directions
     public byte[] yDixon;//history of joystick directions
     public byte[] rotDixon;//history of joystick directions
@@ -175,7 +178,19 @@ public class Inputs extends Component {
         }
         SmartDashboard.putBoolean("Compass Drive", compassDrive);
 
-        
+        SmartDashboard.putBoolean("Pit Mode", pitMode);
+
+        // autofunctions disable cals and ball or hatch detection
+        if(actionBall && sense.hasBall) {
+            autoGather(true);
+            autoScore(false);
+        } else if(actionHatch && sense.hasHatch) {
+            autoGather(false);
+            autoScore(true);
+        } else {
+            autoGather(false);
+            autoScore(false);
+        }
     }
 
     public void compassDrive(){
@@ -301,6 +316,88 @@ public class Inputs extends Component {
             controlBoard.setOutput(cb.cargoShip, true);
             break;
         }
+
+    }
+
+    public enum AutoGatherStates { DRIVETOGATHER, CAMERAGATHER };
+    private AutoGatherStates autoGatherState = AutoGatherStates.DRIVETOGATHER;
+    
+    public void autoGather(boolean autoGather) {
+        
+        if(autoGather){
+            
+            switch(autoGatherState){
+                case DRIVETOGATHER:
+                //pathfind
+                //face the robot in the right direction
+                //move elevator to floor/feeder station
+                //move gather to ball/hatch position
+
+                //when camera sees target
+                //when operator gather button pressed
+                //next state
+                break;
+
+                case CAMERAGATHER:
+                //camera drive, or manual drive if no image
+                //turn on gatherer
+
+                //when gather current spike
+                //set sense.hasThing to true
+                //next state
+                break;
+            }
+
+        } else { //reset to first state
+            autoGatherState = AutoGatherStates.DRIVETOGATHER;
+        }
+
+    } 
+
+    public enum AutoScoreStates { DRIVETOGOAL, CAMERASCORE, GATHERSHOOT }
+    private AutoScoreStates autoScoreState = AutoScoreStates.DRIVETOGOAL;
+
+    public void autoScore(boolean autoScore) {
+
+        if(autoScore){
+
+            switch(autoScoreState){
+                case DRIVETOGOAL:
+                //pathfind
+                //face robot in right direction
+                //move elevator to stage height (but dont go too high, wait at level 2 if target is level 3)
+
+                //when vision spotted
+                //when shift shoot
+                //next state
+                break;
+
+                case CAMERASCORE:
+                //camera drive or manual drive if no image
+                //move elevator to final height
+                
+                //when reached target
+                //when operator shoot button pressed (or when shift released)
+                //next state
+
+                //when shoot released and no image
+                //go back to DRIVETOGOAL state
+                break;
+
+                case GATHERSHOOT:
+                //run shoot gather
+                
+                //when TIME_CAL elapses (like 0.5sec or so)
+                //turn off gather
+                //next state
+                //set sense.hasThing to false
+                break;
+            }
+
+        } else { //reset to first state
+            autoScoreState = AutoScoreStates.DRIVETOGOAL;
+        }
+
     }
 
 }
