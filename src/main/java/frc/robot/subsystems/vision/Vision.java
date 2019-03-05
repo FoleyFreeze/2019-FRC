@@ -63,6 +63,16 @@ public class Vision extends Component {
 
     }
 
+    public boolean goodCargoImage(){
+        VisionData vd = cargoStack.peek();
+        return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime; 
+    }
+
+    public boolean goodHatchImage(){
+        VisionData vd = visionTargetStack.peek();
+        return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime; 
+    }
+
     public VisionData getLastCargo(){
         return cargoStack.peek();
     }

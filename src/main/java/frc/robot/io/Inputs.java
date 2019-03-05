@@ -40,6 +40,8 @@ public class Inputs extends Component {
     
     public boolean shift;
     public boolean pitMode;
+    public boolean shoot;
+    public boolean gather;
 
     public boolean leftNotRight;
 
@@ -132,6 +134,8 @@ public class Inputs extends Component {
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
         shift = controlBoard.getRawButton(cb.shift);
+        shoot = controlBoard.getRawButton(cb.shoot);
+        gather = controlBoard.getRawButton(cb.gather);
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         parseControlBoard();
@@ -147,11 +151,12 @@ public class Inputs extends Component {
             }
         }
 
+        //remove once robot state is working
         if(!k.GTH_disableDisk && !ballNotHatch) {
             diskGather = controlBoard.getRawButton(cb.gather);
             releaseDisk = controlBoard.getRawButton(cb.shoot);
         }
-
+        //remove once robot state is working
         if(!k.GTH_disableBall && ballNotHatch){
             ballGather = controlBoard.getRawButton(cb.gather);
             releaseBall = controlBoard.getRawButton(cb.shoot);
@@ -366,10 +371,16 @@ public class Inputs extends Component {
                 //pathfind
                 //face robot in right direction
                 //move elevator to stage height (but dont go too high, wait at level 2 if target is level 3)
+                //setElevatorHeight();
+                //elevatorStage = true;
 
                 //when vision spotted
                 //when shift shoot
-                //next state
+                if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodHatchImage() || shift && shoot){
+                    //next state
+                    autoScoreState = AutoScoreStates.CAMERASCORE;
+                }
+                
                 break;
 
                 case CAMERASCORE:

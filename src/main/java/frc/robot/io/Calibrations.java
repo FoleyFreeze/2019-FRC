@@ -37,10 +37,6 @@ public class Calibrations{
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
 
-    //camera cals
-    public double CAM_Location_X = 5.125;
-    public double CAM_Location_Y = 0;
-
     //sensor cals
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
@@ -92,7 +88,9 @@ public class Calibrations{
     public boolean OUT_DriveBrakeMode = true;
 
     // Vision cals
-    public double VIS_ExpireTime = 0.5;
+    public double CAM_ExpireTime = 0.5;
+    public double CAM_Location_X = 5.125;
+    public double CAM_Location_Y = 0;
     
     public Calibrations(){
         

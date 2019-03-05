@@ -19,13 +19,13 @@ public class DriveTrain extends Component{
         
         if(in.visionTarget) {
             VisionData vd = view.getLastVisionTarget();
-            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.VIS_ExpireTime) {
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
                 cameraDrive(vd);
                 return;
             } 
         } else if(in.visionCargo) {
             VisionData vd = view.getLastCargo();
-            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.VIS_ExpireTime) {
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
                 cameraDrive(vd);
                 return;
             }
