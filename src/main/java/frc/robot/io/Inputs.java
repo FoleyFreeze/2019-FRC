@@ -2,13 +2,13 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Component;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
-import frc.robot.subsystems.Component;
 
 public class Inputs extends Component {
    
-    private final Joystick controlBoard;
+    public Joystick controlBoard;
     public Joystick gamePad;
         
     //----------------------------------Driver Functions--------------------------------
@@ -26,7 +26,7 @@ public class Inputs extends Component {
     public boolean ballGather;
     public boolean releaseBall; 
     public boolean diskGather;
-    public boolean releaseDisc; 
+    public boolean releaseDisk; 
 
     public boolean climb;
     public boolean reverseClimb;
@@ -36,13 +36,12 @@ public class Inputs extends Component {
     public boolean autoElevator;
     public Elevator.ElevatorPosition elevatorTarget = ElevatorPosition.DONT_MOVE;
     //elevatorTarget means you press a button and it moves to a specific place
-    public boolean rocketL1;
-    public boolean rocketL2;
-    public boolean rocketL3;
-    public boolean rocketSideLeft;
-    public boolean rocketSideRight;
+    public boolean ballNotHatch;
     
+    public boolean shift;
     public boolean pitMode;
+
+    public boolean leftNotRight;
 
     public boolean fourBarIn;
     public boolean fourBarOut;
@@ -54,12 +53,23 @@ public class Inputs extends Component {
     public byte[] yDixon;//history of joystick directions
     public byte[] rotDixon;//history of joystick directions
 
+    public enum RocketCargoshipPosition {
+        HI, MID, LO, FRONT, DEFAULT
+    }
+    public RocketCargoshipPosition rocketCargoState;
+    public enum NearFarCargo {
+        NEAR, FAR, CARGO, DEFAULT
+    }
+    public NearFarCargo nearFarCargo;
+
     public Inputs() {
         controlBoard = new Joystick(ElectroJendz.CONTROL_BOARD);
         gamePad = new Joystick(ElectroJendz.GAMEPAD);
         xDixon = new byte[k.IN_DixonSize];
         yDixon = new byte[k.IN_DixonSize];
         rotDixon = new byte[k.IN_DixonSize];
+        nearFarCargo = NearFarCargo.DEFAULT;
+        rocketCargoState = RocketCargoshipPosition.DEFAULT;
     }
 
     
@@ -84,6 +94,7 @@ public class Inputs extends Component {
         }
         if(Math.abs(rotAxisDrive) < bm.rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
 
+
         String stopDixon;//for joy of programming
         boolean dixon;//for joy of programming
 
@@ -102,6 +113,10 @@ public class Inputs extends Component {
 
         SmartDashboard.putString("Dixon Detector", stopDixon);
 
+        ballNotHatch = controlBoard.getRawButton(cb.ballOrHatch);
+        leftNotRight = controlBoard.getRawButton(cb.lOrR);
+
+        
         //set buttons
         if(!k.DRV_disable){
             compassDrive = gamePad.getRawButton(bm.compassDrive);
@@ -112,15 +127,14 @@ public class Inputs extends Component {
         }
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
-        //pitMode = gamePad.getRawButton(k.IN_pitMode);
-        //diskGather = gamePad.getRawButton(k.IN_diskGather);
+        pitMode = !controlBoard.getRawButton(cb.pitMode);
+        shift = controlBoard.getRawButton(cb.shift);
+        SmartDashboard.putBoolean("Pit Mode", pitMode);
+
+        parseControlBoard();
+
         if(!k.ELE_disable){
-            rocketL1 = gamePad.getRawButton(k.IN_rocketL1);
-            rocketL2 = gamePad.getRawButton(k.IN_rocketL2);
-            rocketL3 = gamePad.getRawButton(k.IN_rocketL3);
-            rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
-            rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
-            autoElevator = true;  //true=auto mode, false=manual mode
+            autoElevator = true;
             manualElevatorUp = gamePad.getRawButton(2);
             manualElevatorDown = gamePad.getRawButton(3);
             if(autoElevator){
@@ -130,44 +144,26 @@ public class Inputs extends Component {
             }
         }
 
-        if(!k.GTH_disableBall){
-            ballGather = gamePad.getRawButton(8);
-            releaseBall = gamePad.getRawButton(9);
+        if(!k.GTH_disableDisk && !ballNotHatch) {
+            diskGather = controlBoard.getRawButton(cb.gather);
+            releaseDisk = controlBoard.getRawButton(cb.shoot);
+        }
+
+        if(!k.GTH_disableBall && ballNotHatch){
+            ballGather = controlBoard.getRawButton(cb.gather);
+            releaseBall = controlBoard.getRawButton(cb.shoot);
         }
 
         if(!k.CLM_disable){
-            climb = gamePad.getRawButton(2);
-            reverseClimb = gamePad.getRawButton(3);
+            climb = controlBoard.getRawButton(cb.climb);
+            reverseClimb = (climb && shift);
         }
-
-        String elevatorState;
 
         if(sense.isDisabled) {
             //when disabled require a new button press before moving
             elevatorTarget = ElevatorPosition.DONT_MOVE;
-            elevatorState = "irrelevant";
-        } else if(rocketL3 && sense.hasBall){
-            elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
-            elevatorState = "Level 3 Cargo";
-        } else if (rocketL3 && sense.hasHatch) {
-            elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
-            elevatorState = "Level 3 Hatch";
-        } else if (rocketL2 && sense.hasBall) {
-            elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
-            elevatorState = "Level 2 Cargo";
-        } else if (rocketL2 && sense.hasHatch) {
-            elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
-            elevatorState = "Level 2 Hatch";
-        } else if (rocketL1 && sense.hasBall) {
-            elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
-            elevatorState = "Level 1 Cargo";
-        } else if (rocketL1 && sense.hasHatch) {
-            elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
-            elevatorState = "Level 2 Hatch";
-        }else{
-            elevatorState = "unknown";
         }
-        SmartDashboard.putString("Elevator Location", elevatorState);
+        SmartDashboard.putString("Elevator Location", elevatorTarget.name());
 
         if(flipOrientation){
             flipOrientation();
@@ -179,7 +175,7 @@ public class Inputs extends Component {
         }
         SmartDashboard.putBoolean("Compass Drive", compassDrive);
 
-        SmartDashboard.putBoolean("Pit Mode", pitMode);
+        
     }
 
     public void compassDrive(){
@@ -221,6 +217,90 @@ public class Inputs extends Component {
         }
         //if more than 1 direction change, true
         return count>1;
+    }
+
+    private void parseControlBoard(){
+        if(controlBoard.getRawButton(cb.high)){
+            rocketCargoState = RocketCargoshipPosition.HI;
+        }else if(controlBoard.getRawButton(cb.middle)){
+            rocketCargoState = RocketCargoshipPosition.MID;
+        }else if(controlBoard.getRawButton(cb.low)){
+            rocketCargoState = RocketCargoshipPosition.LO;
+        }else if(controlBoard.getRawButton(cb.front)){
+            rocketCargoState = RocketCargoshipPosition.FRONT;
+        }
+
+        switch(rocketCargoState){
+            case HI:
+            controlBoard.setOutput(cb.high, true);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, false);
+            break;
+
+            case MID:
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, true);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, false);
+            break;
+
+            case LO:
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, true);
+            controlBoard.setOutput(cb.front, false);
+            break;
+
+            case FRONT:
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, true);
+            break;   
+            
+            case DEFAULT:
+            controlBoard.setOutput(cb.high, true);
+            controlBoard.setOutput(cb.middle, true);
+            controlBoard.setOutput(cb.low, true);
+            controlBoard.setOutput(cb.front, true);
+            break;
+        }
+        
+
+        if(controlBoard.getRawButton(cb.farRkt)){
+            nearFarCargo = NearFarCargo.FAR;
+        }else if(controlBoard.getRawButton(cb.nearRkt)){
+            nearFarCargo = NearFarCargo.NEAR;
+        }else if(controlBoard.getRawButton(cb.cargoShip)){
+            nearFarCargo = NearFarCargo.CARGO;
+        }
+
+        switch(nearFarCargo){
+            case FAR:
+            controlBoard.setOutput(cb.farRkt, true);
+            controlBoard.setOutput(cb.nearRkt, false);
+            controlBoard.setOutput(cb.cargoShip, false);
+            break;
+
+            case NEAR:
+            controlBoard.setOutput(cb.farRkt, false);
+            controlBoard.setOutput(cb.nearRkt, true);
+            controlBoard.setOutput(cb.cargoShip, false);
+            break;
+
+            case CARGO:
+            controlBoard.setOutput(cb.farRkt, false);
+            controlBoard.setOutput(cb.nearRkt, false);
+            controlBoard.setOutput(cb.cargoShip, true);
+            break;  
+
+            case DEFAULT:
+            controlBoard.setOutput(cb.farRkt, true);
+            controlBoard.setOutput(cb.nearRkt, true);
+            controlBoard.setOutput(cb.cargoShip, true);
+            break;
+        }
     }
 
 }
