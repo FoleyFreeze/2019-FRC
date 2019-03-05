@@ -100,7 +100,11 @@ public class DriveTrain extends Component{
     
     public boolean parkMode;
 
-    public void swerve(double xAxis, double yAxis, double rotAxis) {
+    public void swerve(double xAxis, double yAxis, double rotAxis){
+        swerve(xAxis, yAxis, rotAxis, k.DRV_RotCentX, k.DRV_RotCentY);
+    }
+    
+    public void swerve(double xAxis, double yAxis, double rotAxis, double xRotCtr, double yRotCtr) {
         //drive straight
         if(in.resetGyro || sense.isDisabled) prevDriveStraight = false;
 
@@ -119,8 +123,8 @@ public class DriveTrain extends Component{
 
        //for each wheel calculate r,theta; power and angle
        for(int i = 0; i < 4; i++){
-            double x = k.DRV_WheelLocX[i] - k.DRV_RotCentX;
-            double y = k.DRV_WheelLocY[i] - k.DRV_RotCentY;
+            double x = k.DRV_WheelLocX[i] - xRotCtr;
+            double y = k.DRV_WheelLocY[i] - yRotCtr;
             
             double h = Math.sqrt(x*x + y*y);
  
@@ -232,7 +236,7 @@ public class DriveTrain extends Component{
         //}
         Y *= (0.5-R) / 0.5;
 
-        swerve(X, Y, R);
+        swerve(X, Y, R, k.CAM_Location_X, k.CAM_Location_Y);
     }
 
 }

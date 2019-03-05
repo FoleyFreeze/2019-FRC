@@ -37,6 +37,10 @@ public class Calibrations{
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
 
+    //camera cals
+    public double CAM_Location_X = 5.125;
+    public double CAM_Location_Y = 0;
+
     //sensor cals
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
@@ -63,7 +67,7 @@ public class Calibrations{
     public double ELE_PositionKP = 0.1;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            0,               0,               0,              0.5,              0,              0,             0,               78,          0,          0
+            0,               0,               0,            0.5,              0,              0,             0,            78,          0,          0
     };
 
     // climb cals
@@ -75,13 +79,6 @@ public class Calibrations{
     public int IN_DixonSize = 6;
     public int IN_dodgingL = 2;
     public int IN_dodgingR = 3;
-
-    // elevator buttons 
-    public int IN_rocketL1 = -0;//new button int in controlboard branch(ControlBoard file), yes it exists on GitHub
-    public int IN_rocketL2 = -0;//new button int in controlboard branch(ControlBoard file), yes it exists on GitHub
-    public int IN_rocketL3 = -0;//new button int in controlboard branch(ControlBoard file), yes it exists on GitHub
-    public int IN_rocketSideLeft = -0;
-    public int IN_rocketSideRight = -0;
 
     //mils
     public int MIL_livepi = 0;
