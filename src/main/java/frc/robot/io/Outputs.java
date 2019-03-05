@@ -8,16 +8,23 @@ public abstract class Outputs extends Component {
  
     private Solenoid gatherSolenoid1;
     private Solenoid gatherSolenoid2;
-
+    private Solenoid blueLEDs;
+    private Solenoid blueLeds2;
+    private Solenoid blueLEDs7;
 
 
     public Outputs() {
         gatherSolenoid1 = new Solenoid(1);
-        gatherSolenoid2 = new Solenoid(2);
+        //gatherSolenoid2 = new Solenoid(2);
+        blueLEDs = new Solenoid(6);
+        blueLeds2 = new Solenoid(0);
+        blueLEDs7 = new Solenoid(7);
     }
 
     public void run() {
-        
+        blueLEDs.set(true);
+        blueLeds2.set(true);
+        blueLEDs7.set(true);
     }
 
     //Assign powers to motors

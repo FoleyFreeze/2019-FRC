@@ -120,7 +120,7 @@ public class Inputs extends Component {
             rocketL3 = gamePad.getRawButton(k.IN_rocketL3);
             rocketSideLeft = gamePad.getRawButton(k.IN_rocketSideLeft);
             rocketSideRight = gamePad.getRawButton(k.IN_rocketSideRight);
-            autoElevator = true;
+            autoElevator = true;  //true=auto mode, false=manual mode
             manualElevatorUp = gamePad.getRawButton(2);
             manualElevatorDown = gamePad.getRawButton(3);
             if(autoElevator){

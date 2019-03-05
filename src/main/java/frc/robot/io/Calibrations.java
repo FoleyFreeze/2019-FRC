@@ -91,7 +91,7 @@ public class Calibrations{
         ELE_disable = false;
         CLM_disable = true;
         GTH_disableBall = false;
-        GTH_disableDisk = false;
+        GTH_disableDisk = true;
         DRV_disable = false;
         AD_Disabled = true;
         MIL_Disabled = true;
@@ -104,8 +104,8 @@ public class Calibrations{
         DRV_RotCentY = 0.0;
         DRV_SwerveAngRate = 0.05;
         DRV_SwerveAngKP = -0.003;
-        DRV_SwerveMaxAnglePwr = 0.5;
-        DRV_SwerveDrivePwrScale = 0.25;
+        DRV_SwerveMaxAnglePwr = 0.50;
+        DRV_SwerveDrivePwrScale = 0.50;//.25
         DRV_SwerveStrKP = -0.2;//rotation power per degree
         DRV_SwerveStrKD = 0;
         DRV_WaitForParkTime = 5;//seconds
@@ -127,8 +127,8 @@ public class Calibrations{
         ELE_MotorPwr = 0.1; // set to actual value later
         ELE_PositionKP = 0.1;
         ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
-        ELE_PIDLimitUp = 0.75;
-        ELE_PIDLimitDown = 0.5;
+        ELE_PIDLimitUp = 0.5;
+        ELE_PIDLimitDown = 0.25;
 
         CLM_MotorSpeedUp = 0.3;
         CLM_MotorSpeedDn = 0.6;

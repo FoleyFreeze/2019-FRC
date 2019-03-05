@@ -21,7 +21,8 @@ public class Sensors extends Component {
     public Angle[] angles = new Angle[4];
     public double elevatorEncoder;
     public double[] driveEnc = new double[4];
-    
+    public double climberEncoder;
+
     public boolean hasBall;
     public boolean hasHatch;
     public boolean isDisabled;

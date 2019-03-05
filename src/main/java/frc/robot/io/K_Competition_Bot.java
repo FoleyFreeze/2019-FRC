@@ -9,7 +9,7 @@ public class K_Competition_Bot extends Calibrations{
             SEN_AbsAngleFL = 75.41;
             SEN_AbsAngleFR = -17.44;
             SEN_AbsAngleRL = 50.80;
-            SEN_AbsAngleRR = -51.63;
+            SEN_AbsAngleRR = -63.63;
         } else {
             SEN_AbsAngleFL = -24.4;
             SEN_AbsAngleFR = -36.3;

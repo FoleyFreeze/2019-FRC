@@ -140,7 +140,7 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void run() {
-        
+        super.run();
     }
 
     public void getEnc(){
