@@ -14,22 +14,25 @@ public class BallGatherer extends Component{
         String gatherStatus;
         if(k.GTH_disableBall) return;
         
+        // conditions for gathering
         if(in.ballGather){
             if(currStop){
                 out.setGatherMotor(0.05, -0.05);
             } else {
                 out.setGatherMotor(k.GTH_IntakeSpeed, -k.GTH_IntakeSpeed);
             }
-            if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > 14){
+            if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit){
                 currStop = true;
             }
             gatherStatus = "Gathering";
         }
+        //  releases ball
         else if(in.releaseBall){
             currStop = false;
             out.setGatherMotor(-k.GTH_ShootSpeedFast, k.GTH_ShootSpeedSlow);
             gatherStatus = "Releasing";
         }
+        // stop moving
         else {
             currStop = false;
             out.setGatherMotor(0,0); 

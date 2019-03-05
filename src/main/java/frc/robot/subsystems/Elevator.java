@@ -17,26 +17,27 @@ public class Elevator extends Component {
 
         if(k.ELE_disable) return;
 
-        String evelate;
+        String elevate;
 
         if (in.autoElevator){
             gotoPosition(in.elevatorTarget);
-            evelate = "Auto Mode";
+            elevate = "Auto Mode";
         } else { //in manual mode
             if (in.manualElevatorUp) {
                 out.setElevatorMotor(k.ELE_MotorPwr);
-                evelate = "Going Up!";
+                elevate = "Going Up!";
             } else if (in.manualElevatorDown) {
                 out.setElevatorMotor(-k.ELE_MotorPwr);   
-                evelate = "Going Down!";
+                elevate = "Going Down!";
             } else {
                 out.setElevatorMotor(0);
-                evelate = "I'm going no where...";
+                elevate = "I'm going no where...";
             }
         }
-        SmartDashboard.putString("Elevator Status", evelate);
+        SmartDashboard.putString("Elevator Status", elevate);
     }
 
+    // elevator goes to set position value
     public void gotoPosition (ElevatorPosition position) {
         if(position == ElevatorPosition.DONT_MOVE){
             out.setElevatorMotor(0);
