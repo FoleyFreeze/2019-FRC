@@ -129,29 +129,10 @@ public class Inputs extends Component {
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
         shift = controlBoard.getRawButton(cb.shift);
+        SmartDashboard.putBoolean("Pit Mode", pitMode);
 
-        if(controlBoard.getRawButton(cb.high)){
-            rocketCargoState = RocketCargoshipPosition.HI;
-        }else if(controlBoard.getRawButton(cb.middle)){
-            rocketCargoState = RocketCargoshipPosition.MID;
-        }else if(controlBoard.getRawButton(cb.low)){
-            rocketCargoState = RocketCargoshipPosition.LO;
-        }else if(controlBoard.getRawButton(cb.front)){
-            rocketCargoState = RocketCargoshipPosition.FRONT;
-        }
+        parseControlBoard();
 
-        if(controlBoard.getRawButton(cb.farRkt)){
-            nearFarCargo = NearFarCargo.FAR;
-        }else if(controlBoard.getRawButton(cb.nearRkt)){
-            nearFarCargo = NearFarCargo.NEAR;
-        }else if(controlBoard.getRawButton(cb.cargoShip)){
-            nearFarCargo = NearFarCargo.CARGO;
-        }
-
-        if(!k.GTH_disableDisk && !ballNotHatch) {
-            diskGather = controlBoard.getRawButton(cb.gather);
-            releaseDisk = controlBoard.getRawButton(cb.shoot);
-        }
         if(!k.ELE_disable){
             autoElevator = true;
             manualElevatorUp = gamePad.getRawButton(2);
@@ -163,8 +144,12 @@ public class Inputs extends Component {
             }
         }
 
+        if(!k.GTH_disableDisk && !ballNotHatch) {
+            diskGather = controlBoard.getRawButton(cb.gather);
+            releaseDisk = controlBoard.getRawButton(cb.shoot);
+        }
+
         if(!k.GTH_disableBall && ballNotHatch){
-            //FIXME!!!
             ballGather = controlBoard.getRawButton(cb.gather);
             releaseBall = controlBoard.getRawButton(cb.shoot);
         }
@@ -190,7 +175,7 @@ public class Inputs extends Component {
         }
         SmartDashboard.putBoolean("Compass Drive", compassDrive);
 
-        SmartDashboard.putBoolean("Pit Mode", pitMode);
+        
     }
 
     public void compassDrive(){
@@ -232,6 +217,90 @@ public class Inputs extends Component {
         }
         //if more than 1 direction change, true
         return count>1;
+    }
+
+    private void parseControlBoard(){
+        if(controlBoard.getRawButton(cb.high)){
+            rocketCargoState = RocketCargoshipPosition.HI;
+        }else if(controlBoard.getRawButton(cb.middle)){
+            rocketCargoState = RocketCargoshipPosition.MID;
+        }else if(controlBoard.getRawButton(cb.low)){
+            rocketCargoState = RocketCargoshipPosition.LO;
+        }else if(controlBoard.getRawButton(cb.front)){
+            rocketCargoState = RocketCargoshipPosition.FRONT;
+        }
+
+        switch(rocketCargoState){
+            case HI:
+            controlBoard.setOutput(cb.high, true);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, false);
+            break;
+
+            case MID:
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, true);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, false);
+            break;
+
+            case LO:
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, true);
+            controlBoard.setOutput(cb.front, false);
+            break;
+
+            case FRONT:
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, true);
+            break;   
+            
+            case DEFAULT:
+            controlBoard.setOutput(cb.high, true);
+            controlBoard.setOutput(cb.middle, true);
+            controlBoard.setOutput(cb.low, true);
+            controlBoard.setOutput(cb.front, true);
+            break;
+        }
+        
+
+        if(controlBoard.getRawButton(cb.farRkt)){
+            nearFarCargo = NearFarCargo.FAR;
+        }else if(controlBoard.getRawButton(cb.nearRkt)){
+            nearFarCargo = NearFarCargo.NEAR;
+        }else if(controlBoard.getRawButton(cb.cargoShip)){
+            nearFarCargo = NearFarCargo.CARGO;
+        }
+
+        switch(nearFarCargo){
+            case FAR:
+            controlBoard.setOutput(cb.farRkt, true);
+            controlBoard.setOutput(cb.nearRkt, false);
+            controlBoard.setOutput(cb.cargoShip, false);
+            break;
+
+            case NEAR:
+            controlBoard.setOutput(cb.farRkt, false);
+            controlBoard.setOutput(cb.nearRkt, true);
+            controlBoard.setOutput(cb.cargoShip, false);
+            break;
+
+            case CARGO:
+            controlBoard.setOutput(cb.farRkt, false);
+            controlBoard.setOutput(cb.nearRkt, false);
+            controlBoard.setOutput(cb.cargoShip, true);
+            break;  
+
+            case DEFAULT:
+            controlBoard.setOutput(cb.farRkt, true);
+            controlBoard.setOutput(cb.nearRkt, true);
+            controlBoard.setOutput(cb.cargoShip, true);
+            break;
+        }
     }
 
 }
