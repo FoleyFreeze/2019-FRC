@@ -9,36 +9,43 @@ public class BallGatherer extends Component{
         
     }
     
-    boolean currStop = false;
     public void run() {
         String gatherStatus;
         if(k.GTH_disableBall) return;
         
         // conditions for gathering
         if(in.ballGather){
-            if(currStop){
-                out.setGatherMotor(0.05, -0.05);
-            } else {
-                out.setGatherMotor(k.GTH_IntakeSpeed, -k.GTH_IntakeSpeed);
-            }
-            if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit){
-                currStop = true;
-            }
+            out.setGatherMotor(k.GTH_CargoIntakeSpeed, -k.GTH_CargoIntakeSpeed);
             gatherStatus = "Gathering";
         }
         //  releases ball
         else if(in.releaseBall){
-            currStop = false;
-            out.setGatherMotor(-k.GTH_ShootSpeedFast, k.GTH_ShootSpeedSlow);
+            out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);
             gatherStatus = "Releasing";
+        }
+        if(in.diskGather){
+            out.setGatherMotor(-k.GTH_DiskIntakeSpeed, k.GTH_DiskIntakeSpeed);
+            gatherStatus = "Gathering";
+        }
+        //  releases ball
+        else if(in.releaseDisk){
+            out.setGatherMotor(k.GTH_DiskShootSpeedFast, -k.GTH_DiskShootSpeedSlow);
+            gatherStatus = "Releasing";
+        }
+        else if(sense.hasBall){
+            gatherStatus = "Hold";
+            out.setGatherMotor(k.GTH_HoldSpeed, -k.GTH_HoldSpeed);
+        }
+        else if(sense.hasHatch){
+            gatherStatus = "Hold";
+            out.setGatherMotor(-k.GTH_HoldSpeed, k.GTH_HoldSpeed);
         }
         // stop moving
         else {
-            currStop = false;
             out.setGatherMotor(0,0); 
-            gatherStatus = "Not Moving the Wheels";
+            gatherStatus = "Stopped";
         }
-        SmartDashboard.putString("Cargo Gather Status", gatherStatus);
+        SmartDashboard.putString("Gather Status", gatherStatus);
     }
 
 } 

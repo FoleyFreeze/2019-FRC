@@ -1,5 +1,7 @@
 package frc.robot.io;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -23,7 +25,7 @@ public class OutputsCompBot extends Outputs {
 
     private CANSparkMax gatherMotorL;
     private CANSparkMax gatherMotorR;
-    private CANSparkMax gatherArmMotor;
+    private TalonSRX gatherArmMotor;
 
     private CANSparkMax climbMotor;
 
@@ -129,8 +131,7 @@ public class OutputsCompBot extends Outputs {
         }
 
         if(!k.GTH_disableDisk){
-            gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushless);
-            gatherArmMotor.setIdleMode(IdleMode.kBrake);
+            gatherArmMotor = new TalonSRX(ElectroJendz.GTH_ArmMotorID);
         }
 
         if(!k.CLM_disable){
@@ -152,6 +153,9 @@ public class OutputsCompBot extends Outputs {
         }
         if(!k.ELE_disable){
             sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();//value in inches
+        }
+        if(!k.CLM_disable){
+            sense.climberEncoder = climbMotor.getEncoder().getPosition();//value in motor rotations
         }
         
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
@@ -217,7 +221,7 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void setGatherArm(double armGather) {
-        gatherArmMotor.set(limit(armGather, gatherArmMil));
+        gatherArmMotor.set(ControlMode.PercentOutput, limit(armGather, gatherArmMil));
     }
 
     public void climbMotor(double climb) {

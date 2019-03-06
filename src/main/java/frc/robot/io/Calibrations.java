@@ -50,10 +50,15 @@ public class Calibrations{
     public double GTH_ArmOutPwr = 0;
     public double GTH_CurrLimit = 14.0;
     public double GTH_FailSafeTimer = 0;
-    public double GTH_IntakeSpeed = 0.5;
-    public double GTH_ShootSpeedFast = 0.4;
-    public double GTH_ShootSpeedSlow = 0.4;
+    public double GTH_CargoIntakeSpeed = 0.5;
+    public double GTH_CargoShootSpeedFast = 0.4;
+    public double GTH_CargoShootSpeedSlow = 0.4;
+    public double GTH_DiskIntakeSpeed = 0.5;
+    public double GTH_DiskShootSpeedFast = 0.4;
+    public double GTH_DiskShootSpeedSlow = 0.4;
     public double GTH_StartUpTime = 0;
+    public double GTH_HoldSpeed = 0.05;
+    public double GTH_ReleaseTime = 0.5;
 
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
@@ -61,14 +66,16 @@ public class Calibrations{
     public double ELE_PIDLimitUp = 0.75;
     public double ELE_PIDLimitDown = 0.5;
     public double ELE_PositionKP = 0.1;
+    public double ELE_StageHeight = 36;
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            0,               0,               0,            0.5,              0,              0,             0,            78,          0,          0
+            0.5,         0.5,           0.5,            0.5,            0.5,            0.5,           0.5,            78,          0.5,          0.5
     };
 
     // climb cals
     public double CLM_MotorSpeedUp = 0.3;
     public double CLM_MotorSpeedDn = 0.6;
+    public double CLM_EncoderLimit = 5000;
     
     // input cals
     public double IN_DodgingMin = 0.2;
@@ -91,6 +98,7 @@ public class Calibrations{
     public double CAM_ExpireTime = 0.5;
     public double CAM_Location_X = 5.125;
     public double CAM_Location_Y = 0;
+    public double CAM_ShootDist = 3;//inches
     
     public Calibrations(){
         

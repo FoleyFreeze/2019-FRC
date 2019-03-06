@@ -15,8 +15,12 @@ public class Climber extends Component{
         SmartDashboard.putNumber("Climb Power", pwr);
 
         if(in.climb){
+            if(sense.climberEncoder < -k.CLM_EncoderLimit){
+                out.climbMotor(0);
+            } else {
+                out.climbMotor(-pwr);
+            }
             
-            out.climbMotor(-pwr);
             climb = "Climbing";
         }
         else if(in.reverseClimb){

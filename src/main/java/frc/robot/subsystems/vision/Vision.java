@@ -68,7 +68,7 @@ public class Vision extends Component {
         return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime; 
     }
 
-    public boolean goodHatchImage(){
+    public boolean goodVisionTarget(){
         VisionData vd = visionTargetStack.peek();
         return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime; 
     }

@@ -1,10 +1,12 @@
 package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Component;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
+import frc.robot.subsystems.vision.VisionData;
 
 public class Inputs extends Component {
    
@@ -34,6 +36,7 @@ public class Inputs extends Component {
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
     public boolean autoElevator;
+    public boolean elevatorStage;
     public Elevator.ElevatorPosition elevatorTarget = ElevatorPosition.DONT_MOVE;
     //elevatorTarget means you press a button and it moves to a specific place
     public boolean ballNotHatch;
@@ -75,6 +78,7 @@ public class Inputs extends Component {
         rotDixon = new byte[k.IN_DixonSize];
         nearFarCargo = NearFarCargo.DEFAULT;
         rocketCargoState = RocketCargoshipPosition.DEFAULT;
+        elevatorTarget = ElevatorPosition.DONT_MOVE;
     }
 
     
@@ -128,7 +132,7 @@ public class Inputs extends Component {
             fieldOriented = gamePad.getRawButton(bm.fieldOriented);
             dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
             dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-            visionCargo = gamePad.getRawButton(4);
+            //visionCargo = gamePad.getRawButton(4);
         }
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
@@ -140,6 +144,16 @@ public class Inputs extends Component {
 
         parseControlBoard();
 
+        autoElevator = true;
+        releaseBall = false;
+        releaseDisk = false;
+        diskGather = false;
+        ballGather = false;
+        elevatorStage = false;
+        visionTarget = false;
+        visionCargo = false;
+
+        /*
         if(!k.ELE_disable){
             autoElevator = true;
             manualElevatorUp = gamePad.getRawButton(2);
@@ -161,6 +175,7 @@ public class Inputs extends Component {
             ballGather = controlBoard.getRawButton(cb.gather);
             releaseBall = controlBoard.getRawButton(cb.shoot);
         }
+        */
 
         if(!k.CLM_disable){
             climb = controlBoard.getRawButton(cb.climb);
@@ -336,20 +351,48 @@ public class Inputs extends Component {
                 //pathfind
                 //face the robot in the right direction
                 //move elevator to floor/feeder station
+                if (ballNotHatch){
+                    elevatorTarget = ElevatorPosition.FLOOR;
+                } else {
+                    elevatorTarget = ElevatorPosition.LOADING_STATION;
+                }
+    
                 //move gather to ball/hatch position
+                //this is handled in the diskGather class
 
                 //when camera sees target
                 //when operator gather button pressed
-                //next state
+                if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodVisionTarget() || gather){
+                    //next state
+                    autoScoreState = AutoScoreStates.CAMERASCORE;
+                }
                 break;
 
                 case CAMERAGATHER:
                 //camera drive, or manual drive if no image
+                visionCargo = ballNotHatch && view.goodCargoImage();
+                visionTarget =  !ballNotHatch && view.goodVisionTarget();
+                
+                //set elevator position
+                if (ballNotHatch){
+                    elevatorTarget = ElevatorPosition.FLOOR;
+                } else {
+                    elevatorTarget = ElevatorPosition.LOADING_STATION;
+                }
+
                 //turn on gatherer
+                diskGather = !ballNotHatch;
+                ballGather = ballNotHatch;
 
                 //when gather current spike
-                //set sense.hasThing to true
-                //next state
+                if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit){
+                    //set sense.hasThing to true
+                    //next state
+                    sense.hasBall = ballNotHatch;
+                    sense.hasHatch = !ballNotHatch;
+                    autoScoreState = AutoScoreStates.DRIVETOGOAL;
+                }
+                
                 break;
             }
 
@@ -361,6 +404,7 @@ public class Inputs extends Component {
 
     public enum AutoScoreStates { DRIVETOGOAL, CAMERASCORE, GATHERSHOOT }
     private AutoScoreStates autoScoreState = AutoScoreStates.DRIVETOGOAL;
+    double autoScoreTimer = 0;
 
     public void autoScore(boolean autoScore) {
 
@@ -371,12 +415,12 @@ public class Inputs extends Component {
                 //pathfind
                 //face robot in right direction
                 //move elevator to stage height (but dont go too high, wait at level 2 if target is level 3)
-                //setElevatorHeight();
-                //elevatorStage = true;
+                setElevatorHeight();
+                elevatorStage = true;
 
                 //when vision spotted
                 //when shift shoot
-                if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodHatchImage() || shift && shoot){
+                if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodVisionTarget() || shift && shoot){
                     //next state
                     autoScoreState = AutoScoreStates.CAMERASCORE;
                 }
@@ -385,23 +429,44 @@ public class Inputs extends Component {
 
                 case CAMERASCORE:
                 //camera drive or manual drive if no image
+                visionTarget =  view.goodVisionTarget();
+
                 //move elevator to final height
+                setElevatorHeight();
                 
                 //when reached target
                 //when operator shoot button pressed (or when shift released)
-                //next state
+                VisionData vd = view.getLastVisionTarget();
+                if(vd != null && view.goodVisionTarget() && vd.distance < k.CAM_ShootDist || !shift && shoot){
+                    //next state
+                    autoScoreState = AutoScoreStates.GATHERSHOOT;
+                    autoScoreTimer = Timer.getFPGATimestamp();
+                }
+                
 
                 //when shoot released and no image
-                //go back to DRIVETOGOAL state
+                if(!shoot && !view.goodVisionTarget()){
+                    //go back to DRIVETOGOAL state
+                    autoScoreState = AutoScoreStates.DRIVETOGOAL;
+                }
+                
                 break;
 
                 case GATHERSHOOT:
+
                 //run shoot gather
+                releaseBall = ballNotHatch;
+                releaseDisk = !ballNotHatch;
                 
                 //when TIME_CAL elapses (like 0.5sec or so)
-                //turn off gather
-                //next state
-                //set sense.hasThing to false
+                if(Timer.getFPGATimestamp() - autoScoreTimer > k.GTH_ReleaseTime){
+                    //turn off gather
+                    //next state
+                    autoScoreState = AutoScoreStates.DRIVETOGOAL;
+                    sense.hasBall = false;
+                    sense.hasHatch = false;
+                }
+                
                 break;
             }
 
@@ -409,6 +474,57 @@ public class Inputs extends Component {
             autoScoreState = AutoScoreStates.DRIVETOGOAL;
         }
 
+    }
+
+    //set elevator position based on control board state
+    public void setElevatorHeight(){
+        switch(nearFarCargo){
+            case NEAR:
+            case FAR:
+                switch(rocketCargoState){
+                    case HI:
+                        if(ballNotHatch){
+                            elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
+                        } else {
+                            elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
+                        }
+                    break;
+
+                    case MID:
+                        if(ballNotHatch){
+                            elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
+                        } else {
+                            elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
+                        }
+                    break;
+
+                    case LO:
+                        if(ballNotHatch){
+                            elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
+                        } else {
+                            elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+                        }
+                    break;
+
+                    case DEFAULT:
+                    case FRONT:
+                        elevatorTarget = ElevatorPosition.DONT_MOVE;
+                    break;
+                }
+            break;
+
+            case CARGO:
+                if(ballNotHatch){
+                    elevatorTarget = ElevatorPosition.SHIP_CARGO;
+                } else {
+                    elevatorTarget = ElevatorPosition.SHIP_HATCH;
+                }
+            break;
+
+            case DEFAULT:
+                elevatorTarget = ElevatorPosition.DONT_MOVE;
+            break;
+        }
     }
 
 }
