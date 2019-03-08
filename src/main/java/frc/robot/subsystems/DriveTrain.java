@@ -225,16 +225,16 @@ public class DriveTrain extends Component{
         SmartDashboard.putNumber("CamDrvY", Y);
         SmartDashboard.putNumber("CamDrvR", R);
 
-        X = Math.min(Math.max(X,-0.5),0.5);
-        Y = Math.min(Math.max(Y,-0.5),0.5);
-        R = Math.min(Math.max(R,-0.5),0.5);
+        X = Math.min(Math.max(X,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
+        Y = Math.min(Math.max(Y,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
+        R = Math.min(Math.max(R,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
 
         //do turning first
         //should be replaced with a normalization function 
         //if(Math.abs(R) > 0.1) {
         //    Y = Math.max(Math.min(.1,Y),-.1);
         //}
-        Y *= (0.5-R) / 0.5;
+        Y *= (k.DRV_CamDriveMaxPwr-R) / k.DRV_CamDriveMaxPwr;
 
         swerve(X, Y, R, k.CAM_Location_X, k.CAM_Location_Y);
     }
