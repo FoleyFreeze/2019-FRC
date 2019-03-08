@@ -1,5 +1,7 @@
 package frc.robot.io;
 
+import javax.lang.model.element.ElementKind;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,6 +49,7 @@ public class Inputs extends Component {
     public boolean gather;
 
     public boolean leftNotRight;
+    public boolean autoNotManualMode;
 
     public boolean fourBarIn;
     public boolean fourBarOut;
@@ -131,6 +134,7 @@ public class Inputs extends Component {
 
         ballNotHatch = controlBoard.getRawButton(cb.ballOrHatch);
         leftNotRight = controlBoard.getRawButton(cb.lOrR);
+        autoNotManualMode = leftNotRight;
 
         
         //set buttons
@@ -213,23 +217,39 @@ public class Inputs extends Component {
 
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
-        // autofunctions disable cals and ball or hatch detection
-        if(actionBall) {
-            autoGather(!sense.hasBall);
-            autoScore(sense.hasBall);
-        } else if(actionHatch) {
-            autoGather(!sense.hasHatch);
-            autoScore(sense.hasHatch);
+        if(autoNotManualMode){
+            // autofunctions disable cals and ball or hatch detection
+            if(actionBall) {
+                autoGather(!sense.hasBall);
+                autoScore(sense.hasBall);
+            } else if(actionHatch) {
+                autoGather(!sense.hasHatch);
+                autoScore(sense.hasHatch);
+            } else {
+                autoGather(false);
+                autoScore(false);
+            }
+
+            SmartDashboard.putString("AutoGatherState",autoGatherState.name());
+            SmartDashboard.putString("AutoScoreState",autoScoreState.name());
+
+            SmartDashboard.putBoolean("GoodCargoVision",view.goodCargoImage());
+            SmartDashboard.putBoolean("GoodVisionTarget",view.goodVisionTarget());
         } else {
-            autoGather(false);
-            autoScore(false);
+            //manual mode
+            if (ballNotHatch){
+                ballGather = gather;
+                releaseBall = shoot;
+                diskGather = false;
+                releaseDisk = false;
+            } else {
+                ballGather = false;
+                releaseBall = false;
+                diskGather = gather;
+                releaseDisk = shoot;
+            }
+            setElevatorHeight();
         }
-
-        SmartDashboard.putString("AutoGatherState",autoGatherState.name());
-        SmartDashboard.putString("AutoScoreState",autoScoreState.name());
-
-        SmartDashboard.putBoolean("GoodCargoVision",view.goodCargoImage());
-        SmartDashboard.putBoolean("GoodVisionTarget",view.goodVisionTarget());
     }
 
     public void compassDrive(){
@@ -540,8 +560,15 @@ public class Inputs extends Component {
                     break;
 
                     case DEFAULT:
-                    case FRONT:
                         elevatorTarget = ElevatorPosition.DONT_MOVE;
+                    break;
+
+                    case FRONT:
+                        if(ballNotHatch){
+                            elevatorTarget = ElevatorPosition.FLOOR;
+                        } else {
+                            elevatorTarget = ElevatorPosition.LOADING_STATION;
+                        }
                     break;
                 }
             break;
