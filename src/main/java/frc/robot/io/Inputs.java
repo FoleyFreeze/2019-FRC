@@ -270,12 +270,16 @@ public class Inputs extends Component {
     private void parseControlBoard(){
         if(controlBoard.getRawButton(cb.high)){
             rocketCargoState = RocketCargoshipPosition.HI;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.middle)){
             rocketCargoState = RocketCargoshipPosition.MID;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.low)){
             rocketCargoState = RocketCargoshipPosition.LO;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.front)){
             rocketCargoState = RocketCargoshipPosition.FRONT;
+            if (shift) setElevatorHeight();
         }
 
         switch(rocketCargoState){
@@ -318,10 +322,13 @@ public class Inputs extends Component {
 
         if(controlBoard.getRawButton(cb.farRkt)){
             nearFarCargo = NearFarCargo.FAR;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.nearRkt)){
             nearFarCargo = NearFarCargo.NEAR;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.cargoShip)){
             nearFarCargo = NearFarCargo.CARGO;
+            if (shift) setElevatorHeight();
         }
 
         switch(nearFarCargo){
