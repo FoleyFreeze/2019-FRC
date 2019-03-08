@@ -163,6 +163,7 @@ public class OutputsCompBot extends Outputs {
         SmartDashboard.putNumber("Enc RL", sense.driveEnc[2]);
         SmartDashboard.putNumber("Enc RR", sense.driveEnc[3]);
         SmartDashboard.putNumber("Enc Ele", sense.elevatorEncoder);
+        SmartDashboard.putNumber("Enc Climb", sense.climberEncoder);
     }
 
     public void resetEnc(){
@@ -224,8 +225,18 @@ public class OutputsCompBot extends Outputs {
         gatherArmMotor.set(ControlMode.PercentOutput, limit(armGather, gatherArmMil));
     }
 
+    @Override
+    public double getGatherArmCurrent(){
+        return sense.pdp.getCurrent(ElectroJendz.GTH_ArmMotorID);
+    }
+
     public void climbMotor(double climb) {
         climbMotor.set(limit(climb, climbMil));
     }    
+
+    @Override
+    public void resetEleEnc(){
+        elevatorMotor.getEncoder().setPosition(0);
+    }
 
 }

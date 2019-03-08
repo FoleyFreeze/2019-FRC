@@ -24,6 +24,7 @@ public class Inputs extends Component {
     public boolean dodgingR;
     public boolean flipOrientation;
     public boolean resetGyro;
+    public boolean resetEleEnc;
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 
@@ -38,7 +39,6 @@ public class Inputs extends Component {
     public boolean autoElevator;
     public boolean elevatorStage;
     public Elevator.ElevatorPosition elevatorTarget = ElevatorPosition.DONT_MOVE;
-    //elevatorTarget means you press a button and it moves to a specific place
     public boolean ballNotHatch;
     
     public boolean shift;
@@ -88,6 +88,11 @@ public class Inputs extends Component {
         if(resetGyro){
             sense.init();
         }
+
+        resetEleEnc = gamePad.getRawButton(11) && gamePad.getRawButton(15);
+        if(resetEleEnc){
+            out.resetEleEnc();
+        }
      
         //read joystick
         xAxisDrive = -gamePad.getRawAxis(bm.IN_xDriveAxis);
@@ -111,7 +116,9 @@ public class Inputs extends Component {
         if(dixonDetector(yDixon, yAxisDrive))yAxisDrive = 0;//stop Dixon from breaking robot
         if(dixonDetector(rotDixon, rotAxisDrive))rotAxisDrive = 0;//stop Dixon from breaking robot
         
-        if(dixonDetector(xDixon, xAxisDrive)||dixonDetector(yDixon, yAxisDrive)||dixonDetector(rotDixon, rotAxisDrive)){
+        if(dixonDetector(xDixon, xAxisDrive)
+                ||dixonDetector(yDixon, yAxisDrive)
+                ||dixonDetector(rotDixon, rotAxisDrive)){
             dixon = true;
         }else{
             dixon = false;
@@ -130,10 +137,12 @@ public class Inputs extends Component {
         if(!k.DRV_disable){
             compassDrive = gamePad.getRawButton(bm.compassDrive);
             fieldOriented = gamePad.getRawButton(bm.fieldOriented);
-            dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
-            dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+            //dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
+            //dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
             //visionCargo = gamePad.getRawButton(4);
         }
+        actionBall = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
+        actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
@@ -143,6 +152,9 @@ public class Inputs extends Component {
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         parseControlBoard();
+
+        SmartDashboard.putBoolean("ActionBall", actionBall);
+        SmartDashboard.putBoolean("ActionHatch", actionHatch);
 
         autoElevator = true;
         releaseBall = false;
@@ -178,8 +190,9 @@ public class Inputs extends Component {
         */
 
         if(!k.CLM_disable){
-            climb = controlBoard.getRawButton(cb.climb);
-            reverseClimb = (climb && shift);
+            boolean temp = controlBoard.getRawButton(cb.climb);
+            climb = temp && !shift;
+            reverseClimb = (temp && shift);
         }
 
         if(sense.isDisabled) {
@@ -201,16 +214,22 @@ public class Inputs extends Component {
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         // autofunctions disable cals and ball or hatch detection
-        if(actionBall && sense.hasBall) {
-            autoGather(true);
-            autoScore(false);
-        } else if(actionHatch && sense.hasHatch) {
-            autoGather(false);
-            autoScore(true);
+        if(actionBall) {
+            autoGather(!sense.hasBall);
+            autoScore(sense.hasBall);
+        } else if(actionHatch) {
+            autoGather(!sense.hasHatch);
+            autoScore(sense.hasHatch);
         } else {
             autoGather(false);
             autoScore(false);
         }
+
+        SmartDashboard.putString("AutoGatherState",autoGatherState.name());
+        SmartDashboard.putString("AutoScoreState",autoScoreState.name());
+
+        SmartDashboard.putBoolean("GoodCargoVision",view.goodCargoImage());
+        SmartDashboard.putBoolean("GoodVisionTarget",view.goodVisionTarget());
     }
 
     public void compassDrive(){
@@ -257,12 +276,16 @@ public class Inputs extends Component {
     private void parseControlBoard(){
         if(controlBoard.getRawButton(cb.high)){
             rocketCargoState = RocketCargoshipPosition.HI;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.middle)){
             rocketCargoState = RocketCargoshipPosition.MID;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.low)){
             rocketCargoState = RocketCargoshipPosition.LO;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.front)){
             rocketCargoState = RocketCargoshipPosition.FRONT;
+            if (shift) setElevatorHeight();
         }
 
         switch(rocketCargoState){
@@ -305,10 +328,13 @@ public class Inputs extends Component {
 
         if(controlBoard.getRawButton(cb.farRkt)){
             nearFarCargo = NearFarCargo.FAR;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.nearRkt)){
             nearFarCargo = NearFarCargo.NEAR;
+            if (shift) setElevatorHeight();
         }else if(controlBoard.getRawButton(cb.cargoShip)){
             nearFarCargo = NearFarCargo.CARGO;
+            if (shift) setElevatorHeight();
         }
 
         switch(nearFarCargo){
@@ -337,6 +363,8 @@ public class Inputs extends Component {
             break;
         }
 
+        SmartDashboard.putString("RocketState",rocketCargoState.name());
+        SmartDashboard.putString("NearFarCargoState",nearFarCargo.name());
     }
 
     public enum AutoGatherStates { DRIVETOGATHER, CAMERAGATHER };
@@ -364,7 +392,7 @@ public class Inputs extends Component {
                 //when operator gather button pressed
                 if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodVisionTarget() || gather){
                     //next state
-                    autoScoreState = AutoScoreStates.CAMERASCORE;
+                    autoGatherState = AutoGatherStates.CAMERAGATHER;
                 }
                 break;
 
@@ -390,7 +418,9 @@ public class Inputs extends Component {
                     //next state
                     sense.hasBall = ballNotHatch;
                     sense.hasHatch = !ballNotHatch;
-                    autoScoreState = AutoScoreStates.DRIVETOGOAL;
+                    autoGatherState = AutoGatherStates.DRIVETOGATHER;
+                    rocketCargoState = RocketCargoshipPosition.DEFAULT;
+                    nearFarCargo = NearFarCargo.DEFAULT;
                 }
                 
                 break;
@@ -420,7 +450,9 @@ public class Inputs extends Component {
 
                 //when vision spotted
                 //when shift shoot
-                if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodVisionTarget() || shift && shoot){
+                if(ballNotHatch && view.goodCargoImage() 
+                        || !ballNotHatch && view.goodVisionTarget() 
+                        || shift && shoot){
                     //next state
                     autoScoreState = AutoScoreStates.CAMERASCORE;
                 }
@@ -493,6 +525,7 @@ public class Inputs extends Component {
                     case MID:
                         if(ballNotHatch){
                             elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
+                            
                         } else {
                             elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
                         }

@@ -22,7 +22,7 @@ public class BallGatherer extends Component{
             out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);
             gatherStatus = "Releasing";
         }
-        if(in.diskGather){
+        else if(in.diskGather){
             out.setGatherMotor(-k.GTH_DiskIntakeSpeed, k.GTH_DiskIntakeSpeed);
             gatherStatus = "Gathering";
         }

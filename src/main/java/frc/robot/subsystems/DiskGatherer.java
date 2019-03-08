@@ -16,6 +16,8 @@ public class DiskGatherer extends Component{
 
     private double startTime;
     private boolean movingToBall;
+    private boolean inBallPosition;
+    private boolean inHatchPosition;
 
     public void run() {
         if(k.GTH_disableDisk) return;
@@ -25,17 +27,17 @@ public class DiskGatherer extends Component{
        
         //out.suction(in.diskGather);
         
-        SmartDashboard.putString("GatherState", gatherState.name());
+        SmartDashboard.putString("GatherArmState", gatherState.name());
 
         switch(gatherState){
             case WAIT:
             out.setGatherArm(0);
 
-            if(in.ballNotHatch && !sense.hasHatch){
+            if(in.ballNotHatch && !sense.hasHatch && !inBallPosition){
                 movingToBall = true;
                 startTime = Timer.getFPGATimestamp();
                 gatherState = FourBarState.STARTUP;    
-            } else if(!in.ballNotHatch && !sense.hasBall){
+            } else if(!in.ballNotHatch && !sense.hasBall && !inHatchPosition){
                 movingToBall = false;
                 startTime = Timer.getFPGATimestamp();
                 gatherState = FourBarState.STARTUP;
@@ -43,8 +45,8 @@ public class DiskGatherer extends Component{
             break;
 
             case STARTUP:
-            if(movingToBall) out.setGatherArm(k.GTH_ArmInPwr);
-            else out.setGatherArm(k.GTH_ArmOutPwr);
+            if(movingToBall) out.setGatherArm(-k.GTH_Arm2BallPwr);
+            else out.setGatherArm(k.GTH_Arm2HatchPwr);
 
             if(Timer.getFPGATimestamp() - startTime > k.GTH_StartUpTime){
                 gatherState = FourBarState.WAIT_FOR_STALL;
@@ -53,15 +55,19 @@ public class DiskGatherer extends Component{
             break;
 
             case WAIT_FOR_STALL:
-            if(movingToBall) out.setGatherArm(k.GTH_ArmInPwr);
-            else out.setGatherArm(k.GTH_ArmOutPwr);
+            if(movingToBall) out.setGatherArm(-k.GTH_Arm2BallPwr);
+            else out.setGatherArm(k.GTH_Arm2HatchPwr);
 
-            if(movingToBall && out.getGatherArmCurrent() > k.GTH_ArmInCurrent){
+            if(movingToBall && out.getGatherArmCurrent() > k.GTH_ArmInCurrent
+                    || Timer.getFPGATimestamp() - startTime > k.GTH_Arm2BallTimer){
                 gatherState = FourBarState.WAIT;
-            }else if(!movingToBall && out.getGatherArmCurrent() > k.GTH_ArmOutCurrent){
+                inBallPosition = true;
+                inHatchPosition = false;
+            }else if(!movingToBall && out.getGatherArmCurrent() > k.GTH_ArmOutCurrent
+                    || Timer.getFPGATimestamp() - startTime > k.GTH_Arm2HatchTimer){
                 gatherState = FourBarState.WAIT;
-            }else if(Timer.getFPGATimestamp() - startTime > k.GTH_FailSafeTimer){
-                gatherState = FourBarState.WAIT;
+                inBallPosition = false;
+                inHatchPosition = true;
             }
             break;
             

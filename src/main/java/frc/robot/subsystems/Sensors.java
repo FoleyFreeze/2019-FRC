@@ -85,6 +85,9 @@ public class Sensors extends Component {
         dt = time - prevTime;
         prevTime = time;
         SmartDashboard.putNumber("dt",dt);
+
+        SmartDashboard.putBoolean("HasBall",hasBall);
+        SmartDashboard.putBoolean("HasHatch",hasHatch);
     }
 
     public double nxX = 0;
@@ -99,8 +102,8 @@ public class Sensors extends Component {
             navx.resetDisplacement();
         }
 
-        nxX = nxOffsetX + navx.getDisplacementX();
-        nxY = nxOffsetY + navx.getDisplacementY();
+        nxX = nxOffsetX + navx.getDisplacementX() * 100/2.54;//convert from meters to inches
+        nxY = nxOffsetY + navx.getDisplacementY() * 100/2.54;
 
         SmartDashboard.putNumber("NavxX", nxX);
         SmartDashboard.putNumber("NavxY", nxY);
