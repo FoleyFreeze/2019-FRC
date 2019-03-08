@@ -234,4 +234,9 @@ public class OutputsCompBot extends Outputs {
         climbMotor.set(limit(climb, climbMil));
     }    
 
+    @Override
+    public void resetEleEnc(){
+        elevatorMotor.getEncoder().setPosition(0);
+    }
+
 }

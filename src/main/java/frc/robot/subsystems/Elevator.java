@@ -42,7 +42,7 @@ public class Elevator extends Component {
         if(position == ElevatorPosition.DONT_MOVE){
             out.setElevatorMotor(0);
         } else {
-            double setpoint = k.ELE_PositionArray[position.ordinal()];
+            double setpoint = k.ELE_PositionArray[position.ordinal()] + k.ELE_OffsetHeight;
             if(in.elevatorStage && setpoint > k.ELE_StageHeight){
                 setpoint = k.ELE_StageHeight;
             }

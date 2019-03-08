@@ -12,7 +12,7 @@ public class Calibrations{
     // disable cals
     public boolean AD_Disabled = true;
     public boolean CAM_Disabled = false;
-    public boolean CLM_disable = true;
+    public boolean CLM_disable = false;
     public boolean DRV_disable = false;
     public boolean ELE_disable = false;
     public boolean GTH_disableBall = false;
@@ -51,7 +51,7 @@ public class Calibrations{
     public double GTH_Arm2HatchPwr = 1;
     public double GTH_StartUpTime = 0.1;
     public double GTH_Arm2BallTimer = 0.5;
-    public double GTH_Arm2HatchTimer = 0.8;
+    public double GTH_Arm2HatchTimer = 1.2;
 
     public double GTH_CurrLimit = 14.0;
     public double GTH_CargoIntakeSpeed = 0.5;
@@ -61,7 +61,7 @@ public class Calibrations{
     public double GTH_DiskShootSpeedFast = 0.4;
     public double GTH_DiskShootSpeedSlow = 0.4;
     public double GTH_HoldSpeed = 0.05;
-    public double GTH_ReleaseTime = 0.5;
+    public double GTH_ReleaseTime = 1.5;
 
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
@@ -69,10 +69,11 @@ public class Calibrations{
     public double ELE_PIDLimitUp = 0.75;
     public double ELE_PIDLimitDown = 0.5;
     public double ELE_PositionKP = 0.1;
-    public double ELE_StageHeight = 36;
+    public double ELE_StageHeight = 14;
+    public double ELE_OffsetHeight = 1.5; 
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            0.5,         10,           24,              12,              48,              36,           78,            56,            40,          12
+            -1,        10,           20,              10,              50,              40,           78,            68,            37,          10
     };
 
     // climb cals

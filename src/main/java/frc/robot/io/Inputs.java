@@ -24,6 +24,7 @@ public class Inputs extends Component {
     public boolean dodgingR;
     public boolean flipOrientation;
     public boolean resetGyro;
+    public boolean resetEleEnc;
     //----------------------------Operator Functions-------------------------------------- 
     public boolean ballGather;
     public boolean releaseBall; 
@@ -86,6 +87,11 @@ public class Inputs extends Component {
         resetGyro = gamePad.getRawButton(bm.resetGyro);
         if(resetGyro){
             sense.init();
+        }
+
+        resetEleEnc = gamePad.getRawButton(11) && gamePad.getRawButton(15);
+        if(resetEleEnc){
+            out.resetEleEnc();
         }
      
         //read joystick
@@ -413,6 +419,8 @@ public class Inputs extends Component {
                     sense.hasBall = ballNotHatch;
                     sense.hasHatch = !ballNotHatch;
                     autoGatherState = AutoGatherStates.DRIVETOGATHER;
+                    rocketCargoState = RocketCargoshipPosition.DEFAULT;
+                    nearFarCargo = NearFarCargo.DEFAULT;
                 }
                 
                 break;
@@ -442,7 +450,9 @@ public class Inputs extends Component {
 
                 //when vision spotted
                 //when shift shoot
-                if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodVisionTarget() || shift && shoot){
+                if(ballNotHatch && view.goodCargoImage() 
+                        || !ballNotHatch && view.goodVisionTarget() 
+                        || shift && shoot){
                     //next state
                     autoScoreState = AutoScoreStates.CAMERASCORE;
                 }
@@ -515,6 +525,7 @@ public class Inputs extends Component {
                     case MID:
                         if(ballNotHatch){
                             elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
+                            
                         } else {
                             elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
                         }

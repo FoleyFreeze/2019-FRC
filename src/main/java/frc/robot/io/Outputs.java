@@ -94,4 +94,8 @@ public abstract class Outputs extends Component {
     public double getGatherArmCurrent(){
         return 0;
     }
+
+    public void resetEleEnc(){
+        
+    }
 }
