@@ -240,18 +240,25 @@ public class Inputs extends Component {
         } else {
             //manual mode
             if (cargoNotHatch){
-                cargoGather = gather;
+                cargoGather = gather && !shift;
                 releaseCargo = shoot;
                 hatchGather = false;
                 releaseHatch = false;
+
+                if(!sense.hasCargo) sense.hasCargo = shift && gather;
+                if(sense.hasCargo && shoot) sense.hasCargo = false; 
 
                 visionCargo = actionCargo && !sense.hasCargo;
                 visionTarget = actionCargo && sense.hasCargo;
             } else {
                 cargoGather = false;
                 releaseCargo = false;
-                hatchGather = gather;
+                hatchGather = gather && !shift;
                 releaseHatch = shoot;
+
+                if(!sense.hasHatch) sense.hasHatch = shift && gather;
+                if(sense.hasHatch && shoot) sense.hasHatch = false;
+
                 visionTarget = actionHatch;
             }
             setElevatorHeight();
