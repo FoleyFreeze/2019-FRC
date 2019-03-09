@@ -42,6 +42,13 @@ public class Vision extends Component {
 
                     vd.timeStamp = Timer.getFPGATimestamp();
                     vd.robotAngle = sense.robotAngle.getDeg();
+                    
+                    //transform the camera distance vector into a field relative position
+                    double camRad = vd.angleTo * Math.PI / 180;
+                    double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;
+                    double robotY = vd.distance * Math.cos(camRad) + k.CAM_Location_Y;
+                    vd.targetX = robotX * Math.cos(sense.robotAngle.getRad()) - robotY * Math.sin(sense.robotAngle.getRad()) + rse.x;
+                    vd.targetY = robotX * Math.sin(sense.robotAngle.getRad()) + robotY * Math.cos(sense.robotAngle.getRad()) + rse.y;
 
                     visionTargetStack.push(vd);
                 } catch(Exception e){
@@ -63,6 +70,13 @@ public class Vision extends Component {
                     
                     vd.timeStamp = Timer.getFPGATimestamp();
                     vd.robotAngle = sense.robotAngle.getDeg();
+                    
+                    //transform the camera distance vector into a field relative position
+                    double camRad = vd.angleTo * Math.PI / 180;
+                    double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;
+                    double robotY = vd.distance * Math.cos(camRad) + k.CAM_Location_Y;
+                    vd.targetX = robotX * Math.cos(sense.robotAngle.getRad()) - robotY * Math.sin(sense.robotAngle.getRad()) + rse.x;
+                    vd.targetY = robotX * Math.sin(sense.robotAngle.getRad()) + robotY * Math.cos(sense.robotAngle.getRad()) + rse.y;
 
                     cargoStack.push(vd);
                 } catch (Exception e) {

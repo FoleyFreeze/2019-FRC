@@ -6,6 +6,8 @@ public class RSE extends Component {
 
     public double x;
     public double y;
+    public double dx;
+    public double dy;
     public double theta;
 
     private double[] prevEnc;
@@ -75,12 +77,12 @@ public class RSE extends Component {
 
         //convert to field dx 
         double radAngle = -prevRobotAngle * Math.PI / 180;
-        double DX = sumDX * Math.cos(radAngle) - sumDY * Math.sin(radAngle);
-        double DY = sumDX * Math.sin(radAngle) + sumDY * Math.cos(radAngle);
+        dx = sumDX * Math.cos(radAngle) - sumDY * Math.sin(radAngle);
+        dy = sumDX * Math.sin(radAngle) + sumDY * Math.cos(radAngle);
 
         // update stored x and y 
-        x += DX;
-        y += DY;
+        x += dx;
+        y += dy;
 
         SmartDashboard.putNumber("RSE dX", sumDX);
         SmartDashboard.putNumber("RSE dY", sumDY);

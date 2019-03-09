@@ -20,10 +20,9 @@ public class Calibrations{
     public boolean MIL_Disabled = false;
 
     // drive cals
-    public double   DRV_CamDriveMaxPwr = 0.5;
+    
     public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
     public double   DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
-    public double   DRV_OfTargetAngleKP = -0.0;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.003;
@@ -32,8 +31,14 @@ public class Calibrations{
     public double   DRV_SwerveMaxAnglePwr = 0.5;
     public double   DRV_SwerveStrKD = 0;
     public double   DRV_SwerveStrKP = -0.2;//rotation power per degree
-    public double   DRV_TargetDistanceKP = -0.2;
-    public double   DRV_ToTargetAngleKP  = 0.025; //was .05 - MrC
+    public double   DRV_CamDriveMaxPwr = 0.5;
+    public double   DRV_TargetDistanceKP = -0.2; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0;
+    public double   DRV_OfTargetAngleKP = 0; //cam drive based on angle OF target
+    public double   DRV_OfTargetAngleKD = 0;
+    public double   DRV_ToTargetAngleKP = 0.025; //cam drive based on angle TO target
+    public double   DRV_ToTargetAngleKD = 0;
+    public boolean  DRV_CamDriveUseDynDist = false; //use dynamic distance based on RSE
     public double   DRV_WaitForParkTime = 15;//seconds
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
@@ -86,6 +91,7 @@ public class Calibrations{
     public double CLM_Zone_Power_1 = 0.3;
     public double CLM_Zone_Power_2 = 0.7;
     public double CLM_Zone_Power_3 = 0.1;
+    public double CLM_DrivePower = 0.05; //how fast to drive at the wall after/during the climb
 
 
     

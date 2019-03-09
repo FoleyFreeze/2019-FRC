@@ -7,5 +7,6 @@ public class VisionData {
     public double robotDistance;
     public double robotAngle;
     public double timeStamp;
-    //subject to change
+    public double targetX;
+    public double targetY;
 }

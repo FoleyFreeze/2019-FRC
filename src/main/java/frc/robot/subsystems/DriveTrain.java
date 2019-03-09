@@ -31,6 +31,11 @@ public class DriveTrain extends Component{
             }
         }
 
+        if(in.climb){
+            swerve(0,k.CLM_DrivePower,0);
+            return;
+        }
+
         boolean firstDodge = (in.dodgingL || in.dodgingR) && !prevDodge;
         prevDodge = in.dodgingL || in.dodgingR;
 
@@ -47,8 +52,8 @@ public class DriveTrain extends Component{
             mode = "Field Oriented";
             SmartDashboard.putString("Mode", mode);
         }else{
-             swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
-             mode = "Regular Swerve";
+            swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
+            mode = "Regular Swerve";
             SmartDashboard.putString("Mode", mode);
         }
     }
@@ -216,8 +221,18 @@ public class DriveTrain extends Component{
             X = 0;
         }
 
-        double Y = vd.distance * k.DRV_TargetDistanceKP;
-        double R = (vd.angleTo + deltaAngle) * k.DRV_ToTargetAngleKP;
+        double dist;
+        if(k.DRV_CamDriveUseDynDist){
+            double diffX = vd.targetX - rse.x;
+            double diffY = vd.targetY - rse.y;
+            dist = Math.sqrt(diffX*diffX + diffY*diffY) * k.DRV_TargetDistanceKP;
+        } else {
+            dist = vd.distance * k.DRV_TargetDistanceKP;
+        }
+        double deltaDist = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy);
+        double Y = dist * k.DRV_TargetDistanceKP + Math.abs(deltaDist) * k.DRV_TargetDistanceKD;
+
+        double R = (vd.angleTo + deltaAngle) * k.DRV_ToTargetAngleKP + sense.deltaRobotAngle * k.DRV_ToTargetAngleKD;
 
         SmartDashboard.putNumber("vdDist", vd.distance);
         SmartDashboard.putNumber("vdAng", vd.angleTo);
