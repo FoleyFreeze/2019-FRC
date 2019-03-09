@@ -28,5 +28,5 @@ public class ControlBoard extends Component{
     public int shift = 15;
     public int pitMode = 13;
 
-    public int ballOrHatch = 12;
+    public int cargoOrHatch = 12;
 }

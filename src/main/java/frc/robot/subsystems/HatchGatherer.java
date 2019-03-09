@@ -3,14 +3,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DiskGatherer extends Component{
+public class HatchGatherer extends Component{
 
     private enum FourBarState{
         WAIT, STARTUP, WAIT_FOR_STALL
     }
     private FourBarState gatherState = FourBarState.WAIT;
 
-    public DiskGatherer() {
+    public HatchGatherer() {
         
     }
 
@@ -25,7 +25,7 @@ public class DiskGatherer extends Component{
         //make sure that if we disable in a movement we don't re-enable and immediately start moving
         if(sense.isDisabled) gatherState = FourBarState.WAIT;
        
-        //out.suction(in.diskGather);
+        //out.suction(in.hatchGather);
         
         SmartDashboard.putString("GatherArmState", gatherState.name());
 
@@ -33,11 +33,11 @@ public class DiskGatherer extends Component{
             case WAIT:
             out.setGatherArm(0);
 
-            if(in.ballNotHatch && !sense.hasHatch && !inBallPosition){
+            if(in.cargoNotHatch && !sense.hasHatch && !inBallPosition){
                 movingToBall = true;
                 startTime = Timer.getFPGATimestamp();
                 gatherState = FourBarState.STARTUP;    
-            } else if(!in.ballNotHatch && !sense.hasBall && !inHatchPosition){
+            } else if(!in.cargoNotHatch && !sense.hasCargo && !inHatchPosition){
                 movingToBall = false;
                 startTime = Timer.getFPGATimestamp();
                 gatherState = FourBarState.STARTUP;

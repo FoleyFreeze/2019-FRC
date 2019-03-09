@@ -28,7 +28,7 @@ public class LEDs extends Component{
     int blinkCount = BLINK_COUNT;
     double blinkTimer;
     boolean blinkState;
-    boolean prevStateBall;
+    boolean prevStateCargo;
     boolean prevStateHatch;
 
     public void run(){
@@ -37,7 +37,7 @@ public class LEDs extends Component{
         camLED.set(in.camLightsOn);
 
         //rising edge of hasThing
-        if(!prevStateBall && sense.hasBall || !prevStateHatch && sense.hasHatch){
+        if(!prevStateCargo && sense.hasCargo || !prevStateHatch && sense.hasHatch){
             blinkCount = 0;
             blinkTimer = Timer.getFPGATimestamp();
         } 
@@ -53,13 +53,13 @@ public class LEDs extends Component{
             }
         }
 
-        //gearFlake_R.set(sense.hasBall);
+        //gearFlake_R.set(sense.hasCargo);
         //gearFlake_G.set(sense.hasHatch);
-        gearFlake_R.set(sense.hasBall && blinkState);
+        gearFlake_R.set(sense.hasCargo && blinkState);
         gearFlake_G.set(sense.hasHatch && blinkState);
-        gearFlake_B.set(!sense.hasBall && !sense.hasHatch);
+        gearFlake_B.set(!sense.hasCargo && !sense.hasHatch);
 
-        prevStateBall = sense.hasBall;
+        prevStateCargo = sense.hasCargo;
         prevStateHatch = sense.hasHatch;
 
     }

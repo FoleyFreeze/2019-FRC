@@ -19,10 +19,10 @@ public class Component {
     public static Outputs out;
     public static Sensors sense;
     public static Vision view;
-    public static BallGatherer grabCargo;
+    public static CargoGatherer grabCargo;
     public static Climber climb; 
     public static Elevator elevator;
-    public static DiskGatherer grabDisk;
+    public static HatchGatherer grabHatch;
     public static DriveTrain drive;
     public static Calibrations k;
     public static RSE rse;
@@ -64,10 +64,10 @@ public class Component {
         in = new Inputs();
         sense = new Sensors();
         view = new Vision();
-        grabCargo = new BallGatherer();
+        grabCargo = new CargoGatherer();
         climb = new Climber();
         elevator = new Elevator(); //F
-        grabDisk = new DiskGatherer();
+        grabHatch = new HatchGatherer();
         drive = new DriveTrain(); 
         rse = new RSE();
         cb = new ControlBoard();
@@ -86,14 +86,14 @@ public class Component {
     
     public static void runAll(){
         bm.set();
-        cb.set();
         in.run();
         sense.run();
+        view.run();
         rse.run();
         grabCargo.run();
         climb.run();
         elevator.run();
-        grabDisk.run();
+        grabHatch.run();
         drive.run();
         out.run();
         SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());

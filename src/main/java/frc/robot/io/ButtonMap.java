@@ -10,7 +10,7 @@ public class ButtonMap {
     public int fieldOriented;
     public int flipOrientation;
     public int pitMode;
-    public int diskGather;
+    public int hatchGather;
     public boolean flySky = false;
     public double xDeadband;
     public double yDeadband;
@@ -34,7 +34,7 @@ public class ButtonMap {
             fieldOriented = 5;
             flipOrientation = -0;
             pitMode = -0;
-            diskGather = -0;
+            hatchGather = -0;
             xDeadband = 0.05;
             yDeadband = 0.05;
             rotDeadband = 0.05;
@@ -48,7 +48,7 @@ public class ButtonMap {
             fieldOriented = 6;
             flipOrientation = -0;
             pitMode = -0;
-            diskGather = -0;
+            hatchGather = -0;
             xDeadband = 0.05;
             yDeadband = 0.05;
             rotDeadband = 0.1;

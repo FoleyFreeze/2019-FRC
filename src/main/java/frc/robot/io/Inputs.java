@@ -26,10 +26,10 @@ public class Inputs extends Component {
     public boolean resetGyro;
     public boolean resetEleEnc;
     //----------------------------Operator Functions-------------------------------------- 
-    public boolean ballGather;
-    public boolean releaseBall; 
-    public boolean diskGather;
-    public boolean releaseDisk; 
+    public boolean cargoGather;
+    public boolean releaseCargo; 
+    public boolean hatchGather;
+    public boolean releaseHatch; 
 
     public boolean climb;
     public boolean reverseClimb;
@@ -39,7 +39,7 @@ public class Inputs extends Component {
     public boolean autoElevator;
     public boolean elevatorStage;
     public Elevator.ElevatorPosition elevatorTarget = ElevatorPosition.DONT_MOVE;
-    public boolean ballNotHatch;
+    public boolean cargoNotHatch;
     
     public boolean shift;
     public boolean pitMode;
@@ -55,9 +55,10 @@ public class Inputs extends Component {
     public boolean visionCargo;
     public boolean visionTarget;
 
-    public boolean actionBall;
+    public boolean actionCargo;
     public boolean actionHatch;
     public boolean camLightsOn;
+    public boolean enableCamera;
 
     public byte[] xDixon;//history of joystick directions
     public byte[] yDixon;//history of joystick directions
@@ -131,7 +132,7 @@ public class Inputs extends Component {
 
         SmartDashboard.putString("Dixon Detector", stopDixon);
 
-        ballNotHatch = controlBoard.getRawButton(cb.ballOrHatch);
+        cargoNotHatch = controlBoard.getRawButton(cb.cargoOrHatch);
         leftNotRight = controlBoard.getRawButton(cb.lOrR);
         autoNotManualMode = leftNotRight;
 
@@ -144,9 +145,10 @@ public class Inputs extends Component {
             //dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
             //visionCargo = gamePad.getRawButton(4);
         }
-        actionBall = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
+        actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
         camLightsOn = false;
+        enableCamera = false;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
@@ -157,14 +159,14 @@ public class Inputs extends Component {
 
         parseControlBoard();
 
-        SmartDashboard.putBoolean("ActionBall", actionBall);
+        SmartDashboard.putBoolean("ActionCargo", actionCargo);
         SmartDashboard.putBoolean("ActionHatch", actionHatch);
 
         autoElevator = true;
-        releaseBall = false;
-        releaseDisk = false;
-        diskGather = false;
-        ballGather = false;
+        releaseCargo = false;
+        releaseHatch = false;
+        hatchGather = false;
+        cargoGather = false;
         elevatorStage = false;
         visionTarget = false;
         visionCargo = false;
@@ -182,14 +184,14 @@ public class Inputs extends Component {
         }
 
         //remove once robot state is working
-        if(!k.GTH_disableDisk && !ballNotHatch) {
-            diskGather = controlBoard.getRawButton(cb.gather);
-            releaseDisk = controlBoard.getRawButton(cb.shoot);
+        if(!k.GTH_disableHatch && !cargoNotHatch) {
+            hatchGather = controlBoard.getRawButton(cb.gather);
+            releaseHatch = controlBoard.getRawButton(cb.shoot);
         }
         //remove once robot state is working
-        if(!k.GTH_disableBall && ballNotHatch){
-            ballGather = controlBoard.getRawButton(cb.gather);
-            releaseBall = controlBoard.getRawButton(cb.shoot);
+        if(!k.GTH_disableCargo && cargoNotHatch){
+            cargoGather = controlBoard.getRawButton(cb.gather);
+            releaseCargo = controlBoard.getRawButton(cb.shoot);
         }
         */
 
@@ -218,10 +220,10 @@ public class Inputs extends Component {
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         if(autoNotManualMode){
-            // autofunctions disable cals and ball or hatch detection
-            if(actionBall) {
-                autoGather(!sense.hasBall);
-                autoScore(sense.hasBall);
+            // autofunctions disable cals and cargo or hatch detection
+            if(actionCargo) {
+                autoGather(!sense.hasCargo);
+                autoScore(sense.hasCargo);
             } else if(actionHatch) {
                 autoGather(!sense.hasHatch);
                 autoScore(sense.hasHatch);
@@ -237,16 +239,20 @@ public class Inputs extends Component {
             SmartDashboard.putBoolean("GoodVisionTarget",view.goodVisionTarget());
         } else {
             //manual mode
-            if (ballNotHatch){
-                ballGather = gather;
-                releaseBall = shoot;
-                diskGather = false;
-                releaseDisk = false;
+            if (cargoNotHatch){
+                cargoGather = gather;
+                releaseCargo = shoot;
+                hatchGather = false;
+                releaseHatch = false;
+
+                visionCargo = actionCargo && !sense.hasCargo;
+                visionTarget = actionCargo && sense.hasCargo;
             } else {
-                ballGather = false;
-                releaseBall = false;
-                diskGather = gather;
-                releaseDisk = shoot;
+                cargoGather = false;
+                releaseCargo = false;
+                hatchGather = gather;
+                releaseHatch = shoot;
+                visionTarget = actionHatch;
             }
             setElevatorHeight();
         }
@@ -393,24 +399,26 @@ public class Inputs extends Component {
     public void autoGather(boolean autoGather) {
         
         if(autoGather){
-            
+            enableCamera = true;
+
             switch(autoGatherState){
                 case DRIVETOGATHER:
                 //pathfind
                 //face the robot in the right direction
                 //move elevator to floor/feeder station
-                if (ballNotHatch){
+                if (cargoNotHatch){
                     elevatorTarget = ElevatorPosition.FLOOR;
                 } else {
                     elevatorTarget = ElevatorPosition.LOADING_STATION;
+                    camLightsOn = true;
                 }
     
-                //move gather to ball/hatch position
-                //this is handled in the diskGather class
+                //move gather to cargo/hatch position
+                //this is handled in the hatchGather class
 
                 //when camera sees target
                 //when operator gather button pressed
-                if(ballNotHatch && view.goodCargoImage() || !ballNotHatch && view.goodVisionTarget() || gather){
+                if(cargoNotHatch && view.goodCargoImage() || !cargoNotHatch && view.goodVisionTarget() || gather){
                     //next state
                     autoGatherState = AutoGatherStates.CAMERAGATHER;
                 }
@@ -418,11 +426,11 @@ public class Inputs extends Component {
 
                 case CAMERAGATHER:
                 //camera drive, or manual drive if no image
-                visionCargo = ballNotHatch && view.goodCargoImage();
-                visionTarget =  !ballNotHatch && view.goodVisionTarget();
+                visionCargo = cargoNotHatch && view.goodCargoImage();
+                visionTarget =  !cargoNotHatch && view.goodVisionTarget();
                 
                 //set elevator position
-                if (ballNotHatch){
+                if (cargoNotHatch){
                     elevatorTarget = ElevatorPosition.FLOOR;
                 } else {
                     elevatorTarget = ElevatorPosition.LOADING_STATION;
@@ -430,15 +438,15 @@ public class Inputs extends Component {
                 }
 
                 //turn on gatherer
-                diskGather = !ballNotHatch;
-                ballGather = ballNotHatch;
+                hatchGather = !cargoNotHatch;
+                cargoGather = cargoNotHatch;
 
                 //when gather current spike
                 if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit){
                     //set sense.hasThing to true
                     //next state
-                    sense.hasBall = ballNotHatch;
-                    sense.hasHatch = !ballNotHatch;
+                    sense.hasCargo = cargoNotHatch;
+                    sense.hasHatch = !cargoNotHatch;
                     autoGatherState = AutoGatherStates.DRIVETOGATHER;
                     rocketCargoState = RocketCargoshipPosition.DEFAULT;
                     nearFarCargo = NearFarCargo.DEFAULT;
@@ -460,6 +468,8 @@ public class Inputs extends Component {
     public void autoScore(boolean autoScore) {
 
         if(autoScore){
+            enableCamera = true;
+            camLightsOn = true;
 
             switch(autoScoreState){
                 case DRIVETOGOAL:
@@ -471,8 +481,8 @@ public class Inputs extends Component {
 
                 //when vision spotted
                 //when shift shoot
-                if(ballNotHatch && view.goodCargoImage() 
-                        || !ballNotHatch && view.goodVisionTarget() 
+                if(cargoNotHatch && view.goodCargoImage() 
+                        || !cargoNotHatch && view.goodVisionTarget() 
                         || shift && shoot){
                     //next state
                     autoScoreState = AutoScoreStates.CAMERASCORE;
@@ -483,7 +493,6 @@ public class Inputs extends Component {
                 case CAMERASCORE:
                 //camera drive or manual drive if no image
                 visionTarget =  view.goodVisionTarget();
-                camLightsOn = true;
 
                 //move elevator to final height
                 setElevatorHeight();
@@ -509,15 +518,15 @@ public class Inputs extends Component {
                 case GATHERSHOOT:
 
                 //run shoot gather
-                releaseBall = ballNotHatch;
-                releaseDisk = !ballNotHatch;
+                releaseCargo = cargoNotHatch;
+                releaseHatch = !cargoNotHatch;
                 
                 //when TIME_CAL elapses (like 0.5sec or so)
                 if(Timer.getFPGATimestamp() - autoScoreTimer > k.GTH_ReleaseTime){
                     //turn off gather
                     //next state
                     autoScoreState = AutoScoreStates.DRIVETOGOAL;
-                    sense.hasBall = false;
+                    sense.hasCargo = false;
                     sense.hasHatch = false;
                 }
                 
@@ -537,7 +546,7 @@ public class Inputs extends Component {
             case FAR:
                 switch(rocketCargoState){
                     case HI:
-                        if(ballNotHatch){
+                        if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
                         } else {
                             elevatorTarget = ElevatorPosition.ROCKET_3_HATCH;
@@ -545,7 +554,7 @@ public class Inputs extends Component {
                     break;
 
                     case MID:
-                        if(ballNotHatch){
+                        if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
                             
                         } else {
@@ -554,7 +563,7 @@ public class Inputs extends Component {
                     break;
 
                     case LO:
-                        if(ballNotHatch){
+                        if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.ROCKET_1_CARGO;
                         } else {
                             elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
@@ -566,7 +575,7 @@ public class Inputs extends Component {
                     break;
 
                     case FRONT:
-                        if(ballNotHatch){
+                        if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.FLOOR;
                         } else {
                             elevatorTarget = ElevatorPosition.LOADING_STATION;
@@ -576,7 +585,7 @@ public class Inputs extends Component {
             break;
 
             case CARGO:
-                if(ballNotHatch){
+                if(cargoNotHatch){
                     elevatorTarget = ElevatorPosition.SHIP_CARGO;
                 } else {
                     elevatorTarget = ElevatorPosition.SHIP_HATCH;

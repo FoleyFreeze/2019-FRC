@@ -1,11 +1,12 @@
 package frc.robot.subsystems.vision;
 
-import frc.robot.subsystems.Component;
 import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Component;
 import frc.robot.util.LimitedStack;
 
 public class Vision extends Component {
@@ -13,7 +14,16 @@ public class Vision extends Component {
     LimitedStack<VisionData> visionTargetStack;
     LimitedStack<VisionData> cargoStack;
 
+    NetworkTable piCommands;
+    NetworkTableEntry piDebugMode;
+    NetworkTableEntry piFindCargo;
+    NetworkTableEntry piFindVisionTarget;
+
     public Vision() {
+        piCommands = NetworkTableInstance.getDefault().getTable("PiControl");
+        piDebugMode = piCommands.getEntry("DebugMode");
+        piFindCargo = piCommands.getEntry("FindCargo");
+        piFindVisionTarget = piCommands.getEntry("FindVisionTarget");
 
         visionTargetStack = new LimitedStack<>(5);
         cargoStack = new LimitedStack<>(5);
@@ -65,10 +75,11 @@ public class Vision extends Component {
 
     public boolean goodCargoImage(){
         VisionData vd = cargoStack.peek();
-        return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime; 
+        return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime;
     }
 
     public boolean goodVisionTarget(){
+        //TODO: eventually check the image vs the expected location of the target
         VisionData vd = visionTargetStack.peek();
         return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime; 
     }
@@ -79,5 +90,11 @@ public class Vision extends Component {
 
     public VisionData getLastVisionTarget(){
         return visionTargetStack.peek();
+    }
+
+    public void run(){
+        piDebugMode.setBoolean(k.CAM_DebugMode);
+        piFindCargo.setBoolean(in.enableCamera && in.actionCargo && !sense.hasCargo);
+        piFindVisionTarget.setBoolean(in.enableCamera && (in.actionHatch || in.actionCargo && sense.hasCargo));
     }
 }

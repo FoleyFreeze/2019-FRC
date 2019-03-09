@@ -111,6 +111,7 @@ public class Calibrations{
     public double CAM_Location_X = 5.125;
     public double CAM_Location_Y = 0;
     public double CAM_ShootDist = 3;//inches
+    public boolean CAM_DebugMode = false;
     
     public Calibrations(){
         

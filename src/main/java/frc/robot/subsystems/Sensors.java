@@ -23,7 +23,7 @@ public class Sensors extends Component {
     public double[] driveEnc = new double[4];
     public double climberEncoder;
 
-    public boolean hasBall;
+    public boolean hasCargo;
     public boolean hasHatch;
     public boolean isDisabled;
 
@@ -86,7 +86,7 @@ public class Sensors extends Component {
         prevTime = time;
         SmartDashboard.putNumber("dt",dt);
 
-        SmartDashboard.putBoolean("HasBall",hasBall);
+        SmartDashboard.putBoolean("HasCargo",hasCargo);
         SmartDashboard.putBoolean("HasHatch",hasHatch);
     }
 
