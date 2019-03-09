@@ -18,7 +18,21 @@ public class Climber extends Component{
             if(sense.climberEncoder > k.CLM_EncoderLimit){
                 out.climbMotor(0);
             } else {
-                out.climbMotor(pwr);
+                if(sense.climberEncoder < k.CLM_Zone_1){
+                    out.climbMotor(k.CLM_Zone_Power_1);
+                } 
+                else if(sense.climberEncoder < k.CLM_Zone_2){
+                    out.climbMotor(k.CLM_Zone_Power_2);
+                }
+                else if(sense.climberEncoder < k.CLM_Zone_3){
+                    out.climbMotor(k.CLM_Zone_Power_3);
+                }
+                else{
+                    out.climbMotor(0);
+                }
+
+
+                //out.climbMotor(pwr);
             }
             
             climb = "Climbing";
