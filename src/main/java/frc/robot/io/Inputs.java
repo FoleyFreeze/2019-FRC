@@ -1,7 +1,5 @@
 package frc.robot.io;
 
-import javax.lang.model.element.ElementKind;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -59,6 +57,7 @@ public class Inputs extends Component {
 
     public boolean actionBall;
     public boolean actionHatch;
+    public boolean camLightsOn;
 
     public byte[] xDixon;//history of joystick directions
     public byte[] yDixon;//history of joystick directions
@@ -138,7 +137,7 @@ public class Inputs extends Component {
 
         
         //set buttons
-        if(!k.DRV_disable){
+        if(!k.DRV_Disable){
             compassDrive = gamePad.getRawButton(bm.compassDrive);
             fieldOriented = gamePad.getRawButton(bm.fieldOriented);
             //dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
@@ -147,6 +146,7 @@ public class Inputs extends Component {
         }
         actionBall = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+        camLightsOn = false;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
@@ -310,38 +310,38 @@ public class Inputs extends Component {
 
         switch(rocketCargoState){
             case HI:
-            controlBoard.setOutput(cb.high, true);
-            controlBoard.setOutput(cb.middle, false);
-            controlBoard.setOutput(cb.low, false);
-            controlBoard.setOutput(cb.front, false);
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, true);
+            controlBoard.setOutput(cb.low, true);
+            controlBoard.setOutput(cb.front, true);
             break;
 
             case MID:
-            controlBoard.setOutput(cb.high, false);
-            controlBoard.setOutput(cb.middle, true);
-            controlBoard.setOutput(cb.low, false);
-            controlBoard.setOutput(cb.front, false);
+            controlBoard.setOutput(cb.high, true);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, true);
+            controlBoard.setOutput(cb.front, true);
             break;
 
             case LO:
-            controlBoard.setOutput(cb.high, false);
-            controlBoard.setOutput(cb.middle, false);
-            controlBoard.setOutput(cb.low, true);
-            controlBoard.setOutput(cb.front, false);
+            controlBoard.setOutput(cb.high, true);
+            controlBoard.setOutput(cb.middle, true);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, true);
             break;
 
             case FRONT:
-            controlBoard.setOutput(cb.high, false);
-            controlBoard.setOutput(cb.middle, false);
-            controlBoard.setOutput(cb.low, false);
-            controlBoard.setOutput(cb.front, true);
-            break;   
-            
-            case DEFAULT:
             controlBoard.setOutput(cb.high, true);
             controlBoard.setOutput(cb.middle, true);
             controlBoard.setOutput(cb.low, true);
-            controlBoard.setOutput(cb.front, true);
+            controlBoard.setOutput(cb.front, false );
+            break;   
+            
+            case DEFAULT:
+            controlBoard.setOutput(cb.high, false);
+            controlBoard.setOutput(cb.middle, false);
+            controlBoard.setOutput(cb.low, false);
+            controlBoard.setOutput(cb.front, false);
             break;
         }
         
@@ -426,6 +426,7 @@ public class Inputs extends Component {
                     elevatorTarget = ElevatorPosition.FLOOR;
                 } else {
                     elevatorTarget = ElevatorPosition.LOADING_STATION;
+                    camLightsOn = true;
                 }
 
                 //turn on gatherer
@@ -482,6 +483,7 @@ public class Inputs extends Component {
                 case CAMERASCORE:
                 //camera drive or manual drive if no image
                 visionTarget =  view.goodVisionTarget();
+                camLightsOn = true;
 
                 //move elevator to final height
                 setElevatorHeight();

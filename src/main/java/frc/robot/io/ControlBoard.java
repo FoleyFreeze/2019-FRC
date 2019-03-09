@@ -6,50 +6,27 @@ import frc.robot.subsystems.Component;
 public class ControlBoard extends Component{
 
     //2018 Practice board values!!!!!!!!!!!!!!!!!!!!!!!!
-    public int high;
-    public int middle;
-    public int low;
+    public int high = 4;
+    public int middle = 3;
+    public int low = 2;
+    public int front = 5;
 
     public int jogUp;//?????
     public int jogDown;//?????
     
-    public int gather;
-    public int shoot;
+    public int gather = 7;
+    public int shoot = 10;
     
-    public int farRkt;
-    public int cargoShip;
-    public int nearRkt;
+    public int farRkt = 6;
+    public int cargoShip = 8;
+    public int nearRkt = 9;
 
-    public int lOrR;
+    public int lOrR = 14;
 
-    public int front;
-
-    public int climb;
+    public int climb = 1;
     
-    public int shift;
-    public int pitMode;
+    public int shift = 15;
+    public int pitMode = 13;
 
-    public int ballOrHatch;
-    
-    public void set(){
-        shift = 15;
-        ballOrHatch = 12;
-        high = 4;
-        middle = 3;
-        low = 2;
-        front = 5;
-
-        gather = 7;
-        shoot = 10;
-
-        lOrR = 14;
-        
-        farRkt = 6;
-        cargoShip = 8;
-        nearRkt = 9; 
-
-        climb = 1;
-
-        pitMode = 13;
-    }
+    public int ballOrHatch = 12;
 }

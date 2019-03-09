@@ -84,7 +84,7 @@ public class OutputsCompBot extends Outputs {
 
         climbMil = new CurrentLimit(40, ElectroJendz.CLM_MotorID, 400);
 
-        if(!k.DRV_disable) {
+        if(!k.DRV_Disable) {
             frontLeftMotorDrive = new CANSparkMax(ElectroJendz.FL_DRIVE_ID, MotorType.kBrushless);
             frontLeftMotorTurn = new CANSparkMax(ElectroJendz.FL_TURN_ID, MotorType.kBrushless);
             frontRightMotorDrive = new CANSparkMax(ElectroJendz.FR_DRIVE_ID, MotorType.kBrushless);
@@ -117,20 +117,20 @@ public class OutputsCompBot extends Outputs {
             backRightMotorTurn.setIdleMode(IdleMode.kBrake);
         }
 
-        if(!k.ELE_disable){
+        if(!k.ELE_Disable){
             elevatorMotor = new CANSparkMax(ElectroJendz.ELE_MotorID, MotorType.kBrushless);
             elevatorMotor.setIdleMode(IdleMode.kBrake);
             elevatorMotor.getEncoder().setPositionConversionFactor(k.ELE_InchesPRev);
         }
 
-        if(!k.GTH_disableBall){
+        if(!k.GTH_DisableCargo){
             gatherMotorL = new CANSparkMax(ElectroJendz.GTH_MotorL_ID, MotorType.kBrushless);
             gatherMotorR = new CANSparkMax(ElectroJendz.GTH_MotorR_ID, MotorType.kBrushless);
             gatherMotorL.setIdleMode(IdleMode.kBrake);
             gatherMotorR.setIdleMode(IdleMode.kBrake);
         }
 
-        if(!k.GTH_disableDisk){
+        if(!k.GTH_DisableHatch){
             gatherArmMotor = new TalonSRX(ElectroJendz.GTH_ArmMotorID);
         }
 
@@ -145,13 +145,13 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void getEnc(){
-        if(!k.DRV_disable) {
+        if(!k.DRV_Disable) {
             sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();//value in inches
             sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();//value in inches
             sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();//value in inches
             sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();//value in inches
         }
-        if(!k.ELE_disable){
+        if(!k.ELE_Disable){
             sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();//value in inches
         }
         if(!k.CLM_disable){
@@ -167,7 +167,7 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void resetEnc(){
-        if(!k.DRV_disable){
+        if(!k.DRV_Disable){
             frontLeftMotorDrive.getEncoder().setPosition(0);
             frontRightMotorDrive.getEncoder().setPosition(0);
             backLeftMotorDrive.getEncoder().setPosition(0);
@@ -222,7 +222,7 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void setGatherArm(double armGather) {
-        gatherArmMotor.set(ControlMode.PercentOutput, limit(armGather, gatherArmMil));
+        gatherArmMotor.set(ControlMode.PercentOutput, limit(-armGather, gatherArmMil));
     }
 
     @Override

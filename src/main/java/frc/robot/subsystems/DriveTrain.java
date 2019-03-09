@@ -15,7 +15,7 @@ public class DriveTrain extends Component{
     String mode;
 
     public void run() {
-        if(k.DRV_disable) return;
+        if(k.DRV_Disable) return;
         
         if(in.visionTarget) {
             VisionData vd = view.getLastVisionTarget();
@@ -211,13 +211,13 @@ public class DriveTrain extends Component{
         double X;
 
         if(in.visionTarget) {
-            X = (vd.angleOf - 90 - deltaAngle) * k.DRV_ofTargetAngleKP;
+            X = (vd.angleOf - 90 - deltaAngle) * k.DRV_OfTargetAngleKP;
         } else {
             X = 0;
         }
 
-        double Y = vd.distance * k.DRV_targetDistanceKP;
-        double R = (vd.angleTo + deltaAngle) * k.DRV_toTargetAngleKP;
+        double Y = vd.distance * k.DRV_TargetDistanceKP;
+        double R = (vd.angleTo + deltaAngle) * k.DRV_ToTargetAngleKP;
 
         SmartDashboard.putNumber("vdDist", vd.distance);
         SmartDashboard.putNumber("vdAng", vd.angleTo);

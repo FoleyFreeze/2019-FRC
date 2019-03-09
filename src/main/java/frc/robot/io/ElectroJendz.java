@@ -27,4 +27,11 @@ public class ElectroJendz {
     public static final int GAMEPAD = 0;
     public static final int CONTROL_BOARD = 1;
 
+    public static final int lowerLeftLED = 6;
+    public static final int lowerRightLED = 7;
+    public static final int gearFlake_R = 0;
+    public static final int gearFlake_G = 1;
+    public static final int gearFlake_B = 2;
+    public static final int camLED = 5;
+
 }

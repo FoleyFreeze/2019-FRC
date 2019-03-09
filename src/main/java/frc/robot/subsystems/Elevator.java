@@ -15,7 +15,7 @@ public class Elevator extends Component {
 
     public void run() {
 
-        if(k.ELE_disable) return;
+        if(k.ELE_Disable) return;
 
         String elevate;
 

@@ -20,7 +20,7 @@ public class DiskGatherer extends Component{
     private boolean inHatchPosition;
 
     public void run() {
-        if(k.GTH_disableDisk) return;
+        if(k.GTH_DisableHatch) return;
        
         //make sure that if we disable in a movement we don't re-enable and immediately start moving
         if(sense.isDisabled) gatherState = FourBarState.WAIT;
@@ -45,7 +45,7 @@ public class DiskGatherer extends Component{
             break;
 
             case STARTUP:
-            if(movingToBall) out.setGatherArm(-k.GTH_Arm2BallPwr);
+            if(movingToBall) out.setGatherArm(-k.GTH_Arm2CargoPwr);
             else out.setGatherArm(k.GTH_Arm2HatchPwr);
 
             if(Timer.getFPGATimestamp() - startTime > k.GTH_StartUpTime){
@@ -55,11 +55,11 @@ public class DiskGatherer extends Component{
             break;
 
             case WAIT_FOR_STALL:
-            if(movingToBall) out.setGatherArm(-k.GTH_Arm2BallPwr);
+            if(movingToBall) out.setGatherArm(-k.GTH_Arm2CargoPwr);
             else out.setGatherArm(k.GTH_Arm2HatchPwr);
 
             if(movingToBall && out.getGatherArmCurrent() > k.GTH_ArmInCurrent
-                    || Timer.getFPGATimestamp() - startTime > k.GTH_Arm2BallTimer){
+                    || Timer.getFPGATimestamp() - startTime > k.GTH_Arm2CargoTimer){
                 gatherState = FourBarState.WAIT;
                 inBallPosition = true;
                 inHatchPosition = false;

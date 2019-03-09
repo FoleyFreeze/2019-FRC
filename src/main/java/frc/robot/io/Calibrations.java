@@ -13,27 +13,27 @@ public class Calibrations{
     public boolean AD_Disabled = true;
     public boolean CAM_Disabled = false;
     public boolean CLM_disable = false;
-    public boolean DRV_disable = false;
-    public boolean ELE_disable = false;
-    public boolean GTH_disableBall = false;
-    public boolean GTH_disableDisk = false;
+    public boolean DRV_Disable = false;
+    public boolean ELE_Disable = false;
+    public boolean GTH_DisableCargo = false;
+    public boolean GTH_DisableHatch = false;
     public boolean MIL_Disabled = false;
 
     // drive cals
+    public double   DRV_CamDriveMaxPwr = 0.5;
     public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
     public double   DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
+    public double   DRV_OfTargetAngleKP = -0.0;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
-    public double   DRV_SwerveAngRate = 0.06; //was 0.05 - MrC
     public double   DRV_SwerveAngKP = -0.003;
-    public double   DRV_SwerveMaxAnglePwr = 0.5;
+    public double   DRV_SwerveAngRate = 0.06; //was 0.05 - MrC
     public double   DRV_SwerveDrivePwrScale = 0.5; //was 0.25 - MrC
-    public double   DRV_SwerveStrKP = -0.2;//rotation power per degree
+    public double   DRV_SwerveMaxAnglePwr = 0.5;
     public double   DRV_SwerveStrKD = 0;
-    public double   DRV_toTargetAngleKP  = 0.025; //was .05 - MrC
-    public double   DRV_ofTargetAngleKP = -0.0;
-    public double   DRV_targetDistanceKP = -0.2;
-    public double   DRV_CamDriveMaxPwr = 0.5;
+    public double   DRV_SwerveStrKP = -0.2;//rotation power per degree
+    public double   DRV_TargetDistanceKP = -0.2;
+    public double   DRV_ToTargetAngleKP  = 0.025; //was .05 - MrC
     public double   DRV_WaitForParkTime = 15;//seconds
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
@@ -47,19 +47,19 @@ public class Calibrations{
     // gatherer cals
     public double GTH_ArmInCurrent = 5;
     public double GTH_ArmOutCurrent = 5;
-    public double GTH_Arm2BallPwr = 1;
+    public double GTH_Arm2CargoPwr = 1;
     public double GTH_Arm2HatchPwr = 1;
     public double GTH_StartUpTime = 0.1;
-    public double GTH_Arm2BallTimer = 0.5;
+    public double GTH_Arm2CargoTimer = 0.5;
     public double GTH_Arm2HatchTimer = 1.2;
 
     public double GTH_CurrLimit = 14.0;
     public double GTH_CargoIntakeSpeed = 0.5;
     public double GTH_CargoShootSpeedFast = 0.4;
     public double GTH_CargoShootSpeedSlow = 0.4;
-    public double GTH_DiskIntakeSpeed = 0.5;
-    public double GTH_DiskShootSpeedFast = 0.4;
-    public double GTH_DiskShootSpeedSlow = 0.4;
+    public double GTH_HatchIntakeSpeed = 0.5;
+    public double GTH_HatchShootSpeedFast = 0.4;
+    public double GTH_HatchShootSpeedSlow = 0.4;
     public double GTH_HoldSpeed = 0.05;
     public double GTH_ReleaseTime = 1.5;
 

@@ -10,7 +10,7 @@ public class BallGatherer extends Component{
     
     public void run() {
         String gatherStatus;
-        if(k.GTH_disableBall) return;
+        if(k.GTH_DisableCargo) return;
         
         // conditions for gathering
         if(in.ballGather){
@@ -23,12 +23,12 @@ public class BallGatherer extends Component{
             gatherStatus = "Releasing";
         }
         else if(in.diskGather){
-            out.setGatherMotor(-k.GTH_DiskIntakeSpeed, k.GTH_DiskIntakeSpeed);
+            out.setGatherMotor(-k.GTH_HatchIntakeSpeed, k.GTH_HatchIntakeSpeed);
             gatherStatus = "Gathering";
         }
         //  releases ball
         else if(in.releaseDisk){
-            out.setGatherMotor(k.GTH_DiskShootSpeedFast, -k.GTH_DiskShootSpeedSlow);
+            out.setGatherMotor(k.GTH_HatchShootSpeedFast, -k.GTH_HatchShootSpeedSlow);
             gatherStatus = "Releasing";
         }
         else if(sense.hasBall){
