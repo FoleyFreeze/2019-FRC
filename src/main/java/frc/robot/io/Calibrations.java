@@ -79,7 +79,15 @@ public class Calibrations{
     // climb cals
     public double CLM_MotorSpeedUp = 0.3;
     public double CLM_MotorSpeedDn = 0.6;
-    public double CLM_EncoderLimit = 5000;
+    public double CLM_EncoderLimit = 96;
+    public double CLM_Zone_1 = 0;
+    public double CLM_Zone_2 = 0;
+    public double CLM_Zone_3 = 0;
+    public double CLM_Zone_Power_1 = 0.3;
+    public double CLM_Zone_Power_2 = 0.7;
+    public double CLM_Zone_Power_3 = 0.1;
+
+
     
     // input cals
     public double IN_DodgingMin = 0.2;
