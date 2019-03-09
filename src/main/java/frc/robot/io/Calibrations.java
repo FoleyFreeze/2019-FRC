@@ -17,7 +17,7 @@ public class Calibrations{
     public boolean ELE_Disable = false;
     public boolean GTH_DisableCargo = false;
     public boolean GTH_DisableHatch = false;
-    public boolean MIL_Disabled = false;
+    public boolean MIL_Disabled = true;
 
     // drive cals
     
@@ -25,18 +25,18 @@ public class Calibrations{
     public double   DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
-    public double   DRV_SwerveAngKP = -0.003;
+    public double   DRV_SwerveAngKP = -0.002;
     public double   DRV_SwerveAngRate = 0.06; //was 0.05 - MrC
     public double   DRV_SwerveDrivePwrScale = 0.5; //was 0.25 - MrC
     public double   DRV_SwerveMaxAnglePwr = 0.5;
     public double   DRV_SwerveStrKD = 0;
-    public double   DRV_SwerveStrKP = -0.2;//rotation power per degree
+    public double   DRV_SwerveStrKP = -0.0;//rotation power per degree
     public double   DRV_CamDriveMaxPwr = 0.5;
-    public double   DRV_TargetDistanceKP = -0.2; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKP = -0.001; //camera drive kp based on dist
     public double   DRV_TargetDistanceKD = 0;
     public double   DRV_OfTargetAngleKP = 0; //cam drive based on angle OF target
     public double   DRV_OfTargetAngleKD = 0;
-    public double   DRV_ToTargetAngleKP = 0.025; //cam drive based on angle TO target
+    public double   DRV_ToTargetAngleKP = 0.015; //cam drive based on angle TO target
     public double   DRV_ToTargetAngleKD = 0;
     public boolean  DRV_CamDriveUseDynDist = false; //use dynamic distance based on RSE
     public double   DRV_WaitForParkTime = 15;//seconds
@@ -78,7 +78,7 @@ public class Calibrations{
     public double ELE_OffsetHeight = 1.5; 
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            -1,        10,           20,              10,              50,              40,           78,            68,            37,          10
+            -1,        10,           20,              10,              50,              40,           76.5,            68,            37,          10
     };
 
     // climb cals

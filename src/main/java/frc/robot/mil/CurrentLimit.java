@@ -1,6 +1,7 @@
 package frc.robot.mil;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Component;
 import frc.robot.util.Filter;
 
@@ -21,7 +22,14 @@ public class CurrentLimit extends Component{
     }
 
     public void run(){
-        double current = sense.pdp.getCurrent(channel);
+        double current;
+        try{
+         current = sense.pdp.getCurrent(channel);
+        } catch (Error e){
+            System.out.println(e.getMessage());
+            SmartDashboard.putNumber("TimeOfPDPError", Timer.getFPGATimestamp());
+            current = 0;
+        }
         if(current>limitCurr){
             //dont actually filter, but update the value in the in the filter based on Amp-seconds over the limit
             double sumCurrent = filCurr.getVal() + (current-limitCurr)*sense.dt;

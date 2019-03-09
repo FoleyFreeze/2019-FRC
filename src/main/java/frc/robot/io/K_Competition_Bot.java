@@ -18,7 +18,7 @@ public class K_Competition_Bot extends Calibrations{
         }
 
 
-        DRV_SwerveAngKP = -0.01;
-        DRV_SwerveStrKP = -0.02;
+        DRV_SwerveAngKP = -0.005;
+        DRV_SwerveStrKP = -0.01;
     }   
 }

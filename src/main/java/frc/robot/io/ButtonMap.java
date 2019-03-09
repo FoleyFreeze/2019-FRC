@@ -38,7 +38,7 @@ public class ButtonMap {
             xDeadband = 0.05;
             yDeadband = 0.05;
             rotDeadband = 0.05;
-            xyDeadband = 0.05;
+            xyDeadband = 0.07;
             IN_xDriveAxis = 0;
             IN_yDriveAxis = 1;
             IN_rotDriveAxis = 4;

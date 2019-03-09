@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
 
 public class LEDs extends Component{
@@ -35,6 +36,8 @@ public class LEDs extends Component{
         lowerLED_Left.set(true);
         lowerLED_Right.set(true);
         camLED.set(in.camLightsOn);
+
+        SmartDashboard.putBoolean("LEDs", lowerLED_Left.get());
 
         //rising edge of hasThing
         if(!prevStateCargo && sense.hasCargo || !prevStateHatch && sense.hasHatch){

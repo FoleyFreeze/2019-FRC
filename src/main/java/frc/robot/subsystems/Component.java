@@ -27,6 +27,7 @@ public class Component {
     public static Calibrations k;
     public static RSE rse;
     public static ControlBoard cb;
+    public static LEDs leds;
 
     public static void initAll() {
         
@@ -71,6 +72,7 @@ public class Component {
         drive = new DriveTrain(); 
         rse = new RSE();
         cb = new ControlBoard();
+        leds = new LEDs();
 
         switch(Calibrations.BOT_Version){
             case COMPETITION:
@@ -96,6 +98,7 @@ public class Component {
         grabHatch.run();
         drive.run();
         out.run();
+        leds.run();
         SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());
     }
 

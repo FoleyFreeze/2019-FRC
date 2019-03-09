@@ -11,6 +11,11 @@ public class ControlBoard extends Component{
     public int low = 10;
     public int front = 9;
 
+    public int highOut = 5;
+    public int middleOut = 4;
+    public int lowOut = 3;
+    public int frontOut = 2;
+
     public int jogUp = 8;//?????
     public int jogDown = 7;//?????
     
@@ -21,11 +26,16 @@ public class ControlBoard extends Component{
     public int cargoShip = 13;
     public int nearRkt = 14;
 
+    public int farRktOut = 8;
+    public int cargoShipOut = 6;
+    public int nearRktOut = 9;//TODO: check that this is right for comp board
+
     public int lOrR = 5;
 
     public int climb = 6;
     
     public int shift = 3;
+    public int shiftOut = 1;
     public int pitMode = 16;
 
     public int cargoOrHatch = 2;

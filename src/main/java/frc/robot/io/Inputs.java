@@ -132,7 +132,7 @@ public class Inputs extends Component {
 
         SmartDashboard.putString("Dixon Detector", stopDixon);
 
-        cargoNotHatch = controlBoard.getRawButton(cb.cargoOrHatch);
+        cargoNotHatch = !controlBoard.getRawButton(cb.cargoOrHatch);
         leftNotRight = controlBoard.getRawButton(cb.lOrR);
         autoNotManualMode = leftNotRight;
 
@@ -321,40 +321,42 @@ public class Inputs extends Component {
             if (shift) setElevatorHeight();
         }
 
+        controlBoard.setOutput(cb.shiftOut, shift);
+
         switch(rocketCargoState){
             case HI:
-            controlBoard.setOutput(cb.high, false);
-            controlBoard.setOutput(cb.middle, true);
-            controlBoard.setOutput(cb.low, true);
-            controlBoard.setOutput(cb.front, true);
+            controlBoard.setOutput(cb.highOut, true);
+            controlBoard.setOutput(cb.middleOut, false);
+            controlBoard.setOutput(cb.lowOut, false);
+            controlBoard.setOutput(cb.frontOut, false);
             break;
 
             case MID:
-            controlBoard.setOutput(cb.high, true);
-            controlBoard.setOutput(cb.middle, false);
-            controlBoard.setOutput(cb.low, true);
-            controlBoard.setOutput(cb.front, true);
+            controlBoard.setOutput(cb.highOut, false);
+            controlBoard.setOutput(cb.middleOut, true);
+            controlBoard.setOutput(cb.lowOut, false);
+            controlBoard.setOutput(cb.frontOut, false);
             break;
 
             case LO:
-            controlBoard.setOutput(cb.high, true);
-            controlBoard.setOutput(cb.middle, true);
-            controlBoard.setOutput(cb.low, false);
-            controlBoard.setOutput(cb.front, true);
+            controlBoard.setOutput(cb.highOut, false);
+            controlBoard.setOutput(cb.middleOut, false);
+            controlBoard.setOutput(cb.lowOut, true);
+            controlBoard.setOutput(cb.frontOut, false);
             break;
 
             case FRONT:
-            controlBoard.setOutput(cb.high, true);
-            controlBoard.setOutput(cb.middle, true);
-            controlBoard.setOutput(cb.low, true);
-            controlBoard.setOutput(cb.front, false );
+            controlBoard.setOutput(cb.highOut, false);
+            controlBoard.setOutput(cb.middleOut, false);
+            controlBoard.setOutput(cb.lowOut, false);
+            controlBoard.setOutput(cb.frontOut, true);
             break;   
             
             case DEFAULT:
-            controlBoard.setOutput(cb.high, false);
-            controlBoard.setOutput(cb.middle, false);
-            controlBoard.setOutput(cb.low, false);
-            controlBoard.setOutput(cb.front, false);
+            controlBoard.setOutput(cb.highOut, true);
+            controlBoard.setOutput(cb.middleOut, true);
+            controlBoard.setOutput(cb.lowOut, true);
+            controlBoard.setOutput(cb.frontOut, true);
             break;
         }
         
@@ -372,27 +374,27 @@ public class Inputs extends Component {
 
         switch(nearFarCargo){
             case FAR:
-            controlBoard.setOutput(cb.farRkt, true);
-            controlBoard.setOutput(cb.nearRkt, false);
-            controlBoard.setOutput(cb.cargoShip, false);
+            controlBoard.setOutput(cb.farRktOut, true);
+            controlBoard.setOutput(cb.nearRktOut, false);
+            controlBoard.setOutput(cb.cargoShipOut, false);
             break;
 
             case NEAR:
-            controlBoard.setOutput(cb.farRkt, false);
-            controlBoard.setOutput(cb.nearRkt, true);
-            controlBoard.setOutput(cb.cargoShip, false);
+            controlBoard.setOutput(cb.farRktOut, false);
+            controlBoard.setOutput(cb.nearRktOut, true);
+            controlBoard.setOutput(cb.cargoShipOut, false);
             break;
 
             case CARGO:
-            controlBoard.setOutput(cb.farRkt, false);
-            controlBoard.setOutput(cb.nearRkt, false);
-            controlBoard.setOutput(cb.cargoShip, true);
+            controlBoard.setOutput(cb.farRktOut, false);
+            controlBoard.setOutput(cb.nearRktOut, false);
+            controlBoard.setOutput(cb.cargoShipOut, true);
             break;  
 
             case DEFAULT:
-            controlBoard.setOutput(cb.farRkt, true);
-            controlBoard.setOutput(cb.nearRkt, true);
-            controlBoard.setOutput(cb.cargoShip, true);
+            controlBoard.setOutput(cb.farRktOut, true);
+            controlBoard.setOutput(cb.nearRktOut, true);
+            controlBoard.setOutput(cb.cargoShipOut, true);
             break;
         }
 
