@@ -17,7 +17,7 @@ public class CargoGatherer extends Component{
             out.setGatherMotor(k.GTH_CargoIntakeSpeed, -k.GTH_CargoIntakeSpeed);
             gatherStatus = "Gathering";
         }
-        //  releases ball
+        //  releases cargo
         else if(in.releaseCargo){
             out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);
             gatherStatus = "Releasing";
@@ -26,7 +26,7 @@ public class CargoGatherer extends Component{
             out.setGatherMotor(-k.GTH_HatchIntakeSpeed, k.GTH_HatchIntakeSpeed);
             gatherStatus = "Gathering";
         }
-        //  releases ball
+        //  releases hatch
         else if(in.releaseHatch){
             out.setGatherMotor(k.GTH_HatchShootSpeedFast, -k.GTH_HatchShootSpeedSlow);
             gatherStatus = "Releasing";
