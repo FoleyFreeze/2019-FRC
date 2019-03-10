@@ -29,7 +29,7 @@ public class Vision extends Component {
         cargoStack = new LimitedStack<>(5);
         if(!k.CAM_Disabled){
             NetworkTable nt = NetworkTableInstance.getDefault().getTable("Vision");
-            nt.addEntryListener("vis_trgt", (table,key,entry,value,flags) -> {
+            nt.addEntryListener("vis_target", (table,key,entry,value,flags) -> {
                 try{
                     VisionData vd = new VisionData();
                     String data = value.getString(); //seqNum, dist, angleOf, angleTo, etc?
@@ -107,8 +107,7 @@ public class Vision extends Component {
     }
 
     public void run(){
-        piDebugMode.setBoolean(k.CAM_DebugMode);
-        piFindCargo.setBoolean(in.enableCamera && in.actionCargo && !sense.hasCargo);
-        piFindVisionTarget.setBoolean(in.enableCamera && (in.actionHatch || in.actionCargo && sense.hasCargo));
+        piFindCargo.setBoolean((in.enableCamera && in.actionCargo && !sense.hasCargo) || k.CAM_DebugCargo);
+        piFindVisionTarget.setBoolean((in.enableCamera && (in.actionHatch || in.actionCargo && sense.hasCargo)) || k.CAM_DebugTarget);
     }
 }

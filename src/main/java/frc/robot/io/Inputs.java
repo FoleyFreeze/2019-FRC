@@ -147,8 +147,8 @@ public class Inputs extends Component {
         }
         actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-        camLightsOn = false;
-        enableCamera = false;
+        camLightsOn = k.CAM_DebugTarget; //no lights for cargo targeting
+        enableCamera = k.CAM_DebugCargo || k.CAM_DebugTarget;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
