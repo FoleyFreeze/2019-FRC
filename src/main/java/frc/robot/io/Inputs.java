@@ -245,8 +245,15 @@ public class Inputs extends Component {
                 hatchGather = false;
                 releaseHatch = false;
 
-                if(!sense.hasCargo) sense.hasCargo = shift && gather;
-                if(sense.hasCargo && shoot) sense.hasCargo = false; 
+                if(!sense.hasCargo && shift && gather) {
+                    sense.hasCargo = true;
+                    sense.hasHatch = false;
+                } else if(sense.hasCargo && shoot) {
+                    sense.hasCargo = false; 
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gather) {
+                    sense.hasCargo = true;
+                    sense.hasHatch = false;
+                }
 
                 visionCargo = actionCargo && !sense.hasCargo;
                 visionTarget = actionCargo && sense.hasCargo;
@@ -256,8 +263,15 @@ public class Inputs extends Component {
                 hatchGather = gather && !shift;
                 releaseHatch = shoot;
 
-                if(!sense.hasHatch) sense.hasHatch = shift && gather;
-                if(sense.hasHatch && shoot) sense.hasHatch = false;
+                if(!sense.hasHatch && shift && gather) {
+                    sense.hasHatch = true;
+                    sense.hasCargo = false;
+                } else if(sense.hasHatch && shoot) {
+                    sense.hasHatch = false;
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gather) {
+                    sense.hasHatch = true;
+                    sense.hasCargo = false;
+                }
 
                 visionTarget = actionHatch;
             }
@@ -406,69 +420,65 @@ public class Inputs extends Component {
     private AutoGatherStates autoGatherState = AutoGatherStates.DRIVETOGATHER;
     
     public void autoGather(boolean autoGather) {
+        if(autoGather) {
         
-        if(autoGather){
-            enableCamera = true;
-
             switch(autoGatherState){
                 case DRIVETOGATHER:
-                //pathfind
-                //face the robot in the right direction
-                //move elevator to floor/feeder station
-                if (cargoNotHatch){
-                    elevatorTarget = ElevatorPosition.FLOOR;
-                } else {
-                    elevatorTarget = ElevatorPosition.LOADING_STATION;
-                    camLightsOn = true;
-                }
-    
-                //move gather to cargo/hatch position
-                //this is handled in the hatchGather class
+                    //pathfind
+                    //face the robot in the right direction
+                    //move elevator to floor/feeder station
+                    if (cargoNotHatch){
+                        elevatorTarget = ElevatorPosition.FLOOR;
+                    } else {
+                        elevatorTarget = ElevatorPosition.LOADING_STATION;
+                        camLightsOn = true;
+                    }
+                    enableCamera = true;
 
-                //when camera sees target
-                //when operator gather button pressed
-                if(cargoNotHatch && view.goodCargoImage() || !cargoNotHatch && view.goodVisionTarget() || gather){
-                    //next state
-                    autoGatherState = AutoGatherStates.CAMERAGATHER;
-                }
+                    //move gather to cargo/hatch position
+                    //this is handled in the hatchGather class
+
+                    //when camera sees target
+                    //add transition for when auto drive is completed
+                    boolean driveComplete = true;
+                    if(cargoNotHatch && view.goodCargoImage() || !cargoNotHatch && view.goodVisionTarget() || driveComplete){
+                        //next state
+                        autoGatherState = AutoGatherStates.CAMERAGATHER;
+                    }
                 break;
 
                 case CAMERAGATHER:
-                //camera drive, or manual drive if no image
-                visionCargo = cargoNotHatch && view.goodCargoImage();
-                visionTarget =  !cargoNotHatch && view.goodVisionTarget();
-                
-                //set elevator position
-                if (cargoNotHatch){
-                    elevatorTarget = ElevatorPosition.FLOOR;
-                } else {
-                    elevatorTarget = ElevatorPosition.LOADING_STATION;
-                    camLightsOn = true;
-                }
+                    //camera drive, or manual drive if no image
+                    enableCamera = true;
+                    visionCargo = cargoNotHatch && view.goodCargoImage();
+                    visionTarget =  !cargoNotHatch && view.goodVisionTarget();
+                    
+                    //set elevator position
+                    if (cargoNotHatch){
+                        elevatorTarget = ElevatorPosition.FLOOR;
+                    } else {
+                        elevatorTarget = ElevatorPosition.LOADING_STATION;
+                        camLightsOn = true;
+                    }
 
-                //turn on gatherer
-                hatchGather = !cargoNotHatch;
-                cargoGather = cargoNotHatch;
+                    //turn on gatherer
+                    hatchGather = !cargoNotHatch;
+                    cargoGather = cargoNotHatch;
 
-                //when gather current spike
-                if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit){
-                    //set sense.hasThing to true
-                    //next state
-                    sense.hasCargo = cargoNotHatch;
-                    sense.hasHatch = !cargoNotHatch;
-                    autoGatherState = AutoGatherStates.DRIVETOGATHER;
-                    rocketCargoState = RocketCargoshipPosition.DEFAULT;
-                    nearFarCargo = NearFarCargo.DEFAULT;
-                }
-                
+                    //when gather current spike
+                    if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit || shift && gather){
+                        //set sense.hasThing to true
+                        //next state
+                        sense.hasCargo = cargoNotHatch;
+                        sense.hasHatch = !cargoNotHatch;                        
+                        autoGatherState = AutoGatherStates.DRIVETOGATHER;
+                        rocketCargoState = RocketCargoshipPosition.DEFAULT;
+                        nearFarCargo = NearFarCargo.DEFAULT;
+                    }
                 break;
             }
-
-        } else { //reset to first state
-            autoGatherState = AutoGatherStates.DRIVETOGATHER;
         }
-
-    } 
+    }
 
     public enum AutoScoreStates { DRIVETOGOAL, CAMERASCORE, GATHERSHOOT }
     private AutoScoreStates autoScoreState = AutoScoreStates.DRIVETOGOAL;
@@ -482,63 +492,53 @@ public class Inputs extends Component {
 
             switch(autoScoreState){
                 case DRIVETOGOAL:
-                //pathfind
-                //face robot in right direction
-                //move elevator to stage height (but dont go too high, wait at level 2 if target is level 3)
-                setElevatorHeight();
-                elevatorStage = true;
+                    //pathfind
+                    //face robot in right direction
+                    //move elevator to stage height (but dont go too high, wait at level 2 if target is level 3)
+                    setElevatorHeight();
+                    elevatorStage = true;
 
-                //when vision spotted
-                //when shift shoot
-                if(cargoNotHatch && view.goodCargoImage() 
-                        || !cargoNotHatch && view.goodVisionTarget() 
-                        || shift && shoot){
-                    //next state
-                    autoScoreState = AutoScoreStates.CAMERASCORE;
-                }
-                
+                    //when vision spotted
+                    //when drive complete
+                    boolean driveComplete = true;
+                    if(cargoNotHatch && view.goodCargoImage()
+                            || !cargoNotHatch && view.goodVisionTarget()
+                            || driveComplete){
+                        //next state
+                        autoScoreState = AutoScoreStates.CAMERASCORE;
+                    }
                 break;
 
                 case CAMERASCORE:
-                //camera drive or manual drive if no image
-                visionTarget =  view.goodVisionTarget();
+                    //camera drive or manual drive if no image
+                    visionTarget =  view.goodVisionTarget();
 
-                //move elevator to final height
-                setElevatorHeight();
-                
-                //when reached target
-                //when operator shoot button pressed (or when shift released)
-                VisionData vd = view.getLastVisionTarget();
-                if(vd != null && view.goodVisionTarget() && vd.distance < k.CAM_ShootDist || !shift && shoot){
-                    //next state
-                    autoScoreState = AutoScoreStates.GATHERSHOOT;
-                    autoScoreTimer = Timer.getFPGATimestamp();
-                }
-                
-
-                //when shoot released and no image
-                if(!shoot && !view.goodVisionTarget()){
-                    //go back to DRIVETOGOAL state
-                    autoScoreState = AutoScoreStates.DRIVETOGOAL;
-                }
-                
+                    //move elevator to final height
+                    setElevatorHeight();
+                    
+                    //when reached target
+                    //when operator shoot button pressed
+                    VisionData vd = view.getLastVisionTarget();
+                    if(vd != null && view.goodVisionTarget() && vd.distance < k.CAM_ShootDist || shoot){
+                        //next state
+                        autoScoreState = AutoScoreStates.GATHERSHOOT;
+                        autoScoreTimer = Timer.getFPGATimestamp();
+                    }
                 break;
 
                 case GATHERSHOOT:
-
-                //run shoot gather
-                releaseCargo = cargoNotHatch;
-                releaseHatch = !cargoNotHatch;
-                
-                //when TIME_CAL elapses (like 0.5sec or so)
-                if(Timer.getFPGATimestamp() - autoScoreTimer > k.GTH_ReleaseTime){
-                    //turn off gather
-                    //next state
-                    autoScoreState = AutoScoreStates.DRIVETOGOAL;
-                    sense.hasCargo = false;
-                    sense.hasHatch = false;
-                }
-                
+                    //run shoot gather
+                    releaseCargo = cargoNotHatch;
+                    releaseHatch = !cargoNotHatch;
+                    
+                    //when TIME_CAL elapses (like 0.5sec or so)
+                    if(Timer.getFPGATimestamp() - autoScoreTimer > k.GTH_ReleaseTime){
+                        //turn off gather
+                        //next state
+                        autoScoreState = AutoScoreStates.DRIVETOGOAL;
+                        sense.hasCargo = false;
+                        sense.hasHatch = false;
+                    }
                 break;
             }
 
