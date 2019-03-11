@@ -27,7 +27,7 @@ public class Calibrations{
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
     public double   DRV_SwerveAngRate = 0.06; //was 0.05 - MrC
-    public double   DRV_SwerveDrivePwrScale = 0.5; //was 0.25 - MrC
+    public double   DRV_SwerveDrivePwrScale = 0.75; //was 0.25 - MrC
     public double   DRV_SwerveMaxAnglePwr = 0.5;
     public double   DRV_SwerveStrKD = 0;
     public double   DRV_SwerveStrKP = -0.0;//rotation power per degree
