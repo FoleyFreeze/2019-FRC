@@ -1,5 +1,6 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.autodrive;
 
+import frc.robot.subsystems.Component;
 import frc.robot.util.Angle;
 
 public class AutoDrive extends Component{
