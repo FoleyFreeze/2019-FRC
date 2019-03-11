@@ -42,6 +42,8 @@ public class Calibrations{
     public double   DRV_WaitForParkTime = 15;//seconds
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
+    public final double[] DRV_EleHeightAxis = {0,20,78};
+    public final double[] DRV_PowerTable = {1, 1, 0.2};
 
     //sensor cals
     public double SEN_AbsAngleFL;

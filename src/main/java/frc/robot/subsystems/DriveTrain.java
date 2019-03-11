@@ -204,8 +204,9 @@ public class DriveTrain extends Component{
             double anglePower = k.DRV_SwerveAngKP * error;
             outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);
         }
+        double powerFactor = Util.interpolate(k.DRV_EleHeightAxis, k.DRV_PowerTable, sense.elevatorEncoder);
 
-        out.setSwerveDrivePower(outR[0], outR[1], outR[2], outR[3]);
+        out.setSwerveDrivePower(outR[0]*powerFactor, outR[1]*powerFactor, outR[2]*powerFactor, outR[3]*powerFactor);
         out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
         SmartDashboard.putNumberArray("Drive Power", outR);
         SmartDashboard.putNumberArray("Turn Power", outError);
