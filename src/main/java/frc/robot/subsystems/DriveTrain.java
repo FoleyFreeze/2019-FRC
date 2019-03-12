@@ -32,7 +32,7 @@ public class DriveTrain extends Component{
         }
 
         if(in.climb){
-            swerve(0,k.CLM_DrivePower,0);
+            swerve(0,-k.CLM_DrivePower,0);
             return;
         }
 

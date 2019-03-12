@@ -31,7 +31,12 @@ public class HatchGatherer extends Component{
 
         switch(gatherState){
             case WAIT:
-            out.setGatherArm(0);
+            if(in.cargoNotHatch){
+                out.setGatherArm(0);
+            } else {
+                //help keep it closed
+                out.setGatherArm(0.05);
+            }
 
             if(in.cargoNotHatch && !sense.hasHatch && !inBallPosition){
                 movingToBall = true;

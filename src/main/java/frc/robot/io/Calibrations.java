@@ -17,7 +17,7 @@ public class Calibrations{
     public boolean ELE_Disable = false;
     public boolean GTH_DisableCargo = false;
     public boolean GTH_DisableHatch = false;
-    public boolean MIL_Disabled = true;
+    public boolean MIL_Disabled = false;
 
     // drive cals
     
@@ -86,14 +86,14 @@ public class Calibrations{
     // climb cals
     public double CLM_MotorSpeedUp = 0.3;
     public double CLM_MotorSpeedDn = 0.6;
-    public double CLM_EncoderLimit = 96;
-    public double CLM_Zone_1 = 0;
-    public double CLM_Zone_2 = 0;
-    public double CLM_Zone_3 = 0;
-    public double CLM_Zone_Power_1 = 0.3;
-    public double CLM_Zone_Power_2 = 0.7;
-    public double CLM_Zone_Power_3 = 0.1;
-    public double CLM_DrivePower = 0.05; //how fast to drive at the wall after/during the climb
+    public double CLM_EncoderLimit = 65;
+    public double CLM_Zone_1 = 20;
+    public double CLM_Zone_2 = 60;
+    public double CLM_Zone_3 = CLM_EncoderLimit;
+    public double CLM_Zone_Power_1 = 0.60;
+    public double CLM_Zone_Power_2 = 1;
+    public double CLM_Zone_Power_3 = 0.05;
+    public double CLM_DrivePower = 0.3; //how fast to drive at the wall after/during the climb
 
 
     
