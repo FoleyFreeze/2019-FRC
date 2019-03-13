@@ -35,7 +35,7 @@ public class HatchGatherer extends Component{
                 out.setGatherArm(0);
             } else {
                 //help keep it closed
-                out.setGatherArm(0.05);
+                out.setGatherArm(k.GTH_ArmExtraIdlePwr);
             }
 
             if(in.cargoNotHatch && !sense.hasHatch && !inBallPosition){

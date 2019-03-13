@@ -25,7 +25,7 @@ public class OutputsCompBot extends Outputs {
 
     private CANSparkMax gatherMotorL;
     private CANSparkMax gatherMotorR;
-    private TalonSRX gatherArmMotor;
+    private CANSparkMax gatherArmMotor;
 
     private CANSparkMax climbMotor;
 
@@ -116,6 +116,16 @@ public class OutputsCompBot extends Outputs {
             frontRightMotorTurn.setIdleMode(IdleMode.kBrake);
             backLeftMotorTurn.setIdleMode(IdleMode.kBrake);
             backRightMotorTurn.setIdleMode(IdleMode.kBrake);
+
+            frontLeftMotorDrive.setOpenLoopRampRate(k.DRV_MotorDriveRampRate);
+            frontRightMotorDrive.setOpenLoopRampRate(k.DRV_MotorDriveRampRate);
+            backLeftMotorDrive.setOpenLoopRampRate(k.DRV_MotorDriveRampRate);
+            backRightMotorDrive.setOpenLoopRampRate(k.DRV_MotorDriveRampRate);
+
+            frontLeftMotorTurn.setOpenLoopRampRate(k.DRV_MotorTurnRampRate);
+            frontRightMotorTurn.setOpenLoopRampRate(k.DRV_MotorTurnRampRate);
+            backLeftMotorTurn.setOpenLoopRampRate(k.DRV_MotorTurnRampRate);
+            backRightMotorTurn.setOpenLoopRampRate(k.DRV_MotorTurnRampRate);
         }
 
         if(!k.ELE_Disable){
@@ -132,7 +142,7 @@ public class OutputsCompBot extends Outputs {
         }
 
         if(!k.GTH_DisableHatch){
-            gatherArmMotor = new TalonSRX(ElectroJendz.GTH_ArmMotorID);
+            gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushed);
         }
 
         if(!k.CLM_disable){
@@ -178,10 +188,10 @@ public class OutputsCompBot extends Outputs {
 
     //Assign powers to motors
     public void setSwerveDrivePower(double powerLF, double powerRF, double powerLB, double powerRB) {
-        double lf = limit(powerLF*k.DRV_SwerveDrivePwrScale, fLDriveMil);
-        double rf = limit(powerRF*k.DRV_SwerveDrivePwrScale, fRDriveMil);
-        double lb = limit(powerLB*k.DRV_SwerveDrivePwrScale, rLDriveMil);
-        double rb = limit(powerRB*k.DRV_SwerveDrivePwrScale, rRDriveMil);
+        double lf = limit(powerLF*k.DRV_SwerveDrivePwrScale/*, fLDriveMil*/);
+        double rf = limit(powerRF*k.DRV_SwerveDrivePwrScale/*, fRDriveMil*/);
+        double lb = limit(powerLB*k.DRV_SwerveDrivePwrScale/*, rLDriveMil*/);
+        double rb = limit(powerRB*k.DRV_SwerveDrivePwrScale/*, rRDriveMil*/);
         
         SmartDashboard.putNumber("Drive_LF",lf);
         SmartDashboard.putNumber("Drive_RF",rf);
@@ -211,10 +221,10 @@ public class OutputsCompBot extends Outputs {
 
         //attempt to still drive if one encoder is bad
         if(count < 2) {
-            frontLeftMotorTurn.set(limit(turnLF, fLTurnMil));
-            frontRightMotorTurn.set(limit(turnRF, fRTurnMil));    
-            backLeftMotorTurn.set(limit(turnLB, rLTurnMil));
-            backRightMotorTurn.set(limit(turnRB, rRTurnMil));
+            frontLeftMotorTurn.set(limit(turnLF/*, fLTurnMil*/));
+            frontRightMotorTurn.set(limit(turnRF/*, fRTurnMil*/));    
+            backLeftMotorTurn.set(limit(turnLB/*, rLTurnMil*/));
+            backRightMotorTurn.set(limit(turnRB/*, rRTurnMil*/));
         } else {
             frontLeftMotorTurn.set(0);
             frontRightMotorTurn.set(0);
@@ -228,12 +238,13 @@ public class OutputsCompBot extends Outputs {
     }
 
     public void setGatherMotor(double leftSpeed, double rightSpeed) {
-        gatherMotorL.set(limit(leftSpeed, gatherLMil));
-        gatherMotorR.set(limit(rightSpeed, gatherRMil));
+        gatherMotorL.set(limit(leftSpeed/*, gatherLMil*/));
+        gatherMotorR.set(limit(rightSpeed/*, gatherRMil*/));
     }
 
     public void setGatherArm(double armGather) {
-        gatherArmMotor.set(ControlMode.PercentOutput, limit(-armGather, gatherArmMil));
+        //gatherArmMotor.set(ControlMode.PercentOutput, limit(-armGather, gatherArmMil));
+        gatherArmMotor.set(limit(-armGather, gatherArmMil));
     }
 
     @Override

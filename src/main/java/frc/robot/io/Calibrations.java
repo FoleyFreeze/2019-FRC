@@ -27,10 +27,13 @@ public class Calibrations{
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
     public double   DRV_SwerveAngRate = 0.06; //was 0.05 - MrC
-    public double   DRV_SwerveDrivePwrScale = 0.75; //was 0.25 - MrC
+    public double   DRV_SwerveDrivePwrScale = 0.5; 
     public double   DRV_SwerveMaxAnglePwr = 0.5;
+    public double   DRV_MotorTurnRampRate = 0.3; //number of seconds to go from 0 to 1 power
+    public double   DRV_MotorDriveRampRate = 0.3;//number of seconds to go from 0 to 1 power
     public double   DRV_SwerveStrKD = 0;
     public double   DRV_SwerveStrKP = -0.0;//rotation power per degree
+    public double   DRV_DriveStraightDelay = 0.3; //seconds
     public double   DRV_CamDriveMaxPwr = 0.5;
     public double   DRV_TargetDistanceKP = -0.00; //camera drive kp based on dist
     public double   DRV_TargetDistanceKD = 0;
@@ -58,7 +61,8 @@ public class Calibrations{
     public double GTH_Arm2HatchPwr = 1;
     public double GTH_StartUpTime = 0.1;
     public double GTH_Arm2CargoTimer = 0.5;
-    public double GTH_Arm2HatchTimer = 1.2;
+    public double GTH_Arm2HatchTimer = 1.25;
+    public double GTH_ArmExtraIdlePwr = 0.20; //power applied after closing to prevent backdriving
 
     public double GTH_CurrLimit = 14.0;
     public double GTH_CargoIntakeSpeed = 0.5;
@@ -80,7 +84,7 @@ public class Calibrations{
     public double ELE_OffsetHeight = 1.5; 
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            -1,        10,           20,              10,              50,              40,           76.5,            68,            37,          10
+            -1,        11,           20,              11,              50,              40,           76.5,            68,            37,          11
     };
 
     // climb cals

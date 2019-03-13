@@ -97,7 +97,8 @@ public class DriveTrain extends Component{
         swerve(x, y, rotAxis);
     }
 
-    boolean prevDriveStraight = false; 
+    boolean prevDriveStraight = false;
+    double driveStraightTime = 0; 
     Angle drvStrSetPnt = new Angle();
 
     //start timer upon robot startup
@@ -116,12 +117,15 @@ public class DriveTrain extends Component{
         // drive straight when we're not turning
         if(rotAxis == 0){
             if(!prevDriveStraight){
+                driveStraightTime = Timer.getFPGATimestamp() + k.DRV_DriveStraightDelay;
+            } else if(!prevDriveStraight && Timer.getFPGATimestamp() > driveStraightTime){
                 drvStrSetPnt.setDeg(sense.robotAngle);//if first time, set angle to drive at
-            } 
-            double error = drvStrSetPnt.subDeg(sense.robotAngle);             
-
-            rotAxis = error * k.DRV_SwerveStrKP + sense.deltaRobotAngle * k.DRV_SwerveStrKD;
-            prevDriveStraight = true;
+                prevDriveStraight = true;
+            } else {
+                double error = drvStrSetPnt.subDeg(sense.robotAngle);             
+                rotAxis = error * k.DRV_SwerveStrKP + sense.deltaRobotAngle * k.DRV_SwerveStrKD;
+            }
+            
         }else{
             prevDriveStraight = false;
         }
