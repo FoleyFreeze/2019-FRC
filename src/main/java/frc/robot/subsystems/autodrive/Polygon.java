@@ -15,7 +15,12 @@ public class Polygon{
 
         vert = new Point[vertX.length];
         edges = new Point[edgeID.length];
-        neighbors = neighborID;
+        neighbors = new int[neighborID.length];
+
+        //copy over the neighbor array
+        for(int i=0;i<neighborID.length;i++){
+            neighbors[i] = neighborID[i];
+        }
 
         int edgeIdx = 0;
         int nextEdge = edgeID[edgeIdx];
@@ -44,4 +49,17 @@ public class Polygon{
         if(edgePoint != null) edges[0] = edgePoint;
     }
     
+    public boolean containsPoint(double x, double y){
+        int crossCount = 0;
+        Point prevVert = vert[vert.length-1];
+        for(int i=0; i<vert.length; i++){
+            Point currVert = vert[i];
+            if(y >= currVert.y && y <= prevVert.y || y <= currVert.y && y >= prevVert.y){
+                if(currVert.x > x || prevVert.x > x){
+                    
+                }
+            }
+        }
+        return false;
+    }
 }

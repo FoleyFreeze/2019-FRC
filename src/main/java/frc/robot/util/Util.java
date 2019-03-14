@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import frc.robot.subsystems.autodrive.Point;
+
 public class Util{
 
     public static double absMax(double[] data) {
@@ -26,5 +28,10 @@ public class Util{
     
     public static double limit(double value, double limit){
         return Math.max(-limit, Math.min(limit, value));
+    }
+    
+    //calculate the distance between 2 points
+    public static double dist(Point p1, Point p2){
+        return 0;
     }
 }
