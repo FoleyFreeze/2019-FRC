@@ -156,10 +156,12 @@ public class Pathfinder extends Component {
                 break;
             }
         }
+        if(startPolyIdx == -1) return null;
         Polygon startPoly = polygonList[startPolyIdx];
 
         //determine where we want to go (dest polygon)
         int destPolyIdx = getDestPoly();
+        if(destPolyIdx == -1) return null;
         Polygon destPoly = polygonList[destPolyIdx];
 
         //init nodes into priority queue
@@ -169,7 +171,9 @@ public class Pathfinder extends Component {
         //pop the best node
 
         //while the best node is not at the destination polygon
+        int aStarCount = 0;
         while(bestNode.poly.id != destPoly.id){
+            aStarCount++;
             //for each edge in the next polygon
             for(int i=0; i<bestNode.poly.edges.length; i++){
                 Point edge = bestNode.poly.edges[i];
@@ -186,6 +190,8 @@ public class Pathfinder extends Component {
 
             //pop the best node
             bestNode = pq.poll();
+
+            if(aStarCount > 20) return null;
         }
             
         //turn best node into a path

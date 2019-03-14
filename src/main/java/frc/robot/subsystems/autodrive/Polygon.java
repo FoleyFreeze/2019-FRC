@@ -56,10 +56,15 @@ public class Polygon{
             Point currVert = vert[i];
             if(y >= currVert.y && y <= prevVert.y || y <= currVert.y && y >= prevVert.y){
                 if(currVert.x > x || prevVert.x > x){
-                    
+                    double frac = (y - prevVert.y) / (currVert.y - prevVert.y);
+                    double intersectX = frac * (currVert.x - prevVert.x) + prevVert.x;
+                    if(intersectX >= x){
+                        crossCount++;
+                    }
                 }
             }
+            prevVert = currVert;
         }
-        return false;
+        return crossCount % 2 == 1;
     }
 }
