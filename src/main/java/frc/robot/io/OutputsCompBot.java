@@ -244,7 +244,7 @@ public class OutputsCompBot extends Outputs {
 
     public void setGatherArm(double armGather) {
         //gatherArmMotor.set(ControlMode.PercentOutput, limit(-armGather, gatherArmMil));
-        gatherArmMotor.set(limit(-armGather, gatherArmMil));
+        gatherArmMotor.set(limit(armGather, gatherArmMil)); //ES -armGather
     }
 
     @Override

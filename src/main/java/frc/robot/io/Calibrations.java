@@ -27,8 +27,8 @@ public class Calibrations{
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
     public double   DRV_SwerveAngRate = 0.06; //was 0.05 - MrC
-    public double   DRV_SwerveDrivePwrScale = 0.5; 
-    public double   DRV_SwerveMaxAnglePwr = 0.5;
+    public double   DRV_SwerveDrivePwrScale = 0.75; 
+    public double   DRV_SwerveMaxAnglePwr = 0.75;
     public double   DRV_MotorTurnRampRate = 0.3; //number of seconds to go from 0 to 1 power
     public double   DRV_MotorDriveRampRate = 0.3;//number of seconds to go from 0 to 1 power
     public double   DRV_SwerveStrKD = 0;
@@ -55,13 +55,13 @@ public class Calibrations{
     public double SEN_AbsAngleRR;
 
     // gatherer cals
-    public double GTH_ArmInCurrent = 5;
+    public double GTH_ArmInCurrent = 7;
     public double GTH_ArmOutCurrent = 5;
     public double GTH_Arm2CargoPwr = 1;
     public double GTH_Arm2HatchPwr = 1;
-    public double GTH_StartUpTime = 0.1;
+    public double GTH_StartUpTime = 0.2;
     public double GTH_Arm2CargoTimer = 0.5;
-    public double GTH_Arm2HatchTimer = 1.25;
+    public double GTH_Arm2HatchTimer = 1.75;
     public double GTH_ArmExtraIdlePwr = 0.20; //power applied after closing to prevent backdriving
 
     public double GTH_CurrLimit = 14.0;
@@ -77,7 +77,7 @@ public class Calibrations{
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
-    public double ELE_PIDLimitUp = 0.75;
+    public double ELE_PIDLimitUp = 0.9;
     public double ELE_PIDLimitDown = 0.5;
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
