@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import frc.robot.subsystems.autodrive.Point;
+
 public class Util{
 
     public static double absMax(double[] data) {
@@ -22,5 +24,10 @@ public class Util{
         }
         double frac = (value - axis[i-1])/(axis[i]-axis[i-1]);
         return frac*(table[i] - table[i-1]) + table[i-1];
+    }
+
+    //calculate the distance between 2 points
+    public static double dist(Point p1, Point p2){
+        return 0;
     }
 }
