@@ -27,8 +27,8 @@ public class Calibrations{
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
     public double   DRV_SwerveAngRate = 0.06; //was 0.05 - MrC
-    public double   DRV_SwerveDrivePwrScale = 0.75; 
-    public double   DRV_SwerveMaxAnglePwr = 0.75;
+    public double   DRV_SwerveDrivePwrScale = 0.85; 
+    public double   DRV_SwerveMaxAnglePwr = 0.60;
     public double   DRV_MotorTurnRampRate = 0.3; //number of seconds to go from 0 to 1 power
     public double   DRV_MotorDriveRampRate = 0.3;//number of seconds to go from 0 to 1 power
     public double   DRV_SwerveStrKD = 0;
@@ -42,7 +42,7 @@ public class Calibrations{
     public double   DRV_ToTargetAngleKP = 0.01; //cam drive based on angle TO target
     public double   DRV_ToTargetAngleKD = 0;
     public boolean  DRV_CamDriveUseDynDist = false; //use dynamic distance based on RSE
-    public double   DRV_WaitForParkTime = 15;//seconds
+    public double   DRV_WaitForParkTime = 2;//seconds
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
     public final double[] DRV_EleHeightAxis = {0,20,78};
@@ -112,7 +112,7 @@ public class Calibrations{
     //mils
     public int MIL_livepi = 0;
     public int MIL_trackpi = 0;
-    public double MIL_CurrResetTime = 30;
+    public double MIL_CurrResetTime = 5;//seconds to set pit mode when limit exceeded
     public double MIL_CurrFilt = 1; //time constant of 1/val
     public boolean MIL_CLDisabled = false;
 

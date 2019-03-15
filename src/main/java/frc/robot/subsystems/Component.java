@@ -11,6 +11,7 @@ import frc.robot.io.K_Swerve_Bot;
 import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
 import frc.robot.io.OutputsSwerveBot;
+import frc.robot.io.Calibrations.RobotType;
 import frc.robot.subsystems.vision.Vision;
 
 public class Component {
@@ -43,7 +44,9 @@ public class Component {
             Calibrations.BOT_Version = Calibrations.RobotType.PRACTICE;
         } else {
             System.out.println("Error: The Robot Selection Jumper is Missing!");
-            System.exit(-1);
+            System.out.println("Defaulting to COMP_BOT!");
+            Calibrations.BOT_Version = RobotType.COMPETITION;
+            //System.exit(-1);
         }
         id1.close();
         id2.close(); 
