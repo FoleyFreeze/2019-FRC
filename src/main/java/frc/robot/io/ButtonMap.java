@@ -19,6 +19,8 @@ public class ButtonMap {
     public int IN_xDriveAxis;
     public int IN_yDriveAxis;
     public int IN_rotDriveAxis;
+    public int IN_dodgingL = 2;
+    public int IN_dodgingR = 3;
 
     public void set(){
         Joystick joy = new Joystick(ElectroJendz.GAMEPAD);
@@ -42,6 +44,8 @@ public class ButtonMap {
             IN_xDriveAxis = 0;
             IN_yDriveAxis = 1;
             IN_rotDriveAxis = 4;
+            IN_dodgingL = 2;
+            IN_dodgingR = 3;
         }else{
             resetGyro = 1;
             compassDrive = 5;
@@ -56,6 +60,8 @@ public class ButtonMap {
             IN_xDriveAxis = 0;
             IN_yDriveAxis = 1;
             IN_rotDriveAxis = 4;
+            IN_dodgingL = 2;
+            IN_dodgingR = 3;
         }
     }
 

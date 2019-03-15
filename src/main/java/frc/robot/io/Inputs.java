@@ -146,8 +146,10 @@ public class Inputs extends Component {
             //dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
             //visionCargo = gamePad.getRawButton(4);
         }
-        actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
-        actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+        //actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
+        //actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+        actionCargo = gamePad.getRawAxis(bm.IN_dodgingL) > k.IN_DodgingMin;
+        actionHatch = gamePad.getRawAxis(bm.IN_dodgingR) > k.IN_DodgingMin;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
@@ -459,7 +461,7 @@ public class Inputs extends Component {
                     //camera drive, or manual drive if no image
                     enableCamera = true;
                     visionCargo = cargoNotHatch && view.goodCargoImage();
-                    visionTarget =  !cargoNotHatch && view.goodVisionTargetHigh();
+                    visionTargetHigh =  !cargoNotHatch && view.goodVisionTargetHigh();
                     
                     //set elevator position
                     if (cargoNotHatch){
@@ -519,7 +521,7 @@ public class Inputs extends Component {
 
                 case CAMERASCORE:
                     //camera drive or manual drive if no image
-                    visionTarget =  view.goodVisionTargetHigh();
+                    visionTargetHigh =  view.goodVisionTargetHigh();
 
                     //move elevator to final height
                     setElevatorHeight();
