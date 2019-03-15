@@ -227,7 +227,7 @@ public class DriveTrain extends Component{
         double X;
 
         if(in.visionTargetHigh || in.visionTargetLow) {
-            X = vd.angleOf * k.DRV_OfTargetAngleKP;
+            X = vd.angleTo * k.DRV_ToTargetAngleKP;// * (vd.distance / 48 +.5);
         } else {
             X = 0;
         }
@@ -238,18 +238,23 @@ public class DriveTrain extends Component{
             double diffY = vd.targetY - rse.y;
             dist = Math.sqrt(diffX*diffX + diffY*diffY);
         } else {
-            dist = vd.distance;
+            dist = vd.distance+3;
         }
         double deltaDist = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy);
         double Y = dist * k.DRV_TargetDistanceKP + Math.abs(deltaDist) * k.DRV_TargetDistanceKD;
 
-        double R = (-vd.angleTo - deltaAngle) * k.DRV_ToTargetAngleKP + sense.deltaRobotAngle * k.DRV_ToTargetAngleKD;
+        double R = (-vd.angleOf - deltaAngle*0)*k.DRV_OfTargetAngleKP - sense.deltaRobotAngle * k.DRV_OfTargetAngleKD;//(-vd.angleTo - deltaAngle) * k.DRV_ToTargetAngleKP + sense.deltaRobotAngle * k.DRV_ToTargetAngleKD;
+        
+        
 
         SmartDashboard.putNumber("vdDist", vd.distance);
-        SmartDashboard.putNumber("vdAng", vd.angleTo);
+        SmartDashboard.putNumber("vdAngto", vd.angleTo);
+        SmartDashboard.putNumber("vdAngof", vd.angleOf);
         SmartDashboard.putNumber("CamDrvX", X);
         SmartDashboard.putNumber("CamDrvY", Y);
         SmartDashboard.putNumber("CamDrvR", R);
+
+        X += 0.5*R;
 
         X = Math.min(Math.max(X,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
         Y = Math.min(Math.max(Y,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
@@ -260,9 +265,9 @@ public class DriveTrain extends Component{
         //if(Math.abs(R) > 0.1) {
         //    Y = Math.max(Math.min(.1,Y),-.1);
         //}
-        double norm = (k.DRV_CamDriveMaxPwr-Math.abs(R)) / k.DRV_CamDriveMaxPwr;
-        Y *= norm;
-        X *= norm;
+        //double norm = (k.DRV_CamDriveMaxPwr-Math.abs(X)) / k.DRV_CamDriveMaxPwr;
+        Y *= (1-X);
+        //X *= norm;
 
         swerve(X, Y, R, k.CAM_Location_X, k.CAM_Location_Y);
     }
