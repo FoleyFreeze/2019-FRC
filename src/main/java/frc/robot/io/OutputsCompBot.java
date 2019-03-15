@@ -163,7 +163,7 @@ public class OutputsCompBot extends Outputs {
             sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();//value in inches
         }
         if(!k.ELE_Disable){
-            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition();//value in inches
+            sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition() + k.SEN_ElevatorEncOffset;//value in inches
         }
         if(!k.CLM_disable){
             sense.climberEncoder = climbMotor.getEncoder().getPosition();//value in motor rotations

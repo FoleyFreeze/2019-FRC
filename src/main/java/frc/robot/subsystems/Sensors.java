@@ -75,7 +75,7 @@ public class Sensors extends Component {
 
         estNavxPosition();
 
-        robotAngle.setDeg(-navx.getYaw() + k.NAVX_Offset); 
+        robotAngle.setDeg(-navx.getYaw() + k.SEN_NAVX_Offset); 
         deltaRobotAngle = robotAngle.subDeg(prevRobotAngle);
         prevRobotAngle = robotAngle.getDeg();
         SmartDashboard.putNumber("Angle of Robot", robotAngle.getDeg());

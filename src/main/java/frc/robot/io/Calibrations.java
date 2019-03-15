@@ -7,7 +7,7 @@ public class Calibrations{
     }
     public static RobotType BOT_Version = RobotType.PRACTICE;
 
-    public double NAVX_Offset;
+    
 
     // disable cals
     public boolean AD_Disabled = true;
@@ -53,6 +53,8 @@ public class Calibrations{
     public double SEN_AbsAngleFR; 
     public double SEN_AbsAngleRL;
     public double SEN_AbsAngleRR;
+    public double SEN_NAVX_Offset = 0;
+    public double SEN_ElevatorEncOffset = 0;
 
     // gatherer cals
     public double GTH_ArmInCurrent = 7;
