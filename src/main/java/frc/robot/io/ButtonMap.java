@@ -53,10 +53,10 @@ public class ButtonMap {
             flipOrientation = -0;
             pitMode = -0;
             hatchGather = -0;
-            xDeadband = 0.05;
-            yDeadband = 0.05;
-            rotDeadband = 0.1;
-            xyDeadband = 0.1;
+            xDeadband = 0.15;
+            yDeadband = 0.15;
+            rotDeadband = 0.15;
+            xyDeadband = 0.2;
             IN_xDriveAxis = 0;
             IN_yDriveAxis = 1;
             IN_rotDriveAxis = 4;

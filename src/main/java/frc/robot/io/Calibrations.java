@@ -35,12 +35,12 @@ public class Calibrations{
     public double   DRV_SwerveStrKP = -0.0;//rotation power per degree
     public double   DRV_DriveStraightDelay = 0.3; //seconds
     public double   DRV_CamDriveMaxPwr = 0.5;
-    public double   DRV_TargetDistanceKP = -0.00; //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0;
-    public double   DRV_OfTargetAngleKP = 0; //cam drive based on angle OF target
+    public double   DRV_TargetDistanceKP = -0.012; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0.15;
+    public double   DRV_OfTargetAngleKP = 0.04; //cam drive based on angle OF target
     public double   DRV_OfTargetAngleKD = 0;
-    public double   DRV_ToTargetAngleKP = 0.01; //cam drive based on angle TO target
-    public double   DRV_ToTargetAngleKD = 0;
+    public double   DRV_ToTargetAngleKP = -0.0125; //cam drive based on angle TO target
+    public double   DRV_ToTargetAngleKD = 0.0; //power per deg per 0.02ms
     public boolean  DRV_CamDriveUseDynDist = false; //use dynamic distance based on RSE
     public double   DRV_WaitForParkTime = 2;//seconds
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};

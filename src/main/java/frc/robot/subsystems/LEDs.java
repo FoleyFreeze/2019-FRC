@@ -22,13 +22,13 @@ public class LEDs extends Component{
         camLED = new Solenoid(ElectroJendz.camLED);
     }
 
-    private double BLINK_TIME_ON = 0.20;
+    private double BLINK_TIME_ON = 0.10;
     private double BLINK_TIME_OFF = 0.05;
     private int BLINK_COUNT = 5;
 
     int blinkCount = BLINK_COUNT;
     double blinkTimer;
-    boolean blinkState;
+    boolean blinkState = true;
     boolean prevStateCargo;
     boolean prevStateHatch;
 

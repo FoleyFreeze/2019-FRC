@@ -111,7 +111,9 @@ public class Inputs extends Component {
             yAxisDrive = 0;
         }
         if(Math.abs(rotAxisDrive) < bm.rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
-
+        xAxisDrive = Math.signum(xAxisDrive) * (Math.abs(xAxisDrive) - bm.xDeadband / (1-bm.xDeadband));
+        yAxisDrive = Math.signum(yAxisDrive) * (Math.abs(yAxisDrive) - bm.yDeadband / (1-bm.yDeadband));
+        rotAxisDrive = Math.signum(rotAxisDrive) * (Math.abs(rotAxisDrive) - bm.rotDeadband / (1-bm.rotDeadband));
 
         String stopDixon;//for joy of programming
         boolean dixon;//for joy of programming

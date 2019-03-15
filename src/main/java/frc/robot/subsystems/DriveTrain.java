@@ -236,14 +236,14 @@ public class DriveTrain extends Component{
         if(k.DRV_CamDriveUseDynDist){
             double diffX = vd.targetX - rse.x;
             double diffY = vd.targetY - rse.y;
-            dist = Math.sqrt(diffX*diffX + diffY*diffY) * k.DRV_TargetDistanceKP;
+            dist = Math.sqrt(diffX*diffX + diffY*diffY);
         } else {
-            dist = vd.distance * k.DRV_TargetDistanceKP;
+            dist = vd.distance;
         }
         double deltaDist = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy);
         double Y = dist * k.DRV_TargetDistanceKP + Math.abs(deltaDist) * k.DRV_TargetDistanceKD;
 
-        double R = (vd.angleTo + deltaAngle) * k.DRV_ToTargetAngleKP + sense.deltaRobotAngle * k.DRV_ToTargetAngleKD;
+        double R = (-vd.angleTo - deltaAngle) * k.DRV_ToTargetAngleKP + sense.deltaRobotAngle * k.DRV_ToTargetAngleKD;
 
         SmartDashboard.putNumber("vdDist", vd.distance);
         SmartDashboard.putNumber("vdAng", vd.angleTo);
@@ -260,7 +260,7 @@ public class DriveTrain extends Component{
         //if(Math.abs(R) > 0.1) {
         //    Y = Math.max(Math.min(.1,Y),-.1);
         //}
-        double norm = (k.DRV_CamDriveMaxPwr-R) / k.DRV_CamDriveMaxPwr;
+        double norm = (k.DRV_CamDriveMaxPwr-Math.abs(R)) / k.DRV_CamDriveMaxPwr;
         Y *= norm;
         X *= norm;
 
