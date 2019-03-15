@@ -17,12 +17,18 @@ public class DriveTrain extends Component{
     public void run() {
         if(k.DRV_Disable) return;
         
-        if(in.visionTarget) {
-            VisionData vd = view.getLastVisionTarget();
+        if(in.visionTargetHigh) {
+            VisionData vd = view.getLastVisionTargetHigh();
             if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
                 cameraDrive(vd);
                 return;
             } 
+        } else if(in.visionTargetLow){
+            VisionData vd = view.getLastVisionTargetLow();
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
+                cameraDrive(vd);
+                return;
+            }
         } else if(in.visionCargo) {
             VisionData vd = view.getLastCargo();
             if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
@@ -220,8 +226,8 @@ public class DriveTrain extends Component{
         double deltaAngle = sense.robotAngle.subDeg(vd.robotAngle);
         double X;
 
-        if(in.visionTarget) {
-            X = (vd.angleOf - 90 - deltaAngle) * k.DRV_OfTargetAngleKP;
+        if(in.visionTargetHigh || in.visionTargetLow) {
+            X = vd.angleOf * k.DRV_OfTargetAngleKP;
         } else {
             X = 0;
         }
@@ -254,7 +260,9 @@ public class DriveTrain extends Component{
         //if(Math.abs(R) > 0.1) {
         //    Y = Math.max(Math.min(.1,Y),-.1);
         //}
-        Y *= (k.DRV_CamDriveMaxPwr-R) / k.DRV_CamDriveMaxPwr;
+        double norm = (k.DRV_CamDriveMaxPwr-R) / k.DRV_CamDriveMaxPwr;
+        Y *= norm;
+        X *= norm;
 
         swerve(X, Y, R, k.CAM_Location_X, k.CAM_Location_Y);
     }

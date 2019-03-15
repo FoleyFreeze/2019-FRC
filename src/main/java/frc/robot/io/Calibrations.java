@@ -126,7 +126,8 @@ public class Calibrations{
     public double CAM_Location_Y = 0;
     public double CAM_ShootDist = 3;//inches
     public boolean CAM_DebugCargo = false;
-    public boolean CAM_DebugTarget = true;
+    public boolean CAM_DebugTargetHigh = false;
+    public boolean CAM_DebugTargetLow = false;
     
     public Calibrations(){
         

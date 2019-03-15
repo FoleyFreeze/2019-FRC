@@ -33,8 +33,8 @@ public class LEDs extends Component{
     boolean prevStateHatch;
 
     public void run(){
-        lowerLED_Left.set(true);
-        lowerLED_Right.set(true);
+        //lowerLED_Left.set(true);
+        //lowerLED_Right.set(true);
         camLED.set(in.camLightsOn);
 
         SmartDashboard.putBoolean("LEDs", lowerLED_Left.get());
@@ -44,6 +44,11 @@ public class LEDs extends Component{
             blinkCount = 0;
             blinkTimer = Timer.getFPGATimestamp();
         } 
+
+        //camera sees a thing
+        if(view.goodCargoImage() || view.goodVisionTargetHigh() || view.goodVisionTargetLow()){
+            blinkCount = 0;
+        }
 
         if(blinkCount < BLINK_COUNT){
             if(blinkState && Timer.getFPGATimestamp() - blinkTimer > BLINK_TIME_ON) {
@@ -56,11 +61,16 @@ public class LEDs extends Component{
             }
         }
 
+        boolean notGathered = !sense.hasCargo && !sense.hasHatch;
         //gearFlake_R.set(sense.hasCargo);
         //gearFlake_G.set(sense.hasHatch);
         gearFlake_R.set(sense.hasCargo && blinkState);
         gearFlake_G.set(sense.hasHatch && blinkState);
-        gearFlake_B.set(!sense.hasCargo && !sense.hasHatch);
+        gearFlake_B.set(notGathered && blinkState);
+        //lowerLED_Left.set(blinkState || notGathered);
+        //lowerLED_Right.set(blinkState || notGathered);
+        lowerLED_Left.set(blinkState);
+        lowerLED_Right.set(blinkState);
 
         prevStateCargo = sense.hasCargo;
         prevStateHatch = sense.hasHatch;

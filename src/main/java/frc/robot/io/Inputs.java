@@ -53,7 +53,8 @@ public class Inputs extends Component {
     public boolean fourBarOut;
 
     public boolean visionCargo;
-    public boolean visionTarget;
+    public boolean visionTargetHigh;
+    public boolean visionTargetLow;
 
     public boolean actionCargo;
     public boolean actionHatch;
@@ -147,8 +148,6 @@ public class Inputs extends Component {
         }
         actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-        camLightsOn = k.CAM_DebugTarget; //no lights for cargo targeting
-        enableCamera = k.CAM_DebugCargo || k.CAM_DebugTarget;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.getRawButton(cb.pitMode);
@@ -168,7 +167,8 @@ public class Inputs extends Component {
         hatchGather = false;
         cargoGather = false;
         elevatorStage = false;
-        visionTarget = false;
+        visionTargetHigh = false;
+        visionTargetLow = false;
         visionCargo = false;
 
         /*
@@ -236,7 +236,7 @@ public class Inputs extends Component {
             SmartDashboard.putString("AutoScoreState",autoScoreState.name());
 
             SmartDashboard.putBoolean("GoodCargoVision",view.goodCargoImage());
-            SmartDashboard.putBoolean("GoodVisionTarget",view.goodVisionTarget());
+            SmartDashboard.putBoolean("GoodVisionTarget",view.goodVisionTargetHigh());
         } else {
             //manual mode
             if (cargoNotHatch){
@@ -256,7 +256,7 @@ public class Inputs extends Component {
                 }
 
                 visionCargo = actionCargo && !sense.hasCargo;
-                visionTarget = actionCargo && sense.hasCargo;
+                visionTargetHigh = actionCargo && sense.hasCargo;
             } else {
                 cargoGather = false;
                 releaseCargo = false;
@@ -273,10 +273,18 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 }
 
-                visionTarget = actionHatch;
+                visionTargetLow = actionHatch;
             }
             setElevatorHeight();
         }
+
+        boolean searchingCargo = !sense.isDisabled && cargoNotHatch && !sense.hasCargo;
+        boolean scoringCargo = !sense.isDisabled && cargoNotHatch && sense.hasCargo;
+        boolean searchingHatch = !sense.isDisabled && !cargoNotHatch;
+        boolean targetAnything = searchingCargo || scoringCargo || searchingHatch; 
+        enableCamera = targetAnything || k.CAM_DebugCargo || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow;
+        camLightsOn = scoringCargo || searchingHatch || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow; //no lights for cargo targeting
+        
     }
 
     public void compassDrive(){
@@ -441,7 +449,7 @@ public class Inputs extends Component {
                     //when camera sees target
                     //add transition for when auto drive is completed
                     boolean driveComplete = true;
-                    if(cargoNotHatch && view.goodCargoImage() || !cargoNotHatch && view.goodVisionTarget() || driveComplete){
+                    if(cargoNotHatch && view.goodCargoImage() || !cargoNotHatch && view.goodVisionTargetHigh() || driveComplete){
                         //next state
                         autoGatherState = AutoGatherStates.CAMERAGATHER;
                     }
@@ -451,7 +459,7 @@ public class Inputs extends Component {
                     //camera drive, or manual drive if no image
                     enableCamera = true;
                     visionCargo = cargoNotHatch && view.goodCargoImage();
-                    visionTarget =  !cargoNotHatch && view.goodVisionTarget();
+                    visionTarget =  !cargoNotHatch && view.goodVisionTargetHigh();
                     
                     //set elevator position
                     if (cargoNotHatch){
@@ -502,7 +510,7 @@ public class Inputs extends Component {
                     //when drive complete
                     boolean driveComplete = true;
                     if(cargoNotHatch && view.goodCargoImage()
-                            || !cargoNotHatch && view.goodVisionTarget()
+                            || !cargoNotHatch && view.goodVisionTargetHigh()
                             || driveComplete){
                         //next state
                         autoScoreState = AutoScoreStates.CAMERASCORE;
@@ -511,15 +519,15 @@ public class Inputs extends Component {
 
                 case CAMERASCORE:
                     //camera drive or manual drive if no image
-                    visionTarget =  view.goodVisionTarget();
+                    visionTarget =  view.goodVisionTargetHigh();
 
                     //move elevator to final height
                     setElevatorHeight();
                     
                     //when reached target
                     //when operator shoot button pressed
-                    VisionData vd = view.getLastVisionTarget();
-                    if(vd != null && view.goodVisionTarget() && vd.distance < k.CAM_ShootDist || shoot){
+                    VisionData vd = view.getLastVisionTargetHigh();
+                    if(vd != null && view.goodVisionTargetHigh() && vd.distance < k.CAM_ShootDist || shoot){
                         //next state
                         autoScoreState = AutoScoreStates.GATHERSHOOT;
                         autoScoreTimer = Timer.getFPGATimestamp();
