@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.lang.model.util.ElementScanner6;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CargoGatherer extends Component{
@@ -19,7 +21,12 @@ public class CargoGatherer extends Component{
         }
         //  releases cargo
         else if(in.releaseCargo){
-            out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);
+                if (in.shift) {
+                    out.setGatherMotor(-k.GTH_CargoShootSpeedFast/2, k.GTH_CargoShootSpeedSlow/2);
+                } else {
+                    out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);
+                }
+
             gatherStatus = "Releasing";
         }
         else if(in.hatchGather){
@@ -33,11 +40,11 @@ public class CargoGatherer extends Component{
         }
         else if(sense.hasCargo){
             gatherStatus = "Hold";
-            out.setGatherMotor(k.GTH_HoldSpeed, -k.GTH_HoldSpeed);
+            out.setGatherMotor(k.GTH_CargoHoldSpeed, -k.GTH_CargoHoldSpeed);
         }
         else if(sense.hasHatch){
             gatherStatus = "Hold";
-            out.setGatherMotor(-k.GTH_HoldSpeed, k.GTH_HoldSpeed);
+            out.setGatherMotor(-k.GTH_HatchHoldSpeed, k.GTH_HatchHoldSpeed);
         }
         // stop moving
         else {

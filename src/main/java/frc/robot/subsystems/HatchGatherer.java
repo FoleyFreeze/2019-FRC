@@ -63,12 +63,12 @@ public class HatchGatherer extends Component{
             if(movingToBall) out.setGatherArm(-k.GTH_Arm2CargoPwr);
             else out.setGatherArm(k.GTH_Arm2HatchPwr);
 
-            if(movingToBall && out.getGatherArmCurrent() > k.GTH_ArmInCurrent
+            if(movingToBall && out.getGatherArmCurrent() > k.GTH_ArmOutCurrent
                     || Timer.getFPGATimestamp() - startTime > k.GTH_Arm2CargoTimer){
                 gatherState = FourBarState.WAIT;
                 inBallPosition = true;
                 inHatchPosition = false;
-            }else if(!movingToBall && out.getGatherArmCurrent() > k.GTH_ArmOutCurrent
+            }else if(!movingToBall && out.getGatherArmCurrent() > k.GTH_ArmInCurrent
                     || Timer.getFPGATimestamp() - startTime > k.GTH_Arm2HatchTimer){
                 gatherState = FourBarState.WAIT;
                 inBallPosition = false;

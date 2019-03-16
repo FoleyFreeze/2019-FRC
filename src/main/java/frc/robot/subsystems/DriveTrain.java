@@ -173,6 +173,7 @@ public class DriveTrain extends Component{
         }
          
         //park if not moving
+        if(in.fallingEdgeClimb) startTime = 0; //goto park immediately after climb
         double elapsedTime = Timer.getFPGATimestamp() - startTime; 
         if(maxPwr < 0.02 && elapsedTime > k.DRV_WaitForParkTime) {
         

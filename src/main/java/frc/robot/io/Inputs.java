@@ -32,6 +32,8 @@ public class Inputs extends Component {
     public boolean releaseHatch; 
 
     public boolean climb;
+    private boolean prevClimb;
+    public boolean fallingEdgeClimb;
     public boolean reverseClimb;
 
     public boolean manualElevatorUp;
@@ -45,6 +47,7 @@ public class Inputs extends Component {
     public boolean pitMode;
     public boolean shoot;
     public boolean gather;
+    private double gatherTimer; 
 
     public boolean leftNotRight;
     public boolean autoNotManualMode;
@@ -157,7 +160,8 @@ public class Inputs extends Component {
         pitMode = !controlBoard.getRawButton(cb.pitMode);
         shift = controlBoard.getRawButton(cb.shift);
         shoot = controlBoard.getRawButton(cb.shoot);
-        gather = controlBoard.getRawButton(cb.gather);
+        if(sense.isDisabled) gatherTimer = Timer.getFPGATimestamp() + k.GTH_StartTimer;
+        gather = controlBoard.getRawButton(cb.gather) && Timer.getFPGATimestamp() > gatherTimer;
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         parseControlBoard();
@@ -203,6 +207,9 @@ public class Inputs extends Component {
             boolean temp = controlBoard.getRawButton(cb.climb);
             climb = temp && !shift;
             reverseClimb = (temp && shift);
+            if(climb) cargoNotHatch = false;
+            fallingEdgeClimb = prevClimb && !climb;
+            prevClimb = climb;
         }
 
         if(sense.isDisabled) {
@@ -562,6 +569,13 @@ public class Inputs extends Component {
 
     //set elevator position based on control board state
     public void setElevatorHeight(){
+        if(climb) {
+            //elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+            //return;
+            rocketCargoState = RocketCargoshipPosition.LO;
+            nearFarCargo = NearFarCargo.NEAR;
+        }
+
         switch(nearFarCargo){
             case NEAR:
             case FAR:
@@ -599,18 +613,34 @@ public class Inputs extends Component {
                         if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.FLOOR;
                         } else {
-                            elevatorTarget = ElevatorPosition.LOADING_STATION;
+                            //elevatorTarget = ElevatorPosition.LOADING_STATION;
+                            elevatorTarget = ElevatorPosition.FLOOR;
                         }
                     break;
                 }
             break;
 
             case CARGO:
-                if(cargoNotHatch){
-                    elevatorTarget = ElevatorPosition.SHIP_CARGO;
-                } else {
-                    elevatorTarget = ElevatorPosition.SHIP_HATCH;
+                switch(rocketCargoState){
+                    case HI:
+                    case MID:
+                    case LO:
+                        if(cargoNotHatch){
+                            elevatorTarget = ElevatorPosition.SHIP_CARGO;
+                        } else {
+                            elevatorTarget = ElevatorPosition.SHIP_HATCH;
+                        }
+                        break;
+
+                    case FRONT:
+                        elevatorTarget = ElevatorPosition.FLOOR;
+                        break;
+
+                    case DEFAULT:
+                        elevatorTarget = ElevatorPosition.DONT_MOVE;
+                        break;
                 }
+                
             break;
 
             case DEFAULT:
