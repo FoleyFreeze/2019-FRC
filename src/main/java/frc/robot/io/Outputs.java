@@ -1,6 +1,5 @@
 package frc.robot.io;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.mil.CurrentLimit;
 import frc.robot.subsystems.Component;
 

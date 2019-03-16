@@ -1,6 +1,5 @@
 package frc.robot.io;
 
-import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystems.Component;
 
 public class ControlBoard extends Component{
