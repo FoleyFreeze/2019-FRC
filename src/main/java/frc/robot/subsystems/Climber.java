@@ -10,9 +10,6 @@ public class Climber extends Component{
     public void run(){
         String climb;
         if(k.CLM_disable) return;
-        
-        double pwr = (in.gamePad.getRawAxis(6) + 1) /2;
-        SmartDashboard.putNumber("Climb Power", pwr);
 
         if(in.climb){
             if(sense.climberEncoder > k.CLM_EncoderLimit){
@@ -38,7 +35,7 @@ public class Climber extends Component{
             climb = "Climbing";
         }
         else if(in.reverseClimb){
-            out.climbMotor(-pwr);
+            out.climbMotor(-k.CLM_MotorSpeedDn);
             climb = "Climbing in Reverse";
         }
         else {

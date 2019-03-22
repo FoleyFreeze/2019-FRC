@@ -42,6 +42,14 @@ public class DriveTrain extends Component{
             return;
         }
 
+        if(in.autoOrientRobot && Math.abs(in.robotOrientation) < 360){
+            //PID rotation until robot angle equals robotOrientation
+            double angleErr = sense.robotAngle.subDeg(in.robotOrientation);
+            double rotPower = angleErr * k.DRV_AutoRotateKP;
+            rotPower = Math.max(k.DRV_AutoRotatePwr, Math.min(-k.DRV_AutoRotatePwr, rotPower));
+            swerve(in.xAxisDrive, in.yAxisDrive, rotPower);
+        }
+
         boolean firstDodge = (in.dodgingL || in.dodgingR) && !prevDodge;
         prevDodge = in.dodgingL || in.dodgingR;
 

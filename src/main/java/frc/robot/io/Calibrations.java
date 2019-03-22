@@ -47,6 +47,9 @@ public class Calibrations{
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
     public final double[] DRV_EleHeightAxis = {0,20,78};
     public final double[] DRV_PowerTable = {1, 1, 0.2};
+    public double DRV_AutoRotateKP = -0.03; //power per degres of error
+    public double DRV_AutoRotatePwr = 0.2; //max auto rotate power
+    public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
 
     //sensor cals
     public double SEN_AbsAngleFL;
@@ -92,8 +95,8 @@ public class Calibrations{
     };
 
     // climb cals
-    public double CLM_MotorSpeedUp = 0.3;
-    public double CLM_MotorSpeedDn = 0.6;
+    public double CLM_MotorSpeedUp = 0.15;
+    public double CLM_MotorSpeedDn = 0.15;
     public double CLM_EncoderLimit = 65;
     public double CLM_Zone_1 = 20;
     public double CLM_Zone_2 = 60;

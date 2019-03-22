@@ -2,9 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.io.ButtonMap;
 import frc.robot.io.Calibrations;
-import frc.robot.io.ControlBoard;
 import frc.robot.io.Inputs;
 import frc.robot.io.K_Competition_Bot;
 import frc.robot.io.K_Swerve_Bot;
@@ -15,7 +13,6 @@ import frc.robot.io.Calibrations.RobotType;
 import frc.robot.subsystems.vision.Vision;
 
 public class Component {
-    public static ButtonMap bm;
     public static Inputs in;
     public static Outputs out;
     public static Sensors sense;
@@ -27,7 +24,6 @@ public class Component {
     public static DriveTrain drive;
     public static Calibrations k;
     public static RSE rse;
-    public static ControlBoard cb;
     public static LEDs leds;
 
     public static void initAll() {
@@ -51,9 +47,6 @@ public class Component {
         id1.close();
         id2.close(); 
 
-        //select button map
-        bm = new ButtonMap();
-
         // picks the right subsystems based on RobotType 
         switch(Calibrations.BOT_Version){
             case COMPETITION:
@@ -74,7 +67,6 @@ public class Component {
         grabHatch = new HatchGatherer();
         drive = new DriveTrain(); 
         rse = new RSE();
-        cb = new ControlBoard();
         leds = new LEDs();
 
         switch(Calibrations.BOT_Version){
@@ -90,7 +82,6 @@ public class Component {
 
     
     public static void runAll(){
-        bm.set();
         in.run();
         sense.run();
         view.run();

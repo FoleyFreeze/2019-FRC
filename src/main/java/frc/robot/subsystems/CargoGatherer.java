@@ -13,7 +13,7 @@ public class CargoGatherer extends Component{
         if(k.GTH_DisableCargo) return;
         
         // conditions for gathering
-        if(in.cargoGather){
+        if(in.gatherCargo){
             out.setGatherMotor(k.GTH_CargoIntakeSpeed, -k.GTH_CargoIntakeSpeed);
             gatherStatus = "Gathering";
         }
@@ -27,7 +27,7 @@ public class CargoGatherer extends Component{
 
             gatherStatus = "Releasing";
         }
-        else if(in.hatchGather){
+        else if(in.gatherHatch){
             out.setGatherMotor(-k.GTH_HatchIntakeSpeed, k.GTH_HatchIntakeSpeed);
             gatherStatus = "Gathering";
         }

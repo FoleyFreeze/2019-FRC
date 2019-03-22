@@ -146,8 +146,8 @@ public class Vision extends Component {
     }
 
     public void run(){
-        piFindCargo.setBoolean((in.enableCamera && in.actionCargo && !sense.hasCargo) || k.CAM_DebugCargo);
-        piFindTargetHigh.setBoolean((in.enableCamera && in.actionCargo && sense.hasCargo) || k.CAM_DebugTargetHigh);
-        piFindTargetLow.setBoolean((in.enableCamera && in.actionHatch) || k.CAM_DebugTargetLow);
+        piFindCargo.setBoolean((in.enableCamera && in.actionLeft && !sense.hasCargo) || k.CAM_DebugCargo);
+        piFindTargetHigh.setBoolean((in.enableCamera && in.actionLeft && sense.hasCargo) || k.CAM_DebugTargetHigh);
+        piFindTargetLow.setBoolean((in.enableCamera && in.actionRight) || k.CAM_DebugTargetLow);
     }
 }

@@ -1,17 +1,15 @@
 package frc.robot.io;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Component;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
-import frc.robot.subsystems.vision.VisionData;
 
 public class Inputs extends Component {
    
-    public Joystick controlBoard;
-    public Joystick gamePad;
+    public ControlBoard controlBoard;
+    public Controller gamePad;
         
     //----------------------------------Driver Functions--------------------------------
     public double xAxisDrive; 
@@ -26,9 +24,9 @@ public class Inputs extends Component {
     public boolean resetGyro;
     public boolean resetEleEnc;
     //----------------------------Operator Functions-------------------------------------- 
-    public boolean cargoGather;
+    public boolean gatherCargo;
     public boolean releaseCargo; 
-    public boolean hatchGather;
+    public boolean gatherHatch;
     public boolean releaseHatch; 
 
     public boolean climb;
@@ -59,64 +57,71 @@ public class Inputs extends Component {
     public boolean visionTargetHigh;
     public boolean visionTargetLow;
 
-    public boolean actionCargo;
-    public boolean actionHatch;
+    public boolean actionLeft;
+    public boolean prevActionLeft; 
+    public boolean actionLeftRising;
+    public boolean actionLeftFalling;
+    public boolean actionRight;
     public boolean camLightsOn;
-    public boolean enableCamera;
+    public boolean enableCamera; 
+
+    public double robotOrientation;
+    public boolean autoOrientRobot;
 
     public byte[] xDixon;//history of joystick directions
     public byte[] yDixon;//history of joystick directions
     public byte[] rotDixon;//history of joystick directions
 
-    public enum RocketCargoshipPosition {
-        HI, MID, LO, FRONT, DEFAULT
-    }
-    public RocketCargoshipPosition rocketCargoState;
-    public enum NearFarCargo {
-        NEAR, FAR, CARGO, DEFAULT
-    }
-    public NearFarCargo nearFarCargo;
+  
 
     public Inputs() {
-        controlBoard = new Joystick(ElectroJendz.CONTROL_BOARD);
-        gamePad = new Joystick(ElectroJendz.GAMEPAD);
+        controlBoard = new ControlBoard(ElectroJendz.CONTROL_BOARD);
+        gamePad = new Controller(ElectroJendz.GAMEPAD);
         xDixon = new byte[k.IN_DixonSize];
         yDixon = new byte[k.IN_DixonSize];
         rotDixon = new byte[k.IN_DixonSize];
-        nearFarCargo = NearFarCargo.DEFAULT;
-        rocketCargoState = RocketCargoshipPosition.DEFAULT;
+        controlBoard.nearFarCargo = ControlBoard.NearFarCargo.DEFAULT;
+        controlBoard.rocketCargoState = ControlBoard.RocketCargoshipPosition.DEFAULT;
         elevatorTarget = ElevatorPosition.DONT_MOVE;
     }
 
     
 
     public void run() {
-        resetGyro = gamePad.getRawButton(bm.resetGyro);
+        
+        gamePad.read();
+        controlBoard.read();
+
+        resetGyro = gamePad.resetGyro;
         if(resetGyro){
             sense.init();
         }
 
-        resetEleEnc = gamePad.getRawButton(11) && gamePad.getRawButton(15);
+        resetEleEnc = gamePad.resetElePart1 && gamePad.resetElePart2;
         if(resetEleEnc){
             out.resetEleEnc();
         }
      
         //read joystick
-        xAxisDrive = -gamePad.getRawAxis(bm.IN_xDriveAxis);
-        yAxisDrive = gamePad.getRawAxis(bm.IN_yDriveAxis);
-        rotAxisDrive = gamePad.getRawAxis(bm.IN_rotDriveAxis);
+        xAxisDrive = -gamePad.xDriveAxis;
+        yAxisDrive = gamePad.yDriveAxis;
+        rotAxisDrive = gamePad.rotDriveAxis;
+
+        xAxisDrive = Math.signum(xAxisDrive) * Math.pow(Math.abs(xAxisDrive), k.DRV_AxisExpo);
+        yAxisDrive = Math.signum(yAxisDrive) * Math.pow(Math.abs(yAxisDrive), k.DRV_AxisExpo);
+        rotAxisDrive = Math.signum(rotAxisDrive) * Math.pow(Math.abs(rotAxisDrive), k.DRV_AxisExpo);
 
         //deadband if tiny
-        if(Math.abs(xAxisDrive) < bm.xDeadband) xAxisDrive = 0; 
-        if(Math.abs(yAxisDrive) < bm.xDeadband) yAxisDrive = 0; 
-        if(Math.abs(xAxisDrive) < bm.xyDeadband && Math.abs(yAxisDrive) < bm.xyDeadband) {
+        if(Math.abs(xAxisDrive) < gamePad.IN_xDeadband) xAxisDrive = 0; 
+        if(Math.abs(yAxisDrive) < gamePad.IN_xDeadband) yAxisDrive = 0; 
+        if(Math.abs(xAxisDrive) < gamePad.IN_xyDeadband && Math.abs(yAxisDrive) < gamePad.IN_xyDeadband) {
             xAxisDrive = 0;
             yAxisDrive = 0;
         }
-        if(Math.abs(rotAxisDrive) < bm.rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
-        xAxisDrive = Math.signum(xAxisDrive) * (Math.abs(xAxisDrive) - bm.xDeadband / (1-bm.xDeadband));
-        yAxisDrive = Math.signum(yAxisDrive) * (Math.abs(yAxisDrive) - bm.yDeadband / (1-bm.yDeadband));
-        rotAxisDrive = Math.signum(rotAxisDrive) * (Math.abs(rotAxisDrive) - bm.rotDeadband / (1-bm.rotDeadband));
+        if(Math.abs(rotAxisDrive) < gamePad.IN_rotDeadband) rotAxisDrive = 0;//if command is unreasonably tiny, don't turn
+        xAxisDrive = Math.signum(xAxisDrive) * (Math.abs(xAxisDrive) - gamePad.IN_xDeadband / (1-gamePad.IN_xDeadband));
+        yAxisDrive = Math.signum(yAxisDrive) * (Math.abs(yAxisDrive) - gamePad.IN_yDeadband / (1-gamePad.IN_yDeadband));
+        rotAxisDrive = Math.signum(rotAxisDrive) * (Math.abs(rotAxisDrive) - gamePad.IN_rotDeadband / (1-gamePad.IN_rotDeadband));
 
         String stopDixon;//for joy of programming
         boolean dixon;//for joy of programming
@@ -138,42 +143,43 @@ public class Inputs extends Component {
 
         SmartDashboard.putString("Dixon Detector", stopDixon);
 
-        cargoNotHatch = !controlBoard.getRawButton(cb.cargoOrHatch);
-        leftNotRight = controlBoard.getRawButton(cb.lOrR);
+        cargoNotHatch = !controlBoard.cargoOrHatch;
+        leftNotRight = controlBoard.lOrR;
         autoNotManualMode = leftNotRight;
 
         
         //set buttons
         if(!k.DRV_Disable){
-            compassDrive = gamePad.getRawButton(bm.compassDrive);
-            fieldOriented = gamePad.getRawButton(bm.fieldOriented);
+            compassDrive = gamePad.compassDrive;
+            fieldOriented = gamePad.fieldOriented;
             //dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
             //dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
             //visionCargo = gamePad.getRawButton(4);
         }
         //actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         //actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-        actionCargo = gamePad.getRawAxis(bm.IN_dodgingL) > k.IN_DodgingMin;
-        actionHatch = gamePad.getRawAxis(bm.IN_dodgingR) > k.IN_DodgingMin;
+        actionLeft = gamePad.leftTrigger > k.IN_DodgingMin;
+        actionLeftRising = actionLeft && !prevActionLeft;
+        actionLeftFalling = !actionLeft && prevActionLeft;
+        prevActionLeft = actionLeft;
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
-        pitMode = !controlBoard.getRawButton(cb.pitMode);
-        shift = controlBoard.getRawButton(cb.shift);
-        shoot = controlBoard.getRawButton(cb.shoot);
+        pitMode = !controlBoard.pitMode;
+        shift = controlBoard.shift;
+        shoot = controlBoard.shoot;
         if(sense.isDisabled) gatherTimer = Timer.getFPGATimestamp() + k.GTH_StartTimer;
-        gather = controlBoard.getRawButton(cb.gather) && Timer.getFPGATimestamp() > gatherTimer;
+        gather = controlBoard.gather && Timer.getFPGATimestamp() > gatherTimer;
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
-        parseControlBoard();
-
-        SmartDashboard.putBoolean("ActionCargo", actionCargo);
-        SmartDashboard.putBoolean("ActionHatch", actionHatch);
+        SmartDashboard.putBoolean("ActionLeft", actionLeft);
+        SmartDashboard.putBoolean("ActionRight", actionRight);  
 
         autoElevator = true;
         releaseCargo = false;
         releaseHatch = false;
-        hatchGather = false;
-        cargoGather = false;
+        gatherHatch = false;
+        gatherCargo = false;
         elevatorStage = false;
         visionTargetHigh = false;
         visionTargetLow = false;
@@ -204,7 +210,7 @@ public class Inputs extends Component {
         */
 
         if(!k.CLM_disable){
-            boolean temp = controlBoard.getRawButton(cb.climb);
+            boolean temp = controlBoard.climb;
             climb = temp && !shift;
             reverseClimb = (temp && shift);
             if(climb) cargoNotHatch = false;
@@ -231,29 +237,59 @@ public class Inputs extends Component {
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         if(autoNotManualMode){
-            // autofunctions disable cals and cargo or hatch detection
-            if(actionCargo) {
-                autoGather(!sense.hasCargo);
-                autoScore(sense.hasCargo);
-            } else if(actionHatch) {
-                autoGather(!sense.hasHatch);
-                autoScore(sense.hasHatch);
+            if(cargoNotHatch) {
+                gatherHatch = false;
+                releaseHatch = false; 
+                gatherCargo = !sense.hasCargo && actionLeft || gather && !shift;
+                releaseCargo = releaseCargo && !actionLeftFalling || sense.hasCargo && actionLeft;  
+                
+                if(!sense.hasCargo && shift && gather) {
+                    sense.hasCargo = true;
+                    sense.hasHatch = false;
+                } else if(sense.hasCargo && releaseCargo) {
+                    sense.hasCargo = false; 
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gatherCargo) {
+                    sense.hasCargo = true;
+                    sense.hasHatch = false;
+                }
             } else {
-                autoGather(false);
-                autoScore(false);
+                gatherCargo = false; 
+                releaseCargo = false; 
+                gatherHatch = !sense.hasHatch && actionLeft || gather && !shift;
+                releaseHatch = releaseHatch && !actionLeftFalling || sense.hasHatch && actionLeft; 
+                //the overide
+                if(!sense.hasHatch && shift && gather) {
+                    sense.hasHatch = true;
+                    sense.hasCargo = false;
+                } else if(sense.hasHatch && releaseHatch) {
+                    sense.hasHatch = false;
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gatherHatch) {
+                    sense.hasHatch = true;
+                    sense.hasCargo = false;
+                }
+            } 
+            // if ready
+            if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
+                setElevatorHeight();
+                setRobotOrientation();
+                autoOrientRobot = true;
+            } else {
+                autoOrientRobot = false;
+                if(!cargoNotHatch) {
+                    elevatorTarget = ElevatorPosition.LOADING_STATION;
+                } else if(sense.hasCargo) {
+                    elevatorTarget = ElevatorPosition.LOADING_STATION;
+                } else {
+                    elevatorTarget = ElevatorPosition.FLOOR;
+                }
             }
 
-            SmartDashboard.putString("AutoGatherState",autoGatherState.name());
-            SmartDashboard.putString("AutoScoreState",autoScoreState.name());
 
-            SmartDashboard.putBoolean("GoodCargoVision",view.goodCargoImage());
-            SmartDashboard.putBoolean("GoodVisionTarget",view.goodVisionTargetHigh());
-        } else {
-            //manual mode
+        } else { //manual mode
             if (cargoNotHatch){
-                cargoGather = gather && !shift;
+                gatherCargo = gather && !shift;
                 releaseCargo = shoot;
-                hatchGather = false;
+                gatherHatch = false;
                 releaseHatch = false;
 
                 if(!sense.hasCargo && shift && gather) {
@@ -266,12 +302,12 @@ public class Inputs extends Component {
                     sense.hasHatch = false;
                 }
 
-                visionCargo = actionCargo && !sense.hasCargo;
-                visionTargetHigh = actionCargo && sense.hasCargo;
+                visionCargo = actionLeft && !sense.hasCargo;
+                visionTargetHigh = actionLeft && sense.hasCargo;
             } else {
-                cargoGather = false;
+                gatherCargo = false;
                 releaseCargo = false;
-                hatchGather = gather && !shift;
+                gatherHatch = gather && !shift;
                 releaseHatch = shoot;
 
                 if(!sense.hasHatch && shift && gather) {
@@ -284,7 +320,7 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 }
 
-                visionTargetLow = actionHatch;
+                visionTargetLow = actionRight;
             }
             setElevatorHeight();
         }
@@ -338,248 +374,20 @@ public class Inputs extends Component {
         //if more than 1 direction change, true
         return count>1;
     }
-
-    private void parseControlBoard(){
-        if(controlBoard.getRawButton(cb.high)){
-            rocketCargoState = RocketCargoshipPosition.HI;
-            if (shift) setElevatorHeight();
-        }else if(controlBoard.getRawButton(cb.middle)){
-            rocketCargoState = RocketCargoshipPosition.MID;
-            if (shift) setElevatorHeight();
-        }else if(controlBoard.getRawButton(cb.low)){
-            rocketCargoState = RocketCargoshipPosition.LO;
-            if (shift) setElevatorHeight();
-        }else if(controlBoard.getRawButton(cb.front)){
-            rocketCargoState = RocketCargoshipPosition.FRONT;
-            if (shift) setElevatorHeight();
-        }
-
-        controlBoard.setOutput(cb.shiftOut, shift);
-
-        switch(rocketCargoState){
-            case HI:
-            controlBoard.setOutput(cb.highOut, true);
-            controlBoard.setOutput(cb.middleOut, false);
-            controlBoard.setOutput(cb.lowOut, false);
-            controlBoard.setOutput(cb.frontOut, false);
-            break;
-
-            case MID:
-            controlBoard.setOutput(cb.highOut, false);
-            controlBoard.setOutput(cb.middleOut, true);
-            controlBoard.setOutput(cb.lowOut, false);
-            controlBoard.setOutput(cb.frontOut, false);
-            break;
-
-            case LO:
-            controlBoard.setOutput(cb.highOut, false);
-            controlBoard.setOutput(cb.middleOut, false);
-            controlBoard.setOutput(cb.lowOut, true);
-            controlBoard.setOutput(cb.frontOut, false);
-            break;
-
-            case FRONT:
-            controlBoard.setOutput(cb.highOut, false);
-            controlBoard.setOutput(cb.middleOut, false);
-            controlBoard.setOutput(cb.lowOut, false);
-            controlBoard.setOutput(cb.frontOut, true);
-            break;   
-            
-            case DEFAULT:
-            controlBoard.setOutput(cb.highOut, true);
-            controlBoard.setOutput(cb.middleOut, true);
-            controlBoard.setOutput(cb.lowOut, true);
-            controlBoard.setOutput(cb.frontOut, true);
-            break;
-        }
-        
-
-        if(controlBoard.getRawButton(cb.farRkt)){
-            nearFarCargo = NearFarCargo.FAR;
-            if (shift) setElevatorHeight();
-        }else if(controlBoard.getRawButton(cb.nearRkt)){
-            nearFarCargo = NearFarCargo.NEAR;
-            if (shift) setElevatorHeight();
-        }else if(controlBoard.getRawButton(cb.cargoShip)){
-            nearFarCargo = NearFarCargo.CARGO;
-            if (shift) setElevatorHeight();
-        }
-
-        switch(nearFarCargo){
-            case FAR:
-            controlBoard.setOutput(cb.farRktOut, true);
-            controlBoard.setOutput(cb.nearRktOut, false);
-            controlBoard.setOutput(cb.cargoShipOut, false);
-            break;
-
-            case NEAR:
-            controlBoard.setOutput(cb.farRktOut, false);
-            controlBoard.setOutput(cb.nearRktOut, true);
-            controlBoard.setOutput(cb.cargoShipOut, false);
-            break;
-
-            case CARGO:
-            controlBoard.setOutput(cb.farRktOut, false);
-            controlBoard.setOutput(cb.nearRktOut, false);
-            controlBoard.setOutput(cb.cargoShipOut, true);
-            break;  
-
-            case DEFAULT:
-            controlBoard.setOutput(cb.farRktOut, true);
-            controlBoard.setOutput(cb.nearRktOut, true);
-            controlBoard.setOutput(cb.cargoShipOut, true);
-            break;
-        }
-
-        SmartDashboard.putString("RocketState",rocketCargoState.name());
-        SmartDashboard.putString("NearFarCargoState",nearFarCargo.name());
-    }
-
-    public enum AutoGatherStates { DRIVETOGATHER, CAMERAGATHER };
-    private AutoGatherStates autoGatherState = AutoGatherStates.DRIVETOGATHER;
     
-    public void autoGather(boolean autoGather) {
-        if(autoGather) {
-        
-            switch(autoGatherState){
-                case DRIVETOGATHER:
-                    //pathfind
-                    //face the robot in the right direction
-                    //move elevator to floor/feeder station
-                    if (cargoNotHatch){
-                        elevatorTarget = ElevatorPosition.FLOOR;
-                    } else {
-                        elevatorTarget = ElevatorPosition.LOADING_STATION;
-                        camLightsOn = true;
-                    }
-                    enableCamera = true;
-
-                    //move gather to cargo/hatch position
-                    //this is handled in the hatchGather class
-
-                    //when camera sees target
-                    //add transition for when auto drive is completed
-                    boolean driveComplete = true;
-                    if(cargoNotHatch && view.goodCargoImage() || !cargoNotHatch && view.goodVisionTargetHigh() || driveComplete){
-                        //next state
-                        autoGatherState = AutoGatherStates.CAMERAGATHER;
-                    }
-                break;
-
-                case CAMERAGATHER:
-                    //camera drive, or manual drive if no image
-                    enableCamera = true;
-                    visionCargo = cargoNotHatch && view.goodCargoImage();
-                    visionTargetHigh =  !cargoNotHatch && view.goodVisionTargetHigh();
-                    
-                    //set elevator position
-                    if (cargoNotHatch){
-                        elevatorTarget = ElevatorPosition.FLOOR;
-                    } else {
-                        elevatorTarget = ElevatorPosition.LOADING_STATION;
-                        camLightsOn = true;
-                    }
-
-                    //turn on gatherer
-                    hatchGather = !cargoNotHatch;
-                    cargoGather = cargoNotHatch;
-
-                    //when gather current spike
-                    if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit || shift && gather){
-                        //set sense.hasThing to true
-                        //next state
-                        sense.hasCargo = cargoNotHatch;
-                        sense.hasHatch = !cargoNotHatch;                        
-                        autoGatherState = AutoGatherStates.DRIVETOGATHER;
-                        rocketCargoState = RocketCargoshipPosition.DEFAULT;
-                        nearFarCargo = NearFarCargo.DEFAULT;
-                    }
-                break;
-            }
-        }
-    }
-
-    public enum AutoScoreStates { DRIVETOGOAL, CAMERASCORE, GATHERSHOOT }
-    private AutoScoreStates autoScoreState = AutoScoreStates.DRIVETOGOAL;
-    double autoScoreTimer = 0;
-
-    public void autoScore(boolean autoScore) {
-
-        if(autoScore){
-            enableCamera = true;
-            camLightsOn = true;
-
-            switch(autoScoreState){
-                case DRIVETOGOAL:
-                    //pathfind
-                    //face robot in right direction
-                    //move elevator to stage height (but dont go too high, wait at level 2 if target is level 3)
-                    setElevatorHeight();
-                    elevatorStage = true;
-
-                    //when vision spotted
-                    //when drive complete
-                    boolean driveComplete = true;
-                    if(cargoNotHatch && view.goodCargoImage()
-                            || !cargoNotHatch && view.goodVisionTargetHigh()
-                            || driveComplete){
-                        //next state
-                        autoScoreState = AutoScoreStates.CAMERASCORE;
-                    }
-                break;
-
-                case CAMERASCORE:
-                    //camera drive or manual drive if no image
-                    visionTargetHigh =  view.goodVisionTargetHigh();
-
-                    //move elevator to final height
-                    setElevatorHeight();
-                    
-                    //when reached target
-                    //when operator shoot button pressed
-                    VisionData vd = view.getLastVisionTargetHigh();
-                    if(vd != null && view.goodVisionTargetHigh() && vd.distance < k.CAM_ShootDist || shoot){
-                        //next state
-                        autoScoreState = AutoScoreStates.GATHERSHOOT;
-                        autoScoreTimer = Timer.getFPGATimestamp();
-                    }
-                break;
-
-                case GATHERSHOOT:
-                    //run shoot gather
-                    releaseCargo = cargoNotHatch;
-                    releaseHatch = !cargoNotHatch;
-                    
-                    //when TIME_CAL elapses (like 0.5sec or so)
-                    if(Timer.getFPGATimestamp() - autoScoreTimer > k.GTH_ReleaseTime){
-                        //turn off gather
-                        //next state
-                        autoScoreState = AutoScoreStates.DRIVETOGOAL;
-                        sense.hasCargo = false;
-                        sense.hasHatch = false;
-                    }
-                break;
-            }
-
-        } else { //reset to first state
-            autoScoreState = AutoScoreStates.DRIVETOGOAL;
-        }
-
-    }
-
     //set elevator position based on control board state
     public void setElevatorHeight(){
         if(climb) {
             //elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
             //return;
-            rocketCargoState = RocketCargoshipPosition.LO;
-            nearFarCargo = NearFarCargo.NEAR;
+            controlBoard.rocketCargoState = ControlBoard.RocketCargoshipPosition.LO;
+            controlBoard.nearFarCargo = ControlBoard.NearFarCargo.NEAR;
         }
 
-        switch(nearFarCargo){
+        switch(controlBoard.nearFarCargo){
             case NEAR:
             case FAR:
-                switch(rocketCargoState){
+                switch(controlBoard.rocketCargoState){
                     case HI:
                         if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.ROCKET_3_CARGO;
@@ -591,7 +399,6 @@ public class Inputs extends Component {
                     case MID:
                         if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.ROCKET_2_CARGO;
-                            
                         } else {
                             elevatorTarget = ElevatorPosition.ROCKET_2_HATCH;
                         }
@@ -621,7 +428,7 @@ public class Inputs extends Component {
             break;
 
             case CARGO:
-                switch(rocketCargoState){
+                switch(controlBoard.rocketCargoState){
                     case HI:
                     case MID:
                     case LO:
@@ -649,4 +456,46 @@ public class Inputs extends Component {
         }
     }
 
+    private void setRobotOrientation(){
+        switch(controlBoard.nearFarCargo){
+            case NEAR: 
+                if(cargoNotHatch) {
+                    robotOrientation = 90;
+                } else {
+                    robotOrientation = 61;
+                }   
+            break; 
+
+            case FAR: 
+                if(cargoNotHatch) {
+                    robotOrientation = 90;
+                } else {
+                    robotOrientation = 149;
+                } 
+            break; 
+
+            case CARGO: 
+                switch(controlBoard.rocketCargoState) {
+                    case LO: 
+                    case MID: 
+                    case HI: 
+                        robotOrientation = -90;
+                    break;
+
+                    case FRONT: 
+                        robotOrientation = 0;
+                    break;
+
+                    case DEFAULT: 
+                        robotOrientation = 910;
+                    break;
+                }
+            break;
+
+            case DEFAULT:
+                robotOrientation = 910;
+            break;
+        }   
+        if(!leftNotRight) robotOrientation = -robotOrientation;
+    }
 }
