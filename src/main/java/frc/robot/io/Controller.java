@@ -108,19 +108,19 @@ public class Controller {
         if(IN_hatchGather != 0) hatchGather = joy.getRawButton(IN_hatchGather);
         else hatchGather = false;
 
-        if(IN_xDriveAxis != 0) xDriveAxis = joy.getRawAxis(IN_xDriveAxis);
+        if(IN_xDriveAxis != -1) xDriveAxis = joy.getRawAxis(IN_xDriveAxis);
         else xDriveAxis = 0;
 
-        if(IN_yDriveAxis != 0) yDriveAxis = joy.getRawAxis(IN_yDriveAxis);
+        if(IN_yDriveAxis != -1) yDriveAxis = joy.getRawAxis(IN_yDriveAxis);
         else yDriveAxis = 0;
 
-        if(IN_rotDriveAxis != 0) rotDriveAxis = joy.getRawAxis(IN_rotDriveAxis);
+        if(IN_rotDriveAxis != -1) rotDriveAxis = joy.getRawAxis(IN_rotDriveAxis);
         else rotDriveAxis = 0; 
 
-        if(IN_dodgingL != 0) leftTrigger = joy.getRawAxis(IN_dodgingL); 
+        if(IN_dodgingL != -1) leftTrigger = joy.getRawAxis(IN_dodgingL); 
         else leftTrigger = 0;
 
-        if(IN_dodgingR != 0) rightTrigger = joy.getRawAxis(IN_dodgingR);
+        if(IN_dodgingR != -1) rightTrigger = joy.getRawAxis(IN_dodgingR);
         else rightTrigger = 0;
 
         if(IN_resetElePart1 != 0) resetElePart1 = joy.getRawButton(IN_resetElePart1);

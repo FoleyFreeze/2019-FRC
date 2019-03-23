@@ -32,7 +32,7 @@ public class ControlBoard {
     private int OUT_nearRkt = 9;//TODO: check that this is right for comp board
 
     private int IN_lOrR = 5; // isn't left right 
-    // public int manual = 0; // need to make a thing 
+    public int IN_AutoOrSemi = 5; // auto is true 
     private int IN_climb = 6;
     
     private int IN_shift = 3;
@@ -46,6 +46,7 @@ public class ControlBoard {
     public boolean gather;
     public boolean shoot;
     public boolean lOrR;
+    public boolean autoOrSemi;
     public boolean climb; 
     public boolean shift; 
     public boolean pitMode; 
@@ -64,6 +65,7 @@ public class ControlBoard {
         gather = joy.getRawButton(IN_gather);
         shoot = joy.getRawButton(IN_shoot);
         lOrR = joy.getRawButton(IN_lOrR);
+        autoOrSemi = joy.getRawButton(IN_AutoOrSemi);
         climb = joy.getRawButton(IN_climb);
         shift = joy.getRawButton(IN_shift);
         pitMode = joy.getRawButton(IN_pitMode);

@@ -107,10 +107,6 @@ public class Inputs extends Component {
         yAxisDrive = gamePad.yDriveAxis;
         rotAxisDrive = gamePad.rotDriveAxis;
 
-        xAxisDrive = Math.signum(xAxisDrive) * Math.pow(Math.abs(xAxisDrive), k.DRV_AxisExpo);
-        yAxisDrive = Math.signum(yAxisDrive) * Math.pow(Math.abs(yAxisDrive), k.DRV_AxisExpo);
-        rotAxisDrive = Math.signum(rotAxisDrive) * Math.pow(Math.abs(rotAxisDrive), k.DRV_AxisExpo);
-
         //deadband if tiny
         if(Math.abs(xAxisDrive) < gamePad.IN_xDeadband) xAxisDrive = 0; 
         if(Math.abs(yAxisDrive) < gamePad.IN_xDeadband) yAxisDrive = 0; 
@@ -143,9 +139,14 @@ public class Inputs extends Component {
 
         SmartDashboard.putString("Dixon Detector", stopDixon);
 
+        //add joystick expo
+        xAxisDrive = Math.signum(xAxisDrive) * Math.pow(Math.abs(xAxisDrive), k.DRV_AxisExpo);
+        yAxisDrive = Math.signum(yAxisDrive) * Math.pow(Math.abs(yAxisDrive), k.DRV_AxisExpo);
+        rotAxisDrive = Math.signum(rotAxisDrive) * Math.pow(Math.abs(rotAxisDrive), k.DRV_AxisExpo);
+
         cargoNotHatch = !controlBoard.cargoOrHatch;
-        leftNotRight = controlBoard.lOrR;
-        autoNotManualMode = leftNotRight;
+        leftNotRight = !controlBoard.lOrR;
+        autoNotManualMode = controlBoard.autoOrSemi;
 
         
         //set buttons
@@ -176,10 +177,10 @@ public class Inputs extends Component {
         SmartDashboard.putBoolean("ActionRight", actionRight);  
 
         autoElevator = true;
-        releaseCargo = false;
-        releaseHatch = false;
-        gatherHatch = false;
-        gatherCargo = false;
+        //releaseCargo = false;
+        //releaseHatch = false;
+        //gatherHatch = false;
+        //gatherCargo = false;
         elevatorStage = false;
         visionTargetHigh = false;
         visionTargetLow = false;
@@ -240,8 +241,8 @@ public class Inputs extends Component {
             if(cargoNotHatch) {
                 gatherHatch = false;
                 releaseHatch = false; 
-                gatherCargo = !sense.hasCargo && actionLeft || gather && !shift;
-                releaseCargo = releaseCargo && !actionLeftFalling || sense.hasCargo && actionLeft;  
+                gatherCargo = !sense.hasCargo && actionLeft && !releaseCargo || gather && !shift;
+                releaseCargo = releaseCargo && !actionLeftFalling || sense.hasCargo && actionLeftRising;  
                 
                 if(!sense.hasCargo && shift && gather) {
                     sense.hasCargo = true;
@@ -255,8 +256,8 @@ public class Inputs extends Component {
             } else {
                 gatherCargo = false; 
                 releaseCargo = false; 
-                gatherHatch = !sense.hasHatch && actionLeft || gather && !shift;
-                releaseHatch = releaseHatch && !actionLeftFalling || sense.hasHatch && actionLeft; 
+                gatherHatch = !sense.hasHatch && actionLeft && !releaseHatch || gather && !shift;
+                releaseHatch = releaseHatch && !actionLeftFalling || sense.hasHatch && actionLeftRising; 
                 //the overide
                 if(!sense.hasHatch && shift && gather) {
                     sense.hasHatch = true;
@@ -276,8 +277,6 @@ public class Inputs extends Component {
             } else {
                 autoOrientRobot = false;
                 if(!cargoNotHatch) {
-                    elevatorTarget = ElevatorPosition.LOADING_STATION;
-                } else if(sense.hasCargo) {
                     elevatorTarget = ElevatorPosition.LOADING_STATION;
                 } else {
                     elevatorTarget = ElevatorPosition.FLOOR;
@@ -432,6 +431,7 @@ public class Inputs extends Component {
                     case HI:
                     case MID:
                     case LO:
+                    case FRONT:
                         if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.SHIP_CARGO;
                         } else {
@@ -439,9 +439,9 @@ public class Inputs extends Component {
                         }
                         break;
 
-                    case FRONT:
+                    /*case FRONT:
                         elevatorTarget = ElevatorPosition.FLOOR;
-                        break;
+                        break;*/
 
                     case DEFAULT:
                         elevatorTarget = ElevatorPosition.DONT_MOVE;
@@ -457,12 +457,13 @@ public class Inputs extends Component {
     }
 
     private void setRobotOrientation(){
+
         switch(controlBoard.nearFarCargo){
             case NEAR: 
                 if(cargoNotHatch) {
                     robotOrientation = 90;
                 } else {
-                    robotOrientation = 61;
+                    robotOrientation = 29;
                 }   
             break; 
 

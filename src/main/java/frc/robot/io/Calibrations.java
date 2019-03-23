@@ -12,7 +12,7 @@ public class Calibrations{
     // disable cals
     public boolean AD_Disabled = true;
     public boolean CAM_Disabled = false;
-    public boolean CLM_disable = false;
+    public boolean CLM_disable = true;
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
     public boolean GTH_DisableCargo = false;
@@ -27,7 +27,7 @@ public class Calibrations{
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
     public double   DRV_SwerveAngRate = 0.06; //ratio of turn power to wheel distance from center
-    public double   DRV_SwerveDrivePwrScale = 0.85; 
+    public double   DRV_SwerveDrivePwrScale = 1;//0.85; 
     public double   DRV_SwerveMaxAnglePwr = 0.5; //angle pid power limit
     public double   DRV_MotorTurnRampRate = 0.3; //number of seconds to go from 0 to 1 power
     public double   DRV_MotorDriveRampRate = 0.3;//number of seconds to go from 0 to 1 power
@@ -47,13 +47,15 @@ public class Calibrations{
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
     public final double[] DRV_EleHeightAxis = {0,20,78};
     public final double[] DRV_PowerTable = {1, 1, 0.2};
-    public double DRV_AutoRotateKP = -0.03; //power per degres of error
+    public double DRV_AutoRotateKP = 0.01; //power per degres of error
     public double DRV_AutoRotatePwr = 0.2; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
+    public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
 
     //sensor cals
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
+
     public double SEN_AbsAngleRL;
     public double SEN_AbsAngleRR;
     public double SEN_NAVX_Offset = 0;
@@ -77,7 +79,7 @@ public class Calibrations{
     public double GTH_HatchIntakeSpeed = 0.5;
     public double GTH_HatchShootSpeedFast = 0.4;
     public double GTH_HatchShootSpeedSlow = 0.4;
-    public double GTH_CargoHoldSpeed = 0.2;
+    public double GTH_CargoHoldSpeed = 0.1; //0.2;
     public double GTH_HatchHoldSpeed = 0.05;
     public double GTH_ReleaseTime = 1.5;
 

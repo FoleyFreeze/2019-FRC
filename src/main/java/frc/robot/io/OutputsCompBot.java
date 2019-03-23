@@ -75,7 +75,7 @@ public class OutputsCompBot extends Outputs {
         rRTurnMil = new CurrentLimit(10, ElectroJendz.RR_TURN_ID, 100);
 
         //10amp*sec over the 25amp limit
-        elevatorMil = new CurrentLimit(10, ElectroJendz.ELE_MotorID, 25);
+        elevatorMil = new CurrentLimit(10, ElectroJendz.ELE_MotorID, 30);//was 10, 25
 
         gatherLMil = new CurrentLimit(5, ElectroJendz.GTH_MotorL_ID, 20);
         gatherRMil = new CurrentLimit(5, ElectroJendz.GTH_MotorR_ID, 20);
