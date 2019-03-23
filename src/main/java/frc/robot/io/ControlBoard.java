@@ -83,96 +83,62 @@ public class ControlBoard {
     public NearFarCargo nearFarCargo;
 
     private void parseControlBoard(){
+
+        int count = 0;
         if(joy.getRawButton(IN_high)){
             rocketCargoState = RocketCargoshipPosition.HI;
-            
-        }else if(joy.getRawButton(IN_middle)){
+            count++;
+        }
+        if(joy.getRawButton(IN_middle)){
             rocketCargoState = RocketCargoshipPosition.MID;
-            
-        }else if(joy.getRawButton(IN_low)){
+            count++;
+        }
+        if(joy.getRawButton(IN_low)){
             rocketCargoState = RocketCargoshipPosition.LO;
-            
-        }else if(joy.getRawButton(IN_front)){
+            count++;
+        }
+        if(joy.getRawButton(IN_front)){
             rocketCargoState = RocketCargoshipPosition.FRONT;
-            
+            count++;
+        }
+        if(count >= 3){
+            rocketCargoState = RocketCargoshipPosition.DEFAULT;
         }
 
         joy.setOutput(OUT_shift, shift);
 
-        switch(rocketCargoState){
-            case HI:
-            joy.setOutput(OUT_high, true);
-            joy.setOutput(OUT_middle, false);
-            joy.setOutput(OUT_low, false);
-            joy.setOutput(OUT_front, false);
-            break;
+        joy.setOutput(OUT_high, rocketCargoState == RocketCargoshipPosition.HI 
+                        || rocketCargoState == RocketCargoshipPosition.DEFAULT);
+        joy.setOutput(OUT_middle, rocketCargoState == RocketCargoshipPosition.MID 
+                        || rocketCargoState == RocketCargoshipPosition.DEFAULT);
+        joy.setOutput(OUT_low, rocketCargoState == RocketCargoshipPosition.LO 
+                        || rocketCargoState == RocketCargoshipPosition.DEFAULT);
+        joy.setOutput(OUT_front, rocketCargoState == RocketCargoshipPosition.FRONT 
+                        || rocketCargoState == RocketCargoshipPosition.DEFAULT);
 
-            case MID:
-            joy.setOutput(OUT_high, false);
-            joy.setOutput(OUT_middle, true);
-            joy.setOutput(OUT_low, false);
-            joy.setOutput(OUT_front, false);
-            break;
-
-            case LO:
-            joy.setOutput(OUT_high, false);
-            joy.setOutput(OUT_middle, false);
-            joy.setOutput(OUT_low, true);
-            joy.setOutput(OUT_front, false);
-            break;
-
-            case FRONT:
-            joy.setOutput(OUT_high, false);
-            joy.setOutput(OUT_middle, false);
-            joy.setOutput(OUT_low, false);
-            joy.setOutput(OUT_front, true);
-            break;   
-            
-            case DEFAULT:
-            joy.setOutput(OUT_high, true);
-            joy.setOutput(OUT_middle, true);
-            joy.setOutput(OUT_low, true);
-            joy.setOutput(OUT_front, true);
-            break;
-        }
-        
-
+        count = 0;
         if(joy.getRawButton(IN_farRkt)){
             nearFarCargo = NearFarCargo.FAR;
-            
-        }else if(joy.getRawButton(IN_nearRkt)){
+            count++;
+        }
+        if(joy.getRawButton(IN_nearRkt)){
             nearFarCargo = NearFarCargo.NEAR;
-            
-        }else if(joy.getRawButton(IN_cargoShip)){
+            count++;
+        }
+        if(joy.getRawButton(IN_cargoShip)){
             nearFarCargo = NearFarCargo.CARGO;
-            
+            count++;
+        }
+        if(count >= 3){
+            nearFarCargo = NearFarCargo.DEFAULT;
         }
 
-        switch(nearFarCargo){
-            case FAR:
-            joy.setOutput(OUT_farRkt, true);
-            joy.setOutput(OUT_nearRkt, false);
-            joy.setOutput(OUT_cargoShip, false);
-            break;
-
-            case NEAR:
-            joy.setOutput(OUT_farRkt, false);
-            joy.setOutput(OUT_nearRkt, true);
-            joy.setOutput(OUT_cargoShip, false);
-            break;
-
-            case CARGO:
-            joy.setOutput(OUT_farRkt, false);
-            joy.setOutput(OUT_nearRkt, false);
-            joy.setOutput(OUT_cargoShip, true);
-            break;  
-
-            case DEFAULT:
-            joy.setOutput(OUT_farRkt, true);
-            joy.setOutput(OUT_nearRkt, true);
-            joy.setOutput(OUT_cargoShip, true);
-            break;
-        }
+        joy.setOutput(OUT_farRkt, nearFarCargo == NearFarCargo.FAR 
+                        || nearFarCargo == NearFarCargo.DEFAULT);
+        joy.setOutput(OUT_nearRkt, nearFarCargo == NearFarCargo.NEAR 
+                        || nearFarCargo == NearFarCargo.DEFAULT);
+        joy.setOutput(OUT_cargoShip, nearFarCargo == NearFarCargo.CARGO 
+                        || nearFarCargo == NearFarCargo.DEFAULT);
 
         SmartDashboard.putString("RocketState",rocketCargoState.name());
         SmartDashboard.putString("NearFarCargoState",nearFarCargo.name());
