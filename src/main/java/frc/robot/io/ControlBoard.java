@@ -31,7 +31,7 @@ public class ControlBoard {
     private int OUT_cargoShip = 6;
     private int OUT_nearRkt = 9;//TODO: check that this is right for comp board
 
-    private int IN_lOrR = 5; // isn't left right 
+    private int IN_lOrR = 17; // isn't left right 
     private int IN_AutoOrSemi = 5; // auto is true 
     private int IN_climb = 6;
     
