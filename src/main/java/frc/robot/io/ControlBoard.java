@@ -27,9 +27,9 @@ public class ControlBoard {
     private int IN_cargoShip = 14;
     private int IN_nearRkt = 15;
 
-    private int OUT_farRkt = 8;
-    private int OUT_cargoShip = 6;
-    private int OUT_nearRkt = 9;//TODO: check that this is right for comp board
+    private int OUT_farRkt = 9;
+    private int OUT_cargoShip = 7;
+    private int OUT_nearRkt = 8;//TODO: check that this is right for comp board
 
     private int IN_lOrR = 17; // isn't left right 
     private int IN_AutoOrSemi = 5; // auto is true 
