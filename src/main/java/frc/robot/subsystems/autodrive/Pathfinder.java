@@ -147,7 +147,7 @@ public class Pathfinder extends Component {
     }
 
 
-    public Stack<Point> determinePath(){
+    public Stack<Node> determinePath(){
         //determine where we are (initial polygon)
         int startPolyIdx = -1; 
         for(Polygon p : polygonList){
@@ -195,11 +195,11 @@ public class Pathfinder extends Component {
         }
             
         //turn best node into a path
-        Stack<Point> path = new Stack<>();
-        path.add(bestNode.location);
+        Stack<Node> path = new Stack<>();
+        path.add(bestNode);
         while(bestNode.prevNode != null){
             bestNode = bestNode.prevNode;
-            path.add(bestNode.location);
+            path.add(bestNode);
         }
         
         //clear the priority queue
@@ -209,7 +209,7 @@ public class Pathfinder extends Component {
         return path;
     }
 
-    public int getDestPoly(){
+    private int getDestPoly(){
         int value = getDestPolyHelper();
         if(in.leftNotRight && value != -1) value += numPolygons;
 
@@ -217,9 +217,9 @@ public class Pathfinder extends Component {
     }
 
     private int getDestPolyHelper(){
-        switch(in.nearFarCargo){
+        switch(in.controlBoard.nearFarCargo){
             case CARGO:
-                switch(in.rocketCargoState){
+                switch(in.controlBoard.rocketCargoState){
                     case HI:
                         return 6;
                     case MID:
@@ -233,7 +233,7 @@ public class Pathfinder extends Component {
                 }
 
             case NEAR:
-                switch(in.rocketCargoState){
+                switch(in.controlBoard.rocketCargoState){
                     case HI:
                     case MID:
                     case LO:
@@ -247,7 +247,7 @@ public class Pathfinder extends Component {
                 }
 
             case FAR:
-                switch(in.rocketCargoState){
+                switch(in.controlBoard.rocketCargoState){
                     case HI:
                     case MID:
                     case LO:

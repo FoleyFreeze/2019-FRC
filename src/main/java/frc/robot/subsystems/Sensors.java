@@ -25,6 +25,8 @@ public class Sensors extends Component {
 
     public boolean hasCargo;
     public boolean hasHatch;
+    public boolean hasHatchEdge;
+    public boolean prevHasHatch;
     public boolean isDisabled;
     public boolean navxGood;
 

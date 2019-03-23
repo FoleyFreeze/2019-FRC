@@ -1,45 +1,49 @@
 package frc.robot.subsystems.autodrive;
 
+import java.util.Stack;
+
 import frc.robot.subsystems.Component;
-import frc.robot.util.Angle;
 
 public class AutoDrive extends Component{
     
-    int wayPointIndex;
-    boolean setPoint;
-    double[] rSet;
-    double[] thetaSet;
-    double endFaceAngle;
-    Angle startAngle;
-    double[] encValueInit;
-    double deltaTheta;
-    double rotRate;
+    Stack<Node> path;
+    public Point targetPoint;
+    public boolean pathComplete;
 
     public AutoDrive(){
-        startAngle = new Angle();
+        targetPoint = null;
+        pathComplete = false;
     }
 
     public void run(){
-        if(!setPoint)return;
-
-        double targetR = rSet[wayPointIndex];
-        double targetTheta = thetaSet[wayPointIndex];
-        
-    }
-
-    public void start(double[] r, double[] theta, double endFaceAngle){
-        if(k.AD_Disabled)return;
-        startAngle.setDeg(sense.robotAngle);
-        setPoint = true;
-        rSet = r;
-        thetaSet = theta;
-        deltaTheta = startAngle.subtrahendDeg(endFaceAngle);
- 
-        wayPointIndex=0;
-        double sumR = 0;
-        for(int i = 0; i<r.length-1; i++){
-            sumR+=r[i];
+        if(k.AD_Disabled || !in.autoDrive) {
+            pathComplete = false;
+            return;
         }
-        rotRate = deltaTheta/sumR;//DO NOT LET SUMR=0!!!!!!
+        
+        //if first time, create a new path
+        if(in.autoDriveRising || sense.hasHatchEdge) path = pathfinder.determinePath();
+
+        if(path == null) {
+            targetPoint = null;
+            pathComplete = false;
+            return; //cant follow path if there is no path
+        }
+
+        Node n = path.peek();
+        if(n == null) {
+            //indicate that the path is complete
+            pathComplete = true;
+            targetPoint = null;
+            return;
+        }
+
+        //if we are still in the polygon, PID to point
+        if(n.poly.containsPoint(rse.x, rse.y)){
+            targetPoint = n.location;
+        } else {//else go to the next polygon
+            path.pop();
+        }
+
     }
 }

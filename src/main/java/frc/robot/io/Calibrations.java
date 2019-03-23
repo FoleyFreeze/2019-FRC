@@ -48,6 +48,11 @@ public class Calibrations{
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
 
+    //auto drive cals
+    public double AD_MaxPower_X = 0.25;
+    public double AD_MaxPower_Y = 0.25;
+    public double AD_AutoDriveKP = -0.0;
+
     //sensor cals
     public double SEN_AbsAngleFL;
     public double SEN_AbsAngleFR; 
