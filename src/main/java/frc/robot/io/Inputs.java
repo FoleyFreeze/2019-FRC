@@ -56,6 +56,9 @@ public class Inputs extends Component {
     public boolean visionCargo;
     public boolean visionTargetHigh;
     public boolean visionTargetLow;
+    public boolean searchingCargo;
+    public boolean scoringCargo;
+    public boolean searchingHatch;
 
     public boolean actionLeft;
     public boolean prevActionLeft; 
@@ -152,7 +155,7 @@ public class Inputs extends Component {
         //set buttons
         if(!k.DRV_Disable){
             compassDrive = gamePad.compassDrive;
-            fieldOriented = gamePad.fieldOriented;
+            fieldOriented = gamePad.fieldOriented && sense.navxGood;
             //dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
             //dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
             //visionCargo = gamePad.getRawButton(4);
@@ -237,6 +240,8 @@ public class Inputs extends Component {
 
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
+        double remainingShootTime = Timer.getFPGATimestamp() - autoShootTime;
+
         if(autoNotManualMode){
             if(cargoNotHatch) {
                 gatherHatch = false;
@@ -247,8 +252,11 @@ public class Inputs extends Component {
                 if(!sense.hasCargo && shift && gather) {
                     sense.hasCargo = true;
                     sense.hasHatch = false;
-                } else if(sense.hasCargo && releaseCargo) {
-                    sense.hasCargo = false; 
+
+                // After pressing shoot, reset no matter state of button holding
+                } else if(sense.hasCargo && releaseCargo || sense.hasCargo && remainingShootTime<0 && remainingShootTime>-0.1) {
+                    if(actionLeftRising) autoShootTime = Timer.getFPGATimestamp() + k.GTH_ReleaseTime;
+                    else if(remainingShootTime<0) sense.hasCargo = false; 
                 } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gatherCargo) {
                     sense.hasCargo = true;
                     sense.hasHatch = false;
@@ -262,8 +270,10 @@ public class Inputs extends Component {
                 if(!sense.hasHatch && shift && gather) {
                     sense.hasHatch = true;
                     sense.hasCargo = false;
-                } else if(sense.hasHatch && releaseHatch) {
-                    sense.hasHatch = false;
+                // After pressing shoot, reset no matter state of button holding
+                } else if(sense.hasHatch && releaseHatch || sense.hasHatch && remainingShootTime<0 && remainingShootTime>-0.1) {
+                    if(actionLeftRising) autoShootTime = Timer.getFPGATimestamp() + k.GTH_ReleaseTime;
+                    else if(remainingShootTime<0) sense.hasHatch = false; 
                 } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gatherHatch) {
                     sense.hasHatch = true;
                     sense.hasCargo = false;
@@ -282,7 +292,9 @@ public class Inputs extends Component {
                     elevatorTarget = ElevatorPosition.FLOOR;
                 }
             }
-
+            visionTargetLow = !cargoNotHatch && actionRight && gamePad.camDrive;
+            visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive;
+            visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
 
         } else { //manual mode
             if (cargoNotHatch){
@@ -324,14 +336,16 @@ public class Inputs extends Component {
             setElevatorHeight();
         }
 
-        boolean searchingCargo = !sense.isDisabled && cargoNotHatch && !sense.hasCargo;
-        boolean scoringCargo = !sense.isDisabled && cargoNotHatch && sense.hasCargo;
-        boolean searchingHatch = !sense.isDisabled && !cargoNotHatch;
+        searchingCargo = !sense.isDisabled && cargoNotHatch && !sense.hasCargo;
+        scoringCargo = !sense.isDisabled && cargoNotHatch && sense.hasCargo;
+        searchingHatch = !sense.isDisabled && !cargoNotHatch;
         boolean targetAnything = searchingCargo || scoringCargo || searchingHatch; 
         enableCamera = targetAnything || k.CAM_DebugCargo || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow;
         camLightsOn = scoringCargo || searchingHatch || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow; //no lights for cargo targeting
         
     }
+
+    private double autoShootTime;
 
     public void compassDrive(){
         //x and y to theta and r

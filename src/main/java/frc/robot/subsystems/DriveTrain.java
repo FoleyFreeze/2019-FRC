@@ -43,12 +43,9 @@ public class DriveTrain extends Component{
         }
 
         if(!k.DRV_DisableAutoOrient && in.autoOrientRobot && Math.abs(in.robotOrientation) < 360){
-            //PID rotation until robot angle equals robotOrientation
-            double angleErr = sense.robotAngle.subDeg(in.robotOrientation);
-            SmartDashboard.putNumber("autoRotateError", angleErr);
-            double rotPower = angleErr * k.DRV_AutoRotateKP;
-            rotPower = Math.max(-k.DRV_AutoRotatePwr, Math.min(k.DRV_AutoRotatePwr, rotPower));
-            fieldSwerve(in.xAxisDrive, in.yAxisDrive, rotPower);
+            double rotPower = pidOrient();
+            if(in.fieldOriented)fieldSwerve(in.xAxisDrive, in.yAxisDrive, rotPower);
+            else swerve(in.xAxisDrive, in.yAxisDrive, rotPower);
             return;
         }
 
@@ -72,6 +69,15 @@ public class DriveTrain extends Component{
             mode = "Regular Swerve";
             SmartDashboard.putString("Mode", mode);
         }
+    }
+
+    private double pidOrient(){
+        //PID rotation until robot angle equals robotOrientation
+        double angleErr = sense.robotAngle.subDeg(in.robotOrientation);
+        SmartDashboard.putNumber("autoRotateError", angleErr);
+        double rotPower = angleErr * k.DRV_AutoRotateKP;
+        rotPower = Math.max(-k.DRV_AutoRotatePwr, Math.min(k.DRV_AutoRotatePwr, rotPower));
+        return rotPower;
     }
 
     double[] outR = new double[4];
@@ -234,53 +240,23 @@ public class DriveTrain extends Component{
     }
 
     public void cameraDrive(VisionData vd) { 
-        double deltaAngle = sense.robotAngle.subDeg(vd.robotAngle);
-        double X;
+        if(in.visionCargo){
 
-        if(in.visionTargetHigh || in.visionTargetLow) {
-            X = vd.angleTo * k.DRV_ToTargetAngleKP;// * (vd.distance / 48 +.5);
-        } else {
-            X = 0;
+        }else{
+            //get angle and distance from vd
+            
+            //turn angle into a x distance
+            double distX = (vd.distance + 14.5) * Math.tan(vd.angleOf);
+            double distY = vd.distance;
+
+            //PID x and y powers to x y distances
+            double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
+            double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
+            double rotPower = pidOrient();
+
+            //call swerve w/ x and y powers & auto rotate power
+            swerve(xPower, yPower, rotPower);
         }
-
-        double dist;
-        if(k.DRV_CamDriveUseDynDist){
-            double diffX = vd.targetX - rse.x;
-            double diffY = vd.targetY - rse.y;
-            dist = Math.sqrt(diffX*diffX + diffY*diffY);
-        } else {
-            dist = vd.distance+3;
-        }
-        double deltaDist = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy);
-        double Y = dist * k.DRV_TargetDistanceKP + Math.abs(deltaDist) * k.DRV_TargetDistanceKD;
-
-        double R = (-vd.angleOf - deltaAngle*0)*k.DRV_OfTargetAngleKP - sense.deltaRobotAngle * k.DRV_OfTargetAngleKD;//(-vd.angleTo - deltaAngle) * k.DRV_ToTargetAngleKP + sense.deltaRobotAngle * k.DRV_ToTargetAngleKD;
-        
-        
-
-        SmartDashboard.putNumber("vdDist", vd.distance);
-        SmartDashboard.putNumber("vdAngto", vd.angleTo);
-        SmartDashboard.putNumber("vdAngof", vd.angleOf);
-        SmartDashboard.putNumber("CamDrvX", X);
-        SmartDashboard.putNumber("CamDrvY", Y);
-        SmartDashboard.putNumber("CamDrvR", R);
-
-        X += 0.5*R;
-
-        X = Math.min(Math.max(X,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
-        Y = Math.min(Math.max(Y,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
-        R = Math.min(Math.max(R,-k.DRV_CamDriveMaxPwr),k.DRV_CamDriveMaxPwr);
-
-        //do turning first
-        //should be replaced with a normalization function 
-        //if(Math.abs(R) > 0.1) {
-        //    Y = Math.max(Math.min(.1,Y),-.1);
-        //}
-        //double norm = (k.DRV_CamDriveMaxPwr-Math.abs(X)) / k.DRV_CamDriveMaxPwr;
-        Y *= (1-X);
-        //X *= norm;
-
-        swerve(X, Y, R, k.CAM_Location_X, k.CAM_Location_Y);
     }
 
 }

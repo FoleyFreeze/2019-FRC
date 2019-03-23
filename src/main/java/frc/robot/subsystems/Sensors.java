@@ -26,6 +26,7 @@ public class Sensors extends Component {
     public boolean hasCargo;
     public boolean hasHatch;
     public boolean isDisabled;
+    public boolean navxGood;
 
     public double dt;
     private double prevTime;
@@ -73,6 +74,7 @@ public class Sensors extends Component {
         rawAngles[3] = angleRR;
         //SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
+        navxGood = navx.isConnected();
         estNavxPosition();
 
         robotAngle.setDeg(-navx.getYaw() + k.SEN_NAVX_Offset); 

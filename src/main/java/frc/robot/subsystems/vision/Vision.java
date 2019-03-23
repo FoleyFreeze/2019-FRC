@@ -46,12 +46,12 @@ public class Vision extends Component {
                     vd.robotAngle = sense.robotAngle.getDeg();
                     
                     //transform the camera distance vector into a field relative position
-                    double camRad = vd.angleTo * Math.PI / 180;
+                    /*double camRad = vd.angleTo * Math.PI / 180;
                     double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;
                     double robotY = vd.distance * Math.cos(camRad) + k.CAM_Location_Y;
                     vd.targetX = robotX * Math.cos(sense.robotAngle.getRad()) - robotY * Math.sin(sense.robotAngle.getRad()) + rse.x;
                     vd.targetY = robotX * Math.sin(sense.robotAngle.getRad()) + robotY * Math.cos(sense.robotAngle.getRad()) + rse.y;
-
+*/
                     targetHighStack.push(vd);
                 } catch(Exception e){
                     e.printStackTrace();
@@ -101,12 +101,12 @@ public class Vision extends Component {
                     vd.robotAngle = sense.robotAngle.getDeg();
                     
                     //transform the camera distance vector into a field relative position
-                    double camRad = vd.angleTo * Math.PI / 180;
+                    /*double camRad = vd.angleTo * Math.PI / 180;
                     double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;
                     double robotY = vd.distance * Math.cos(camRad) + k.CAM_Location_Y;
                     vd.targetX = robotX * Math.cos(sense.robotAngle.getRad()) - robotY * Math.sin(sense.robotAngle.getRad()) + rse.x;
                     vd.targetY = robotX * Math.sin(sense.robotAngle.getRad()) + robotY * Math.cos(sense.robotAngle.getRad()) + rse.y;
-
+*/
                     cargoStack.push(vd);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -146,8 +146,8 @@ public class Vision extends Component {
     }
 
     public void run(){
-        piFindCargo.setBoolean((in.enableCamera && in.actionLeft && !sense.hasCargo) || k.CAM_DebugCargo);
-        piFindTargetHigh.setBoolean((in.enableCamera && in.actionLeft && sense.hasCargo) || k.CAM_DebugTargetHigh);
-        piFindTargetLow.setBoolean((in.enableCamera && in.actionRight) || k.CAM_DebugTargetLow);
+        piFindCargo.setBoolean(in.searchingCargo || k.CAM_DebugCargo);
+        piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
+        piFindTargetLow.setBoolean(in.searchingHatch || k.CAM_DebugTargetLow);
     }
 }

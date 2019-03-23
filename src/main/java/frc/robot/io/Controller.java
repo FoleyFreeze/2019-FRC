@@ -23,6 +23,8 @@ public class Controller {
     private int IN_rotDriveAxis;
     private int IN_dodgingL = 2;
     private int IN_dodgingR = 3;
+    private int IN_camDriveEnable;
+    private int IN_autoDriveEnable;
 
     public boolean resetGyro;
     public boolean resetElePart1;
@@ -32,6 +34,8 @@ public class Controller {
     public boolean flipOrientation;
     public boolean pitMode;
     public boolean hatchGather;
+    public boolean autoDrive;
+    public boolean camDrive;
     public double xDriveAxis;
     public double yDriveAxis;
     public double rotDriveAxis;
@@ -54,7 +58,7 @@ public class Controller {
         if(IN_flySky){
             //Buttons if Fly Sky controller
             IN_resetGyro = 10;
-            IN_compassDrive = 1;
+            IN_compassDrive = 0;
             IN_fieldOriented = 5;
             IN_flipOrientation = 0;
             IN_pitMode = 0;
@@ -70,9 +74,11 @@ public class Controller {
             IN_dodgingR = 3;
             IN_resetElePart1 = 11;
             IN_resetElePart2 = 15;
+            IN_autoDriveEnable = 1;
+            IN_camDriveEnable = 8;
         }else{
             IN_resetGyro = 1;
-            IN_compassDrive = 5;
+            IN_compassDrive = 0;
             IN_fieldOriented = 6;
             IN_flipOrientation = 0;
             IN_pitMode = 0;
@@ -88,6 +94,8 @@ public class Controller {
             IN_dodgingR = 3;
             IN_resetElePart1 = 0;
             IN_resetElePart2 = 0;
+            IN_autoDriveEnable = 5;
+            IN_camDriveEnable = 0;
         }
 
         if(IN_resetGyro != 0) resetGyro = joy.getRawButton(IN_resetGyro);
@@ -128,6 +136,12 @@ public class Controller {
 
         if(IN_resetElePart2 != 0) resetElePart2 = joy.getRawButton(IN_resetElePart2);
         else resetElePart2 = false;
+
+        if(IN_autoDriveEnable != 0) autoDrive = joy.getRawButton(IN_autoDriveEnable);
+        else autoDrive = false;
+
+        if(IN_camDriveEnable != 0) camDrive = joy.getRawButton(IN_camDriveEnable);
+        else camDrive = false;
     }
 
 } 

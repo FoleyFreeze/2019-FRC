@@ -23,4 +23,8 @@ public class Util{
         double frac = (value - axis[i-1])/(axis[i]-axis[i-1]);
         return frac*(table[i] - table[i-1]) + table[i-1];
     }
+    
+    public static double limit(double value, double limit){
+        return Math.max(-limit, Math.min(limit, value));
+    }
 }
