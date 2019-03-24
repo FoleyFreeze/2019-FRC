@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Component{
+    public boolean autoShoot;
+    
     public DriveTrain() {
         
     }
@@ -17,25 +19,30 @@ public class DriveTrain extends Component{
     public void run() {
         if(k.DRV_Disable) return;
         
+        autoShoot = false;
         if(in.visionTargetHigh) {
             VisionData vd = view.getLastVisionTargetHigh();
             if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
                 cameraDrive(vd);
+                SmartDashboard.putBoolean("AutoShoot", autoShoot);
                 return;
             } 
         } else if(in.visionTargetLow){
             VisionData vd = view.getLastVisionTargetLow();
             if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
                 cameraDrive(vd);
+                SmartDashboard.putBoolean("AutoShoot", autoShoot);
                 return;
             }
         } else if(in.visionCargo) {
             VisionData vd = view.getLastCargo();
             if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
                 cameraDrive(vd);
+                SmartDashboard.putBoolean("AutoShoot", autoShoot);
                 return;
             }
         }
+        SmartDashboard.putBoolean("AutoShoot", autoShoot);
 
         if(in.climb){
             swerve(0,-k.CLM_DrivePower,0);
@@ -246,16 +253,22 @@ public class DriveTrain extends Component{
             //get angle and distance from vd
             
             //turn angle into a x distance
-            double distX = (vd.distance + 14.5) * Math.tan(vd.angleOf);
-            double distY = vd.distance;
+            double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
+            double distY = vd.distance - k.DRV_CamTargetY0;
 
             //PID x and y powers to x y distances
             double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
             double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
             double rotPower = pidOrient();
 
+            //normalize y power based on applied x power
+            yPower *= 1 - Math.abs(xPower) / k.DRV_CamDriveMaxPwr_X;
+
             //call swerve w/ x and y powers & auto rotate power
             swerve(xPower, yPower, rotPower);
+
+            //determine if we should autoShoot
+            autoShoot = Math.abs(distX) < k.DRV_CamDistShootX && distY < k.DRV_CamDistShootY;
         }
     }
 

@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Component;
+import frc.robot.util.Angle;
 import frc.robot.util.LimitedStack;
 
 public class Vision extends Component {
@@ -71,7 +72,13 @@ public class Vision extends Component {
 
                     vd.timeStamp = Timer.getFPGATimestamp();
                     vd.robotAngle = sense.robotAngle.getDeg();
+
+                    double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
+                    double distY = vd.distance;
                     
+                    SmartDashboard.putNumber("vdX" , distX);
+                    SmartDashboard.putNumber("vdY", distY);
+
                     /*/transform the camera distance vector into a field relative position
                     double camRad = vd.angleTo * Math.PI / 180;
                     double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;

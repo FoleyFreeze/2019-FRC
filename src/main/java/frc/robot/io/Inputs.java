@@ -261,7 +261,7 @@ public class Inputs extends Component {
                     sense.hasCargo = true;
                     sense.hasHatch = false;
                 }
-            } else {
+            } else {//hatch mode
                 gatherCargo = false; 
                 releaseCargo = false; 
                 gatherHatch = !sense.hasHatch && actionLeft && !releaseHatch || gather && !shift;
@@ -279,7 +279,7 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 }
             } 
-            // if ready
+            // if ready (works for all ready scoring positions and hatch gathering)
             if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
                 setElevatorHeight();
                 setRobotOrientation();
@@ -343,6 +343,7 @@ public class Inputs extends Component {
         enableCamera = targetAnything || k.CAM_DebugCargo || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow;
         camLightsOn = scoringCargo || searchingHatch || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow; //no lights for cargo targeting
         
+        SmartDashboard.putNumber("TargetOrientation", robotOrientation);
     }
 
     private double autoShootTime;
@@ -395,6 +396,18 @@ public class Inputs extends Component {
             //return;
             controlBoard.rocketCargoState = ControlBoard.RocketCargoshipPosition.LO;
             controlBoard.nearFarCargo = ControlBoard.NearFarCargo.NEAR;
+        }
+
+        //if we are gathering a hatch stay at gather position
+        if(!cargoNotHatch && !sense.hasHatch){
+            elevatorTarget = ElevatorPosition.LOADING_STATION;
+            return;
+        }
+
+        //if we are gathering a cargo, stay at cargo position
+        if(cargoNotHatch && !sense.hasCargo){
+            elevatorTarget = ElevatorPosition.FLOOR;
+            return;
         }
 
         switch(controlBoard.nearFarCargo){
@@ -471,6 +484,10 @@ public class Inputs extends Component {
     }
 
     private void setRobotOrientation(){
+        if(!cargoNotHatch && !sense.hasHatch){
+            robotOrientation = 180;
+            return;
+        }
 
         switch(controlBoard.nearFarCargo){
             case NEAR: 

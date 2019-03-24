@@ -36,8 +36,11 @@ public class Calibrations{
     public double   DRV_DriveStraightDelay = 0.3; //seconds
     public double   DRV_CamDriveMaxPwr_X = 0.3;
     public double   DRV_CamDriveMaxPwr_Y = 0.2;
-    public double   DRV_TargetDistanceKP = -0.007;//-0.012; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKP = -0.01; //camera drive kp based on dist
     public double   DRV_TargetDistanceKD = 0;//0.15;
+    public double   DRV_CamTargetY0 = -2.5; //inch offset for target 0
+    public double   DRV_CamDistShootX = 2;
+    public double   DRV_CamDistShootY = 2 - DRV_CamTargetY0;
     public double   DRV_WaitForParkTime = 1;//seconds //was 2
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
@@ -86,10 +89,10 @@ public class Calibrations{
     public double ELE_PIDLimitDown = 0.5;
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
-    public double ELE_PositionOffset = 1.5; //add this number to all the positions
+    public double ELE_PositionOffset = 0.5; //add this number to all the positions
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            -2,        11,           20,              11,              50,              40,           76.5,            68,            34,          11
+            -1,        11,           20,              11,              50,              40,           76.5,            68,            34,          11
     };
 
     // climb cals
@@ -116,7 +119,7 @@ public class Calibrations{
     public int MIL_livepi = 0;
     public int MIL_trackpi = 0;
     public double MIL_CurrResetTime = 5;//seconds to set pit mode when limit exceeded
-    public double MIL_CurrFilt = 1; //time constant of 1/val
+    public double MIL_CurrFilt = 1; //time constant of 1/val seconds
     public boolean MIL_CLDisabled = false;
 
     // output cals
@@ -124,13 +127,13 @@ public class Calibrations{
     public boolean OUT_DriveBrakeMode = true;
 
     // Vision cals
-    public double CAM_ExpireTime = 0.5;
+    public double CAM_ExpireTime = 0.125; //seconds until image is deleted
     public double CAM_Location_X = 5.125;
     public double CAM_Location_Y = 0;
     public double CAM_ShootDist = 3;//inches
     public boolean CAM_DebugCargo = false;
     public boolean CAM_DebugTargetHigh = false;
-    public boolean CAM_DebugTargetLow = false;
+    public boolean CAM_DebugTargetLow = true;
     
     public Calibrations(){
         

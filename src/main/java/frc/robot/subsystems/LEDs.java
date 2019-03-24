@@ -45,10 +45,10 @@ public class LEDs extends Component{
             blinkTimer = Timer.getFPGATimestamp();
         } 
 
-        //camera sees a thing
+        /*/camera sees a thing
         if(view.goodCargoImage() || view.goodVisionTargetHigh() || view.goodVisionTargetLow()){
             blinkCount = 0;
-        }
+        }*/
 
         if(blinkCount < BLINK_COUNT){
             if(blinkState && Timer.getFPGATimestamp() - blinkTimer > BLINK_TIME_ON) {
