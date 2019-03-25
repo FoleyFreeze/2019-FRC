@@ -169,7 +169,7 @@ public class Inputs extends Component {
         }
         //actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         //actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-        actionLeft = gamePad.leftTrigger > k.IN_DodgingMin;
+        actionLeft = gamePad.leftTrigger > k.IN_DodgingMin || !k.CAM_AutoShootDisabled && drive.autoShoot;
         actionLeftRising = actionLeft && !prevActionLeft;
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
@@ -301,11 +301,22 @@ public class Inputs extends Component {
 
             // if ready (works for all ready scoring positions and hatch gathering)
             if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
-                //only lift the elevator when autoDrive is not running or has finished its path
-                setElevatorHeight(!autoDrive || autoDrive && autoDriving.pathComplete);
-                setRobotOrientation();
-                autoOrientRobot = true;
+                
+                //if state changes, stay in this setup until we release the ready button
+                if(sense.hasCargoEdge || sense.hasHatchEdge){
+                    latchReady = true;
+                }
+
+                if(!latchReady){
+                    //only lift the elevator when autoDrive is not running or has finished its path
+                    setElevatorHeight(!autoDrive || autoDrive && autoDriving.pathComplete);
+                    setRobotOrientation();
+                    autoOrientRobot = true;
+                } else {
+                    //by not calling any elevator or orientation functions, the variables retain their previous values
+                }
             } else {
+                latchReady = false;
                 //not ready, so keep elevator down
                 autoOrientRobot = false;
                 setElevatorHeight(false);
@@ -355,6 +366,7 @@ public class Inputs extends Component {
             
             //in manual mode we are always "ready" (no preloading elevator positions)
             setElevatorHeight(true);
+            latchReady = false;
 
             autoDrive = false;
             autoDriveRising = false;
@@ -373,10 +385,12 @@ public class Inputs extends Component {
         //handle sense.hasThing rising and falling edges
         sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;
         sense.prevHasHatch = sense.hasHatch;
-        sense.hasCargoFalling = !sense.hasCargo && sense.prevHasCargo;
+        sense.hasCargoEdge = sense.hasCargo != sense.prevHasCargo;
+        sense.prevHasCargo = sense.hasCargo;
     }
 
     private double autoShootTime;
+    public boolean latchReady;
 
     public void compassDrive(){
         //x and y to theta and r

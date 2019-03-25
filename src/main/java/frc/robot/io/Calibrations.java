@@ -9,7 +9,7 @@ public class Calibrations{
 
 
     // disable cals
-    public boolean AD_Disabled = false;
+    public boolean AD_Disabled = true;
     public boolean CAM_Disabled = false;
     public boolean CLM_disable = true;
     public boolean DRV_Disable = false;
@@ -140,7 +140,8 @@ public class Calibrations{
     public double CAM_ShootDist = 3;//inches
     public boolean CAM_DebugCargo = false;
     public boolean CAM_DebugTargetHigh = false;
-    public boolean CAM_DebugTargetLow = true;
+    public boolean CAM_DebugTargetLow = false;
+    public boolean CAM_AutoShootDisabled = true; //disabled until driver is ok with this feature
     
     public Calibrations(){
         

@@ -293,27 +293,39 @@ public class DriveTrain extends Component{
 
     public void cameraDrive(VisionData vd) { 
         if(in.visionCargo){
+            //placeholder
+            swerve(0,0,0);
+        } else {
 
-        }else{
-            //get angle and distance from vd
+            //if we already gathered or shot the object
+            if(in.latchReady){
+
+                //force negative Y in order to force reversing
+                swerve(in.xAxisDrive, Math.min(in.yAxisDrive,-0.1), pidOrient());
+
+            } else {//we still need to drive to and gather/shoot the object
+                
+                //get angle and distance from vd
             
-            //turn angle into a x distance
-            double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
-            double distY = vd.distance - k.DRV_CamTargetY0;
+                //turn angle into a x distance
+                double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
+                double distY = vd.distance - k.DRV_CamTargetY0;
 
-            //PID x and y powers to x y distances
-            double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
-            double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
-            double rotPower = pidOrient();
+                //PID x and y powers to x y distances
+                double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
+                double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
+                double rotPower = pidOrient();
 
-            //normalize y power based on applied x power
-            yPower *= 1 - Math.abs(xPower) / k.DRV_CamDriveMaxPwr_X;
+                //normalize y power based on applied x power
+                yPower *= 1 - Math.abs(xPower) / k.DRV_CamDriveMaxPwr_X;
 
-            //call swerve w/ x and y powers & auto rotate power
-            swerve(xPower, yPower, rotPower);
+                //call swerve w/ x and y powers & auto rotate power
+                swerve(xPower, yPower, rotPower);
 
-            //determine if we should autoShoot
-            autoShoot = Math.abs(distX) < k.DRV_CamDistShootX && distY < k.DRV_CamDistShootY;
+                //determine if we should autoShoot
+                autoShoot = Math.abs(distX) < k.DRV_CamDistShootX && distY < k.DRV_CamDistShootY;
+            }
+
         }
     }
 
