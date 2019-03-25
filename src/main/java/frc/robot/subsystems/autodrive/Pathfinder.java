@@ -5,7 +5,6 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 import frc.robot.subsystems.Component;
-import frc.robot.io.Inputs;
 
 public class Pathfinder extends Component {
 
@@ -70,7 +69,7 @@ public class Pathfinder extends Component {
                  true, null, 6);
         
         makePoly(new double[]{58, 58, 58, 58, 161, 161, 104},
-                 new double[]{256, 278, 300, 322, 322, 287, 256},
+                 new double[]{256, 278, 300, 322, 322, 288, 256},
                  new int[]{1, 2, 3, 6, 7},
                  new int[]{4, 5, 6, 9, 8},
                  false, null, 7);
@@ -93,13 +92,13 @@ public class Pathfinder extends Component {
                  new int[]{8},
                  true, null, 10);
         
-        makePoly(new double[]{104, 104, 134, 134},
-                 new double[]{202, 256, 239, 220},
+        makePoly(new double[]{104, 134, 161, 161},
+                 new double[]{202, 220, 205, 170},
                  new int[]{0},
-                 new int[]{8},
+                 new int[]{12},
                  true, null, 11);
         
-        makePoly(new double[]{75, 58, 256, 161, 161, 90},
+        makePoly(new double[]{75, 58, 104, 161, 161, 108},
                  new double[]{95, 190, 202, 170, 95, 95},
                  new int[]{0, 1, 2, 3, 5},
                  new int[]{13, 1, 8, 11, 14},
@@ -128,6 +127,7 @@ public class Pathfinder extends Component {
                  new int[]{1, 2},
                  new int[]{15, 14},
                  true, null, 16);
+                 
         makePoly(new double[]{23, 23, 58},
                  new double[]{190, 220, 190},
                  new int[]{0},
@@ -156,17 +156,24 @@ public class Pathfinder extends Component {
                 break;
             }
         }
-        if(startPolyIdx == -1) return null;
+        if(startPolyIdx == -1) {
+            System.out.println("No start Polygon");
+            return null;
+        }
         Polygon startPoly = polygonList[startPolyIdx];
+        System.out.println("StartPoly: " + startPolyIdx);
 
         //determine where we want to go (dest polygon)
         int destPolyIdx = getDestPoly();
-        if(destPolyIdx == -1) return null;
+        if(destPolyIdx == -1) {
+            System.out.println("No dest Polygon");
+            return null;
+        }
         Polygon destPoly = polygonList[destPolyIdx];
+        System.out.println("DestPoly: " + destPolyIdx);
 
         //init nodes into priority queue
-        Node bestNode = new Node(new Point(rse.x,rse.y), startPoly, null, destPoly.edges[0]);
-        pq.add(bestNode);
+        Node bestNode = new Node(new Point(rse.x,rse.y), startPoly, null, destPoly.edges[0], 0);
 
         //pop the best node
 
@@ -178,20 +185,28 @@ public class Pathfinder extends Component {
             for(int i=0; i<bestNode.poly.edges.length; i++){
                 Point edge = bestNode.poly.edges[i];
                 
-                //make a new node
-                Node n = new Node(edge, polygonList[bestNode.poly.neighbors[i]], bestNode, destPoly.edges[0]);
-                //set node point to the edge
-                //set previous node to best node
+                //if(edge.x != bestNode.location.x || edge.y != bestNode.location.y){
+                    //can check poly ids instead of edges/points
+                if(bestNode.prevNode == null || bestNode.poly.neighbors[i] != bestNode.prevNode.poly.id){
+                    //make a new node
+                    Node n = new Node(edge, polygonList[bestNode.poly.neighbors[i]], bestNode, destPoly.edges[0], i);
+                    //set node point to the edge
+                    //set previous node to best node
+                    System.out.println(n.toString() + " travD: " + n.traveledDist + " totalD: " + n.totalDist);
 
-                //add the new node to the priority queue
-                pq.add(n);
-                //with priority being the distance between the current edge and the target edge
+                    //add the new node to the priority queue
+                    pq.add(n);
+                    //with priority being the distance between the current edge and the target edge
+                }
             }
 
             //pop the best node
             bestNode = pq.poll();
 
-            if(aStarCount > 20) return null;
+            if(aStarCount > 20) {
+                System.out.println("Astar took too long");
+                return null;
+            }
         }
             
         //turn best node into a path

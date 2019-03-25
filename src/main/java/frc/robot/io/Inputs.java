@@ -152,7 +152,7 @@ public class Inputs extends Component {
         rotAxisDrive = Math.signum(rotAxisDrive) * Math.pow(Math.abs(rotAxisDrive), k.DRV_AxisExpo);
 
         cargoNotHatch = !controlBoard.cargoOrHatch;
-        leftNotRight = !controlBoard.lOrR;
+        leftNotRight = controlBoard.lOrR;
         autoNotManualMode = controlBoard.autoOrSemi;
 
         
@@ -289,6 +289,8 @@ public class Inputs extends Component {
             autoDriveRising = autoDrive && !prevAutoDrive;
             prevAutoDrive = autoDrive;
 
+            SmartDashboard.putBoolean("AutoDrive", autoDrive);
+
             // if ready
             if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
                 //only lift the elevator when autoDrive is not running or has finished its path
@@ -297,6 +299,7 @@ public class Inputs extends Component {
                 autoOrientRobot = true;
             } else {
                 //not ready, so keep elevator down
+                autoOrientRobot = false;
                 setElevatorHeight(false);
             }
 

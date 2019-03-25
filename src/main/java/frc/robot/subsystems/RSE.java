@@ -21,8 +21,8 @@ public class RSE extends Component {
     }
 
     public void reset() {
-        x = 0;
-        y = 0;
+        x = -k.AD_HabEdgeX + k.AD_RobotWidth/2;
+        y = k.AD_HabY + k.AD_RobotHeight/2;
         theta = sense.robotAngle.getDeg();
         prevRobotAngle = theta;
 
