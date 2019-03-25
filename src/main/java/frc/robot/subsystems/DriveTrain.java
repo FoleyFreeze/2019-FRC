@@ -24,7 +24,7 @@ public class DriveTrain extends Component{
             autoDrive();
             return;
         }
-        
+
         if(selectCameraDrive()) return;
 
         if(in.climb){
@@ -100,6 +100,13 @@ public class DriveTrain extends Component{
     }
 
     private boolean selectCameraDrive(){
+        //if we already gathered or shot the object
+        if(in.latchReady){
+            //force negative Y in order to force reversing
+            swerve(in.xAxisDrive, Math.max(in.yAxisDrive,0.1), pidOrient());
+            return true;
+        }
+
         if(in.visionTargetHigh) {
             VisionData vd = view.getLastVisionTargetHigh();
             if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
@@ -296,35 +303,25 @@ public class DriveTrain extends Component{
             //placeholder
             swerve(0,0,0);
         } else {
+            //get angle and distance from vd
+        
+            //turn angle into a x distance
+            double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
+            double distY = vd.distance - k.DRV_CamTargetY0;
 
-            //if we already gathered or shot the object
-            if(in.latchReady){
+            //PID x and y powers to x y distances
+            double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
+            double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
+            double rotPower = pidOrient();
 
-                //force negative Y in order to force reversing
-                swerve(in.xAxisDrive, Math.min(in.yAxisDrive,-0.1), pidOrient());
+            //normalize y power based on applied x power
+            yPower *= 1 - Math.abs(xPower) / k.DRV_CamDriveMaxPwr_X;
 
-            } else {//we still need to drive to and gather/shoot the object
-                
-                //get angle and distance from vd
-            
-                //turn angle into a x distance
-                double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
-                double distY = vd.distance - k.DRV_CamTargetY0;
+            //call swerve w/ x and y powers & auto rotate power
+            swerve(xPower, yPower, rotPower);
 
-                //PID x and y powers to x y distances
-                double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
-                double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
-                double rotPower = pidOrient();
-
-                //normalize y power based on applied x power
-                yPower *= 1 - Math.abs(xPower) / k.DRV_CamDriveMaxPwr_X;
-
-                //call swerve w/ x and y powers & auto rotate power
-                swerve(xPower, yPower, rotPower);
-
-                //determine if we should autoShoot
-                autoShoot = Math.abs(distX) < k.DRV_CamDistShootX && distY < k.DRV_CamDistShootY;
-            }
+            //determine if we should autoShoot
+            autoShoot = Math.abs(distX) < k.DRV_CamDistShootX && distY < k.DRV_CamDistShootY;
 
         }
     }

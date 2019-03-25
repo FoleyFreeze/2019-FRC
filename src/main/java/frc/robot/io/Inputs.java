@@ -299,6 +299,12 @@ public class Inputs extends Component {
 
             SmartDashboard.putBoolean("AutoDrive", autoDrive);
 
+            //handle sense.hasThing rising and falling edges
+            sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;
+            sense.prevHasHatch = sense.hasHatch;
+            sense.hasCargoEdge = sense.hasCargo != sense.prevHasCargo;
+            sense.prevHasCargo = sense.hasCargo;
+
             // if ready (works for all ready scoring positions and hatch gathering)
             if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
                 
@@ -363,6 +369,12 @@ public class Inputs extends Component {
 
                 visionTargetLow = actionRight;
             }
+
+            //handle sense.hasThing rising and falling edges
+            sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;
+            sense.prevHasHatch = sense.hasHatch;
+            sense.hasCargoEdge = sense.hasCargo != sense.prevHasCargo;
+            sense.prevHasCargo = sense.hasCargo;
             
             //in manual mode we are always "ready" (no preloading elevator positions)
             setElevatorHeight(true);
@@ -381,12 +393,8 @@ public class Inputs extends Component {
         camLightsOn = scoringCargo || searchingHatch || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow; //no lights for cargo targeting
         
         SmartDashboard.putNumber("TargetOrientation", robotOrientation);
+        SmartDashboard.putBoolean("latchReady",latchReady);
         
-        //handle sense.hasThing rising and falling edges
-        sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;
-        sense.prevHasHatch = sense.hasHatch;
-        sense.hasCargoEdge = sense.hasCargo != sense.prevHasCargo;
-        sense.prevHasCargo = sense.hasCargo;
     }
 
     private double autoShootTime;
