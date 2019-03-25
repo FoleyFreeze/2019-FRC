@@ -312,6 +312,10 @@ public class DriveTrain extends Component{
             //PID x and y powers to x y distances
             double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
             double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
+
+            if(Math.abs(xPower) < k.DRV_CamDriveMinPwr_X) xPower = k.DRV_CamDriveMinPwr_X * Math.signum(xPower);
+            if(Math.abs(yPower) < k.DRV_CamDriveMinPwr_Y) yPower = k.DRV_CamDriveMinPwr_Y * Math.signum(yPower);
+
             double rotPower = pidOrient();
 
             //normalize y power based on applied x power
