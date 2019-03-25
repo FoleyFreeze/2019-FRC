@@ -65,6 +65,9 @@ public class Inputs extends Component {
     public boolean actionLeftRising;
     public boolean actionLeftFalling;
     public boolean actionRight;
+    public boolean prevActionRight;
+    public boolean actionRightRising;
+    public boolean actionRightFalling;
     public boolean camLightsOn;
     public boolean enableCamera; 
 
@@ -167,6 +170,9 @@ public class Inputs extends Component {
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
         actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
+        actionRightRising = actionRight && !prevActionRight;
+        actionRightFalling = !actionRight && prevActionRight;
+        prevActionRight = actionRight;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.pitMode;
