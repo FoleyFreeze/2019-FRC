@@ -24,7 +24,11 @@ public class Sensors extends Component {
     public double climberEncoder;
 
     public boolean hasCargo;
+    public boolean prevHasCargo;
+    public boolean hasCargoFalling;
     public boolean hasHatch;
+    public boolean hasHatchEdge;
+    public boolean prevHasHatch;
     public boolean isDisabled;
     public boolean navxGood;
 

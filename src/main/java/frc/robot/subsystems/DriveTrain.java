@@ -20,29 +20,12 @@ public class DriveTrain extends Component{
         if(k.DRV_Disable) return;
         
         autoShoot = false;
-        if(in.visionTargetHigh) {
-            VisionData vd = view.getLastVisionTargetHigh();
-            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
-                cameraDrive(vd);
-                SmartDashboard.putBoolean("AutoShoot", autoShoot);
-                return;
-            } 
-        } else if(in.visionTargetLow){
-            VisionData vd = view.getLastVisionTargetLow();
-            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
-                cameraDrive(vd);
-                SmartDashboard.putBoolean("AutoShoot", autoShoot);
-                return;
-            }
-        } else if(in.visionCargo) {
-            VisionData vd = view.getLastCargo();
-            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
-                cameraDrive(vd);
-                SmartDashboard.putBoolean("AutoShoot", autoShoot);
-                return;
-            }
+        if(in.autoDrive){
+            autoDrive();
+            return;
         }
-        SmartDashboard.putBoolean("AutoShoot", autoShoot);
+        
+        if(selectCameraDrive()) return;
 
         if(in.climb){
             swerve(0,-k.CLM_DrivePower,0);
@@ -76,6 +59,68 @@ public class DriveTrain extends Component{
             mode = "Regular Swerve";
             SmartDashboard.putString("Mode", mode);
         }
+    }
+
+    private void autoDrive(){
+
+        //if path is complete, then camera drive
+        if(autoDriving.pathComplete) {
+            if(!selectCameraDrive()){
+                if(in.fieldOriented){
+                    fieldSwerve(in.xAxisDrive, in.yAxisDrive, pidOrient());
+                } else {
+                    swerve(in.xAxisDrive, in.yAxisDrive, pidOrient());
+                }
+            }
+        //if there is a target point, PID towards it
+        } else if(autoDriving.targetPoint != null){
+
+            //calc powers for X and Y based on target point and rse
+            double distX = autoDriving.targetPoint.x - rse.x;
+            double distY = autoDriving.targetPoint.y - rse.y;
+
+            //PID and limit magnitude
+            /*
+            double r = Math.sqrt(distX*distX + distY * distY);
+            double rPwr = Util.limit(r * k.AD_AutoDriveKP, k.AD_MaxPower);
+            double theta = Math.atan2(distX,distY);
+
+            double autoX = rPwr * Math.cos(theta);
+            double autoY = rPwr * Math.sin(theta);
+            */
+            double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
+            double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
+
+            //get rot power form pidOrient
+            double autoRot = pidOrient();
+            
+            //field swerve
+            fieldSwerve(autoX, autoY, autoRot);
+        }
+    }
+
+    private boolean selectCameraDrive(){
+        if(in.visionTargetHigh) {
+            VisionData vd = view.getLastVisionTargetHigh();
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
+                cameraDrive(vd);
+                return true;
+            } 
+        } else if(in.visionTargetLow){
+            VisionData vd = view.getLastVisionTargetLow();
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
+                cameraDrive(vd);
+                return true;
+            }
+        } else if(in.visionCargo) {
+            VisionData vd = view.getLastCargo();
+            if(vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime) {
+                cameraDrive(vd);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private double pidOrient(){

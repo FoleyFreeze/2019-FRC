@@ -3,13 +3,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.Calibrations;
+import frc.robot.io.Calibrations.RobotType;
 import frc.robot.io.Inputs;
 import frc.robot.io.K_Competition_Bot;
 import frc.robot.io.K_Swerve_Bot;
 import frc.robot.io.Outputs;
 import frc.robot.io.OutputsCompBot;
 import frc.robot.io.OutputsSwerveBot;
-import frc.robot.io.Calibrations.RobotType;
+import frc.robot.subsystems.autodrive.AutoDrive;
+import frc.robot.subsystems.autodrive.Pathfinder;
 import frc.robot.subsystems.vision.Vision;
 
 public class Component {
@@ -25,6 +27,8 @@ public class Component {
     public static Calibrations k;
     public static RSE rse;
     public static LEDs leds;
+    public static Pathfinder pathfinder;
+    public static AutoDrive autoDriving;
 
     public static void initAll() {
         
@@ -61,6 +65,8 @@ public class Component {
         in = new Inputs();
         sense = new Sensors();
         view = new Vision();
+        pathfinder = new Pathfinder();
+        autoDriving = new AutoDrive();
         grabCargo = new CargoGatherer();
         climb = new Climber();
         elevator = new Elevator(); //F
@@ -86,6 +92,7 @@ public class Component {
         sense.run();
         view.run();
         rse.run();
+        autoDriving.run();
         grabCargo.run();
         climb.run();
         elevator.run();

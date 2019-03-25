@@ -60,6 +60,10 @@ public class Inputs extends Component {
     public boolean scoringCargo;
     public boolean searchingHatch;
 
+    public boolean autoDrive;
+    private boolean prevAutoDrive;
+    public boolean autoDriveRising;
+
     public boolean actionLeft;
     public boolean prevActionLeft; 
     public boolean actionLeftRising;
@@ -248,6 +252,8 @@ public class Inputs extends Component {
 
         double remainingShootTime = Timer.getFPGATimestamp() - autoShootTime;
 
+        SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
+
         if(autoNotManualMode){
             if(cargoNotHatch) {
                 gatherHatch = false;
@@ -267,7 +273,7 @@ public class Inputs extends Component {
                     sense.hasCargo = true;
                     sense.hasHatch = false;
                 }
-            } else {//hatch mode
+            } else {// auto hatch
                 gatherCargo = false; 
                 releaseCargo = false; 
                 gatherHatch = !sense.hasHatch && actionLeft && !releaseHatch || gather && !shift;
@@ -285,19 +291,26 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 }
             } 
+
+            //autoDrive logic
+            autoDrive = gamePad.autoDrive && actionRight;
+            autoDriveRising = autoDrive && !prevAutoDrive;
+            prevAutoDrive = autoDrive;
+
+            SmartDashboard.putBoolean("AutoDrive", autoDrive);
+
             // if ready (works for all ready scoring positions and hatch gathering)
             if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
-                setElevatorHeight();
+                //only lift the elevator when autoDrive is not running or has finished its path
+                setElevatorHeight(!autoDrive || autoDrive && autoDriving.pathComplete);
                 setRobotOrientation();
                 autoOrientRobot = true;
             } else {
+                //not ready, so keep elevator down
                 autoOrientRobot = false;
-                if(!cargoNotHatch) {
-                    elevatorTarget = ElevatorPosition.LOADING_STATION;
-                } else {
-                    elevatorTarget = ElevatorPosition.FLOOR;
-                }
+                setElevatorHeight(false);
             }
+
             visionTargetLow = !cargoNotHatch && actionRight && gamePad.camDrive;
             visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive;
             visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
@@ -321,7 +334,7 @@ public class Inputs extends Component {
 
                 visionCargo = actionLeft && !sense.hasCargo;
                 visionTargetHigh = actionLeft && sense.hasCargo;
-            } else {
+            } else {// manual hatch
                 gatherCargo = false;
                 releaseCargo = false;
                 gatherHatch = gather && !shift;
@@ -339,7 +352,13 @@ public class Inputs extends Component {
 
                 visionTargetLow = actionRight;
             }
-            setElevatorHeight();
+            
+            //in manual mode we are always "ready" (no preloading elevator positions)
+            setElevatorHeight(true);
+
+            autoDrive = false;
+            autoDriveRising = false;
+            prevAutoDrive = false;
         }
 
         searchingCargo = !sense.isDisabled && cargoNotHatch && !sense.hasCargo;
@@ -350,6 +369,11 @@ public class Inputs extends Component {
         camLightsOn = scoringCargo || searchingHatch || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow; //no lights for cargo targeting
         
         SmartDashboard.putNumber("TargetOrientation", robotOrientation);
+        
+        //handle sense.hasThing rising and falling edges
+        sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;
+        sense.prevHasHatch = sense.hasHatch;
+        sense.hasCargoFalling = !sense.hasCargo && sense.prevHasCargo;
     }
 
     private double autoShootTime;
@@ -396,12 +420,14 @@ public class Inputs extends Component {
     }
     
     //set elevator position based on control board state
-    public void setElevatorHeight(){
+    public void setElevatorHeight(boolean ready){
         if(climb) {
             //elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
             //return;
             controlBoard.rocketCargoState = ControlBoard.RocketCargoshipPosition.LO;
             controlBoard.nearFarCargo = ControlBoard.NearFarCargo.NEAR;
+            elevatorTarget = ElevatorPosition.ROCKET_1_HATCH; //does this need to be cargo?
+            return;
         }
 
         //if we are gathering a hatch stay at gather position
@@ -413,6 +439,16 @@ public class Inputs extends Component {
         //if we are gathering a cargo, stay at cargo position
         if(cargoNotHatch && !sense.hasCargo){
             elevatorTarget = ElevatorPosition.FLOOR;
+            return;
+        }
+
+        if(!ready){
+            //if not ready, stay down
+            if(cargoNotHatch){
+                elevatorTarget = ElevatorPosition.FLOOR;
+            } else {
+                elevatorTarget = ElevatorPosition.LOADING_STATION;
+            }
             return;
         }
 
