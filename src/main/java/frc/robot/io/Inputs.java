@@ -308,6 +308,8 @@ public class Inputs extends Component {
             // if ready (works for all ready scoring positions and hatch gathering)
             if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
                 
+                allowAutoAutoRotation = true;
+
                 //if state changes, stay in this setup until we release the ready button
                 if(sense.hasCargoEdge || sense.hasHatchEdge){
                     latchReady = true;
@@ -324,8 +326,17 @@ public class Inputs extends Component {
             } else {
                 latchReady = false;
                 //not ready, so keep elevator down
-                autoOrientRobot = false;
                 setElevatorHeight(false);
+
+                //allow auto auto rotation if the rot axis has not moved since the falling edge of ready
+                if(Math.abs(rotAxisDrive) > gamePad.IN_rotDeadband) allowAutoAutoRotation = false;
+                if(allowAutoAutoRotation){
+                    autoOrientRobot = true;
+                    setRobotOrientation();
+                } else {
+                    autoOrientRobot = false;
+                }
+
             }
 
             visionTargetLow = !cargoNotHatch && actionRight && gamePad.camDrive;
@@ -383,6 +394,8 @@ public class Inputs extends Component {
             autoDrive = false;
             autoDriveRising = false;
             prevAutoDrive = false;
+            allowAutoAutoRotation = false;
+            autoOrientRobot = false;
         }
 
         searchingCargo = !sense.isDisabled && cargoNotHatch && !sense.hasCargo;
@@ -399,6 +412,7 @@ public class Inputs extends Component {
 
     private double autoShootTime;
     public boolean latchReady;
+    private boolean allowAutoAutoRotation;
 
     public void compassDrive(){
         //x and y to theta and r
