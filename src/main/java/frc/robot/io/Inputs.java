@@ -148,7 +148,7 @@ public class Inputs extends Component {
         rotAxisDrive = Math.signum(rotAxisDrive) * Math.pow(Math.abs(rotAxisDrive), k.DRV_AxisExpo);
 
         cargoNotHatch = !controlBoard.cargoOrHatch;
-        leftNotRight = !controlBoard.lOrR;
+        leftNotRight = controlBoard.lOrR;
         autoNotManualMode = controlBoard.autoOrSemi;
 
         
