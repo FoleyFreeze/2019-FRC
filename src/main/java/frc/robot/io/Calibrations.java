@@ -35,6 +35,8 @@ public class Calibrations{
     public double   DRV_DriveStraightDelay = 0.3; //seconds
     public double   DRV_CamDriveMaxPwr_X = 0.3;
     public double   DRV_CamDriveMaxPwr_Y = 0.3;//.2
+    public double   DRV_CamDriveMinPwr_X = 0.1;
+    public double   DRV_CamDriveMinPwr_Y = 0.05;
     public double   DRV_TargetDistanceKP = -0.01; //camera drive kp based on dist
     public double   DRV_TargetDistanceKD = 0;//0.15;
     public double   DRV_CamTargetY0 = -2.5; //inch offset for target 0
