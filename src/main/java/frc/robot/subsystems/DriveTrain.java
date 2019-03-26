@@ -304,7 +304,24 @@ public class DriveTrain extends Component{
             swerve(0,0,0);
         } else {
             //get angle and distance from vd
-        
+            double vOffset = 2; 
+            //if (vd.angleTo>15) {vOffset += 8; }
+            //Calculate actual angle to (From front of bot, not camera)
+            double vAngle = Math.atan(((vd.distance + 16+vOffset) * Math.tan(Angle.toRad(vd.angleTo)))/(vd.distance+vOffset));
+            vAngle *= 1.3;
+            //PID to distance amplitude of vector
+            double vHypot = Math.abs((vd.distance+vOffset)/Math.cos(vAngle));
+            double vAmplitude = Util.limit(vHypot * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
+            
+            //Break vector into X and Y components
+            double vX = vAmplitude * Math.sin(vAngle);
+            double vY = vAmplitude * Math.cos(vAngle);
+            //Send to drivetrain
+            double rotPower = pidOrient();
+            swerve(vX, vY, rotPower);
+
+            autoShoot = vd.distance < 5;
+/*
             //turn angle into a x distance
             double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
             double distY = vd.distance - k.DRV_CamTargetY0;
@@ -313,6 +330,8 @@ public class DriveTrain extends Component{
             double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
             double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
 
+            if(Math.abs(distX) < k.DRV_CamDistShootX) xPower = 0;
+            if(Math.abs(distY) < k.DRV_CamDistShootY) yPower = 0;
             if(Math.abs(xPower) < k.DRV_CamDriveMinPwr_X) xPower = k.DRV_CamDriveMinPwr_X * Math.signum(xPower);
             if(Math.abs(yPower) < k.DRV_CamDriveMinPwr_Y) yPower = k.DRV_CamDriveMinPwr_Y * Math.signum(yPower);
 
@@ -326,7 +345,7 @@ public class DriveTrain extends Component{
 
             //determine if we should autoShoot
             autoShoot = Math.abs(distX) < k.DRV_CamDistShootX && distY < k.DRV_CamDistShootY;
-
+*/            
         }
     }
 

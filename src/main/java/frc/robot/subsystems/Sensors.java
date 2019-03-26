@@ -30,6 +30,8 @@ public class Sensors extends Component {
     public boolean hasHatchEdge;
     public boolean prevHasHatch;
     public boolean isDisabled;
+    public boolean isAuto;
+    public boolean isTeleop;
     public boolean navxGood;
 
     public double dt;

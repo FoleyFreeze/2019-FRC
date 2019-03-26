@@ -162,7 +162,7 @@ public class Inputs extends Component {
         //set buttons
         if(!k.DRV_Disable){
             compassDrive = gamePad.compassDrive;
-            fieldOriented = gamePad.fieldOriented && sense.navxGood;
+            fieldOriented = gamePad.fieldOriented && sense.navxGood && !sense.isAuto;
             //dodgingL = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
             //dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
             //visionCargo = gamePad.getRawButton(4);
