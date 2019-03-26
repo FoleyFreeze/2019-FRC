@@ -50,27 +50,6 @@ public class Polygon{
 
     }
 
-    public boolean getEdgeCrossing(int edgeIdx, double x, double y){
-        //does a ray cast from x,y intersect the edge at edgeIdx?
-        int vertIdx = edgeLoc[edgeIdx];
-        int prevVertIdx = vertIdx -1;
-        if(prevVertIdx < 0) prevVertIdx += vert.length;
-
-        Point p1 = vert[vertIdx];
-        Point p2 = vert[prevVertIdx];
-
-        if(p1.y == p2.y){
-            //this is the only time we don't intersect
-            return y == p1.y;
-        } else {
-            //we need to interp what the edge's x will be at our y value, then it intersects if x < vert(x)
-            double frac = (y - p2.y)/(p1.y - p2.y);
-            double edgeX = frac*(p1.x - p2.x) + p2.x;
-
-            return x < edgeX;
-        }
-    }
-
     public void setDest(Point edgePoint, double destAngle){
         isDest = true;
         angle = destAngle;

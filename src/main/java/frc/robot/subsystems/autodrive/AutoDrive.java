@@ -43,8 +43,8 @@ public class AutoDrive extends Component{
                 for(Node n : path){
                     System.out.println("Poly: " + n.poly.id + " Edge: " + n.location.x + "," + n.location.y);
                 }
-                //Node n = path.peek();
-                //edgeStatus = n.poly.getEdgeCrossing(n.prevNode.edgeId,rse.x,rse.y);
+                Node n = path.peek();
+                edgeStatus = getEdgeCrossing(n.location, n.edgePoint,rse.x,rse.y);
             } else {
                 System.out.println("Null path");
             }
@@ -67,11 +67,27 @@ public class AutoDrive extends Component{
         //until we cross the edge, PID to its center point
         //or if we get within 6in of target
         boolean isClose = Util.dist(new Point(rse.x,rse.y), n.location) < 6;
-        if(!isClose /*&& edgeStatus == n.poly.getEdgeCrossing(n.prevNode.edgeId,rse.x,rse.y)*/){
+        if(!isClose && edgeStatus == getEdgeCrossing(n.location,n.edgePoint,rse.x,rse.y)){
             targetPoint = n.location;
         } else {//else go to the next polygon
             path.pop();
         }
 
     }
+
+    public boolean getEdgeCrossing(Point p1, Point p2, double x, double y){
+        //does a ray cast from x,y intersect the line from p1 to p2
+
+        if(p1.y == p2.y){
+            //this is the only time we don't intersect
+            return y == p1.y;
+        } else {
+            //we need to interp what the edge's x will be at our y value, then it intersects if x < vert(x)
+            double frac = (y - p2.y)/(p1.y - p2.y);
+            double edgeX = frac*(p1.x - p2.x) + p2.x;
+
+            return x < edgeX;
+        }
+    }
+
 }

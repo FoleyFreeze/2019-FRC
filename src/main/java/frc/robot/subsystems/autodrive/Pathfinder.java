@@ -173,7 +173,7 @@ public class Pathfinder extends Component {
         System.out.println("DestPoly: " + destPolyIdx);
 
         //init nodes into priority queue
-        Node bestNode = new Node(new Point(rse.x,rse.y), startPoly, null, destPoly.edges[0], 0);
+        Node bestNode = new Node(new Point(rse.x,rse.y), startPoly, null, destPoly.edges[0], null);
 
         //pop the best node
 
@@ -189,7 +189,7 @@ public class Pathfinder extends Component {
                     //can check poly ids instead of edges/points
                 if(bestNode.prevNode == null || bestNode.poly.neighbors[i] != bestNode.prevNode.poly.id){
                     //make a new node
-                    Node n = new Node(edge, polygonList[bestNode.poly.neighbors[i]], bestNode, destPoly.edges[0], i);
+                    Node n = new Node(edge, polygonList[bestNode.poly.neighbors[i]], bestNode, destPoly.edges[0], bestNode.poly.vert[bestNode.poly.edgeLoc[i]]);
                     //set node point to the edge
                     //set previous node to best node
                     System.out.println(n.toString() + " travD: " + n.traveledDist + " totalD: " + n.totalDist);
