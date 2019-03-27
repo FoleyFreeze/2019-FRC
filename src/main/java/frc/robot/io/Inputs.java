@@ -6,6 +6,7 @@ import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.subsystems.Component;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
+import frc.robot.util.Util;
 
 public class Inputs extends Component {
    
@@ -120,7 +121,11 @@ public class Inputs extends Component {
         yAxisDrive = gamePad.yDriveAxis;
         rotAxisDrive = gamePad.rotDriveAxis;
 
-        //deadband if tiny
+        //deadband
+        xAxisDrive = Util.deadband(xAxisDrive, gamePad.IN_xDeadband);
+        yAxisDrive = Util.deadband(yAxisDrive, gamePad.IN_yDeadband);
+        rotAxisDrive = Util.deadband(rotAxisDrive, gamePad.IN_rotDeadband);
+        /*
         if(Math.abs(xAxisDrive) < gamePad.IN_xDeadband) xAxisDrive = 0; 
         if(Math.abs(yAxisDrive) < gamePad.IN_xDeadband) yAxisDrive = 0; 
         if(Math.abs(xAxisDrive) < gamePad.IN_xyDeadband && Math.abs(yAxisDrive) < gamePad.IN_xyDeadband) {
@@ -131,6 +136,7 @@ public class Inputs extends Component {
         xAxisDrive = Math.signum(xAxisDrive) * (Math.abs(xAxisDrive) - gamePad.IN_xDeadband / (1-gamePad.IN_xDeadband));
         yAxisDrive = Math.signum(yAxisDrive) * (Math.abs(yAxisDrive) - gamePad.IN_yDeadband / (1-gamePad.IN_yDeadband));
         rotAxisDrive = Math.signum(rotAxisDrive) * (Math.abs(rotAxisDrive) - gamePad.IN_rotDeadband / (1-gamePad.IN_rotDeadband));
+        */
 
         String stopDixon;//for joy of programming
         boolean dixon;//for joy of programming
@@ -157,10 +163,10 @@ public class Inputs extends Component {
         yAxisDrive = Math.signum(yAxisDrive) * Math.pow(Math.abs(yAxisDrive), k.DRV_AxisExpo);
         rotAxisDrive = Math.signum(rotAxisDrive) * Math.pow(Math.abs(rotAxisDrive), k.DRV_AxisExpo);
 
+        //control board switches
         cargoNotHatch = !controlBoard.cargoOrHatch;
         leftNotRight = controlBoard.lOrR;
         autoNotManualMode = controlBoard.autoOrSemi;
-
         
         //set buttons
         if(!k.DRV_Disable){
@@ -170,8 +176,15 @@ public class Inputs extends Component {
             //dodgingR = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
             //visionCargo = gamePad.getRawButton(4);
         }
+        
+        //action buttons
         //actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         //actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
+        actionRightRising = actionRight && !prevActionRight;
+        actionRightFalling = !actionRight && prevActionRight;
+        prevActionRight = actionRight;
+        
         if(actionRightFalling) autoShootHold = false;
         if(drive.autoShoot) autoShootHold = true;
         SmartDashboard.putBoolean("autoShootHold", autoShootHold);
@@ -180,10 +193,7 @@ public class Inputs extends Component {
         actionLeftRising = actionLeft && !prevActionLeft;
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
-        actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
-        actionRightRising = actionRight && !prevActionRight;
-        actionRightFalling = !actionRight && prevActionRight;
-        prevActionRight = actionRight;
+        
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.pitMode;
@@ -261,6 +271,7 @@ public class Inputs extends Component {
 
         SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
 
+        //automatic state handling
         if(autoNotManualMode){
             if(cargoNotHatch) {
                 gatherHatch = false;

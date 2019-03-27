@@ -36,4 +36,12 @@ public class Util{
         double diffY = p1.y - p2.y;
         return Math.sqrt(diffX*diffX + diffY*diffY);
     }
+
+    public static double deadband(double value, double deadband){
+        //zero if in the deadband zone
+        if(Math.abs(value) < deadband) return 0;
+
+        //else normalize the remaining part of the axis to 0 - 1
+        return Math.signum(value) * (Math.abs(value) - deadband) / (1 - deadband);
+    }
 }
