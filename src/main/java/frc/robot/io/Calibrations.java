@@ -83,8 +83,8 @@ public class Calibrations{
 
     public double GTH_CurrLimit = 14.0;
     public double GTH_CargoIntakeSpeed = 0.5;
-    public double GTH_CargoShootSpeedFast = 0.2;// 0.4; //.2 
-    public double GTH_CargoShootSpeedSlow = 0.2;//0.4; //.2
+    public double GTH_CargoShootSpeedFast = 0.27;// 0.4; //.2 
+    public double GTH_CargoShootSpeedSlow = 0.27;//0.4; //.2
     public double GTH_HatchIntakeSpeed = 0.5;
     public double GTH_HatchShootSpeedFast = 0.4;
     public double GTH_HatchShootSpeedSlow = 0.4;

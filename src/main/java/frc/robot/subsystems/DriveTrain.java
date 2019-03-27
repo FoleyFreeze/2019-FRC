@@ -307,7 +307,7 @@ public class DriveTrain extends Component{
         } else {
             //get angle and distance from vd
             double vOffset = 2; 
-            if (vd.angleTo>15) {vOffset = 12; }
+            //if (vd.angleTo>15) {vOffset = 12; }
             //Calculate actual angle to (From front of bot, not camera)
             double vAngle = Math.atan(((vd.distance + 16+vOffset) * Math.tan(Angle.toRad(vd.angleTo)))/(vd.distance+vOffset));
             vAngle *= 1.5; //was 1.3 MrC
