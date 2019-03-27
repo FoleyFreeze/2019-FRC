@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.io.ControlBoard.NearFarCargo;
 
 public class CargoGatherer extends Component{
 
@@ -19,7 +20,7 @@ public class CargoGatherer extends Component{
         }
         //  releases cargo
         else if(in.releaseCargo){
-                if (in.shift) {
+                if (in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {
                     out.setGatherMotor(-k.GTH_CargoShootSpeedFast/2, k.GTH_CargoShootSpeedSlow/2);
                 } else {
                     out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);

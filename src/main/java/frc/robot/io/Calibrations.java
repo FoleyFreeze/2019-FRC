@@ -48,6 +48,7 @@ public class Calibrations{
     public final double[] DRV_EleHeightAxis = {0,20,78};
     public final double[] DRV_PowerTable = {1, 1, 0.2};
     public double DRV_AutoRotateKP = 0.01; //power per degres of error
+    public double DRV_AutoRotateKD = 0.0;
     public double DRV_AutoRotatePwr = 0.2; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation

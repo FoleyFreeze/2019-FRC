@@ -21,6 +21,9 @@ public class Vision extends Component {
     NetworkTableEntry piFindTargetHigh;
     NetworkTableEntry piFindTargetLow;
 
+    double lastFrameTime;
+    int lastSeqNum;
+
     public Vision() {
         piCommands = NetworkTableInstance.getDefault().getTable("PiControl");
         piFindCargo = piCommands.getEntry("FindCargo");
@@ -39,12 +42,32 @@ public class Vision extends Component {
                     SmartDashboard.putString("VisionTargetHigh", data);
                     String[] parts = data.split(",");
 
+                    int seqNum = Integer.parseInt(parts[0]);
+                    SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
+                    lastSeqNum = seqNum;
+
                     vd.distance = Double.parseDouble(parts[1]);
                     vd.angleTo = Double.parseDouble(parts[2]);
                     vd.angleOf = Double.parseDouble(parts[3]);
 
                     vd.timeStamp = Timer.getFPGATimestamp();
                     vd.robotAngle = sense.robotAngle.getDeg();
+
+                    vd.dt = vd.timeStamp - lastFrameTime;
+                    SmartDashboard.putNumber("Image dt",vd.dt);
+                    lastFrameTime = vd.timeStamp;
+
+                    VisionData oldData = targetHighStack.peek();
+                    if(vd.dt < 0.2 && oldData != null){
+                        vd.dDist = oldData.distance - vd.distance;
+                        vd.dAngle = oldData.angleTo - vd.angleTo;
+                        if(vd.dAngle > 180) vd.dAngle += 360;
+                        if(vd.dAngle < -180) vd.dAngle -= 360;
+                    } else {
+                        vd.dDist = 0;
+                        vd.dAngle = 0;
+                    }
+                    
                     
                     //transform the camera distance vector into a field relative position
                     /*double camRad = vd.angleTo * Math.PI / 180;
@@ -66,6 +89,10 @@ public class Vision extends Component {
                     SmartDashboard.putString("VisionTargetLow", data);
                     String[] parts = data.split(",");
 
+                    int seqNum = Integer.parseInt(parts[0]);
+                    SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
+                    lastSeqNum = seqNum;
+
                     vd.distance = Double.parseDouble(parts[1]);
                     vd.angleTo = Double.parseDouble(parts[2]);
                     vd.angleOf = Double.parseDouble(parts[3]);
@@ -78,6 +105,21 @@ public class Vision extends Component {
                     
                     SmartDashboard.putNumber("vdX" , distX);
                     SmartDashboard.putNumber("vdY", distY);
+
+                    vd.dt = vd.timeStamp - lastFrameTime;
+                    SmartDashboard.putNumber("Image dt",vd.dt);
+                    lastFrameTime = vd.timeStamp;
+
+                    VisionData oldData = targetLowStack.peek();
+                    if(vd.dt < 0.2 && oldData != null){
+                        vd.dDist = oldData.distance - vd.distance;
+                        vd.dAngle = oldData.angleTo - vd.angleTo;
+                        if(vd.dAngle > 180) vd.dAngle += 360;
+                        if(vd.dAngle < -180) vd.dAngle -= 360;
+                    } else {
+                        vd.dDist = 0;
+                        vd.dAngle = 0;
+                    }
 
                     /*/transform the camera distance vector into a field relative position
                     double camRad = vd.angleTo * Math.PI / 180;
@@ -106,6 +148,21 @@ public class Vision extends Component {
                     
                     vd.timeStamp = Timer.getFPGATimestamp();
                     vd.robotAngle = sense.robotAngle.getDeg();
+
+                    vd.dt = vd.timeStamp - lastFrameTime;
+                    SmartDashboard.putNumber("Image dt",vd.dt);
+                    lastFrameTime = vd.timeStamp;
+
+                    VisionData oldData = cargoStack.peek();
+                    if(vd.dt < 0.2 && oldData != null){
+                        vd.dDist = oldData.distance - vd.distance;
+                        vd.dAngle = oldData.angleTo - vd.angleTo;
+                        if(vd.dAngle > 180) vd.dAngle += 360;
+                        if(vd.dAngle < -180) vd.dAngle -= 360;
+                    } else {
+                        vd.dDist = 0;
+                        vd.dAngle = 0;
+                    }
                     
                     //transform the camera distance vector into a field relative position
                     /*double camRad = vd.angleTo * Math.PI / 180;

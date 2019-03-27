@@ -572,7 +572,7 @@ public class Inputs extends Component {
                 if(cargoNotHatch) {
                     robotOrientation = 90;
                 } else {
-                    robotOrientation = 29;
+                    robotOrientation = 29-3;
                 }   
             break; 
 
@@ -580,7 +580,7 @@ public class Inputs extends Component {
                 if(cargoNotHatch) {
                     robotOrientation = 90;
                 } else {
-                    robotOrientation = 149;
+                    robotOrientation = 151+3;
                 } 
             break; 
 

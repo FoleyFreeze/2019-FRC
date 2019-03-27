@@ -11,7 +11,7 @@ public class ControlBoard {
     private int IN_low = 11;
     private int IN_front = 10;
 
-    private int OUT_high = 1; //5
+    private int OUT_high = 2; //5
     private int OUT_middle = 12; //4
     private int OUT_low = 11; //3
     private int OUT_front = 10;//2
@@ -21,7 +21,9 @@ public class ControlBoard {
     private int IN_jogDown = 7;//?????
     
     private int IN_gather = 1;
+    private int OUT_gather = 1;
     private int IN_shoot = 4;
+    private int OUT_shoot = 4;
     
     private int IN_farRkt = 16;
     private int IN_cargoShip = 14;
@@ -34,6 +36,7 @@ public class ControlBoard {
     private int IN_lOrR = 17; // isn't left right 
     private int IN_AutoOrSemi = 5; // auto is true 
     private int IN_climb = 6;
+    private int OUT_climb = 6;
     
     private int IN_shift = 3;
     private int OUT_shift = 3;
@@ -63,10 +66,13 @@ public class ControlBoard {
         jogUp = joy.getRawButton(IN_jogUp);
         jogDown = joy.getRawButton(IN_jogDown);
         gather = joy.getRawButton(IN_gather);
+        joy.setOutput(OUT_gather, gather);
         shoot = joy.getRawButton(IN_shoot);
+        joy.setOutput(OUT_shoot, shoot);
         lOrR = joy.getRawButton(IN_lOrR);
         autoOrSemi = joy.getRawButton(IN_AutoOrSemi);
         climb = joy.getRawButton(IN_climb);
+        joy.setOutput(OUT_climb, climb);
         shift = joy.getRawButton(IN_shift);
         pitMode = joy.getRawButton(IN_pitMode);
         cargoOrHatch = joy.getRawButton(IN_cargoOrHatch);

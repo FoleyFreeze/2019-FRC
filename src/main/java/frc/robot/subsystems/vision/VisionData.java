@@ -9,4 +9,8 @@ public class VisionData {
     public double timeStamp;
     public double targetX;
     public double targetY;
+
+    public double dDist;
+    public double dAngle;
+    public double dt;
 }

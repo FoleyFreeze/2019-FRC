@@ -134,7 +134,7 @@ public class DriveTrain extends Component{
         //PID rotation until robot angle equals robotOrientation
         double angleErr = sense.robotAngle.subDeg(in.robotOrientation);
         SmartDashboard.putNumber("autoRotateError", angleErr);
-        double rotPower = angleErr * k.DRV_AutoRotateKP;
+        double rotPower = angleErr * k.DRV_AutoRotateKP + sense.deltaRobotAngle * k.DRV_AutoRotateKD;
         rotPower = Math.max(-k.DRV_AutoRotatePwr, Math.min(k.DRV_AutoRotatePwr, rotPower));
         return rotPower;
     }
