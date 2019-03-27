@@ -2,6 +2,7 @@ package frc.robot.io;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.subsystems.Component;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
@@ -64,6 +65,8 @@ public class Inputs extends Component {
     private boolean prevAutoDrive;
     public boolean autoDriveRising;
 
+    public boolean autoShootHold;
+    public double autoShootDist;
     public boolean actionLeft;
     public boolean prevActionLeft; 
     public boolean actionLeftRising;
@@ -169,7 +172,11 @@ public class Inputs extends Component {
         }
         //actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         //actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-        actionLeft = gamePad.leftTrigger > k.IN_DodgingMin || !k.CAM_AutoShootDisabled && drive.autoShoot;
+        if(actionRightFalling) autoShootHold = false;
+        if(drive.autoShoot) autoShootHold = true;
+        SmartDashboard.putBoolean("autoShootHold", autoShootHold);
+
+        actionLeft = gamePad.leftTrigger > k.IN_DodgingMin || !k.CAM_AutoShootDisabled && autoShootHold;
         actionLeftRising = actionLeft && !prevActionLeft;
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
@@ -183,7 +190,7 @@ public class Inputs extends Component {
         shift = controlBoard.shift;
         shoot = controlBoard.shoot;
         if(sense.isDisabled) gatherTimer = Timer.getFPGATimestamp() + k.GTH_StartTimer;
-        gather = controlBoard.gather && Timer.getFPGATimestamp() > gatherTimer;
+        gather = controlBoard.gather /*&& Timer.getFPGATimestamp() > gatherTimer*/;
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         SmartDashboard.putBoolean("ActionLeft", actionLeft);
@@ -250,7 +257,7 @@ public class Inputs extends Component {
 
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
-        double remainingShootTime = Timer.getFPGATimestamp() - autoShootTime;
+        double remainingShootTime = autoShootTime - Timer.getFPGATimestamp();
 
         SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
 
@@ -273,6 +280,9 @@ public class Inputs extends Component {
                     sense.hasCargo = true;
                     sense.hasHatch = false;
                 }
+
+                autoShootDist = k.CAM_AutoShootCargoDist;
+
             } else {// auto hatch
                 gatherCargo = false; 
                 releaseCargo = false; 
@@ -290,6 +300,9 @@ public class Inputs extends Component {
                     sense.hasHatch = true;
                     sense.hasCargo = false;
                 }
+
+                if(sense.hasHatch) autoShootDist = k.CAM_AutoShootHatchDist;
+                else autoShootDist = k.CAM_AutoGatherHatchDist;
             } 
 
             //autoDrive logic
@@ -339,11 +352,12 @@ public class Inputs extends Component {
 
             }
 
-            visionTargetLow = !cargoNotHatch && actionRight && gamePad.camDrive;
-            visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive;
+            visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO) && actionRight && gamePad.camDrive;
+            visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive && controlBoard.nearFarCargo != NearFarCargo.CARGO;
             visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
 
         } else { //manual mode
+            autoShootDist = -910;
             if (cargoNotHatch){
                 gatherCargo = gather && !shift;
                 releaseCargo = shoot;
@@ -457,6 +471,12 @@ public class Inputs extends Component {
     
     //set elevator position based on control board state
     public void setElevatorHeight(boolean ready){
+        //to help with the start hatch position (only in auto)
+        if(Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) {
+            elevatorTarget = ElevatorPosition.DONT_MOVE;
+            return;
+        }
+
         if(climb) {
             //elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
             //return;

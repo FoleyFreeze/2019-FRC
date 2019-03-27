@@ -103,7 +103,8 @@ public class DriveTrain extends Component{
         //if we already gathered or shot the object
         if(in.latchReady){
             //force negative Y in order to force reversing
-            swerve(in.xAxisDrive, Math.max(in.yAxisDrive,0.1), pidOrient());
+            //swerve(in.xAxisDrive, Math.max(in.yAxisDrive,0.3), pidOrient());
+            swerve(0, Math.max(0,0.3), pidOrient());
             return true;
         }
 
@@ -237,10 +238,11 @@ public class DriveTrain extends Component{
             outTheta[i] = theta;
        }
 
+       double powerFactor = Util.interpolate(k.DRV_EleHeightAxis, k.DRV_PowerTable, sense.elevatorEncoder);
 
         //Normalize
         double maxPwr = Util.absMax(outR);
-        if(maxPwr > 1){
+        if(maxPwr > powerFactor){   //was 1 instead of powerFactor
             outR[0] /= maxPwr;
             outR[1] /= maxPwr;
             outR[2] /= maxPwr;
@@ -290,7 +292,7 @@ public class DriveTrain extends Component{
             double anglePower = k.DRV_SwerveAngKP * error;
             outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);
         }
-        double powerFactor = Util.interpolate(k.DRV_EleHeightAxis, k.DRV_PowerTable, sense.elevatorEncoder);
+        //Moved up to 241 area double powerFactor = Util.interpolate(k.DRV_EleHeightAxis, k.DRV_PowerTable, sense.elevatorEncoder);
 
         out.setSwerveDrivePower(outR[0]*powerFactor, outR[1]*powerFactor, outR[2]*powerFactor, outR[3]*powerFactor);
         out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
@@ -305,10 +307,10 @@ public class DriveTrain extends Component{
         } else {
             //get angle and distance from vd
             double vOffset = 2; 
-            //if (vd.angleTo>15) {vOffset += 8; }
+            if (vd.angleTo>15) {vOffset = 12; }
             //Calculate actual angle to (From front of bot, not camera)
             double vAngle = Math.atan(((vd.distance + 16+vOffset) * Math.tan(Angle.toRad(vd.angleTo)))/(vd.distance+vOffset));
-            vAngle *= 1.3;
+            vAngle *= 1.5; //was 1.3 MrC
             //PID to distance amplitude of vector
             double vHypot = Math.abs((vd.distance+vOffset)/Math.cos(vAngle));
             double vAmplitude = Util.limit(vHypot * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
@@ -320,7 +322,9 @@ public class DriveTrain extends Component{
             double rotPower = pidOrient();
             swerve(vX, vY, rotPower);
 
-            autoShoot = vd.distance < 5;
+            SmartDashboard.putNumber("hypot",vHypot);
+            SmartDashboard.putNumber("autoShootDist", in.autoShootDist);
+            autoShoot = vd.distance < in.autoShootDist && Math.abs(vd.angleTo) < 4;
 /*
             //turn angle into a x distance
             double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));

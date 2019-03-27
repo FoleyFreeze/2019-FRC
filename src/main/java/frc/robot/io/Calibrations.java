@@ -11,7 +11,7 @@ public class Calibrations{
     // disable cals
     public boolean AD_Disabled = true;
     public boolean CAM_Disabled = false;
-    public boolean CLM_disable = true;
+    public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
     public boolean GTH_DisableCargo = false;
@@ -49,7 +49,7 @@ public class Calibrations{
     public final double[] DRV_PowerTable = {1, 1, 0.2};
     public double DRV_AutoRotateKP = 0.01; //power per degres of error
     public double DRV_AutoRotateKD = 0.0;
-    public double DRV_AutoRotatePwr = 0.2; //max auto rotate power
+    public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
 
@@ -79,18 +79,18 @@ public class Calibrations{
     public double GTH_Arm2CargoTimer = 0.5;
     public double GTH_Arm2HatchTimer = 1.75;
     public double GTH_ArmExtraIdlePwr = 0.20; //power applied after closing to prevent backdriving
-    public double GTH_StartTimer = 1.25; //seconds after enabled before the gatherer can run
+    public double GTH_StartTimer = 0.75; //seconds after enabled before the gatherer can run
 
     public double GTH_CurrLimit = 14.0;
     public double GTH_CargoIntakeSpeed = 0.5;
-    public double GTH_CargoShootSpeedFast = 0.4; //.2 
-    public double GTH_CargoShootSpeedSlow = 0.4; //.2
+    public double GTH_CargoShootSpeedFast = 0.2;// 0.4; //.2 
+    public double GTH_CargoShootSpeedSlow = 0.2;//0.4; //.2
     public double GTH_HatchIntakeSpeed = 0.5;
     public double GTH_HatchShootSpeedFast = 0.4;
     public double GTH_HatchShootSpeedSlow = 0.4;
     public double GTH_CargoHoldSpeed = 0.1; //0.2;
     public double GTH_HatchHoldSpeed = 0.05;
-    public double GTH_ReleaseTime = 1.5;
+    public double GTH_ReleaseTime = 0.2; //time to spend auto shooting/gathering
 
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
@@ -144,7 +144,10 @@ public class Calibrations{
     public boolean CAM_DebugCargo = false;
     public boolean CAM_DebugTargetHigh = false;
     public boolean CAM_DebugTargetLow = false;
-    public boolean CAM_AutoShootDisabled = true; //disabled until driver is ok with this feature
+    public boolean CAM_AutoShootDisabled = false; //disabled until driver is ok with this feature
+    public double CAM_AutoShootCargoDist = 3;//inches
+    public double CAM_AutoShootHatchDist = 3;
+    public double CAM_AutoGatherHatchDist = 10;
     
     public Calibrations(){
         

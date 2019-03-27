@@ -83,6 +83,11 @@ public class Vision extends Component {
             }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
             nt.addEntryListener("vis_target_low", (table,key,entry,value,flags) -> {
+                
+                //don't trust the camera when hatch panel is in the way
+                if(!in.cargoNotHatch && sense.elevatorEncoder > 16 && sense.elevatorEncoder < 38) return;
+                if(in.cargoNotHatch && sense.elevatorEncoder > 20 && sense.elevatorEncoder < 33) return;
+                
                 try{
                     VisionData vd = new VisionData();
                     String data = value.getString(); //seqNum, dist, angleTo, angleOf, etc?
