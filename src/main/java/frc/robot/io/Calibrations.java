@@ -37,8 +37,8 @@ public class Calibrations{
     public double   DRV_CamDriveMaxPwr_Y = 0.3;//.2
     public double   DRV_CamDriveMinPwr_X = 0.10; //was .03 MrC
     public double   DRV_CamDriveMinPwr_Y = 0.08; //was .03 MrC
-    public double   DRV_TargetDistanceKP = -0.01; //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0;//0.15;
+    public double   DRV_TargetDistanceKP = -0.014;//-0.0145;//-0.016; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0.15;//0.15;
     public double   DRV_CamTargetY0 = -2.5; //inch offset for target 0
     public double   DRV_CamDistShootX = 2;
     public double   DRV_CamDistShootY = 2 - DRV_CamTargetY0;
@@ -83,8 +83,8 @@ public class Calibrations{
 
     public double GTH_CurrLimit = 14.0;
     public double GTH_CargoIntakeSpeed = 0.5;
-    public double GTH_CargoShootSpeedFast = 0.27;// 0.4; //.2 
-    public double GTH_CargoShootSpeedSlow = 0.27;//0.4; //.2
+    public double GTH_CargoShootSpeedFast = 0.2;//0.16;//0.13;//0.27;// 0.4; //.2 
+    public double GTH_CargoShootSpeedSlow = 0.2;//0.16;//0.13;//0.27;//0.4; //.2
     public double GTH_HatchIntakeSpeed = 0.5;
     public double GTH_HatchShootSpeedFast = 0.4;
     public double GTH_HatchShootSpeedSlow = 0.4;
@@ -145,9 +145,9 @@ public class Calibrations{
     public boolean CAM_DebugTargetHigh = false;
     public boolean CAM_DebugTargetLow = false;
     public boolean CAM_AutoShootDisabled = false; //disabled until driver is ok with this feature
-    public double CAM_AutoShootCargoDist = 3;//inches
-    public double CAM_AutoShootHatchDist = 3;
-    public double CAM_AutoGatherHatchDist = 10;
+    public double CAM_AutoShootCargoDist = 2;//inches
+    public double CAM_AutoShootHatchDist = 2;
+    public double CAM_AutoGatherHatchDist = 18;
     
     public Calibrations(){
         

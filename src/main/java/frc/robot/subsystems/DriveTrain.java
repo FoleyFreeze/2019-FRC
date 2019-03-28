@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
+import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.subsystems.vision.VisionData;
 import frc.robot.util.Angle;
 import frc.robot.util.Util;
+
+//import org.graalvm.compiler.asm.amd64.AMD64Assembler.SSEOp;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -238,15 +242,14 @@ public class DriveTrain extends Component{
             outTheta[i] = theta;
        }
 
-       double powerFactor = Util.interpolate(k.DRV_EleHeightAxis, k.DRV_PowerTable, sense.elevatorEncoder);
-
         //Normalize
+        double powerFactor = Util.interpolate(k.DRV_EleHeightAxis, k.DRV_PowerTable, sense.elevatorEncoder);
         double maxPwr = Util.absMax(outR);
         if(maxPwr > powerFactor){   //was 1 instead of powerFactor
-            outR[0] /= maxPwr;
-            outR[1] /= maxPwr;
-            outR[2] /= maxPwr;
-            outR[3] /= maxPwr;
+            outR[0] = outR[0] / maxPwr * powerFactor;
+            outR[1] = outR[1] / maxPwr * powerFactor;
+            outR[2] = outR[2] / maxPwr * powerFactor;
+            outR[3] = outR[3] / maxPwr * powerFactor;
         }
          
         //park if not moving
@@ -292,9 +295,8 @@ public class DriveTrain extends Component{
             double anglePower = k.DRV_SwerveAngKP * error;
             outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);
         }
-        //Moved up to 241 area double powerFactor = Util.interpolate(k.DRV_EleHeightAxis, k.DRV_PowerTable, sense.elevatorEncoder);
 
-        out.setSwerveDrivePower(outR[0]*powerFactor, outR[1]*powerFactor, outR[2]*powerFactor, outR[3]*powerFactor);
+        out.setSwerveDrivePower(outR[0], outR[1], outR[2], outR[3]);
         out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
         SmartDashboard.putNumberArray("Drive Power", outR);
         SmartDashboard.putNumberArray("Turn Power", outError);
@@ -306,15 +308,36 @@ public class DriveTrain extends Component{
             swerve(0,0,0);
         } else {
             //get angle and distance from vd
-            double vOffset = 2; 
-            //if (vd.angleTo>15) {vOffset = 12; }
+            double vOffset = 0; 
+            //Arc into target aka target 8 inches away first, then drive in when angle is low enoug
+            if (Math.abs(vd.angleTo)>5 /*7.8*//*10*/) {vOffset = 6; } //was vOffset = 8
+            //for all cargo deliveries, add extra inches
+            if (in.cargoNotHatch) {vOffset+=2;}
+            // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
+            if (sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO) {vOffset+=2;}
+            //add extra drive to pick up hatch
+            if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 0;}
+            if (sense.hasHatch && !in.cargoNotHatch && in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {vOffset -= 0;}
+            double vDist = vd.distance-vOffset;
+            double vXErr = (vd.distance + 15) * Math.tan(Angle.toRad(vd.angleTo));
             //Calculate actual angle to (From front of bot, not camera)
-            double vAngle = Math.atan(((vd.distance + 16+vOffset) * Math.tan(Angle.toRad(vd.angleTo)))/(vd.distance+vOffset));
-            vAngle *= 1.5; //was 1.3 MrC
+            double vAngle = Math.atan(vXErr/(vDist));
+            if (vDist < 0) {
+                if (vXErr <0 ) {vAngle -= Math.PI;}
+                else {vAngle+= Math.PI;}
+            }
+
+            vAngle *= 1.25; //was 1.3 MrC
             //PID to distance amplitude of vector
-            double vHypot = Math.abs((vd.distance+vOffset)/Math.cos(vAngle));
+            double vHypot = Math.sqrt(vXErr*vXErr + vDist*vDist);//Math.abs((vDist)/Math.cos(vAngle));
             double vAmplitude = Util.limit(vHypot * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
             
+            SmartDashboard.putNumber("vDist", vDist);
+            SmartDashboard.putNumber("vXErr", vXErr);
+            SmartDashboard.putNumber("vAngle", vAngle);
+            SmartDashboard.putNumber("vAmplitude", vAmplitude);
+
+
             //Break vector into X and Y components
             double vX = vAmplitude * Math.sin(vAngle);
             double vY = vAmplitude * Math.cos(vAngle);
@@ -322,9 +345,11 @@ public class DriveTrain extends Component{
             double rotPower = pidOrient();
             swerve(vX, vY, rotPower);
 
-            SmartDashboard.putNumber("hypot",vHypot);
+            SmartDashboard.putNumber("vHypot",vHypot);
             SmartDashboard.putNumber("autoShootDist", in.autoShootDist);
-            autoShoot = vd.distance < in.autoShootDist && Math.abs(vd.angleTo) < 4;
+            double allowableAngle = 2;
+            if (!in.cargoNotHatch && !sense.hasHatch) allowableAngle = 6;
+            autoShoot = vDist < in.autoShootDist && Math.abs(vd.angleTo) < allowableAngle;
 /*
             //turn angle into a x distance
             double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));

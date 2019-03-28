@@ -6,6 +6,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.io.ControlBoard;
+import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.subsystems.Component;
 import frc.robot.util.Angle;
 import frc.robot.util.LimitedStack;
@@ -215,8 +217,11 @@ public class Vision extends Component {
     }
 
     public void run(){
+        boolean PiHighSearch = in.scoringCargo && in.controlBoard.nearFarCargo!= NearFarCargo.CARGO;
         piFindCargo.setBoolean(in.searchingCargo || k.CAM_DebugCargo);
-        piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
-        piFindTargetLow.setBoolean(in.searchingHatch || k.CAM_DebugTargetLow);
+        piFindTargetHigh.setBoolean(PiHighSearch || k.CAM_DebugTargetHigh);//(in.visionTargetHigh || k.CAM_DebugTargetHigh);//
+        piFindTargetLow.setBoolean(!PiHighSearch || k.CAM_DebugTargetLow);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);
+        //piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
+        //piFindTargetLow.setBoolean(in.searchingHatch || k.CAM_DebugTargetLow);
     }
 }

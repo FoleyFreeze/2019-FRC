@@ -26,6 +26,9 @@ public class Controller {
     private int IN_camDriveEnable;
     private int IN_autoDriveEnable;
 
+    private int IN_autoShootEnbl;
+    public boolean autoShootEnbl;
+
     public boolean resetGyro;
     public boolean resetElePart1;
     public boolean resetElePart2;
@@ -57,6 +60,7 @@ public class Controller {
 
         if(IN_flySky){
             //Buttons if Fly Sky controller
+            IN_autoShootEnbl = 2;
             IN_resetGyro = 10;
             IN_compassDrive = 0;
             IN_fieldOriented = 5;
@@ -77,6 +81,7 @@ public class Controller {
             IN_autoDriveEnable = 1;
             IN_camDriveEnable = 8;
         }else{
+            IN_autoDriveEnable = 0;
             IN_resetGyro = 1;
             IN_compassDrive = 0;
             IN_fieldOriented = 6;
@@ -97,6 +102,9 @@ public class Controller {
             IN_autoDriveEnable = 5;
             IN_camDriveEnable = 0;
         }
+
+        if(IN_autoShootEnbl != 0) autoShootEnbl = joy.getRawButton(IN_autoShootEnbl);
+        else autoShootEnbl = false;
 
         if(IN_resetGyro != 0) resetGyro = joy.getRawButton(IN_resetGyro);
         else resetGyro = false;

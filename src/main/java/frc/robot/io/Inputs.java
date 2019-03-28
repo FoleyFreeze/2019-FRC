@@ -180,10 +180,7 @@ public class Inputs extends Component {
         //action buttons
         //actionCargo = gamePad.getRawAxis(k.IN_dodgingL) > k.IN_DodgingMin;
         //actionHatch = gamePad.getRawAxis(k.IN_dodgingR) > k.IN_DodgingMin;
-        actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
-        actionRightRising = actionRight && !prevActionRight;
-        actionRightFalling = !actionRight && prevActionRight;
-        prevActionRight = actionRight;
+        
         
         if(actionRightFalling) autoShootHold = false;
         if(drive.autoShoot) autoShootHold = true;
@@ -194,6 +191,13 @@ public class Inputs extends Component {
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
         
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
+        actionRightRising = actionRight && !prevActionRight;
+        actionRightFalling = !actionRight && prevActionRight;
+        prevActionRight = actionRight;
+
+        //auto shoot can be turned on and off
+        k.CAM_AutoShootDisabled = !gamePad.autoShootEnbl;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.pitMode;
@@ -271,6 +275,8 @@ public class Inputs extends Component {
 
         SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
 
+        if(sense.isDisabled) allowAutoAutoRotation = false;
+
         //automatic state handling
         if(autoNotManualMode){
             if(cargoNotHatch) {
@@ -345,6 +351,7 @@ public class Inputs extends Component {
                     setRobotOrientation();
                     autoOrientRobot = true;
                 } else {
+                    allowAutoAutoRotation = false;
                     //by not calling any elevator or orientation functions, the variables retain their previous values
                 }
             } else {
@@ -603,7 +610,7 @@ public class Inputs extends Component {
                 if(cargoNotHatch) {
                     robotOrientation = 90;
                 } else {
-                    robotOrientation = 29-3;
+                    robotOrientation = 29-1;//3;
                 }   
             break; 
 
@@ -611,7 +618,7 @@ public class Inputs extends Component {
                 if(cargoNotHatch) {
                     robotOrientation = 90;
                 } else {
-                    robotOrientation = 151+3;
+                    robotOrientation = 151+1;//3;
                 } 
             break; 
 
