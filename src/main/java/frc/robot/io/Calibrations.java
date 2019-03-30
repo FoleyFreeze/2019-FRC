@@ -37,9 +37,9 @@ public class Calibrations{
     public double   DRV_CamDriveMaxPwr_Y = 0.3;//.2
     public double   DRV_CamDriveMinPwr_X = 0.10; //was .03 MrC
     public double   DRV_CamDriveMinPwr_Y = 0.08; //was .03 MrC
-    public double   DRV_TargetDistanceKP = -0.014;//-0.0145;//-0.016; //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0.15;//0.15;
-    public double   DRV_CamTargetY0 = -2.5; //inch offset for target 0
+    public double   DRV_TargetDistanceKP = -0.014;//-0.03;//-0.014;//-0.0145;//-0.016; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0;//0.4;//0.15;
+    public double   DRV_CamTargetY0 = 0;//-2; //Drive 2 inches CLOSER to all targets
     public double   DRV_CamDistShootX = 2;
     public double   DRV_CamDistShootY = 2 - DRV_CamTargetY0;
     public double   DRV_WaitForParkTime = 1;//seconds //was 2

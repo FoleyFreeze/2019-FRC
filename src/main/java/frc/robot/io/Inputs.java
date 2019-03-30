@@ -487,10 +487,11 @@ public class Inputs extends Component {
         return count>1;
     }
     
+    
     //set elevator position based on control board state
     public void setElevatorHeight(boolean ready){
         //to help with the start hatch position (only in auto)
-        if(Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) {
+        if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.fakeAuto ) {
             elevatorTarget = ElevatorPosition.DONT_MOVE;
             return;
         }

@@ -4,7 +4,7 @@ package frc.robot.io;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Controller {
-    
+
     private int IN_resetGyro;
     private int IN_compassDrive;
     private int IN_fieldOriented;
@@ -25,9 +25,13 @@ public class Controller {
     private int IN_dodgingR = 3;
     private int IN_camDriveEnable;
     private int IN_autoDriveEnable;
+    public int IN_fakeAuto;
 
     private int IN_autoShootEnbl;
     public boolean autoShootEnbl;
+
+    // added by Nico
+    public boolean fakeAuto;
 
     public boolean resetGyro;
     public boolean resetElePart1;
@@ -79,7 +83,8 @@ public class Controller {
             IN_resetElePart1 = 11;
             IN_resetElePart2 = 15;
             IN_autoDriveEnable = 1;
-            IN_camDriveEnable = 8;
+            IN_camDriveEnable = 6; //Troy8;
+            IN_fakeAuto = 4;
         }else{
             IN_autoDriveEnable = 0;
             IN_resetGyro = 1;
@@ -105,6 +110,9 @@ public class Controller {
 
         if(IN_autoShootEnbl != 0) autoShootEnbl = joy.getRawButton(IN_autoShootEnbl);
         else autoShootEnbl = false;
+
+        if(IN_fakeAuto != 0) fakeAuto = joy.getRawButton(IN_fakeAuto);
+        else fakeAuto = false;
 
         if(IN_resetGyro != 0) resetGyro = joy.getRawButton(IN_resetGyro);
         else resetGyro = false;

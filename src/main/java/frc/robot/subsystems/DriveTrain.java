@@ -307,8 +307,8 @@ public class DriveTrain extends Component{
             //placeholder
             swerve(0,0,0);
         } else {
-            //get angle and distance from vd
-            double vOffset = 0; 
+            //get angle and distance from ALL targets
+            double vOffset = k.DRV_CamTargetY0; //How close to drive to all targets 
             //Arc into target aka target 8 inches away first, then drive in when angle is low enoug
             if (Math.abs(vd.angleTo)>5 /*7.8*//*10*/) {vOffset = 6; } //was vOffset = 8
             //for all cargo deliveries, add extra inches
@@ -330,7 +330,9 @@ public class DriveTrain extends Component{
             vAngle *= 1.25; //was 1.3 MrC
             //PID to distance amplitude of vector
             double vHypot = Math.sqrt(vXErr*vXErr + vDist*vDist);//Math.abs((vDist)/Math.cos(vAngle));
-            double vAmplitude = Util.limit(vHypot * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
+            double velMag = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy) / sense.dt;
+            double vPwr = vHypot * k.DRV_TargetDistanceKP + velMag * k.DRV_TargetDistanceKD;
+            double vAmplitude = Util.limit(vPwr, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
             
             SmartDashboard.putNumber("vDist", vDist);
             SmartDashboard.putNumber("vXErr", vXErr);
