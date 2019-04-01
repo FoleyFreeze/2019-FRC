@@ -12,7 +12,7 @@ public class AutoDrive extends Component{
     public Point targetPoint;
     public boolean pathComplete;
 
-    private boolean edgeStatus;
+    private int edgeStatus;
 
     public AutoDrive(){
         targetPoint = null;
@@ -71,23 +71,51 @@ public class AutoDrive extends Component{
             targetPoint = n.location;
         } else {//else go to the next polygon
             path.pop();
+            n = path.peek();
+            if(n != null){
+                edgeStatus = getEdgeCrossing(n.location,n.edgePoint,rse.x,rse.y);
+                targetPoint = n.location;
+            }
         }
 
     }
 
-    public boolean getEdgeCrossing(Point p1, Point p2, double x, double y){
+    public int getEdgeCrossing(Point p1, Point p2, double x, double y){
         //does a ray cast from x,y intersect the line from p1 to p2
+        boolean xCross;
+        boolean yCross;
 
         if(p1.y == p2.y){
             //this is the only time we don't intersect
-            return y == p1.y;
+            //return y == p1.y;
+            xCross = false;
         } else {
             //we need to interp what the edge's x will be at our y value, then it intersects if x < vert(x)
             double frac = (y - p2.y)/(p1.y - p2.y);
             double edgeX = frac*(p1.x - p2.x) + p2.x;
 
-            return x < edgeX;
+            //return x < edgeX;
+            xCross = x < edgeX;
         }
+        
+        //check y crossing
+        if(p1.x == p2.x){
+            //this is the only time we don't intersect
+            //return y == p1.y;
+            yCross = false;
+        } else {
+            //we need to interp what the edge's x will be at our y value, then it intersects if x < vert(x)
+            double frac = (x - p2.x)/(p1.x - p2.x);
+            double edgeY = frac*(p1.y - p2.y) + p2.y;
+
+            //return x < edgeX;
+            yCross = y < edgeY;
+        }
+
+        if(!xCross && !yCross) return 0;
+        else if(xCross && !yCross) return 1;
+        else if(!xCross && yCross) return 2;
+        else return 3;
     }
 
 }

@@ -27,8 +27,8 @@ public class Controller {
     private int IN_autoDriveEnable;
     public int IN_fakeAuto;
 
-    private int IN_autoShootEnbl;
-    public boolean autoShootEnbl;
+    private int IN_autoShootEnable;
+    public boolean autoShootEnable;
 
     // added by Nico
     public boolean fakeAuto;
@@ -64,7 +64,7 @@ public class Controller {
 
         if(IN_flySky){
             //Buttons if Fly Sky controller
-            IN_autoShootEnbl = 2;
+            IN_autoShootEnable = 2;
             IN_resetGyro = 10;
             IN_compassDrive = 0;
             IN_fieldOriented = 5;
@@ -108,8 +108,8 @@ public class Controller {
             IN_camDriveEnable = 0;
         }
 
-        if(IN_autoShootEnbl != 0) autoShootEnbl = joy.getRawButton(IN_autoShootEnbl);
-        else autoShootEnbl = false;
+        if(IN_autoShootEnable != 0) autoShootEnable = joy.getRawButton(IN_autoShootEnable);
+        else autoShootEnable = false;
 
         if(IN_fakeAuto != 0) fakeAuto = joy.getRawButton(IN_fakeAuto);
         else fakeAuto = false;

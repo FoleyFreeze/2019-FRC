@@ -197,7 +197,7 @@ public class Inputs extends Component {
         prevActionRight = actionRight;
 
         //auto shoot can be turned on and off
-        k.CAM_AutoShootDisabled = !gamePad.autoShootEnbl;
+        k.CAM_AutoShootDisabled = !gamePad.autoShootEnable;
 
         //flipOrientation = gamePad.getRawButton(k.IN_flipOrientation);
         pitMode = !controlBoard.pitMode;
