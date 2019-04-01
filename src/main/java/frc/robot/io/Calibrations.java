@@ -37,8 +37,8 @@ public class Calibrations{
     public double   DRV_CamDriveMaxPwr_Y = 0.3;//.2
     public double   DRV_CamDriveMinPwr_X = 0.10; //was .03 MrC
     public double   DRV_CamDriveMinPwr_Y = 0.08; //was .03 MrC
-    public double   DRV_TargetDistanceKP = -0.014;//-0.03;//-0.014;//-0.0145;//-0.016; //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0;//0.4;//0.15;
+    public double   DRV_TargetDistanceKP = -0.035;//-0.03;//-0.014;//-0.0145;//-0.016; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0.009;//0.4;//0.15;
     public double   DRV_CamTargetY0 = 0;//-2; //Drive 2 inches CLOSER to all targets
     public double   DRV_CamDistShootX = 2;
     public double   DRV_CamDistShootY = 2 - DRV_CamTargetY0;
@@ -96,7 +96,7 @@ public class Calibrations{
     public double ELE_MotorPwr = 0.1; // set to actual value later
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
     public double ELE_PIDLimitUp = 0.9;
-    public double ELE_PIDLimitDown = 0.5;
+    public double ELE_PIDLimitDown = 0.7;//0.5
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
     public double ELE_PositionOffset = 0.5; //add this number to all the positions
@@ -110,6 +110,7 @@ public class Calibrations{
     public double CLM_MotorSpeedDn = 0.15;
     public double CLM_EncoderLimit = 65;
     public double CLM_Zone_1 = 20;
+    public double CLM_Zone_Half = 10;
     public double CLM_Zone_2 = 60;
     public double CLM_Zone_3 = CLM_EncoderLimit;
     public double CLM_Zone_Power_1 = 0.6; //.6

@@ -293,7 +293,7 @@ public class Inputs extends Component {
                 } else if(sense.hasCargo && releaseCargo || sense.hasCargo && remainingShootTime<0 && remainingShootTime>-0.1) {
                     if(actionLeftRising) autoShootTime = Timer.getFPGATimestamp() + k.GTH_ReleaseTime;
                     else if(remainingShootTime<0) sense.hasCargo = false; 
-                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gatherCargo) {
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2 && gatherCargo) {
                     sense.hasCargo = true;
                     sense.hasHatch = false;
                 }
@@ -313,7 +313,7 @@ public class Inputs extends Component {
                 } else if(sense.hasHatch && releaseHatch || sense.hasHatch && remainingShootTime<0 && remainingShootTime>-0.1) {
                     if(actionLeftRising) autoShootTime = Timer.getFPGATimestamp() + k.GTH_ReleaseTime;
                     else if(remainingShootTime<0) sense.hasHatch = false; 
-                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gatherHatch) {
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2 && gatherHatch) {
                     sense.hasHatch = true;
                     sense.hasCargo = false;
                 }
@@ -387,7 +387,7 @@ public class Inputs extends Component {
                     sense.hasHatch = false;
                 } else if(sense.hasCargo && shoot) {
                     sense.hasCargo = false; 
-                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gather) {
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2 && gather) {
                     sense.hasCargo = true;
                     sense.hasHatch = false;
                 }
@@ -405,7 +405,7 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 } else if(sense.hasHatch && shoot) {
                     sense.hasHatch = false;
-                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.GTH_CurrLimit && gather) {
+                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2 && gather) {
                     sense.hasHatch = true;
                     sense.hasCargo = false;
                 }
@@ -501,7 +501,12 @@ public class Inputs extends Component {
             //return;
             controlBoard.rocketCargoState = ControlBoard.RocketCargoshipPosition.LO;
             controlBoard.nearFarCargo = ControlBoard.NearFarCargo.NEAR;
-            elevatorTarget = ElevatorPosition.ROCKET_1_HATCH; //does this need to be cargo?
+            if(climber.stage > 1){
+                elevatorTarget = ElevatorPosition.FLOOR; //does this need to be cargo?
+            } else {
+                elevatorTarget = ElevatorPosition.ROCKET_1_HATCH; //does this need to be cargo?
+            }
+            
             return;
         }
 

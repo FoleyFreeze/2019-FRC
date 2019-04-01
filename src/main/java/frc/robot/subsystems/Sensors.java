@@ -81,6 +81,7 @@ public class Sensors extends Component {
         //SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
         navxGood = navx.isConnected();
+        SmartDashboard.putBoolean("navxgood", navxGood);
         estNavxPosition();
 
         robotAngle.setDeg(-navx.getYaw() + k.SEN_NAVX_Offset); 

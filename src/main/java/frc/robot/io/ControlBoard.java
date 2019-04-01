@@ -91,16 +91,16 @@ public class ControlBoard {
     private void parseControlBoard(){
 
         int count = 0;
+        if(joy.getRawButton(IN_low)){
+            rocketCargoState = RocketCargoshipPosition.LO;
+            count++;
+        }
         if(joy.getRawButton(IN_high)){
             rocketCargoState = RocketCargoshipPosition.HI;
             count++;
         }
         if(joy.getRawButton(IN_middle)){
             rocketCargoState = RocketCargoshipPosition.MID;
-            count++;
-        }
-        if(joy.getRawButton(IN_low)){
-            rocketCargoState = RocketCargoshipPosition.LO;
             count++;
         }
         if(joy.getRawButton(IN_front)){

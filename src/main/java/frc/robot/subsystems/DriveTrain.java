@@ -1,18 +1,18 @@
 package frc.robot.subsystems;
 
-import frc.robot.io.ControlBoard.NearFarCargo;
-import frc.robot.subsystems.vision.VisionData;
-import frc.robot.util.Angle;
-import frc.robot.util.Util;
-
 //import org.graalvm.compiler.asm.amd64.AMD64Assembler.SSEOp;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.io.ControlBoard.NearFarCargo;
+import frc.robot.subsystems.vision.VisionData;
+import frc.robot.util.Angle;
+import frc.robot.util.Util;
+import frc.robot.util.Filter;
 
-public class DriveTrain extends Component{
+public class DriveTrain extends Component {
     public boolean autoShoot;
-    
+
     public DriveTrain() {
         
     }
@@ -302,23 +302,27 @@ public class DriveTrain extends Component{
         SmartDashboard.putNumberArray("Turn Power", outError);
     }
 
+    private Filter lpf = new Filter(0.5, true, 0.06, 0);
+
     public void cameraDrive(VisionData vd) { 
         if(in.visionCargo){
             //placeholder
             swerve(0,0,0);
         } else {
             //get angle and distance from ALL targets
-            double vOffset = k.DRV_CamTargetY0; //How close to drive to all targets 
+            double vOffset = k.DRV_CamTargetY0; //How close to drive to all targets
+            double vOffset2 = 0;
             //Arc into target aka target 8 inches away first, then drive in when angle is low enoug
-            if (Math.abs(vd.angleTo)>5 /*7.8*//*10*/) {vOffset = 6; } //was vOffset = 8
+            //also target a far distance when the elevator isn't up yet
+            if (Math.abs(vd.angleTo)>5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 5; } //was vOffset = 8
             //for all cargo deliveries, add extra inches
-            if (in.cargoNotHatch) {vOffset+=2;}
+            if (in.cargoNotHatch) {vOffset+=0;}
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
             if (sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO) {vOffset+=2;}
             //add extra drive to pick up hatch
             if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 0;}
             if (sense.hasHatch && !in.cargoNotHatch && in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {vOffset -= 0;}
-            double vDist = vd.distance-vOffset;
+            double vDist = vd.distance-vOffset-vOffset2;
             double vXErr = (vd.distance + 15) * Math.tan(Angle.toRad(vd.angleTo));
             //Calculate actual angle to (From front of bot, not camera)
             double vAngle = Math.atan(vXErr/(vDist));
@@ -331,7 +335,8 @@ public class DriveTrain extends Component{
             //PID to distance amplitude of vector
             double vHypot = Math.sqrt(vXErr*vXErr + vDist*vDist);//Math.abs((vDist)/Math.cos(vAngle));
             double velMag = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy) / sense.dt;
-            double vPwr = vHypot * k.DRV_TargetDistanceKP + velMag * k.DRV_TargetDistanceKD;
+            double filtVel = lpf.run(velMag);
+            double vPwr = vHypot * k.DRV_TargetDistanceKP + filtVel * k.DRV_TargetDistanceKD;
             double vAmplitude = Util.limit(vPwr, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
             
             SmartDashboard.putNumber("vDist", vDist);
@@ -351,7 +356,7 @@ public class DriveTrain extends Component{
             SmartDashboard.putNumber("autoShootDist", in.autoShootDist);
             double allowableAngle = 2;
             if (!in.cargoNotHatch && !sense.hasHatch) allowableAngle = 6;
-            autoShoot = vDist < in.autoShootDist && Math.abs(vd.angleTo) < allowableAngle;
+            autoShoot = vd.distance-vOffset < in.autoShootDist && Math.abs(vd.angleTo) < allowableAngle;
 /*
             //turn angle into a x distance
             double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));

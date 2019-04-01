@@ -20,7 +20,7 @@ public class Component {
     public static Sensors sense;
     public static Vision view;
     public static CargoGatherer grabCargo;
-    public static Climber climb; 
+    public static Climber climber; 
     public static Elevator elevator;
     public static HatchGatherer grabHatch;
     public static DriveTrain drive;
@@ -68,7 +68,7 @@ public class Component {
         pathfinder = new Pathfinder();
         autoDriving = new AutoDrive();
         grabCargo = new CargoGatherer();
-        climb = new Climber();
+        climber = new Climber();
         elevator = new Elevator(); //F
         grabHatch = new HatchGatherer();
         drive = new DriveTrain(); 
@@ -94,7 +94,7 @@ public class Component {
         rse.run();
         autoDriving.run();
         grabCargo.run();
-        climb.run();
+        climber.run();
         elevator.run();
         grabHatch.run();
         drive.run();

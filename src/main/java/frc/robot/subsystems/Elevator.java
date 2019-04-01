@@ -53,4 +53,10 @@ public class Elevator extends Component {
             out.setElevatorMotor(power);
         }
     }
+
+    public double getElevatorError(){
+        if(in.elevatorTarget == ElevatorPosition.DONT_MOVE) return 0;
+        double setpoint = k.ELE_PositionArray[in.elevatorTarget.ordinal()] + k.ELE_PositionOffset;
+        return sense.elevatorEncoder - setpoint;
+    }
 }  

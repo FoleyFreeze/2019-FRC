@@ -7,6 +7,8 @@ public class Climber extends Component{
 
     }
 
+    public int stage;
+
     public void run(){
         String climb;
         if(k.CLM_disable) return;
@@ -14,17 +16,27 @@ public class Climber extends Component{
         if(in.climb){
             if(sense.climberEncoder > k.CLM_EncoderLimit){
                 out.climbMotor(0);
+                stage = 4;
             } else {
+
                 if(sense.climberEncoder < k.CLM_Zone_1){
                     out.climbMotor(k.CLM_Zone_Power_1);
+                    if(sense.climberEncoder < k.CLM_Zone_Half){
+                        stage = 0;
+                    } else {
+                        stage = 1;
+                    }
                 } 
                 else if(sense.climberEncoder < k.CLM_Zone_2){
                     out.climbMotor(k.CLM_Zone_Power_2);
+                    stage = 2;
                 }
                 else if(sense.climberEncoder < k.CLM_Zone_3){
                     out.climbMotor(k.CLM_Zone_Power_3);
+                    stage = 3;
                 }
                 else{
+                    stage = 0;
                     out.climbMotor(0);
                 }
 
