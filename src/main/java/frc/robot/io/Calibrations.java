@@ -14,8 +14,8 @@ public class Calibrations{
     public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
-    public boolean GTH_DisableCargo = false;
-    public boolean GTH_DisableHatch = false;
+    public boolean GTH_DisableGather = false;
+    public boolean SCR_ScorpioSelected = true;//enable scorpio instead of normal gatherer
     public boolean MIL_Disabled = false;
 
     // drive cals
@@ -91,6 +91,14 @@ public class Calibrations{
     public double GTH_CargoHoldSpeed = 0.1; //0.2;
     public double GTH_HatchHoldSpeed = 0.05;
     public double GTH_ReleaseTime = 0.2; //time to spend auto shooting/gathering
+    
+    public double GTH_CargoGatherTime = 0;
+    public double GTH_CargoShootTime = 0;
+    public double GTH_HatchGatherTime = 0;
+    public double GTH_HatchShootTime = 0;
+
+    //SCORPIO cals
+    public double SCR_Whatever;
 
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
@@ -104,6 +112,12 @@ public class Calibrations{
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
             -1,        11,           20,              11,              50,              40,           76.5,            68,            34,          11
     };
+    //in case scorpio needs different elevator positions
+    public final double[] ELE_PositionScorpioArray = {
+        //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
+            -1,        11,           20,              11,              50,              40,           76.5,            68,            34,          11
+    };
+
 
     // climb cals
     public double CLM_MotorSpeedUp = 0.15;

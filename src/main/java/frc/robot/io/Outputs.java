@@ -79,4 +79,12 @@ public abstract class Outputs extends Component {
     public void resetEleEnc(){
         
     }
+
+    public void setGatherWheels(double speed){
+
+    }
+
+    public void setGatherArmPosition(double position){
+
+    }
 }

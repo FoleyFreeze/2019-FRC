@@ -19,10 +19,9 @@ public class Component {
     public static Outputs out;
     public static Sensors sense;
     public static Vision view;
-    public static CargoGatherer grabCargo;
     public static Climber climber; 
     public static Elevator elevator;
-    public static HatchGatherer grabHatch;
+    public static ArmGatherer gatherer;
     public static DriveTrain drive;
     public static Calibrations k;
     public static RSE rse;
@@ -67,10 +66,13 @@ public class Component {
         view = new Vision();
         pathfinder = new Pathfinder();
         autoDriving = new AutoDrive();
-        grabCargo = new CargoGatherer();
         climber = new Climber();
-        elevator = new Elevator(); //F
-        grabHatch = new HatchGatherer();
+        elevator = new Elevator();
+        if(k.SCR_ScorpioSelected){
+            gatherer = new ScorpioGatherer();
+        } else {
+            gatherer = new ArmGatherer();
+        }
         drive = new DriveTrain(); 
         rse = new RSE();
         leds = new LEDs();
@@ -93,10 +95,9 @@ public class Component {
         view.run();
         rse.run();
         autoDriving.run();
-        grabCargo.run();
         climber.run();
         elevator.run();
-        grabHatch.run();
+        gatherer.run();
         drive.run();
         out.run();
         leds.run();

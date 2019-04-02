@@ -21,6 +21,7 @@ public class OutputsCompBot extends Outputs {
 
     private CANSparkMax elevatorMotor;
 
+    //if scorpio, use only gatherMotorL and gatherArmMotor
     private CANSparkMax gatherMotorL;
     private CANSparkMax gatherMotorR;
     private CANSparkMax gatherArmMotor;
@@ -132,15 +133,15 @@ public class OutputsCompBot extends Outputs {
             elevatorMotor.getEncoder().setPositionConversionFactor(k.ELE_InchesPRev);
         }
 
-        if(!k.GTH_DisableCargo){
-            gatherMotorL = new CANSparkMax(ElectroJendz.GTH_MotorL_ID, MotorType.kBrushless);
-            gatherMotorR = new CANSparkMax(ElectroJendz.GTH_MotorR_ID, MotorType.kBrushless);
-            gatherMotorL.setIdleMode(IdleMode.kBrake);
-            gatherMotorR.setIdleMode(IdleMode.kBrake);
-        }
-
-        if(!k.GTH_DisableHatch){
+        if(!k.GTH_DisableGather){
             gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushed);
+            gatherMotorL = new CANSparkMax(ElectroJendz.GTH_MotorL_ID, MotorType.kBrushless);
+            gatherMotorL.setIdleMode(IdleMode.kBrake);
+            
+            if(!k.SCR_ScorpioSelected){
+                gatherMotorR = new CANSparkMax(ElectroJendz.GTH_MotorR_ID, MotorType.kBrushless);
+                gatherMotorR.setIdleMode(IdleMode.kBrake);
+            }
         }
 
         if(!k.CLM_disable){
@@ -235,14 +236,22 @@ public class OutputsCompBot extends Outputs {
         elevatorMotor.set(limit(elevate, elevatorMil));
     }
 
+    //normal gathering
     public void setGatherMotor(double leftSpeed, double rightSpeed) {
         gatherMotorL.set(limit(leftSpeed/*, gatherLMil*/));
         gatherMotorR.set(limit(rightSpeed/*, gatherRMil*/));
     }
-
     public void setGatherArm(double armGather) {
         //gatherArmMotor.set(ControlMode.PercentOutput, limit(-armGather, gatherArmMil));
         gatherArmMotor.set(limit(armGather, gatherArmMil)); //ES -armGather
+    }
+
+    //scorpio gathering
+    public void setGatherWheels(double speed){
+        gatherMotorL.set(limit(speed/*, gatherLMil*/));
+    }
+    public void setGatherArmPosition(double armPosition){
+        //PID to position
     }
 
     @Override
