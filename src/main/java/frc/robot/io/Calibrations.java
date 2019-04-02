@@ -93,9 +93,9 @@ public class Calibrations{
     public double GTH_ReleaseTime = 0.2; //time to spend auto shooting/gathering
     
     public double GTH_CargoGatherTime = 0;
-    public double GTH_CargoShootTime = 0;
-    public double GTH_HatchGatherTime = 0;
-    public double GTH_HatchShootTime = 0;
+    public double GTH_CargoShootTime = 0.5;
+    public double GTH_HatchGatherTime = 0.2;
+    public double GTH_HatchShootTime = 0.25;
 
     //SCORPIO cals
     public double SCR_Whatever;

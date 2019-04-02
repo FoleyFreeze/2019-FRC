@@ -277,45 +277,38 @@ public class Inputs extends Component {
 
         if(sense.isDisabled) allowAutoAutoRotation = false;
 
+        if(cargoNotHatch){
+            sense.hasHatch = false;
+        } else {
+            sense.hasCargo = false;
+        }
+
         //automatic state handling
         if(autoNotManualMode){
             if(cargoNotHatch) {
                 gatherHatch = false;
-                releaseHatch = false; 
-                gatherCargo = !sense.hasCargo && actionLeft && !releaseCargo || gather && !shift;
-                releaseCargo = releaseCargo && !actionLeftFalling || sense.hasCargo && actionLeftRising;  
+                releaseHatch = false;                       //dont start gathering immediately after shooting
+                gatherCargo = !sense.hasCargo && actionLeftRising || gatherCargo && actionLeft;
+                releaseCargo = sense.hasCargo && actionLeftRising;
                 
                 if(!sense.hasCargo && shift && gather) {
                     sense.hasCargo = true;
-                    sense.hasHatch = false;
-
-                // After pressing shoot, reset no matter state of button holding
-                } else if(sense.hasCargo && releaseCargo || sense.hasCargo && remainingShootTime<0 && remainingShootTime>-0.1) {
-                    if(actionLeftRising) autoShootTime = Timer.getFPGATimestamp() + k.GTH_ReleaseTime;
-                    else if(remainingShootTime<0) sense.hasCargo = false; 
-                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2 && gatherCargo) {
-                    sense.hasCargo = true;
-                    sense.hasHatch = false;
+                } else if(sense.hasCargo && gatherer.cargoShootComplete()) {
+                    sense.hasCargo = false;
                 }
 
                 autoShootDist = k.CAM_AutoShootCargoDist;
 
             } else {// auto hatch
                 gatherCargo = false; 
-                releaseCargo = false; 
-                gatherHatch = !sense.hasHatch && actionLeft && !releaseHatch || gather && !shift;
-                releaseHatch = releaseHatch && !actionLeftFalling || sense.hasHatch && actionLeftRising; 
+                releaseCargo = false;                           //dont start gathering immediately after shooting
+                gatherHatch = !sense.hasHatch && actionLeftRising || gatherHatch && actionLeft;
+                releaseHatch = sense.hasHatch && actionLeftRising;
                 //the overide
                 if(!sense.hasHatch && shift && gather) {
                     sense.hasHatch = true;
-                    sense.hasCargo = false;
-                // After pressing shoot, reset no matter state of button holding
-                } else if(sense.hasHatch && releaseHatch || sense.hasHatch && remainingShootTime<0 && remainingShootTime>-0.1) {
-                    if(actionLeftRising) autoShootTime = Timer.getFPGATimestamp() + k.GTH_ReleaseTime;
-                    else if(remainingShootTime<0) sense.hasHatch = false; 
-                } else if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2 && gatherHatch) {
-                    sense.hasHatch = true;
-                    sense.hasCargo = false;
+                } else if(sense.hasHatch && gatherer.hatchShootComplete()) {
+                    sense.hasHatch = false; 
                 }
 
                 if(sense.hasHatch) autoShootDist = k.CAM_AutoShootHatchDist;
@@ -336,7 +329,7 @@ public class Inputs extends Component {
             sense.prevHasCargo = sense.hasCargo;
 
             // if ready (works for all ready scoring positions and hatch gathering)
-            if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
+            if(actionRight /*|| cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot*/) {
                 
                 allowAutoAutoRotation = true;
 

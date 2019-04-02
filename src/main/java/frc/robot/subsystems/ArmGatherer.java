@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ControlBoard.NearFarCargo;
+import frc.robot.io.ElectroJendz;
 
 public class ArmGatherer extends Component{
 
@@ -20,10 +21,18 @@ public class ArmGatherer extends Component{
     private boolean inCargoPosition;
     private boolean inHatchPosition;
 
-    private double gatherTimer;
-    private double shootTimer;
-    private boolean gatherTimerActive;
-    private boolean shootTimerActive;
+    private double cargoGatherTimer;
+    private double cargoShootTimer;
+    private double hatchGatherTimer;
+    private double hatchShootTimer;
+    private boolean cargoGatherTimerActive;
+    private boolean cargoShootTimerActive;
+    private boolean hatchGatherTimerActive;
+    private boolean hatchShootTimerActive;
+    private boolean cargoGatherComplete;
+    private boolean cargoShootComplete;
+    private boolean hatchGatherComplete;
+    private boolean hatchShootComplete;
 
     public void run() {
         if(k.GTH_DisableGather) return;
@@ -87,20 +96,63 @@ public class ArmGatherer extends Component{
         }
 
         //GATHER WHEELS
-        
+
+        if(cargoGatherTimerActive) {
+            cargoGatherTimerActive = Timer.getFPGATimestamp() <= cargoGatherTimer && in.autoNotManualMode;
+            if(!cargoGatherTimerActive){ //falling edge
+                cargoGatherComplete = true;
+                cargoShootComplete = false;
+                hatchGatherComplete = false;
+                hatchShootComplete = false;
+            }
+        }
+        if(cargoShootTimerActive) {
+            cargoShootTimerActive = Timer.getFPGATimestamp() <= cargoShootTimer && in.autoNotManualMode;
+            if(!cargoShootTimerActive){ //falling edge
+                cargoGatherComplete = false;
+                cargoShootComplete = true;
+                hatchGatherComplete = false;
+                hatchShootComplete = false;
+            }
+        }
+        if(hatchGatherTimerActive) {
+            hatchGatherTimerActive = Timer.getFPGATimestamp() <= hatchGatherTimer && in.autoNotManualMode;
+            if(!cargoGatherTimerActive){ //falling edge
+                hatchGatherComplete = false;
+                cargoShootComplete = false;
+                hatchGatherComplete = true;
+                hatchShootComplete = false;
+            }
+        }
+        if(hatchShootTimerActive) {
+            hatchShootTimerActive = Timer.getFPGATimestamp() <= hatchShootTimer && in.autoNotManualMode;
+            if(!hatchShootTimerActive){ //falling edge
+                cargoGatherComplete = false;
+                cargoShootComplete = false;
+                hatchGatherComplete = false;
+                hatchShootComplete = true;
+            }
+        }
+
         // conditions for gathering
-        if(in.gatherCargo){
-            if(!gatherTimerActive){
-                gatherTimerActive = true;
-                gatherTimer = Timer.getFPGATimestamp() + k.GTH_CargoGatherTime;
+        if(in.gatherCargo || cargoGatherTimerActive){
+            if(!cargoGatherTimerActive){
+                cargoGatherTimerActive = true;
+                cargoGatherTimer = Timer.getFPGATimestamp() + k.GTH_CargoGatherTime;
             }
             out.setGatherMotor(k.GTH_CargoIntakeSpeed, -k.GTH_CargoIntakeSpeed);
+
+            //do current sense
+            if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2){
+                cargoGatherTimer = 0; //so next iter it will complete
+                sense.hasCargo = true;
+            }
         }
         //  releases cargo
-        else if(in.releaseCargo){
-                if(!shootTimerActive){
-                    shootTimerActive = true;
-                    shootTimer = Timer.getFPGATimestamp() + k.GTH_CargoShootTime;
+        else if(in.releaseCargo || cargoShootTimerActive){
+                if(!cargoShootTimerActive){
+                    cargoShootTimerActive = true;
+                    cargoShootTimer = Timer.getFPGATimestamp() + k.GTH_CargoShootTime;
                 }
                 if (in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {
                     out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);
@@ -108,25 +160,28 @@ public class ArmGatherer extends Component{
                     out.setGatherMotor(-k.GTH_CargoShootSpeedFast, k.GTH_CargoShootSpeedSlow);
                 }
         }
-        else if(in.gatherHatch){
-            if(!gatherTimerActive){
-                gatherTimerActive = true;
-                gatherTimer = Timer.getFPGATimestamp() + k.GTH_HatchGatherTime;
+        else if(in.gatherHatch || hatchGatherTimerActive){
+            if(!hatchGatherTimerActive){
+                hatchGatherTimerActive = true;
+                hatchGatherTimer = Timer.getFPGATimestamp() + k.GTH_HatchGatherTime;
             }
             out.setGatherMotor(-k.GTH_HatchIntakeSpeed, k.GTH_HatchIntakeSpeed);
+
+            //do current sense
+            if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2){
+                hatchGatherTimer = 0;
+                sense.hasHatch = true;
+            }
         }
         //  releases hatch
         else if(in.releaseHatch){
-            if(!shootTimerActive){
-                shootTimerActive = true;
-                shootTimer = Timer.getFPGATimestamp() + k.GTH_HatchShootTime;
+            if(!hatchShootTimerActive){
+                hatchShootTimerActive = true;
+                hatchShootTimer = Timer.getFPGATimestamp() + k.GTH_HatchShootTime;
             }
             out.setGatherMotor(k.GTH_HatchShootSpeedFast, -k.GTH_HatchShootSpeedSlow);
         }
         else { //no active gather/shoot request
-            
-            gatherTimerActive = false;
-            shootTimerActive = false;
 
             if(sense.hasCargo){
                 out.setGatherMotor(k.GTH_CargoHoldSpeed, -k.GTH_CargoHoldSpeed);
@@ -142,18 +197,17 @@ public class ArmGatherer extends Component{
 
     }
 
-
     public boolean cargoGatherComplete(){
-        return Timer.getFPGATimestamp() - gatherTimer > 0;
+        return cargoGatherComplete && in.autoNotManualMode;
     }
     public boolean cargoShootComplete(){
-        return Timer.getFPGATimestamp() - shootTimer > 0;
+        return cargoShootComplete && in.autoNotManualMode;
     }
     public boolean hatchGatherComplete(){
-        return Timer.getFPGATimestamp() - gatherTimer > 0;
+        return hatchGatherComplete && in.autoNotManualMode;
     }
     public boolean hatchShootComplete(){
-        return Timer.getFPGATimestamp() - shootTimer > 0;
+        return hatchShootComplete && in.autoNotManualMode;
     }
 
 }
