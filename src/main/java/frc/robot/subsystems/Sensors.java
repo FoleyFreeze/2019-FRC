@@ -22,6 +22,7 @@ public class Sensors extends Component {
     public double elevatorEncoder;
     public double[] driveEnc = new double[4];
     public double climberEncoder;
+    public double scorpioArmEnc;
 
     public boolean hasCargo;
     public boolean prevHasCargo;
