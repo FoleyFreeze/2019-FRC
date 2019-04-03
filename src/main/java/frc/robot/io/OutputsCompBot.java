@@ -167,6 +167,9 @@ public class OutputsCompBot extends Outputs {
         if(!k.CLM_disable){
             sense.climberEncoder = climbMotor.getEncoder().getPosition();//value in motor rotations
         }
+        if(!k.GTH_DisableGather && k.SCR_ScorpioSelected){
+            sense.scorpioArmEnc = gatherArmMotor.getEncoder().getPosition();
+        }
         
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
         SmartDashboard.putNumber("Enc FR", sense.driveEnc[1]);
@@ -174,6 +177,7 @@ public class OutputsCompBot extends Outputs {
         SmartDashboard.putNumber("Enc RR", sense.driveEnc[3]);
         SmartDashboard.putNumber("Enc Ele", sense.elevatorEncoder);
         SmartDashboard.putNumber("Enc Climb", sense.climberEncoder);
+        SmartDashboard.putNumber("Enc SCR", sense.scorpioArmEnc);
     }
 
     public void resetEnc(){
