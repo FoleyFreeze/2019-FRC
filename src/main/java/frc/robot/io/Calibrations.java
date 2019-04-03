@@ -139,6 +139,8 @@ public class Calibrations{
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
     public double ELE_PIDLimitUp = 0.9;
     public double ELE_PIDLimitDown = 0.7;//0.5
+    public double ELE_PIDLimitDownLow = 0.2;
+    public double ELE_LowLimitPosition = 10;
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
     public double ELE_PositionOffset = 0.5; //add this number to all the positions
