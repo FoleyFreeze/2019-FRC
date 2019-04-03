@@ -117,11 +117,11 @@ public class Calibrations{
 
     public double SCR_ArmPositionKP = 0;
     public double SCR_ArmPositionKD = 0;
-    public double SCR_ArmIdleHoldPower = -0.05;
+    public double SCR_ArmIdleHoldPower = -0.15;
     public double SCR_ArmInPower = -0.7;
     public double SCR_ArmOutPower = 0.7;
 
-    public double SCR_ArmOutCurrentLimit = 10;
+    public double SCR_ArmOutCurrentLimit = 25;
     public double SCR_ArmInCurrentLimit = 10;
     public double SCR_WheelCurrentLimit = 15;
 

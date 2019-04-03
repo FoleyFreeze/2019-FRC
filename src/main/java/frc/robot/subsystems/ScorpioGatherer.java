@@ -119,7 +119,7 @@ public class ScorpioGatherer extends ArmGatherer {
 
                     //check for arm current, wheel current, time, encoder?
                     if(sense.pdp.getCurrent(ElectroJendz.GTH_ArmMotorID) > k.SCR_ArmOutCurrentLimit
-                            || sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.SCR_WheelCurrentLimit
+                            /*|| sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.SCR_WheelCurrentLimit*/
                             || Timer.getFPGATimestamp() > actionTimer){
                         
                         armState = ScorpioState.TAKING_ACTION;
