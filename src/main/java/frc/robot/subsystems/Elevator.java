@@ -46,10 +46,15 @@ public class Elevator extends Component {
             if(in.elevatorStage && setpoint > k.ELE_StageHeight){
                 setpoint = k.ELE_StageHeight;
             }
+
+            //force slowing down when the elevator is low and moving down
+            double lowPowerLimit = k.ELE_PIDLimitDown;
+            if(sense.elevatorEncoder < k.ELE_LowLimitPosition) lowPowerLimit = k.ELE_PIDLimitDownLow;
+
             double error = setpoint - sense.elevatorEncoder;
             double power = error*k.ELE_PositionKP;
             if(power > k.ELE_PIDLimitUp) power = k.ELE_PIDLimitUp;
-            if(power < -k.ELE_PIDLimitDown) power = -k.ELE_PIDLimitDown;
+            if(power < -lowPowerLimit) power = -lowPowerLimit;
             out.setElevatorMotor(power);
         }
     }
