@@ -291,10 +291,9 @@ public class Inputs extends Component {
                 gatherCargo = !sense.hasCargo && actionLeftRising || gatherCargo && actionLeft;
                 releaseCargo = sense.hasCargo && actionLeftRising;
                 
+                //override
                 if(!sense.hasCargo && shift && gather) {
                     sense.hasCargo = true;
-                } else if(sense.hasCargo && gatherer.cargoShootComplete()) {
-                    sense.hasCargo = false;
                 }
 
                 autoShootDist = k.CAM_AutoShootCargoDist;
@@ -307,8 +306,6 @@ public class Inputs extends Component {
                 //the overide
                 if(!sense.hasHatch && shift && gather) {
                     sense.hasHatch = true;
-                } else if(sense.hasHatch && gatherer.hatchShootComplete()) {
-                    sense.hasHatch = false; 
                 }
 
                 if(sense.hasHatch) autoShootDist = k.CAM_AutoShootHatchDist;
