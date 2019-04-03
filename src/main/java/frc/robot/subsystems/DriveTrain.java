@@ -306,8 +306,12 @@ public class DriveTrain extends Component {
 
     public void cameraDrive(VisionData vd) { 
         if(in.visionCargo){
-            //placeholder
-            swerve(0,0,0);
+            
+            double deltaAngle = sense.robotAngle.subDeg(vd.robotAngle) + vd.angleTo;
+            double turnPwr = Util.limit(deltaAngle * k.DRV_CamCargoThetaKP, k.DRV_CamCargoPwrLim);
+            double distPwr = Util.limit(vd.distance * k.DRV_CamCargoDistKP, k.DRV_CamCargoPwrLim);
+            swerve(0,distPwr,turnPwr);
+            autoShoot = true;
         } else {
             //get angle and distance from ALL targets
             double vOffset = k.DRV_CamTargetY0; //How close to drive to all targets
