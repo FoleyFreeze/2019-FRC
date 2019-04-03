@@ -19,6 +19,8 @@ public class ScorpioGatherer extends ArmGatherer {
     
     private double actionTimer;
 
+    private double targetPosition;
+
     public ScorpioGatherer(){
 
     }
@@ -108,6 +110,11 @@ public class ScorpioGatherer extends ArmGatherer {
                     if(elevator.getElevatorError() < 3) {
                         armState = ScorpioState.MOVING_TO_LIMIT;
                         actionTimer = Timer.getFPGATimestamp() + extendTime;
+                        if(actionState == ActionState.SHOOT_CARGO_CSHIP){
+                            targetPosition = k.SCR_PartOutPosition;
+                        } else {
+                            targetPosition = k.SCR_FullOutPosition;
+                        }
                     }
 
                     out.setGatherArm(k.SCR_ArmIdleHoldPower);
@@ -117,9 +124,9 @@ public class ScorpioGatherer extends ArmGatherer {
 
                 case MOVING_TO_LIMIT:
 
-                    //check for arm current, wheel current, time, encoder?
+                    //check for arm current, encoder value, time
                     if(sense.pdp.getCurrent(ElectroJendz.GTH_ArmMotorID) > k.SCR_ArmOutCurrentLimit
-                            /*|| sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.SCR_WheelCurrentLimit*/
+                            || checkArmPosition()
                             || Timer.getFPGATimestamp() > actionTimer){
                         
                         armState = ScorpioState.TAKING_ACTION;
@@ -132,7 +139,8 @@ public class ScorpioGatherer extends ArmGatherer {
                     }
 
                     out.setGatherWheels(wheelPower);
-                    out.setGatherArm(k.SCR_ArmOutPower);
+                    //out.setGatherArm(k.SCR_ArmOutPower);
+                    pidArm(targetPosition);
 
                 break;
 
@@ -170,7 +178,7 @@ public class ScorpioGatherer extends ArmGatherer {
                     }
 
                     out.setGatherWheels(wheelPower);
-                    out.setGatherArm(0);
+                    out.setGatherArm(0); //do we want to hold it in position?
                     
                 break;
 
@@ -178,20 +186,36 @@ public class ScorpioGatherer extends ArmGatherer {
 
                     //wait for time or in current
                     if(sense.pdp.getCurrent(ElectroJendz.GTH_ArmMotorID) > k.SCR_ArmInCurrentLimit
+                            || checkArmPosition()
                             || Timer.getFPGATimestamp() > actionTimer){
                         armState = ScorpioState.INIT;
                     }
 
+                    targetPosition = k.SCR_InPosition;
                     out.setGatherWheels(wheelHoldPower);
-                    out.setGatherArm(k.SCR_ArmInPower);
+                    //out.setGatherArm(k.SCR_ArmInPower);
+                    pidArm(targetPosition);
                     
                 break;
             }
         }
     }
 
-    public boolean checkWheelCurrent(){
+    private boolean checkWheelCurrent(){
         return sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) > k.SCR_WheelCurrentLimit;
+    }
+
+    private void pidArm(double position){
+
+        double error = position - sense.scorpioArmEnc;
+        double power = error * k.SCR_ArmPositionKP;
+        power = Util.limit(power, k.SCR_ArmPowerLimit);
+
+        out.setGatherArm(power);
+    }
+
+    private boolean checkArmPosition(){
+        return Math.abs(sense.scorpioArmEnc - targetPosition) < 1;
     }
 
 }

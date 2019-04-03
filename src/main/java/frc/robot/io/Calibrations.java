@@ -120,19 +120,15 @@ public class Calibrations{
     public double SCR_ArmIdleHoldPower = -0.15;
     public double SCR_ArmInPower = -0.7;
     public double SCR_ArmOutPower = 0.7;
+    public double SCR_ArmPowerLimit = 0.7;
 
     public double SCR_ArmOutCurrentLimit = 25;
     public double SCR_ArmInCurrentLimit = 10;
     public double SCR_WheelCurrentLimit = 15;
 
-    /*
     public double SCR_InPosition = 0;
-    public double SCR_GatherHatchPosition = 0;
-    public double SCR_ShootHatchPosition = 0;
-    public double SCR_GatherCargoPosition = 0;
-    public double SCR_ShootCargoRocketPosition = 0;
-    public double SCR_ShootCargoCShipPosition = 0;
-    */
+    public double SCR_FullOutPosition = 8;
+    public double SCR_PartOutPosition = 2;    
 
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
