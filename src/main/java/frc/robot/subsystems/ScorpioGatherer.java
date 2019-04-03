@@ -128,7 +128,7 @@ public class ScorpioGatherer extends ArmGatherer {
                     }
 
                     //if not gathering, continue to hold
-                    if(actionState = ActionState.GATHER_CARGO || actionState = ActionState.GATHER_HATCH){
+                    if(actionState == ActionState.GATHER_CARGO || actionState == ActionState.GATHER_HATCH){
                         wheelPower = wheelHoldPower;
                     }
 
@@ -139,30 +139,35 @@ public class ScorpioGatherer extends ArmGatherer {
 
                 case TAKING_ACTION:
 
-                    //wait for time
-                    if(Timer.getFPGATimestamp() > actionTimer){
-                        armState = ScorpioState.RETRACT_ARM;
-                        actionTimer = Timer.getFPGATimestamp() + k.SCR_RetractTime;
-
-                        //set sense.hasThing (if gathering and current spike, or shooting and not current spike)
-                        switch(actionState){
-                            case WAIT:
-
-                            break;
-                            case GATHER_CARGO:
-                                if(checkWheelCurrent()) sense.hasCargo = true;
-                            break;
-                            case GATHER_HATCH:
-                                if(checkWheelCurrent()) sense.hasHatch = true;
-                            break;
-                            case SHOOT_CARGO_CSHIP:
-                            case SHOOT_CARGO_ROCKET:
-                                sense.hasCargo = false;
-                            break;
-                            case SHOOT_HATCH:
-                                sense.hasHatch = false;
-                            break;
+                    //if gathering, leave scorpio extended until either the gather button is released or we see the current spike
+                    if(actionState == ActionState.GATHER_CARGO){
+                        if(checkWheelCurrent()){
+                            sense.hasCargo = true;
+                            armState = ScorpioState.RETRACT_ARM;
+                            actionTimer = Timer.getFPGATimestamp() + k.SCR_RetractTime;
+                        } else if(!in.gatherCargo){
+                            armState = ScorpioState.RETRACT_ARM;
+                            actionTimer = Timer.getFPGATimestamp() + k.SCR_RetractTime;
                         }
+                    } else if(actionState == ActionState.GATHER_HATCH){
+                        if(checkWheelCurrent()){
+                            sense.hasHatch = true;
+                            armState = ScorpioState.RETRACT_ARM;
+                            actionTimer = Timer.getFPGATimestamp() + k.SCR_RetractTime;
+                        } else if(!in.gatherHatch){
+                            armState = ScorpioState.RETRACT_ARM;
+                            actionTimer = Timer.getFPGATimestamp() + k.SCR_RetractTime;
+                        }
+
+                    } else {
+                        //if shooting, shoot for time
+                        if(Timer.getFPGATimestamp() > actionTimer){
+                            armState = ScorpioState.RETRACT_ARM;
+                            actionTimer = Timer.getFPGATimestamp() + k.SCR_RetractTime;
+
+                            sense.hasHatch = false;
+                            sense.hasCargo = false;
+                        }    
                     }
 
                     out.setGatherWheels(wheelPower);
