@@ -98,32 +98,32 @@ public class Calibrations{
     public double GTH_HatchShootTime = 0.25;
 
     //SCORPIO cals
-    public double SCR_CargoGatherPwr = 0.5;
-    public double SCR_CargoShootPwrRocket = -1;
-    public double SCR_CargoShootPwrCShip = -0.2;
-    public double SCR_HatchGatherPwr = 0.5;
-    public double SCR_HatchShootPwr = -1;
-    public double SCR_HatchHoldPwr = 0.05;
-    public double SCR_CargoHoldPwr = 0.1;
+    public double SCR_CargoGatherPwr = -0.5;
+    public double SCR_CargoShootPwrRocket = 1;
+    public double SCR_CargoShootPwrCShip = 0.2;
+    public double SCR_HatchGatherPwr = -0.5;
+    public double SCR_HatchShootPwr = 1;
+    public double SCR_HatchHoldPwr = -0.05;
+    public double SCR_CargoHoldPwr = -0.1;
 
-    public double SCR_CargoGatherTime = 0;
+    public double SCR_CargoGatherTime = 0.5;
     public double SCR_CargoShootTime = 0.5;
-    public double SCR_HatchGatherTime = 0.2;
-    public double SCR_HatchShootTime = 0.25;
-    public double SCR_RetractTime = 0.2;
-    public double SCR_FullExtendTime = 0.2;
+    public double SCR_HatchGatherTime = 0.5;
+    public double SCR_HatchShootTime = 0.5;
+    public double SCR_RetractTime = 0.3;
+    public double SCR_FullExtendTime = 0.4;
     public double SCR_HalfExtendTime = 0.1;
     public double SCR_ShortExtendTime = 0.02;
 
     public double SCR_ArmPositionKP = 0;
     public double SCR_ArmPositionKD = 0;
-    public double SCR_ArmIdleHoldPower = -0.1;
-    public double SCR_ArmInPower = -0.4;
-    public double SCR_ArmOutPower = 0.4;
+    public double SCR_ArmIdleHoldPower = -0.05;
+    public double SCR_ArmInPower = -0.7;
+    public double SCR_ArmOutPower = 0.7;
 
-    public double SCR_ArmOutCurrentLimit = 5;
-    public double SCR_ArmInCurrentLimit = 5;
-    public double SCR_WheelCurrentLimit = 5;
+    public double SCR_ArmOutCurrentLimit = 10;
+    public double SCR_ArmInCurrentLimit = 10;
+    public double SCR_WheelCurrentLimit = 15;
 
     /*
     public double SCR_InPosition = 0;
