@@ -42,7 +42,20 @@ public class Elevator extends Component {
         if(position == ElevatorPosition.DONT_MOVE){
             out.setElevatorMotor(0);
         } else {
-            double setpoint = k.ELE_PositionArray[position.ordinal()] + k.ELE_PositionOffset;
+            
+            double setpoint;
+            if(k.SCR_ScorpioSelected){
+                setpoint = k.ELE_PositionScorpioArray[position.ordinal()] + k.ELE_PositionOffset;
+            } else {
+                setpoint = k.ELE_PositionArray[position.ordinal()] + k.ELE_PositionOffset;
+            }
+
+            //if setpoint is the floor and scorpio is not extended, lift the elevator
+            if(setpoint == k.ELE_PositionArray[0] && sense.scorpioArmEnc < k.SCR_AllowFloorLimit){
+                setpoint = k.ELE_ScorpioFloor;
+            }
+            
+            
             if(in.elevatorStage && setpoint > k.ELE_StageHeight){
                 setpoint = k.ELE_StageHeight;
             }
@@ -61,7 +74,12 @@ public class Elevator extends Component {
 
     public double getElevatorError(){
         if(in.elevatorTarget == ElevatorPosition.DONT_MOVE) return 0;
-        double setpoint = k.ELE_PositionArray[in.elevatorTarget.ordinal()] + k.ELE_PositionOffset;
+        double setpoint;
+        if(k.SCR_ScorpioSelected){
+            setpoint = k.ELE_PositionScorpioArray[in.elevatorTarget.ordinal()] + k.ELE_PositionOffset;
+        } else {
+            setpoint = k.ELE_PositionArray[in.elevatorTarget.ordinal()] + k.ELE_PositionOffset;
+        }
         return sense.elevatorEncoder - setpoint;
     }
 }  

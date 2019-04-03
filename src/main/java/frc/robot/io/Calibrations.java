@@ -128,14 +128,17 @@ public class Calibrations{
 
     public double SCR_InPosition = 0;
     public double SCR_FullOutPosition = 8;
-    public double SCR_PartOutPosition = 2;    
+    public double SCR_PartOutPosition = 2;   
+    public double SCR_AllowFloorLimit = 3;
+    
+    
 
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
     public double ELE_PIDLimitUp = 0.9;
     public double ELE_PIDLimitDown = 0.7;//0.5
-    public double ELE_PIDLimitDownLow = 0.2;
+    public double ELE_PIDLimitDownLow = 0.3;
     public double ELE_LowLimitPosition = 10;
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
@@ -149,6 +152,7 @@ public class Calibrations{
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
             -1,        11,           20,              11,              50,              40,           76.5,            68,            34,          11
     };
+    public double ELE_ScorpioFloor = 4;//floor when scorpio is retracted
 
 
     // climb cals
