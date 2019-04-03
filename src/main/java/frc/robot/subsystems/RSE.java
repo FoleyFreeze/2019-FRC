@@ -76,7 +76,7 @@ public class RSE extends Component {
         sumDY /= 4;
 
         //convert to field dx 
-        double radAngle = -prevRobotAngle * Math.PI / 180;
+        double radAngle = prevRobotAngle * Math.PI / 180;
         dx = sumDX * Math.cos(radAngle) - sumDY * Math.sin(radAngle);
         dy = sumDX * Math.sin(radAngle) + sumDY * Math.cos(radAngle);
 

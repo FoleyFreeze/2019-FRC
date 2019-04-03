@@ -232,6 +232,13 @@ public class Pathfinder extends Component {
     }
 
     private int getDestPolyHelper(){
+        if(!sense.hasHatch && !in.cargoNotHatch){
+            return 16;
+        }
+        if(!sense.hasCargo && in.cargoNotHatch){
+            return -1;//auto drive cannot help find cargo
+        }
+
         switch(in.controlBoard.nearFarCargo){
             case CARGO:
                 switch(in.controlBoard.rocketCargoState){

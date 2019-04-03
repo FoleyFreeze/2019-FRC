@@ -37,14 +37,16 @@ public class AutoDrive extends Component{
         //if first time, create a new path
         if(in.autoDriveRising || sense.hasHatchEdge) {
             path = pathfinder.determinePath();
-            if(path != null){
+            if(path != null && !path.isEmpty()){
                 //get rid of the first node, because it is not a target, it is our starting position
                 path.pop();
                 for(Node n : path){
                     System.out.println("Poly: " + n.poly.id + " Edge: " + n.location.x + "," + n.location.y);
                 }
-                Node n = path.peek();
-                edgeStatus = getEdgeCrossing(n.location, n.edgePoint,rse.x,rse.y);
+                if(!path.isEmpty()){
+                    Node n = path.peek();
+                    edgeStatus = getEdgeCrossing(n.location, n.edgePoint,rse.x,rse.y);
+                }
             } else {
                 System.out.println("Null path");
             }
@@ -71,8 +73,8 @@ public class AutoDrive extends Component{
             targetPoint = n.location;
         } else {//else go to the next polygon
             path.pop();
-            n = path.peek();
-            if(n != null){
+            if(!path.isEmpty()){
+                n = path.peek();
                 edgeStatus = getEdgeCrossing(n.location,n.edgePoint,rse.x,rse.y);
                 targetPoint = n.location;
             }

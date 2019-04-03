@@ -9,11 +9,11 @@ public class Calibrations{
 
 
     // disable cals
-    public boolean AD_Disabled = true;
+    public boolean AD_Disabled = false;
     public boolean CAM_Disabled = false;
     public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
-    public boolean ELE_Disable = false;
+    public boolean ELE_Disable = true;
     public boolean GTH_DisableCargo = false;
     public boolean GTH_DisableHatch = false;
     public boolean MIL_Disabled = false;
@@ -54,7 +54,7 @@ public class Calibrations{
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
 
     //auto drive cals
-    public double AD_MaxPower = 0.15;
+    public double AD_MaxPower = 0.3;
     public double AD_AutoDriveKP = -0.02; //power per inch
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;
