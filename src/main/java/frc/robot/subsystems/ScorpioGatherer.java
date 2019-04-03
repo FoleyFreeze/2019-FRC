@@ -15,9 +15,8 @@ public class ScorpioGatherer extends ArmGatherer {
     private enum ActionState {
         WAIT, GATHER_CARGO, GATHER_HATCH, SHOOT_CARGO_CSHIP, SHOOT_CARGO_ROCKET, SHOOT_HATCH
     }
-    private ActionState actionState;
-
-    private double targetPosition;
+    private ActionState actionState = ActionState.WAIT;
+    
     private double actionTimer;
 
     public ScorpioGatherer(){
