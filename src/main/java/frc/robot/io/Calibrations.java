@@ -104,7 +104,7 @@ public class Calibrations{
     public double SCR_HatchGatherPwr = -0.5;
     public double SCR_HatchShootPwr = 1;
     public double SCR_HatchHoldPwr = -0.05;
-    public double SCR_CargoHoldPwr = -0.1;
+    public double SCR_CargoHoldPwr = -0.2;
 
     public double SCR_CargoGatherTime = 0.5;
     public double SCR_CargoShootTime = 0.5;
