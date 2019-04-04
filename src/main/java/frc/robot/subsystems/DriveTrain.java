@@ -320,11 +320,11 @@ public class DriveTrain extends Component {
             //also target a far distance when the elevator isn't up yet
             if (Math.abs(vd.angleTo)>5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 5; } //was vOffset = 8
             //for all cargo deliveries, add extra inches
-            if (in.cargoNotHatch) {vOffset+=0;}
+            if (in.cargoNotHatch) {vOffset-=4;}//0
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
             if (sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO) {vOffset+=2;}
             //add extra drive to pick up hatch
-            if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 0;}
+            if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 2;}
             if (sense.hasHatch && !in.cargoNotHatch && in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {vOffset -= 0;}
             double vDist = vd.distance-vOffset-vOffset2;
             double vXErr = (vd.distance + 15) * Math.tan(Angle.toRad(vd.angleTo));
