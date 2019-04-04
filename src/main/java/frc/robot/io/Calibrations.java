@@ -119,7 +119,7 @@ public class Calibrations{
     public double SCR_ArmPositionKD = 0;
     public double SCR_ArmIdleHoldPower = -0.15;
     public double SCR_ArmInPower = -0.7;
-    public double SCR_ArmOutPower = 0.7;
+    public double SCR_ArmOutPower = 1;  //0.9;//was .7
     public double SCR_ArmPowerLimit = 0.7;
     public double SCR_ArmInPowerLimit = 0.4;
 
