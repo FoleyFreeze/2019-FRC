@@ -201,7 +201,7 @@ public class ScorpioGatherer extends ArmGatherer {
                     }
 
                     targetPosition = k.SCR_InPosition;
-                    out.setGatherWheels(wheelHoldPower);
+                    out.setGatherWheels(wheelPower);
                     //out.setGatherArm(k.SCR_ArmInPower);
                     pidArm(targetPosition);
                     
