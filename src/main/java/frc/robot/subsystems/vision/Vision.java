@@ -216,7 +216,7 @@ public class Vision extends Component {
     }
 
     public void run(){
-        boolean PiHighSearch = in.scoringCargo && in.controlBoard.nearFarCargo!= NearFarCargo.CARGO;
+        boolean PiHighSearch = in.scoringCargo && in.controlBoard.nearFarCargo != NearFarCargo.CARGO;
         piFindCargo.setBoolean(in.searchingCargo || k.CAM_DebugCargo);
         piFindTargetHigh.setBoolean(PiHighSearch || k.CAM_DebugTargetHigh);//(in.visionTargetHigh || k.CAM_DebugTargetHigh);//
         piFindTargetLow.setBoolean((!PiHighSearch && !in.searchingCargo && !sense.isDisabled) || k.CAM_DebugTargetLow);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);

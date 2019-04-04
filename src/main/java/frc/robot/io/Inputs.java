@@ -364,7 +364,7 @@ public class Inputs extends Component {
 
             }
 
-            visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO) && actionRight && gamePad.camDrive;
+            visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO && sense.hasCargo) && actionRight && gamePad.camDrive;
             visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive && controlBoard.nearFarCargo != NearFarCargo.CARGO;
             visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
 
@@ -602,6 +602,11 @@ public class Inputs extends Component {
     private void setRobotOrientation(){
         if(!cargoNotHatch && !sense.hasHatch){
             robotOrientation = 180;
+            return;
+        }
+
+        if(cargoNotHatch && !sense.hasCargo){
+            robotOrientation = 910;
             return;
         }
 

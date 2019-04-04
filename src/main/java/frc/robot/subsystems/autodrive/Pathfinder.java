@@ -70,8 +70,8 @@ public class Pathfinder extends Component {
         
         makePoly(new double[]{58, 58, 58, 58, 161, 161, 104},
                  new double[]{256, 278, 300, 322, 322, 288, 256},
-                 new int[]{1, 2, 3, 6, 7},
-                 new int[]{4, 5, 6, 9, 8},
+                 new int[]{0, 1, 2, 3, 6},
+                 new int[]{8, 4, 5, 6, 9},
                  false, null, 7);
         
         makePoly(new double[]{58, 58, 104, 104},
@@ -124,8 +124,8 @@ public class Pathfinder extends Component {
         
         makePoly(new double[]{108, 108, 161, 161},
                  new double[]{0, 48, 48, 0},
-                 new int[]{1, 2},
-                 new int[]{15, 14},
+                 new int[]{2},
+                 new int[]{14},
                  true, null, 16);
                  
         makePoly(new double[]{23, 23, 58},

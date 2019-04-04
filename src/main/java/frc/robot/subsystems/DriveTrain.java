@@ -315,7 +315,11 @@ public class DriveTrain extends Component {
             double dist = Math.max(vd.distance - 10, 0);
             double turnPwr = Util.limit(deltaAngle * k.DRV_CamCargoThetaKP, k.DRV_CamCargoPwrLim);
             double distPwr = Util.limit(dist * k.DRV_CamCargoDistKP, k.DRV_CamCargoPwrLim);
-            swerve(0,distPwr,turnPwr);
+            if(gatherer.scorpioActive()){
+                swerve(0,0,0);
+            } else {
+                swerve(0,distPwr,turnPwr);
+            }
             autoShoot = vd.distance < 20 ;//&& Math.abs(deltaAngle) < 10;
         } else {
             //get angle and distance from ALL targets
