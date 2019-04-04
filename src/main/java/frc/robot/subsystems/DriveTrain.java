@@ -353,14 +353,20 @@ public class DriveTrain extends Component {
             double vY = vAmplitude * Math.cos(vAngle);
             //Send to drivetrain
             double rotPower = pidOrient();
-            swerve(vX, vY, rotPower);
 
             SmartDashboard.putNumber("vHypot",vHypot);
             SmartDashboard.putNumber("autoShootDist", in.autoShootDist);
             double allowableAngle = 2;
             if (!in.cargoNotHatch && !sense.hasHatch) allowableAngle = 6;
             autoShoot = vd.distance-vOffset < in.autoShootDist && Math.abs(vd.angleTo) < allowableAngle;
-/*
+	
+			if(autoShoot && sense.hasHatch){ //override driving to compress bumpers
+				swerve(0, -k.DRV_CamHatchDeliverForwardPower, 0);
+			} else {
+				swerve(vX, vY, rotPower);
+			}
+			
+			/*
             //turn angle into a x distance
             double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
             double distY = vd.distance - k.DRV_CamTargetY0;

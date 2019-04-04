@@ -276,6 +276,12 @@ public class Inputs extends Component {
         SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
 
         if(sense.isDisabled) allowAutoAutoRotation = false;
+		
+		if(cargoNotHatch){
+			sense.hasHatch = false;
+		} else {
+			sense.hasCargo = false;
+		}
 
         //automatic state handling
         if(autoNotManualMode){
@@ -336,7 +342,7 @@ public class Inputs extends Component {
             sense.prevHasCargo = sense.hasCargo;
 
             // if ready (works for all ready scoring positions and hatch gathering)
-            if(actionRight || cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot) {
+            if(actionRight /*|| cargoNotHatch && sense.hasCargo && shoot || !cargoNotHatch && sense.hasHatch && shoot*/) {
                 
                 allowAutoAutoRotation = true;
 
@@ -370,7 +376,7 @@ public class Inputs extends Component {
 
             }
 
-            visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO) && actionRight && gamePad.camDrive;
+            visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO && sense.hasCargo) && actionRight && gamePad.camDrive;
             visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive && controlBoard.nearFarCargo != NearFarCargo.CARGO;
             visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
 
@@ -610,6 +616,11 @@ public class Inputs extends Component {
             robotOrientation = 180;
             return;
         }
+		
+		if(cargoNotHatch && !sense.hasCargo){
+			robotOrientation = 910;
+			return;
+		}
 
         switch(controlBoard.nearFarCargo){
             case NEAR: 

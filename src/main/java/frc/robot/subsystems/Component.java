@@ -29,6 +29,7 @@ public class Component {
     public static LEDs leds;
     public static Pathfinder pathfinder;
     public static AutoDrive autoDriving;
+	public static Display display;
 
     public static void initAll() {
         
@@ -74,6 +75,7 @@ public class Component {
         drive = new DriveTrain(); 
         rse = new RSE();
         leds = new LEDs();
+		display = new Display();
 
         switch(Calibrations.BOT_Version){
             case COMPETITION:
@@ -100,6 +102,7 @@ public class Component {
         drive.run();
         out.run();
         leds.run();
+		display.run();
         SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());
     }
 

@@ -16,19 +16,20 @@ public class RSE extends Component {
     private double[] prevWheelAngle;
     private double prevRobotAngle;
 
-    SendableChooser<Integer> startSelector;
+    public SendableChooser<Integer> startSelector;
 
     public RSE() {
         prevEnc = new double[4];
         prevWheelAngle =  new double[4]; 
-        reset();
 
         startSelector = new SendableChooser<>();
-        startSelector.addOption("Far Left", 0);
+        startSelector.setDefaultOption("Far Left", 0);
         startSelector.addOption("Mid Left", 1);
         startSelector.addOption("Mid Right", 2);
         startSelector.addOption("Far Right", 3);
-        SmartDashboard.putData(startSelector);
+        //SmartDashboard.putData("StartLocation",startSelector);
+		
+		reset();
     }
 
     public void reset() {

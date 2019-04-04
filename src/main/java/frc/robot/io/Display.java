@@ -1,12 +1,29 @@
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
-public class Display {
+public class Display extends Component{
 
-    public static void run(){
-        Shuffleboard.getTab("CompTap").add("hasHatch",false);
-        Shuffleboard.getTab("CompTap").add("hasCargo",false);
-        Shuffleboard.getTab("CompTap").add("rseX",false);
-        Shuffleboard.getTab("CompTap").add("rseY",false);
+	NetworkTableEntry hasHatch;
+	NetworkTableEntry hasCargo;
+	NetworkTableEntry rseX;
+	NetworkTableEntry rseY;
+	NetworkTableEntry eleEnc;
+	NetworkTableEntry startSelector;
+
+    public Display(){
+        hasHatch = Shuffleboard.getTab("CompTab").add("hasHatch",false).getEntry();
+        hasCargo = Shuffleboard.getTab("CompTab").add("hasCargo",false).getEntry();
+        rseX = Shuffleboard.getTab("CompTab").add("rseX",0.0).getEntry();
+        rseY = Shuffleboard.getTab("CompTab").add("rseY",0.0).getEntry();
+		eleEnc = Shuffleboard.getTab("CompTab").add("EleEnc",0.0).getEntry();
+		startSelector = Shuffleboard.getTab("CompTab").add("StartLocation",rse.startSelector).getEntry();
     }
+	
+	public void run(){
+		hasHatch.setBoolean(sense.hasHatch);
+		hasCargo.setBoolean(sense.hasCargo);
+		rseX.setDouble(rse.x);
+		rseY.setDouble(rse.y);
+		eleEnc.setDouble(sense.elevatorEncoder);
+	}
 
 }
