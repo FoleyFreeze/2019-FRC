@@ -13,7 +13,7 @@ public class Calibrations{
     public boolean CAM_Disabled = false;
     public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
-    public boolean ELE_Disable = true;
+    public boolean ELE_Disable = false;
     public boolean GTH_DisableCargo = false;
     public boolean GTH_DisableHatch = false;
     public boolean MIL_Disabled = false;
