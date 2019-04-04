@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.io.Display;
 import frc.robot.subsystems.Component;
 
 public class Robot extends TimedRobot {
@@ -15,6 +16,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     Component.initAll();
+    Display.run();
   }
 
   @Override

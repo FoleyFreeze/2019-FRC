@@ -219,8 +219,8 @@ public class Vision extends Component {
         boolean PiHighSearch = in.scoringCargo && in.controlBoard.nearFarCargo!= NearFarCargo.CARGO;
         piFindCargo.setBoolean(in.searchingCargo || k.CAM_DebugCargo);
         piFindTargetHigh.setBoolean(PiHighSearch || k.CAM_DebugTargetHigh);//(in.visionTargetHigh || k.CAM_DebugTargetHigh);//
-        piFindTargetLow.setBoolean(!PiHighSearch || k.CAM_DebugTargetLow);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);
-        //piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
+        piFindTargetLow.setBoolean((!PiHighSearch && !in.searchingCargo && !sense.isDisabled) || k.CAM_DebugTargetLow);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);
+            //piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
         //piFindTargetLow.setBoolean(in.searchingHatch || k.CAM_DebugTargetLow);
     }
 }

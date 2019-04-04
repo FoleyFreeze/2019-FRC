@@ -505,18 +505,18 @@ public class Inputs extends Component {
         }
 
         //if we are gathering a hatch stay at gather position
-        if(!cargoNotHatch && !sense.hasHatch){
+        if(!cargoNotHatch && !sense.hasHatch && autoNotManualMode){
             elevatorTarget = ElevatorPosition.LOADING_STATION;
             return;
         }
 
         //if we are gathering a cargo, stay at cargo position
-        if(cargoNotHatch && !sense.hasCargo){
+        if(cargoNotHatch && !sense.hasCargo && autoNotManualMode){
             elevatorTarget = ElevatorPosition.FLOOR;
             return;
         }
 
-        if(!ready){
+        if(!ready && autoNotManualMode){
             //if not ready, stay down
             if(cargoNotHatch){
                 elevatorTarget = ElevatorPosition.FLOOR;
@@ -562,8 +562,8 @@ public class Inputs extends Component {
                         if(cargoNotHatch){
                             elevatorTarget = ElevatorPosition.FLOOR;
                         } else {
-                            //elevatorTarget = ElevatorPosition.LOADING_STATION;
-                            elevatorTarget = ElevatorPosition.FLOOR;
+                            elevatorTarget = ElevatorPosition.LOADING_STATION;
+                            //elevatorTarget = ElevatorPosition.FLOOR;
                         }
                     break;
                 }

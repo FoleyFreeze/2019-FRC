@@ -84,16 +84,15 @@ public class DriveTrain extends Component {
             double distY = autoDriving.targetPoint.y - rse.y;
 
             //PID and limit magnitude
-            /*
-            double r = Math.sqrt(distX*distX + distY * distY);
+            double r = Math.sqrt(distX*distX + distY*distY);
             double rPwr = Util.limit(r * k.AD_AutoDriveKP, k.AD_MaxPower);
-            double theta = Math.atan2(distX,distY);
+            double theta = Math.atan2(distY,distX);
 
             double autoX = rPwr * Math.cos(theta);
             double autoY = rPwr * Math.sin(theta);
-            */
-            double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
-            double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
+            
+            //double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
+            //double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
 
             //get rot power form pidOrient
             double autoRot = pidOrient();
@@ -328,11 +327,11 @@ public class DriveTrain extends Component {
             if (in.cargoNotHatch) angleLimit = 3;   
             if (Math.abs(vd.angleTo)>angleLimit /*5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 15; } //was 5//was vOffset = 8
             //for all cargo deliveries, add extra inches
-            if (in.cargoNotHatch) {vOffset+=0;}
+            if (in.cargoNotHatch) {vOffset-=4;}//0
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
             if (sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO) {vOffset+=2;}
             //add extra drive to pick up hatch
-            if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 0;}
+            if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 2;}
             if (sense.hasHatch && !in.cargoNotHatch && in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {vOffset -= 0;}
             double vDist = vd.distance-vOffset-vOffset2;
             double vXErr = (vd.distance + 15) * Math.tan(Angle.toRad(vd.angleTo));

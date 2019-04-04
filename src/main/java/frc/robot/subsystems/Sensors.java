@@ -54,6 +54,7 @@ public class Sensors extends Component {
 
     public void init() {
         navx.zeroYaw();//reset navx
+        robotAngle.setDeg(k.SEN_NAVX_Offset);
         out.resetEnc();
         rse.reset(); 
 
