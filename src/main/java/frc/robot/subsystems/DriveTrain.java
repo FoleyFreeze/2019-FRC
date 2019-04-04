@@ -84,16 +84,15 @@ public class DriveTrain extends Component {
             double distY = autoDriving.targetPoint.y - rse.y;
 
             //PID and limit magnitude
-            /*
-            double r = Math.sqrt(distX*distX + distY * distY);
+            double r = Math.sqrt(distX*distX + distY*distY);
             double rPwr = Util.limit(r * k.AD_AutoDriveKP, k.AD_MaxPower);
-            double theta = Math.atan2(distX,distY);
+            double theta = Math.atan2(distY,distX);
 
             double autoX = rPwr * Math.cos(theta);
             double autoY = rPwr * Math.sin(theta);
-            */
-            double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
-            double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
+            
+            //double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
+            //double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
 
             //get rot power form pidOrient
             double autoRot = pidOrient();

@@ -63,6 +63,8 @@ public class Calibrations{
     public double AD_RobotHeight = 35;
     public double AD_HabY = 48;
     public double AD_HabEdgeX = 64;
+    public double AD_MidEdgeX = 24;
+    public double AD_LoadingStationX = 188.5;
 
     //sensor cals
     public double SEN_AbsAngleFL;

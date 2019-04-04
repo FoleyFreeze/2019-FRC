@@ -37,6 +37,18 @@ public class Util{
         return Math.sqrt(diffX*diffX + diffY*diffY);
     }
 
+    public static double dist(double x1, double y1, Point p2){
+        double diffX = x1 - p2.x;
+        double diffY = y1 - p2.y;
+        return Math.sqrt(diffX*diffX + diffY*diffY);
+    }
+
+    public static double dist(double x1, double y1, double x2, double y2){
+        double diffX = x1 - x2;
+        double diffY = y1 - y2;
+        return Math.sqrt(diffX*diffX + diffY*diffY);
+    }
+
     public static double deadband(double value, double deadband){
         //zero if in the deadband zone
         if(Math.abs(value) < deadband) return 0;
