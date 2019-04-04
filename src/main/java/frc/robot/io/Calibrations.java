@@ -37,8 +37,8 @@ public class Calibrations{
     public double   DRV_CamDriveMaxPwr_Y = 0.3;//.2
     public double   DRV_CamDriveMinPwr_X = 0.10; //was .03 MrC
     public double   DRV_CamDriveMinPwr_Y = 0.08; //was .03 MrC
-    public double   DRV_TargetDistanceKP = -0.035;//-0.03;//-0.014;//-0.0145;//-0.016; //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0.009;//0.4;//0.15;
+    public double   DRV_TargetDistanceKP = -0.011;//-0.03;//-0.014;//-0.0145;//-0.016; //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0.000;//0.4;//0.15;
     public double   DRV_CamTargetY0 = 0;//-2; //Drive 2 inches CLOSER to all targets
     public double   DRV_CamDistShootX = 2;
     public double   DRV_CamDistShootY = 2 - DRV_CamTargetY0;
@@ -109,27 +109,28 @@ public class Calibrations{
     public double SCR_CargoGatherTime = 0.5;
     public double SCR_CargoShootTime = 0.5;
     public double SCR_HatchGatherTime = 0.5;
-    public double SCR_HatchShootTime = 0.5;
+    public double SCR_HatchShootTime = 0.25;
     public double SCR_RetractTime = 0.3;
     public double SCR_FullExtendTime = 0.4;
-    public double SCR_HalfExtendTime = 0.1;
+    public double SCR_HalfExtendTime = 0.2;
     public double SCR_ShortExtendTime = 0.02;
 
-    public double SCR_ArmPositionKP = 0;
+    public double SCR_ArmPositionKP = 0.002;
     public double SCR_ArmPositionKD = 0;
     public double SCR_ArmIdleHoldPower = -0.15;
     public double SCR_ArmInPower = -0.7;
     public double SCR_ArmOutPower = 0.7;
     public double SCR_ArmPowerLimit = 0.7;
+    public double SCR_ArmInPowerLimit = 0.4;
 
     public double SCR_ArmOutCurrentLimit = 25;
-    public double SCR_ArmInCurrentLimit = 10;
+    public double SCR_ArmInCurrentLimit = 25;
     public double SCR_WheelCurrentLimit = 15;
 
     public double SCR_InPosition = 0;
-    public double SCR_FullOutPosition = 8;
-    public double SCR_PartOutPosition = 2;   
-    public double SCR_AllowFloorLimit = 3;
+    public double SCR_FullOutPosition = 1500;
+    public double SCR_PartOutPosition = 500;   
+    public double SCR_AllowFloorLimit = 500;
     
     
 
@@ -137,8 +138,8 @@ public class Calibrations{
     public double ELE_MotorPwr = 0.1; // set to actual value later
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
     public double ELE_PIDLimitUp = 0.9;
-    public double ELE_PIDLimitDown = 0.7;//0.5
-    public double ELE_PIDLimitDownLow = 0.3;
+    public double ELE_PIDLimitDown = 0.5;//0.7
+    public double ELE_PIDLimitDownLow = 0.1;
     public double ELE_LowLimitPosition = 10;
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
@@ -150,9 +151,9 @@ public class Calibrations{
     //in case scorpio needs different elevator positions
     public final double[] ELE_PositionScorpioArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            -1,        11,           20,              11,              50,              40,           76.5,            68,            34,          11
+            -0.5,        2,           22,              8,              52,              37,           76.5,            65,            40,          8
     };
-    public double ELE_ScorpioFloor = 4;//floor when scorpio is retracted
+    public double ELE_ScorpioFloor = 2.5;//floor when scorpio is retracted
 
 
     // climb cals
@@ -197,8 +198,8 @@ public class Calibrations{
     public boolean CAM_DebugTargetLow = false;
     public boolean CAM_AutoShootDisabled = false; //disabled until driver is ok with this feature
     public double CAM_AutoShootCargoDist = 2;//inches
-    public double CAM_AutoShootHatchDist = 2;
-    public double CAM_AutoGatherHatchDist = 18;
+    public double CAM_AutoShootHatchDist = 18;//2;
+    public double CAM_AutoGatherHatchDist = 18;//18
     
     public Calibrations(){
         

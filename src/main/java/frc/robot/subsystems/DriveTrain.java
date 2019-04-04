@@ -314,7 +314,7 @@ public class DriveTrain extends Component {
             double vOffset2 = 0;
             //Arc into target aka target 8 inches away first, then drive in when angle is low enoug
             //also target a far distance when the elevator isn't up yet
-            if (Math.abs(vd.angleTo)>5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 5; } //was vOffset = 8
+            if (Math.abs(vd.angleTo)>1.5 /*5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 15; } //was 5//was vOffset = 8
             //for all cargo deliveries, add extra inches
             if (in.cargoNotHatch) {vOffset+=0;}
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
@@ -331,7 +331,7 @@ public class DriveTrain extends Component {
                 else {vAngle+= Math.PI;}
             }
 
-            vAngle *= 1.25; //was 1.3 MrC
+            vAngle *= 1; //was 1.3 MrC
             //PID to distance amplitude of vector
             double vHypot = Math.sqrt(vXErr*vXErr + vDist*vDist);//Math.abs((vDist)/Math.cos(vAngle));
             double velMag = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy) / sense.dt;
@@ -350,12 +350,18 @@ public class DriveTrain extends Component {
             double vY = vAmplitude * Math.cos(vAngle);
             //Send to drivetrain
             double rotPower = pidOrient();
-            swerve(vX, vY, rotPower);
+            if(gatherer.scorpioActive()){
+                swerve(0,0,0);
+            }
+            else {
+                swerve(vX, vY, rotPower);
+            }
+            
 
             SmartDashboard.putNumber("vHypot",vHypot);
             SmartDashboard.putNumber("autoShootDist", in.autoShootDist);
-            double allowableAngle = 2;
-            if (!in.cargoNotHatch && !sense.hasHatch) allowableAngle = 6;
+            double allowableAngle = 1.5;
+            //if (!in.cargoNotHatch && !sense.hasHatch) allowableAngle = 6;
             autoShoot = vd.distance-vOffset < in.autoShootDist && Math.abs(vd.angleTo) < allowableAngle;
 /*
             //turn angle into a x distance

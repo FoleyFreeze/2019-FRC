@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
 import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.util.Util;
@@ -99,7 +100,8 @@ public class ScorpioGatherer extends ArmGatherer {
 
                     if(actionState != ActionState.WAIT) armState = ScorpioState.WAIT_FOR_START;
 
-                    out.setGatherArm(k.SCR_ArmIdleHoldPower);
+                    //out.setGatherArm(k.SCR_ArmIdleHoldPower);
+                    pidArm(k.SCR_InPosition);
                     out.setGatherWheels(wheelHoldPower);
 
                 break;
@@ -112,6 +114,8 @@ public class ScorpioGatherer extends ArmGatherer {
                         actionTimer = Timer.getFPGATimestamp() + extendTime;
                         if(actionState == ActionState.SHOOT_CARGO_CSHIP){
                             targetPosition = k.SCR_PartOutPosition;
+                        } else if(actionState == ActionState.SHOOT_CARGO_ROCKET){
+                            targetPosition = k.SCR_InPosition;
                         } else {
                             targetPosition = k.SCR_FullOutPosition;
                         }
@@ -134,7 +138,7 @@ public class ScorpioGatherer extends ArmGatherer {
                     }
 
                     //if not gathering, continue to hold
-                    if(actionState == ActionState.GATHER_CARGO || actionState == ActionState.GATHER_HATCH){
+                    if(actionState != ActionState.GATHER_CARGO && actionState != ActionState.GATHER_HATCH){
                         wheelPower = wheelHoldPower;
                     }
 
@@ -178,7 +182,8 @@ public class ScorpioGatherer extends ArmGatherer {
                     }
 
                     out.setGatherWheels(wheelPower);
-                    out.setGatherArm(0); //do we want to hold it in position?
+                    //out.setGatherArm(0); //do we want to hold it in position?
+                    pidArm(targetPosition);
                     
                 break;
 
@@ -191,6 +196,10 @@ public class ScorpioGatherer extends ArmGatherer {
                         armState = ScorpioState.INIT;
                     }
 
+                    if(actionState == ActionState.SHOOT_HATCH){
+                        wheelHoldPower = k.SCR_HatchShootPwr;
+                    }
+
                     targetPosition = k.SCR_InPosition;
                     out.setGatherWheels(wheelHoldPower);
                     //out.setGatherArm(k.SCR_ArmInPower);
@@ -198,6 +207,8 @@ public class ScorpioGatherer extends ArmGatherer {
                     
                 break;
             }
+
+            SmartDashboard.putString("ScorpioState",armState.name());
         }
     }
 
@@ -209,13 +220,18 @@ public class ScorpioGatherer extends ArmGatherer {
 
         double error = position - sense.scorpioArmEnc;
         double power = error * k.SCR_ArmPositionKP;
-        power = Util.limit(power, k.SCR_ArmPowerLimit);
+        if(power > k.SCR_ArmPowerLimit) power = k.SCR_ArmPowerLimit;
+        else if(power < -k.SCR_ArmInPowerLimit) power = -k.SCR_ArmInPowerLimit;
 
         out.setGatherArm(power);
     }
 
     private boolean checkArmPosition(){
-        return Math.abs(sense.scorpioArmEnc - targetPosition) < 1;
+        return Math.abs(sense.scorpioArmEnc - targetPosition) < 100;
+    }
+
+    public boolean scorpioActive(){
+        return armState != ScorpioState.INIT;
     }
 
 }

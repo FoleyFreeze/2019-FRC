@@ -86,8 +86,8 @@ public class Vision extends Component {
             nt.addEntryListener("vis_target_low", (table,key,entry,value,flags) -> {
                 
                 //don't trust the camera when hatch panel is in the way
-                if(!in.cargoNotHatch && sense.elevatorEncoder > 16 && sense.elevatorEncoder < 38) return;
-                if(in.cargoNotHatch && sense.elevatorEncoder > 20 && sense.elevatorEncoder < 33) return;
+                if(!in.cargoNotHatch && sense.elevatorEncoder > 16 && sense.elevatorEncoder < 35) return;
+                //if(in.cargoNotHatch && sense.elevatorEncoder > 20 && sense.elevatorEncoder < 33) return;
                 
                 try{
                     VisionData vd = new VisionData();

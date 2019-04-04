@@ -288,12 +288,14 @@ public class Inputs extends Component {
             if(cargoNotHatch) {
                 gatherHatch = false;
                 releaseHatch = false;                       //dont start gathering immediately after shooting
-                gatherCargo = !sense.hasCargo && actionLeftRising || gatherCargo && actionLeft;
+                gatherCargo = !sense.hasCargo && actionLeftRising || gatherCargo && actionLeft && !sense.hasCargo;
                 releaseCargo = sense.hasCargo && actionLeftRising;
                 
                 //override
                 if(!sense.hasCargo && shift && gather) {
                     sense.hasCargo = true;
+                } else if(sense.hasCargo && shift && shoot){
+                    sense.hasCargo = false;
                 }
 
                 autoShootDist = k.CAM_AutoShootCargoDist;
@@ -301,11 +303,13 @@ public class Inputs extends Component {
             } else {// auto hatch
                 gatherCargo = false; 
                 releaseCargo = false;                           //dont start gathering immediately after shooting
-                gatherHatch = !sense.hasHatch && actionLeftRising || gatherHatch && actionLeft;
+                gatherHatch = !sense.hasHatch && actionLeftRising || gatherHatch && actionLeft && !sense.hasHatch;
                 releaseHatch = sense.hasHatch && actionLeftRising;
                 //the overide
                 if(!sense.hasHatch && shift && gather) {
                     sense.hasHatch = true;
+                } else if(sense.hasHatch && shift && shoot){
+                    sense.hasHatch = false;
                 }
 
                 if(sense.hasHatch) autoShootDist = k.CAM_AutoShootHatchDist;

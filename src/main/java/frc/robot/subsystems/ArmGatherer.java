@@ -210,4 +210,7 @@ public class ArmGatherer extends Component{
         return hatchShootComplete && in.autoNotManualMode;
     }
 
+    public boolean scorpioActive(){
+        return false;
+    }
 }
