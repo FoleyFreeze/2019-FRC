@@ -1,4 +1,8 @@
+package frc.robot.io;
+
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import frc.robot.subsystems.Component;
 
 public class Display extends Component{
 
@@ -15,7 +19,7 @@ public class Display extends Component{
         rseX = Shuffleboard.getTab("CompTab").add("rseX",0.0).getEntry();
         rseY = Shuffleboard.getTab("CompTab").add("rseY",0.0).getEntry();
 		eleEnc = Shuffleboard.getTab("CompTab").add("EleEnc",0.0).getEntry();
-		startSelector = Shuffleboard.getTab("CompTab").add("StartLocation",rse.startSelector).getEntry();
+		//startSelector = Shuffleboard.getTab("CompTab").add("StartLocation",rse.startSelector);
     }
 	
 	public void run(){

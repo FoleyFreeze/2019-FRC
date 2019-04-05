@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     Component.initAll();
-    Display.run();
+    //Display.run();
   }
 
   @Override
