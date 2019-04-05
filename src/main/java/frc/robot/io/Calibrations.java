@@ -38,7 +38,7 @@ public class Calibrations{
     public double   DRV_CamDriveMinPwr_X = 0.10; //was .03 MrC
     public double   DRV_CamDriveMinPwr_Y = 0.08; //was .03 MrC
     public double   DRV_TargetDistanceKP = -0.011;//-0.03;//-0.014;//-0.0145;//-0.016; //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0.000;//0.4;//0.15;
+    public double   DRV_TargetDistanceKD = 0.0;//0.4;//0.15;
     public double   DRV_CamTargetY0 = 0;//-2; //Drive 2 inches CLOSER to all targets
     public double   DRV_CamDistShootX = 2;
     public double   DRV_CamDistShootY = 2 - DRV_CamTargetY0;
@@ -48,11 +48,12 @@ public class Calibrations{
     public final double[] DRV_EleHeightAxis = {0,20,78};
     public final double[] DRV_PowerTable = {1, 1, 0.2};
     public double DRV_AutoRotateKP = 0.01; //power per degres of error
-    public double DRV_AutoRotateKD = 0.0;
+    public double DRV_AutoRotateKD = 0.01;
     public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
     public double DRV_CamCargoThetaKP = 0.02; //power per degree
+    public double DRV_CamCargoThetaKD = 0.01;
     public double DRV_CamCargoDistKP = -0.02; //power per inch
     public double DRV_CamCargoPwrLim = 0.5;
 
@@ -156,9 +157,9 @@ public class Calibrations{
     //in case scorpio needs different elevator positions
     public final double[] ELE_PositionScorpioArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            -0.5,        2,           22,              8,              52,              37,           76.5,            65,            40,          8
+            -0.5,        2,           22,              8,              48,              37,           76.5,            65,            40,          8
     };
-    public double ELE_ScorpioFloor = 2.5;//floor when scorpio is retracted
+    public double ELE_ScorpioFloor = 3.5;//floor when scorpio is retracted
 
 
     // climb cals

@@ -312,15 +312,17 @@ public class DriveTrain extends Component {
     public void cameraDrive(VisionData vd) { 
         if(in.visionCargo){
             double deltaAngle = sense.robotAngle.subDeg(vd.robotAngle) + vd.angleTo;
-            double dist = Math.max(vd.distance - 10, 0);
-            double turnPwr = Util.limit(deltaAngle * k.DRV_CamCargoThetaKP, k.DRV_CamCargoPwrLim);
+            double dist = Math.max(vd.distance - 12, 0);
+            double turnPwr = Util.limit(deltaAngle * k.DRV_CamCargoThetaKP + sense.deltaRobotAngle *k.DRV_CamCargoThetaKD , k.DRV_CamCargoPwrLim);
+            //PID orient for ref: double rotPower = angleErr * k.DRV_AutoRotateKP + sense.deltaRobotAngle * k.DRV_AutoRotateKD;
+
             double distPwr = Util.limit(dist * k.DRV_CamCargoDistKP, k.DRV_CamCargoPwrLim);
             if(gatherer.scorpioActive()){
                 swerve(0,0,0);
             } else {
                 swerve(0,distPwr,turnPwr);
             }
-            autoShoot = vd.distance < 20 ;//&& Math.abs(deltaAngle) < 10;
+            autoShoot = vd.distance < 15 && Math.abs(deltaAngle) < 5;
         } else {
             //get angle and distance from ALL targets
             double vOffset = k.DRV_CamTargetY0; //How close to drive to all targets
@@ -329,11 +331,12 @@ public class DriveTrain extends Component {
             //also target a far distance when the elevator isn't up yet
             double angleLimit = 1.5;
             if (in.cargoNotHatch) angleLimit = 3;   
-            if (Math.abs(vd.angleTo)>angleLimit /*5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 15; } //was 5//was vOffset = 8
+            if (Math.abs(vd.angleTo)>angleLimit /*5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) 
+            {vOffset2 = 15; } //was 5//was vOffset = 8
             //for all cargo deliveries, add extra inches
             if (in.cargoNotHatch) {vOffset-=4;}//0
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
-            if (sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO) {vOffset+=2;}
+            if (sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO) {vOffset+=0;}//was, changed for scorpio2;}
             //add extra drive to pick up hatch
             if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 2;}
             if (sense.hasHatch && !in.cargoNotHatch && in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {vOffset -= 0;}
