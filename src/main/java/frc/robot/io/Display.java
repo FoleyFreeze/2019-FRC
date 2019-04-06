@@ -12,6 +12,8 @@ public class Display extends Component{
 	NetworkTableEntry rseY;
 	NetworkTableEntry eleEnc;
 	NetworkTableEntry startSelector;
+	NetworkTableEntry currPoly;
+	NetworkTableEntry lastDist;
 
     public Display(){
         hasHatch = Shuffleboard.getTab("CompTab").add("hasHatch",false).getEntry();
@@ -19,6 +21,8 @@ public class Display extends Component{
         rseX = Shuffleboard.getTab("CompTab").add("rseX",0.0).getEntry();
         rseY = Shuffleboard.getTab("CompTab").add("rseY",0.0).getEntry();
 		eleEnc = Shuffleboard.getTab("CompTab").add("EleEnc",0.0).getEntry();
+		currPoly = Shuffleboard.getTab("CompTab").add("CurrPoly",0).getEntry();
+		lastDist = Shuffleboard.getTab("CompTab").add("LastRSEdist",0).getEntry();
 		Shuffleboard.getTab("CompTab").add("StartLocation",rse.startSelector);
     }
 	
@@ -28,6 +32,8 @@ public class Display extends Component{
 		rseX.setDouble(rse.x);
 		rseY.setDouble(rse.y);
 		eleEnc.setDouble(sense.elevatorEncoder);
+		currPoly.setDouble(autoDriving.currPolyId);
+		lastDist.setDouble(autoDriving.lastDist);
 	}
 
 }

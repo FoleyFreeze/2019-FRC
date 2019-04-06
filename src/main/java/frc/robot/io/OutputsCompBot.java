@@ -1,8 +1,11 @@
 package frc.robot.io;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.mil.CurrentLimit;
@@ -124,6 +127,38 @@ public class OutputsCompBot extends Outputs {
             frontRightMotorTurn.setOpenLoopRampRate(k.DRV_MotorTurnRampRate);
             backLeftMotorTurn.setOpenLoopRampRate(k.DRV_MotorTurnRampRate);
             backRightMotorTurn.setOpenLoopRampRate(k.DRV_MotorTurnRampRate);
+
+            encLF = frontLeftMotorTurn.getEncoder();
+            encRF = frontRightMotorTurn.getEncoder();
+            encLR = backLeftMotorTurn.getEncoder();
+            encRR = backRightMotorTurn.getEncoder();
+            pidLF = frontLeftMotorTurn.getPIDController();
+            pidRF = frontRightMotorTurn.getPIDController();
+            pidLR = backLeftMotorTurn.getPIDController();
+            pidRR = backRightMotorTurn.getPIDController();
+            pidLF.setP(k.DRV_TurnSparkKP);
+            pidLF.setI(k.DRV_TurnSparkKI);
+            pidLF.setD(k.DRV_TurnSparkKD);
+            pidLF.setDFilter(k.DRV_TurnSparkKDFilt);
+            pidLF.setFF(k.DRV_TurnSparkKF);
+            
+            pidRF.setP(k.DRV_TurnSparkKP);
+            pidRF.setI(k.DRV_TurnSparkKI);
+            pidRF.setD(k.DRV_TurnSparkKD);
+            pidRF.setDFilter(k.DRV_TurnSparkKDFilt);
+            pidRF.setFF(k.DRV_TurnSparkKF);
+
+            pidLR.setP(k.DRV_TurnSparkKP);
+            pidLR.setI(k.DRV_TurnSparkKI);
+            pidLR.setD(k.DRV_TurnSparkKD);
+            pidLR.setDFilter(k.DRV_TurnSparkKDFilt);
+            pidLR.setFF(k.DRV_TurnSparkKF);
+
+            pidRR.setP(k.DRV_TurnSparkKP);
+            pidRR.setI(k.DRV_TurnSparkKI);
+            pidRR.setD(k.DRV_TurnSparkKD);
+            pidRR.setDFilter(k.DRV_TurnSparkKDFilt);
+            pidRR.setFF(k.DRV_TurnSparkKF);
         }
 
         if(!k.ELE_Disable){
@@ -200,6 +235,32 @@ public class OutputsCompBot extends Outputs {
         frontRightMotorDrive.set(rf);
         backLeftMotorDrive.set(lb);
         backRightMotorDrive.set(rb);
+    }
+
+    CANEncoder encLF;
+    CANEncoder encRF;
+    CANEncoder encLR;
+    CANEncoder encRR;
+    CANPIDController pidLF;
+    CANPIDController pidRF;
+    CANPIDController pidLR;
+    CANPIDController pidRR;
+    public void setSwerveDriveTurnAngle(double deltaTurnLF, double deltaTurnRF, double deltaTurnLB, double deltaTurnRB){
+        double revs = deltaTurnLF / k.DRV_TurnGearRatio / 360.0;
+        double rotations = revs + encLF.getPosition();
+        pidLF.setReference(rotations, ControlType.kPosition);
+
+        revs = deltaTurnRF / k.DRV_TurnGearRatio / 360.0;
+        rotations = revs + encRF.getPosition();
+        pidRF.setReference(rotations, ControlType.kPosition);
+        
+        revs = deltaTurnLB / k.DRV_TurnGearRatio / 360.0;
+        rotations = revs + encLR.getPosition();
+        pidLR.setReference(rotations, ControlType.kPosition);
+
+        revs = deltaTurnRB / k.DRV_TurnGearRatio / 360.0;
+        rotations = revs + encRR.getPosition();
+        pidRR.setReference(rotations, ControlType.kPosition);
     }
 
     //Assign powers to turn motors 

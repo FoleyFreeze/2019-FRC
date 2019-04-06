@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
+import frc.robot.util.LED_Driver_Table;
 
 public class LEDs extends Component{
     private Solenoid lowerLED_Left;
@@ -87,13 +88,13 @@ public class LEDs extends Component{
 
         if(in.climb && !sense.isDisabled || climbLatch){
             climbLatch = !sense.hasHatchEdge && !sense.hasCargoEdge;
-            mainLeds.set(-0.99);
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Rainbow);
         } else if(sense.hasCargo){
-            mainLeds.set(-0.93);
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
         } else if(sense.hasHatch){
-            mainLeds.set(-0.91);
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Forest);
         } else {
-            mainLeds.set(-0.29);
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Ocean);
         } 
     }
 }

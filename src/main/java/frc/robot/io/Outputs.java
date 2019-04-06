@@ -23,6 +23,10 @@ public abstract class Outputs extends Component {
         
     }
 
+    public void setSwerveDriveTurnAngle(double deltaTurnLF, double deltaTurnRF, double deltaTurnLB, double deltaTurnRB){
+        
+    }
+
     public void setElevatorMotor(double elevate) {
         
     }

@@ -287,12 +287,23 @@ public class DriveTrain extends Component {
             }
             SmartDashboard.putNumber("Error " + i, error);
             
-            double anglePower = k.DRV_SwerveAngKP * error;
-            outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);
+            if(k.DRV_PIDOnSpark){
+                outError[i] = error;
+            } else {
+                double anglePower = k.DRV_SwerveAngKP * error;
+                outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);    
+            }
+
         }
 
         out.setSwerveDrivePower(outR[0], outR[1], outR[2], outR[3]);
-        out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
+
+        if(k.DRV_PIDOnSpark){
+            out.setSwerveDriveTurnAngle(outError[0], outError[1], outError[2], outError[3]);
+        } else {
+            out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
+        }
+        
         SmartDashboard.putNumberArray("Drive Power", outR);
         SmartDashboard.putNumberArray("Turn Power", outError);
     }
@@ -312,7 +323,7 @@ public class DriveTrain extends Component {
             double vOffset2 = 0;
             //Arc into target aka target 8 inches away first, then drive in when angle is low enoug
             //also target a far distance when the elevator isn't up yet
-            if (Math.abs(vd.angleTo)>5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 7; } //5 //was vOffset = 8
+            if (Math.abs(vd.angleTo)>5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 8; } //5 //was vOffset = 8
             //for all cargo deliveries, add extra inches
             if (in.cargoNotHatch) {vOffset-=4;}//0
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing

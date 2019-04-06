@@ -14,6 +14,10 @@ public class AutoDrive extends Component{
     public boolean enableAutoTurn;
 
     private int edgeStatus;
+    private int startingPolyId;
+
+    public int currPolyId;
+    public double lastDist;
 
     public AutoDrive(){
         targetPoint = null;
@@ -41,6 +45,8 @@ public class AutoDrive extends Component{
             powerLim = 0;//reset the power limit so we smoothly accel
             if(path != null && !path.isEmpty()){
                 //get rid of the first node, because it is not a target, it is our starting position
+                startingPolyId = path.peek().poly.id;
+
                 path.pop();
                 //if there is more than 1 step in the path, disable turning for the first step
                 enableAutoTurn = path.size() <= 1;
@@ -69,11 +75,16 @@ public class AutoDrive extends Component{
             return;
         }
         Node n = path.peek();
-
+        currPolyId = n.poly.id;
         //until we cross the edge, PID to its center point
         //or if we get within 6in of target
         boolean isClose = Util.dist(new Point(rse.x,rse.y), n.location) < 6;
-        if(!isClose && edgeStatus == getEdgeCrossing(n.location,n.edgePoint,rse.x,rse.y)){
+
+        //edge check is true if we have not yet broken the plane to leave the current poly
+        boolean edgeCheck = edgeStatus == getEdgeCrossing(n.location,n.edgePoint,rse.x,rse.y);
+        edgeCheck = edgeCheck || path.size() == 1;
+
+        if(!isClose && edgeCheck){
             targetPoint = n.location;
         } else {//else go to the next polygon
             path.pop();
@@ -91,8 +102,14 @@ public class AutoDrive extends Component{
     Point retPoint = new Point();
     public Point getDrivePower(){
 
+        if(path.isEmpty()) {
+            retPoint.x = 0;
+            retPoint.y = 0;
+            return retPoint;
+        }
+
         double endPowerLim;
-        if(path.peek().poly.id == 0 || path.peek().poly.id == 18){
+        if(startingPolyId == 0 || startingPolyId == 18){
             endPowerLim = k.AD_MaxPowerHab;
         } else {
             endPowerLim = k.AD_MaxPower;
@@ -117,7 +134,7 @@ public class AutoDrive extends Component{
         else blendLim = powerLim;
         double rPwr = Util.limit(r * k.AD_AutoDriveKP, blendLim);//powerLim);//blendlim
         double theta = Math.atan2(distY,distX);
-
+        lastDist = r;
         double autoX = rPwr * Math.cos(theta);
         double autoY = rPwr * Math.sin(theta);
 
