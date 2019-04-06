@@ -86,6 +86,45 @@ public class AutoDrive extends Component{
 
     }
 
+    Point retPoint = new Point();
+    public Point getDrivePower(){
+        //calc powers for X and Y based on target point and rse
+        double distX = targetPoint.x - rse.x;
+        double distY = targetPoint.y - rse.y;
+
+        //PID and limit magnitude
+        double r = Math.sqrt(distX*distX + distY*distY);
+        double rPwr = Util.limit(r * k.AD_AutoDriveKP, k.AD_MaxPower);
+        double theta = Math.atan2(distY,distX);
+
+        double autoX = rPwr * Math.cos(theta);
+        double autoY = rPwr * Math.sin(theta);
+
+        //if power is low, get the next point and add its value
+        if(rPwr < k.AD_MaxPower && path.size() >= 2){
+            double blendPwr = k.AD_MaxPower - rPwr;
+
+            Node n2 = path.get(path.size() - 2); //get the second thing off the stack
+
+            double distX2 = n2.edgePoint.x - rse.x;
+            double distY2 = n2.edgePoint.y - rse.y;
+            double r2 = Math.sqrt(distX2*distX2 + distY2*distY2);
+            double rPwr2 = Util.limit(r2 * k.AD_AutoDriveKP, blendPwr);
+
+            double xPwr2 = rPwr2 * Math.cos(theta);
+            double yPwr2 = rPwr2 * Math.sin(theta);
+
+            //add them together
+            autoX += xPwr2;
+            autoY += yPwr2;
+        }
+
+        retPoint.x = autoX;
+        retPoint.y = autoY;
+
+        return retPoint;
+    }
+
     public int getEdgeCrossing(Point p1, Point p2, double x, double y){
         //does a ray cast from x,y intersect the line from p1 to p2
         boolean xCross;

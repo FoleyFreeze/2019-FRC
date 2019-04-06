@@ -5,11 +5,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ControlBoard.NearFarCargo;
-import frc.robot.subsystems.autodrive.AutoDrive;
 import frc.robot.subsystems.vision.VisionData;
 import frc.robot.util.Angle;
-import frc.robot.util.Util;
 import frc.robot.util.Filter;
+import frc.robot.util.Util;
+import frc.robot.subsystems.autodrive.Point;
 
 public class DriveTrain extends Component {
     public boolean autoShoot;
@@ -80,17 +80,8 @@ public class DriveTrain extends Component {
         //if there is a target point, PID towards it
         } else if(autoDriving.targetPoint != null){
 
-            //calc powers for X and Y based on target point and rse
-            double distX = autoDriving.targetPoint.x - rse.x;
-            double distY = autoDriving.targetPoint.y - rse.y;
-
-            //PID and limit magnitude
-            double r = Math.sqrt(distX*distX + distY*distY);
-            double rPwr = Util.limit(r * k.AD_AutoDriveKP, k.AD_MaxPower);
-            double theta = Math.atan2(distY,distX);
-
-            double autoX = rPwr * Math.cos(theta);
-            double autoY = rPwr * Math.sin(theta);
+            //get x,y drive Point (power) from autoDrive
+            Point p = autoDriving.getDrivePower();
             
             //double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
             //double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
@@ -101,7 +92,9 @@ public class DriveTrain extends Component {
             else autoRot = 0;
             
             //field swerve
-            fieldSwerve(autoX, autoY, autoRot);
+            fieldSwerve(p.x, p.y, autoRot);
+        } else {
+            swerve(0,0,0);
         }
     }
 
@@ -307,10 +300,9 @@ public class DriveTrain extends Component {
     private Filter lpf = new Filter(0.5, true, 0.06, 0);
 
     public void cameraDrive(VisionData vd) { 
-        if(in.visionCargo){
-            
+        if(in.visionCargo){            
             double deltaAngle = sense.robotAngle.subDeg(vd.robotAngle) + vd.angleTo;
-            double turnPwr = Util.limit(deltaAngle * k.DRV_CamCargoThetaKP, k.DRV_CamCargoPwrLim);
+            double turnPwr = Util.limit(deltaAngle * k.DRV_CamCargoThetaKP + sense.deltaRobotAngle * k.DRV_CamCargoThetaKD, k.DRV_CamCargoPwrLim);
             double distPwr = Util.limit(vd.distance * k.DRV_CamCargoDistKP, k.DRV_CamCargoPwrLim);
             swerve(0,distPwr,turnPwr);
             autoShoot = true;
