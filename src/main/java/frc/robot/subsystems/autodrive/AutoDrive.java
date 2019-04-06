@@ -38,6 +38,7 @@ public class AutoDrive extends Component{
         //if first time, create a new path
         if(in.autoDriveRising || sense.hasHatchEdge) {
             path = pathfinder.determinePath();
+            powerLim = 0;//reset the power limit so we smoothly accel
             if(path != null && !path.isEmpty()){
                 //get rid of the first node, because it is not a target, it is our starting position
                 path.pop();
@@ -86,24 +87,41 @@ public class AutoDrive extends Component{
 
     }
 
+    double powerLim;
     Point retPoint = new Point();
     public Point getDrivePower(){
+
+        double endPowerLim;
+        if(path.peek().poly.id == 0 || path.peek().poly.id == 18){
+            endPowerLim = k.AD_MaxPowerHab;
+        } else {
+            endPowerLim = k.AD_MaxPower;
+        }
+        
+        if(powerLim < endPowerLim){
+            powerLim += k.AD_AccelLim * sense.dt;
+            powerLim = Math.max(powerLim, endPowerLim);
+        }
+
         //calc powers for X and Y based on target point and rse
         double distX = targetPoint.x - rse.x;
         double distY = targetPoint.y - rse.y;
 
+        //blendLim = Math.max(r/k.blendDistance, powerlim)
+        //limit power increase per timestep
+
         //PID and limit magnitude
         double r = Math.sqrt(distX*distX + distY*distY);
-        double rPwr = Util.limit(r * k.AD_AutoDriveKP, k.AD_MaxPower);
+        double rPwr = Util.limit(r * k.AD_AutoDriveKP, powerLim);//blendlim
         double theta = Math.atan2(distY,distX);
 
         double autoX = rPwr * Math.cos(theta);
         double autoY = rPwr * Math.sin(theta);
 
         //if power is low, get the next point and add its value
-        if(rPwr < k.AD_MaxPower && path.size() >= 2){
-            double blendPwr = k.AD_MaxPower - rPwr;
-
+        if(rPwr < powerLim && path.size() >= 2){
+            double blendPwr = powerLim - rPwr;
+            
             Node n2 = path.get(path.size() - 2); //get the second thing off the stack
 
             double distX2 = n2.edgePoint.x - rse.x;

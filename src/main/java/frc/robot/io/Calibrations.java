@@ -59,7 +59,7 @@ public class Calibrations{
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
-    public double AD_MaxPower = 0.3;
+    public double AD_MaxPower = 0.5;
     public double AD_AutoDriveKP = -0.01; //power per inch
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;
@@ -67,6 +67,8 @@ public class Calibrations{
     public double AD_HabEdgeX = 64;
     public double AD_MidEdgeX = 24;
     public double AD_LoadingStationX = 135;
+    public double AD_AccelLim = 0.75; //x% per second accel
+    public double AD_MaxPowerHab = 0.3; //max power on the hab polygons (0 and 18)
 
     //sensor cals
     public double SEN_AbsAngleFL;
