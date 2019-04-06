@@ -103,7 +103,7 @@ public class Component {
         drive.run();
         out.run();
         leds.run();
-		//display.run();
+	    display.run();
         SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());
     }
 

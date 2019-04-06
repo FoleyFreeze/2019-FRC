@@ -52,13 +52,13 @@ public class Calibrations{
     public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
-    public double DRV_CamCargoThetaKP = 0.02; //power per degree
+    public double DRV_CamCargoThetaKP = 0.01; //power per degree
     public double DRV_CamCargoDistKP = -0.02; //power per inch
     public double DRV_CamCargoPwrLim = 0.5;
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
-    public double AD_MaxPower = 0.5;
+    public double AD_MaxPower = 0.3;
     public double AD_AutoDriveKP = -0.02; //power per inch
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;

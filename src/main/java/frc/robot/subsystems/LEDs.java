@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
@@ -12,6 +13,7 @@ public class LEDs extends Component{
     private Solenoid gearFlake_B;
     private Solenoid lowerLED_Right;
     private Solenoid camLED;
+    private Spark mainLeds;
 
     public LEDs(){
         lowerLED_Left = new Solenoid(ElectroJendz.lowerLeftLED);
@@ -20,6 +22,7 @@ public class LEDs extends Component{
         gearFlake_B = new Solenoid(ElectroJendz.gearFlake_B);
         gearFlake_G = new Solenoid(ElectroJendz.gearFlake_G);
         camLED = new Solenoid(ElectroJendz.camLED);
+        mainLeds = new Spark(0);
     }
 
     private double BLINK_TIME_ON = 0.10;
@@ -75,5 +78,22 @@ public class LEDs extends Component{
         prevStateCargo = sense.hasCargo;
         prevStateHatch = sense.hasHatch;
 
+        setMains();
+    }
+
+    boolean climbLatch;
+
+    private void setMains(){
+
+        if(in.climb && !sense.isDisabled || climbLatch){
+            climbLatch = !sense.hasHatchEdge && !sense.hasCargoEdge;
+            mainLeds.set(-0.99);
+        } else if(sense.hasCargo){
+            mainLeds.set(-0.93);
+        } else if(sense.hasHatch){
+            mainLeds.set(-0.91);
+        } else {
+            mainLeds.set(-0.29);
+        } 
     }
 }

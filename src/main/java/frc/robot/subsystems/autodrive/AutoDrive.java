@@ -11,6 +11,7 @@ public class AutoDrive extends Component{
     Stack<Node> path;
     public Point targetPoint;
     public boolean pathComplete;
+    public boolean enableAutoTurn;
 
     private int edgeStatus;
 
@@ -40,9 +41,11 @@ public class AutoDrive extends Component{
             if(path != null && !path.isEmpty()){
                 //get rid of the first node, because it is not a target, it is our starting position
                 path.pop();
-                for(Node n : path){
-                    System.out.println("Poly: " + n.poly.id + " Edge: " + n.location.x + "," + n.location.y);
-                }
+                //if there is more than 1 step in the path, disable turning for the first step
+                enableAutoTurn = path.size() <= 1;
+                //for(Node n : path){
+                    //System.out.println("Poly: " + n.poly.id + " Edge: " + n.location.x + "," + n.location.y);
+                //}
                 if(!path.isEmpty()){
                     Node n = path.peek();
                     edgeStatus = getEdgeCrossing(n.location, n.edgePoint,rse.x,rse.y);
@@ -73,6 +76,7 @@ public class AutoDrive extends Component{
             targetPoint = n.location;
         } else {//else go to the next polygon
             path.pop();
+            enableAutoTurn = true; //once we start the next step, allow auto turn again
             if(!path.isEmpty()){
                 n = path.peek();
                 edgeStatus = getEdgeCrossing(n.location,n.edgePoint,rse.x,rse.y);

@@ -104,7 +104,7 @@ public class Inputs extends Component {
     public void run() {
         
         gamePad.read();
-        controlBoard.read();
+        controlBoard.read(sense.hasCargo || sense.hasHatch);
 
         resetGyro = gamePad.resetGyro;
         if(resetGyro){
@@ -329,7 +329,7 @@ public class Inputs extends Component {
             } 
 
             //autoDrive logic
-            autoDrive = gamePad.autoDrive && actionRight;
+            autoDrive = gamePad.autoDrive && actionRight && !sense.hasHatchEdge && !sense.hasCargoEdge;
             autoDriveRising = autoDrive && !prevAutoDrive;
             prevAutoDrive = autoDrive;
 
@@ -398,8 +398,6 @@ public class Inputs extends Component {
                     sense.hasHatch = false;
                 }
 
-                visionCargo = actionLeft && !sense.hasCargo;
-                visionTargetHigh = actionLeft && sense.hasCargo;
             } else {// manual hatch
                 gatherCargo = false;
                 releaseCargo = false;
@@ -416,8 +414,11 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 }
 
-                visionTargetLow = actionRight;
             }
+
+            visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO && sense.hasCargo) && actionRight && gamePad.camDrive;
+            visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive && controlBoard.nearFarCargo != NearFarCargo.CARGO;
+            visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
 
             //handle sense.hasThing rising and falling edges
             sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;

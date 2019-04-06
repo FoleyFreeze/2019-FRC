@@ -19,7 +19,7 @@ public class Display extends Component{
         rseX = Shuffleboard.getTab("CompTab").add("rseX",0.0).getEntry();
         rseY = Shuffleboard.getTab("CompTab").add("rseY",0.0).getEntry();
 		eleEnc = Shuffleboard.getTab("CompTab").add("EleEnc",0.0).getEntry();
-		//startSelector = Shuffleboard.getTab("CompTab").add("StartLocation",rse.startSelector);
+		Shuffleboard.getTab("CompTab").add("StartLocation",rse.startSelector);
     }
 	
 	public void run(){

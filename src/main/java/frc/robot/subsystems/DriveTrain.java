@@ -5,6 +5,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ControlBoard.NearFarCargo;
+import frc.robot.subsystems.autodrive.AutoDrive;
 import frc.robot.subsystems.vision.VisionData;
 import frc.robot.util.Angle;
 import frc.robot.util.Util;
@@ -95,7 +96,9 @@ public class DriveTrain extends Component {
             //double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
 
             //get rot power form pidOrient
-            double autoRot = pidOrient();
+            double autoRot;
+            if(autoDriving.enableAutoTurn) autoRot = pidOrient();
+            else autoRot = 0;
             
             //field swerve
             fieldSwerve(autoX, autoY, autoRot);
@@ -317,7 +320,7 @@ public class DriveTrain extends Component {
             double vOffset2 = 0;
             //Arc into target aka target 8 inches away first, then drive in when angle is low enoug
             //also target a far distance when the elevator isn't up yet
-            if (Math.abs(vd.angleTo)>5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 5; } //was vOffset = 8
+            if (Math.abs(vd.angleTo)>5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) {vOffset2 = 7; } //5 //was vOffset = 8
             //for all cargo deliveries, add extra inches
             if (in.cargoNotHatch) {vOffset-=4;}//0
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
