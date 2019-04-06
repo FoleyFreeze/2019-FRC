@@ -107,12 +107,15 @@ public class AutoDrive extends Component{
         double distX = targetPoint.x - rse.x;
         double distY = targetPoint.y - rse.y;
 
-        //blendLim = Math.max(r/k.blendDistance, powerlim)
+
         //limit power increase per timestep
 
         //PID and limit magnitude
         double r = Math.sqrt(distX*distX + distY*distY);
-        double rPwr = Util.limit(r * k.AD_AutoDriveKP, powerLim);//blendlim
+        double blendLim; 
+        if (path.size() >= 2) blendLim = Math.max(powerLim*r/k.AD_BlendDist, powerLim);
+        else blendLim = powerLim;
+        double rPwr = Util.limit(r * k.AD_AutoDriveKP, blendLim);//powerLim);//blendlim
         double theta = Math.atan2(distY,distX);
 
         double autoX = rPwr * Math.cos(theta);

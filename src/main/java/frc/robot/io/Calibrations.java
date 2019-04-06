@@ -69,6 +69,7 @@ public class Calibrations{
     public double AD_LoadingStationX = 135;
     public double AD_AccelLim = 0.75; //x% per second accel
     public double AD_MaxPowerHab = 0.3; //max power on the hab polygons (0 and 18)
+    public double AD_BlendDist = 20;//in inches begin blending next target point
 
     //sensor cals
     public double SEN_AbsAngleFL;
