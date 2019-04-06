@@ -191,7 +191,8 @@ public class Inputs extends Component {
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
         
-        actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
+        //had to OR with the new "autoDrive" button (which is actually fakeAuto)
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || gamePad.fakeAuto;
         actionRightRising = actionRight && !prevActionRight;
         actionRightFalling = !actionRight && prevActionRight;
         prevActionRight = actionRight;
@@ -328,8 +329,9 @@ public class Inputs extends Component {
                 else autoShootDist = k.CAM_AutoGatherHatchDist;
             } 
 
-            //autoDrive logic
-            autoDrive = gamePad.autoDrive && actionRight && !sense.hasHatchEdge && !sense.hasCargoEdge;
+            //autoDrive logic //replaced ready button with fake auto button
+            //autoDrive = gamePad.autoDrive && actionRight && !sense.hasHatchEdge && !sense.hasCargoEdge;
+            autoDrive = gamePad.fakeAuto && !sense.hasHatchEdge && !sense.hasCargoEdge;
             autoDriveRising = autoDrive && !prevAutoDrive;
             prevAutoDrive = autoDrive;
 
@@ -497,8 +499,8 @@ public class Inputs extends Component {
     
     //set elevator position based on control board state
     public void setElevatorHeight(boolean ready){
-        //to help with the start hatch position (only in auto)
-        if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.fakeAuto ) {
+        //to help with the start hatch position (only in auto)          //replaced from gamePad.fakeAuto
+        if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.autoDrive ) {
             elevatorTarget = ElevatorPosition.DONT_MOVE;
             return;
         }

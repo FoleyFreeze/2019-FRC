@@ -288,7 +288,7 @@ public class DriveTrain extends Component {
             SmartDashboard.putNumber("Error " + i, error);
             
             if(k.DRV_PIDOnSpark){
-                outError[i] = error;
+                outError[i] = -error;
             } else {
                 double anglePower = k.DRV_SwerveAngKP * error;
                 outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);    

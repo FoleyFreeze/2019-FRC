@@ -21,14 +21,14 @@ public class Calibrations{
     // drive cals
     
     public double DRV_TurnGearRatio = 20/60.0 * 20/60.0 * 38/64.0;
-    public boolean DRV_PIDOnSpark = false;
-    public double DRV_TurnSparkKP = 0;
+    public boolean DRV_PIDOnSpark = true;
+    public double DRV_TurnSparkKP = 0.25;
     public double DRV_TurnSparkKI = 0;
-    public double DRV_TurnSparkKD = 0;
+    public double DRV_TurnSparkKD = 0.2;
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
     public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double   DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
+    public double   DRV_InchesPRev = 10.0/24.0*0.5*2.7*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
@@ -71,7 +71,7 @@ public class Calibrations{
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;
     public double AD_HabY = 48;
-    public double AD_HabEdgeX = 54;//real measurement is 64in
+    public double AD_HabEdgeX = 64;//real measurement is 64in
     public double AD_MidEdgeX = 24;
     public double AD_LoadingStationX = 135;
     public double AD_AccelLim = 0.5; //x% per second accel
