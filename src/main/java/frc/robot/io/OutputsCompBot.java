@@ -141,24 +141,28 @@ public class OutputsCompBot extends Outputs {
             pidLF.setD(k.DRV_TurnSparkKD);
             pidLF.setDFilter(k.DRV_TurnSparkKDFilt);
             pidLF.setFF(k.DRV_TurnSparkKF);
+            pidLF.setOutputRange(-k.DRV_SwerveMaxAnglePwr, k.DRV_SwerveMaxAnglePwr);
             
             pidRF.setP(k.DRV_TurnSparkKP);
             pidRF.setI(k.DRV_TurnSparkKI);
             pidRF.setD(k.DRV_TurnSparkKD);
             pidRF.setDFilter(k.DRV_TurnSparkKDFilt);
             pidRF.setFF(k.DRV_TurnSparkKF);
+            pidRF.setOutputRange(-k.DRV_SwerveMaxAnglePwr, k.DRV_SwerveMaxAnglePwr);
 
             pidLR.setP(k.DRV_TurnSparkKP);
             pidLR.setI(k.DRV_TurnSparkKI);
             pidLR.setD(k.DRV_TurnSparkKD);
             pidLR.setDFilter(k.DRV_TurnSparkKDFilt);
             pidLR.setFF(k.DRV_TurnSparkKF);
+            pidLR.setOutputRange(-k.DRV_SwerveMaxAnglePwr, k.DRV_SwerveMaxAnglePwr);
 
             pidRR.setP(k.DRV_TurnSparkKP);
             pidRR.setI(k.DRV_TurnSparkKI);
             pidRR.setD(k.DRV_TurnSparkKD);
             pidRR.setDFilter(k.DRV_TurnSparkKDFilt);
             pidRR.setFF(k.DRV_TurnSparkKF);
+            pidRR.setOutputRange(-k.DRV_SwerveMaxAnglePwr, k.DRV_SwerveMaxAnglePwr);
         }
 
         if(!k.ELE_Disable){
