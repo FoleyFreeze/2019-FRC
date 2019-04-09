@@ -319,21 +319,21 @@ public class DriveTrain extends Component {
     public void cameraDrive(VisionData vd) { 
         if(in.visionCargo){
             double deltaAngle = sense.robotAngle.subDeg(vd.robotAngle) + vd.angleTo;
-            double dist = Math.max(vd.distance - 12, 0);
+            double dist = Math.max(vd.distance, 0);
             double turnPwr = Util.limit(deltaAngle * k.DRV_CamCargoThetaKP + sense.deltaRobotAngle *k.DRV_CamCargoThetaKD , k.DRV_CamCargoPwrLim);
             //PID orient for ref: double rotPower = angleErr * k.DRV_AutoRotateKP + sense.deltaRobotAngle * k.DRV_AutoRotateKD;
 
             double distPwr = Util.limit(dist * k.DRV_CamCargoDistKP, k.DRV_CamCargoPwrLim);
-            if(gatherer.scorpioActive()){
-                swerve(0,0,0);
-            } else {
+            //if(gatherer.scorpioActive()){
+            //    swerve(0,0,0);
+            //} else {
                 swerve(0,distPwr,turnPwr);
-            }
-            if(k.SCR_ScorpioSelected) {
-                autoShoot = vd.distance < 15 && Math.abs(deltaAngle) < 5;
-            } else {
+            //}
+            //if(k.SCR_ScorpioSelected) {
+            //    autoShoot = vd.distance < 15 && Math.abs(deltaAngle) < 5;
+            //} else {
                 autoShoot = true;
-            }
+            //}
         } else { //vision target is not cargo
 
             double vOffset;
@@ -356,8 +356,13 @@ public class DriveTrain extends Component {
                     }
                 } else {
                     //rocket
-                    if(k.SCR_ScorpioSelected) vOffset = k.CAM_SCR_Cargo_RKT_Offset;
-                    else                      vOffset = k.CAM_GTH_Cargo_RKT_Offset;
+                    if(k.SCR_ScorpioSelected) {
+                        vOffset = k.CAM_SCR_Cargo_RKT_Offset;
+                        angleLimit = k.CAM_SCR_Cargo_RKT_AngleLimit;
+                    } else {
+                        vOffset = k.CAM_GTH_Cargo_RKT_Offset;
+                        angleLimit = k.CAM_GTH_Cargo_RKT_AngleLimit;
+                    }
                 }
             } else {
                 //hatch mode
@@ -436,22 +441,36 @@ public class DriveTrain extends Component {
 
 
             double allowableAngle;
-            if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO){
+            if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO && in.cargoNotHatch){
                 if(k.SCR_ScorpioSelected) allowableAngle = k.CAM_SCR_AllowShootCargoCSAngle;
                 else allowableAngle = k.CAM_GTH_AllowShootCargoCSAngle;
             } else {
-                if(k.SCR_ScorpioSelected) allowableAngle = k.CAM_SCR_AllowShootAngle;
-                else allowableAngle = k.CAM_GTH_AllowShootAngle;
+                if(in.cargoNotHatch){
+                    if(k.SCR_ScorpioSelected) allowableAngle = k.CAM_SCR_AllowShootCargoRKTAngle;
+                    else allowableAngle = k.CAM_GTH_AllowShootCargoRKTAngle;
+                } else {
+                    if(k.SCR_ScorpioSelected) allowableAngle = k.CAM_SCR_AllowShootAngle;
+                    else allowableAngle = k.CAM_GTH_AllowShootAngle;
+                }
             }
-
-            autoShoot = !disableAutoShoot && vd.distance-vOffset < 0 && Math.abs(vd.angleTo) < allowableAngle;
-	
-			if(autoShoot && sense.hasHatch){ //override driving to compress bumpers
+            
+            //if picking up hatch with mk1
+            if(!in.cargoNotHatch && !sense.hasHatch && !k.SCR_ScorpioSelected){ 
+                autoShoot = true;
+            } else {//all else
+                autoShoot = !disableAutoShoot && vd.distance-vOffset < k.CAM_ShootDist && Math.abs(vd.angleTo) < allowableAngle;
+            }
+            
+			if(autoShoot && sense.hasHatch && !k.SCR_ScorpioSelected){ //override driving to compress bumpers
 				swerve(0, -k.DRV_CamHatchDeliverForwardPower, 0);
-			} else {
+            } /*case is covered above else {
 				swerve(vX, vY, rotPower);
-			}
-			            
+			}*/
+            SmartDashboard.putNumber("camDrive_AllowableAngle",allowableAngle);
+            SmartDashboard.putBoolean("disableAutoShoot",disableAutoShoot);
+            SmartDashboard.putNumber("vOffset",vOffset);
+            
+            
         }
     }
 

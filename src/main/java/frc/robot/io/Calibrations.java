@@ -5,7 +5,7 @@ public class Calibrations{
     public enum RobotType {
         COMPETITION, PRACTICE, SWERVE_BOT
     }
-    public static RobotType BOT_Version = RobotType.PRACTICE;
+    public static RobotType BOT_Version = RobotType.PRACTICE;//doesnt mean anything
 
 
     // disable cals
@@ -15,7 +15,7 @@ public class Calibrations{
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
     public boolean GTH_DisableGather = false;
-    public boolean SCR_ScorpioSelected = true;//enable scorpio instead of normal gatherer
+    public boolean SCR_ScorpioSelected = true;//false;//enable scorpio instead of normal gatherer
     public boolean MIL_Disabled = false;
 
     // drive cals
@@ -120,8 +120,8 @@ public class Calibrations{
     public double SCR_CargoShootPwrCShip = 0.2;
     public double SCR_HatchGatherPwr = -0.5;
     public double SCR_HatchShootPwr = 1;
-    public double SCR_HatchHoldPwr = -0.05;
-    public double SCR_CargoHoldPwr = -0.2;
+    public double SCR_HatchHoldPwr = -0.10;//-.05;
+    public double SCR_CargoHoldPwr = -0.25;
 
     public double SCR_CargoGatherTime = 0.5;
     public double SCR_CargoShootTime = 0.5;
@@ -132,9 +132,9 @@ public class Calibrations{
     public double SCR_HalfExtendTime = 0.2;
     public double SCR_ShortExtendTime = 0.02;
 
-    public double SCR_ArmPositionKP = 0.002;
+    public double SCR_ArmPositionKP = 0.002;//0.002;
     public double SCR_ArmPositionKD = 0;
-    public double SCR_ArmIdleHoldPower = -0.15;
+    public double SCR_ArmIdleHoldPower = -0.15;//-0.15;
     public double SCR_ArmInPower = -0.7;
     public double SCR_ArmOutPower = .7;  //0.9;//was .7
     public double SCR_ArmPowerLimit = 0.7;
@@ -144,10 +144,10 @@ public class Calibrations{
     public double SCR_ArmInCurrentLimit = 25;
     public double SCR_WheelCurrentLimit = 15;
 
-    public double SCR_InPosition = 0;
+    public double SCR_InPosition =  -150;//0;
     public double SCR_FullOutPosition = 1500;
     public double SCR_PartOutPosition = 500;   
-    public double SCR_AllowFloorLimit = 500;
+    public double SCR_AllowFloorLimit = 350;
     
 
     // elevator cals
@@ -167,7 +167,7 @@ public class Calibrations{
     //in case scorpio needs different elevator positions
     public final double[] ELE_PositionScorpioArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            -0.5,        2,           22,              8,              48,              37,           76.5,            65,            40,          8
+            -0.5,        2,           23,              8,              52,              37,           76.5,            65,            40,          8
     };
     public double ELE_ScorpioFloor = 3.5;//floor when scorpio is retracted
 
@@ -212,21 +212,23 @@ public class Calibrations{
     public boolean CAM_DebugTargetHigh = false;
     public boolean CAM_DebugTargetLow = false;
     public boolean CAM_AutoShootDisabled = false; //disabled until driver is ok with this feature
-    public double CAM_AutoShootCargoDist = 2;//inches
-    public double CAM_AutoShootHatchDist = 18;//2;
-    public double CAM_AutoGatherHatchDist = 18;//18
+    //public double CAM_AutoShootCargoDist = 2;//inches
+    //public double CAM_AutoShootHatchDist = 18;//2;
+    //public double CAM_AutoGatherHatchDist = 18;//18
 
-    public double CAM_SCR_MainTargetOffset = 0; //subtract this offset from all targets
-    public double CAM_SCR_Stage1Offset = 0; //extra offset when the angle isn't aligned yet
-    public double CAM_SCR_Cargo_CS_Offset = -2;//scorpio cargo in cargo ship offset 
-    public double CAM_SCR_Cargo_RKT_Offset = -2;//scorpio cargo in rocket offset
+    public double CAM_SCR_MainTargetOffset = 0; //subtract this offset from all targets HIGHER = FARTHER
+    public double CAM_SCR_Stage1Offset = 2; //extra offset when the angle isn't aligned yet
+    public double CAM_SCR_Cargo_CS_Offset = 2;//-2;//scorpio cargo in cargo ship offset 
+    public double CAM_SCR_Cargo_RKT_Offset = 2;//-2;//scorpio cargo in rocket offset
     public double CAM_SCR_Hatch_CS_Offset = 18;//scorpio hatch in cargo ship offset
     public double CAM_SCR_Hatch_RKT_Offset = 18;//scorpio hatch in rocket offset
     public double CAM_SCR_Hatch_LS_Offset = 16;//scorpio hatch in loading station offset
-    public double CAM_SCR_Cargo_CS_AngleLimit = 3;//scorpio angle limit for cargo on cargo ship
+    public double CAM_SCR_Cargo_CS_AngleLimit = 5;//scorpio angle limit for cargo on cargo ship
+    public double CAM_SCR_Cargo_RKT_AngleLimit = 5;//arm gather angle limit for cargo in rocket
     public double CAM_SCR_AngleLimit = 1.5;//scorpio angle limit for everything else
     public double CAM_SCR_AllowShootAngle = 1.5; //autoShoot true when within this angle
-    public double CAM_SCR_AllowShootCargoCSAngle = 5;//overrides angle when cargo going to cargo ship
+    public double CAM_SCR_AllowShootCargoCSAngle = 10;//overrides angle when cargo going to cargo ship
+    public double CAM_SCR_AllowShootCargoRKTAngle = 10;//overrides angle when cargo going to cargo ship
 
     public double CAM_GTH_MainTargetOffset = 0; //subtract this offset from all targets
     public double CAM_GTH_Stage1Offset = 8; //extra offset when the angle isn't aligned yet
@@ -234,12 +236,14 @@ public class Calibrations{
     public double CAM_GTH_Cargo_RKT_Offset = -2;//arm gather cargo in rocket offset
     public double CAM_GTH_Hatch_CS_Offset = 0;//arm gather hatch in cargo ship offset
     public double CAM_GTH_Hatch_RKT_Offset = 2;//arm gather hatch in rocket offset
-    public double CAM_GTH_Hatch_LS_Offset = 18;//arm gather hatch in loading station offset
-    public double CAM_GTH_Cargo_CS_AngleLimit = 3;//arm gather angle limit for cargo on cargo ship
+    public double CAM_GTH_Hatch_LS_Offset = 2;//arm gather hatch in loading station offset
+    public double CAM_GTH_Cargo_CS_AngleLimit = 6;//arm gather angle limit for cargo on cargo ship
+    public double CAM_GTH_Cargo_RKT_AngleLimit = 3;//arm gather angle limit for cargo in rocket
     public double CAM_GTH_AngleLimit = 1.5;//arm gather angle limit for everything else
     public double CAM_GTH_AllowShootAngle = 1.5; //autoShoot true when within this angle
     public double CAM_GTH_AllowShootCargoCSAngle = 5;//overrides angle when cargo going to cargo ship
-    
+    public double CAM_GTH_AllowShootCargoRKTAngle = 3;//arm gather angle limit for cargo in rocket
+
     public Calibrations(){
         
     }   

@@ -33,7 +33,7 @@ public class ScorpioGatherer extends ArmGatherer {
             if(in.controlBoard.jogUp){
                 out.setGatherArm(0.5);
             } else if(in.controlBoard.jogDown){
-                out.setGatherArm(-0.5);
+                out.setGatherArm(-0.25);
             } else {
                 out.setGatherArm(0);
             }
@@ -111,7 +111,7 @@ public class ScorpioGatherer extends ArmGatherer {
                     if(elevator.getElevatorError() < 3) {
                         armState = ScorpioState.MOVING_TO_LIMIT;
                         actionTimer = Timer.getFPGATimestamp() + extendTime;
-                        if(actionState == ActionState.SHOOT_CARGO_CSHIP){
+                        if(actionState == ActionState.SHOOT_CARGO_CSHIP || actionState == ActionState.GATHER_CARGO){
                             targetPosition = k.SCR_PartOutPosition;
                         } else if(actionState == ActionState.SHOOT_CARGO_ROCKET){
                             targetPosition = k.SCR_InPosition;

@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ControlBoard.NearFarCargo;
@@ -12,6 +14,8 @@ import frc.robot.util.Angle;
 import frc.robot.util.LimitedStack;
 
 public class Vision extends Component {
+
+    DigitalInput testInput;
 
     LimitedStack<VisionData> targetHighStack;
     LimitedStack<VisionData> targetLowStack;
@@ -25,7 +29,21 @@ public class Vision extends Component {
     double lastFrameTime;
     int lastSeqNum;
 
+    double lastIntTime;
+    double deltaIntTime;
+
     public Vision() {
+        /*
+        lastIntTime = Timer.getFPGATimestamp();
+        testInput = new DigitalInput(1);
+        testInput.requestInterrupts(new InterruptHandlerFunction<Void>() {
+            public void interruptFired(int num, Void v){
+                double t = Timer.getFPGATimestamp();
+                deltaIntTime = t - lastIntTime;
+                lastIntTime = t;
+            }
+        });*/
+
         piCommands = NetworkTableInstance.getDefault().getTable("PiControl");
         piFindCargo = piCommands.getEntry("FindCargo");
         piFindTargetHigh = piCommands.getEntry("FindTargetHigh");
@@ -222,5 +240,7 @@ public class Vision extends Component {
         piFindTargetLow.setBoolean((!PiHighSearch && !in.searchingCargo && !sense.isDisabled) || k.CAM_DebugTargetLow);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);
             //piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
         //piFindTargetLow.setBoolean(in.searchingHatch || k.CAM_DebugTargetLow);
+
+        //SmartDashboard.putNumber("InterruptDT", deltaIntTime);
     }
 }
