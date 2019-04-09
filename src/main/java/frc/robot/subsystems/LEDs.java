@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
+import frc.robot.util.LED_Driver_Table;
 
 public class LEDs extends Component{
     private Solenoid lowerLED_Left;
@@ -12,6 +14,7 @@ public class LEDs extends Component{
     private Solenoid gearFlake_B;
     private Solenoid lowerLED_Right;
     private Solenoid camLED;
+    private Spark mainLeds;
 
     public LEDs(){
         lowerLED_Left = new Solenoid(ElectroJendz.lowerLeftLED);
@@ -20,6 +23,7 @@ public class LEDs extends Component{
         gearFlake_B = new Solenoid(ElectroJendz.gearFlake_B);
         gearFlake_G = new Solenoid(ElectroJendz.gearFlake_G);
         camLED = new Solenoid(ElectroJendz.camLED);
+        mainLeds = new Spark(0);
     }
 
     private double BLINK_TIME_ON = 0.10;
@@ -75,5 +79,22 @@ public class LEDs extends Component{
         prevStateCargo = sense.hasCargo;
         prevStateHatch = sense.hasHatch;
 
+        setMains();
+    }
+
+    boolean climbLatch;
+
+    private void setMains(){
+
+        if(in.climb && !sense.isDisabled || climbLatch){
+            climbLatch = !sense.hasHatchEdge && !sense.hasCargoEdge;
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Rainbow);
+        } else if(sense.hasCargo){
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
+        } else if(sense.hasHatch){
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Forest);
+        } else {
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Ocean);
+        } 
     }
 }

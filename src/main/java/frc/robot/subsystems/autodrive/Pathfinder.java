@@ -192,7 +192,7 @@ public class Pathfinder extends Component {
                     Node n = new Node(edge, polygonList[bestNode.poly.neighbors[i]], bestNode, destPoly.edges[0], bestNode.poly.vert[bestNode.poly.edgeLoc[i]]);
                     //set node point to the edge
                     //set previous node to best node
-                    System.out.println(n.toString() + " travD: " + n.traveledDist + " totalD: " + n.totalDist);
+                    //System.out.println(n.toString() + " travD: " + n.traveledDist + " totalD: " + n.totalDist);
 
                     //add the new node to the priority queue
                     pq.add(n);

@@ -104,7 +104,7 @@ public class Inputs extends Component {
     public void run() {
         
         gamePad.read();
-        controlBoard.read();
+        controlBoard.read(sense.hasCargo || sense.hasHatch);
 
         resetGyro = gamePad.resetGyro;
         if(resetGyro){
@@ -191,7 +191,8 @@ public class Inputs extends Component {
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
         
-        actionRight = gamePad.rightTrigger > k.IN_DodgingMin;
+        //had to OR with the new "autoDrive" button (which is actually fakeAuto)
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || gamePad.fakeAuto;
         actionRightRising = actionRight && !prevActionRight;
         actionRightFalling = !actionRight && prevActionRight;
         prevActionRight = actionRight;
@@ -271,11 +272,17 @@ public class Inputs extends Component {
 
         SmartDashboard.putBoolean("Pit Mode", pitMode);
 
-        double remainingShootTime = autoShootTime - Timer.getFPGATimestamp();
+        //double remainingShootTime = autoShootTime - Timer.getFPGATimestamp();
 
         SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
 
         if(sense.isDisabled) allowAutoAutoRotation = false;
+		
+		if(cargoNotHatch){
+			sense.hasHatch = false;
+		} else {
+			sense.hasCargo = false;
+		}
 
         if(cargoNotHatch){
             sense.hasHatch = false;
@@ -316,8 +323,9 @@ public class Inputs extends Component {
                 else autoShootDist = k.CAM_AutoGatherHatchDist;
             } 
 
-            //autoDrive logic
-            autoDrive = gamePad.autoDrive && actionRight;
+            //autoDrive logic //replaced ready button with fake auto button
+            //autoDrive = gamePad.autoDrive && actionRight && !sense.hasHatchEdge && !sense.hasCargoEdge;
+            autoDrive = gamePad.fakeAuto && !sense.hasHatchEdge && !sense.hasCargoEdge;
             autoDriveRising = autoDrive && !prevAutoDrive;
             prevAutoDrive = autoDrive;
 
@@ -386,8 +394,6 @@ public class Inputs extends Component {
                     sense.hasHatch = false;
                 }
 
-                visionCargo = actionLeft && !sense.hasCargo;
-                visionTargetHigh = actionLeft && sense.hasCargo;
             } else {// manual hatch
                 gatherCargo = false;
                 releaseCargo = false;
@@ -404,8 +410,11 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 }
 
-                visionTargetLow = actionRight;
             }
+
+            visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO && sense.hasCargo) && actionRight && gamePad.camDrive;
+            visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive && controlBoard.nearFarCargo != NearFarCargo.CARGO;
+            visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
 
             //handle sense.hasThing rising and falling edges
             sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;
@@ -436,7 +445,7 @@ public class Inputs extends Component {
         
     }
 
-    private double autoShootTime;
+    //private double autoShootTime;
     public boolean latchReady;
     private boolean allowAutoAutoRotation;
 
@@ -484,8 +493,8 @@ public class Inputs extends Component {
     
     //set elevator position based on control board state
     public void setElevatorHeight(boolean ready){
-        //to help with the start hatch position (only in auto)
-        if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.fakeAuto ) {
+        //to help with the start hatch position (only in auto)          //replaced from gamePad.fakeAuto
+        if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.autoDrive ) {
             elevatorTarget = ElevatorPosition.DONT_MOVE;
             return;
         }
@@ -604,6 +613,11 @@ public class Inputs extends Component {
             robotOrientation = 180;
             return;
         }
+		
+		if(cargoNotHatch && !sense.hasCargo){
+			robotOrientation = 910;
+			return;
+		}
 
         if(cargoNotHatch && !sense.hasCargo){
             robotOrientation = 910;

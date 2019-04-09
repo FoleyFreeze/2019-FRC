@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.Calibrations;
 import frc.robot.io.Calibrations.RobotType;
+import frc.robot.io.Display;
 import frc.robot.io.Inputs;
 import frc.robot.io.K_Competition_Bot;
 import frc.robot.io.K_Swerve_Bot;
@@ -28,6 +29,7 @@ public class Component {
     public static LEDs leds;
     public static Pathfinder pathfinder;
     public static AutoDrive autoDriving;
+	public static Display display;
 
     public static void initAll() {
         
@@ -76,6 +78,7 @@ public class Component {
         drive = new DriveTrain(); 
         rse = new RSE();
         leds = new LEDs();
+		display = new Display();
 
         switch(Calibrations.BOT_Version){
             case COMPETITION:
@@ -101,6 +104,7 @@ public class Component {
         drive.run();
         out.run();
         leds.run();
+	    display.run();
         SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());
     }
 

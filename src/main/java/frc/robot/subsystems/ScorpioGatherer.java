@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ElectroJendz;
 import frc.robot.io.ControlBoard.NearFarCargo;
-import frc.robot.util.Util;
 
 public class ScorpioGatherer extends ArmGatherer {
 

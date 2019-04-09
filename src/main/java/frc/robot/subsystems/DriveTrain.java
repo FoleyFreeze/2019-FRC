@@ -7,8 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.subsystems.vision.VisionData;
 import frc.robot.util.Angle;
-import frc.robot.util.Util;
 import frc.robot.util.Filter;
+import frc.robot.util.Util;
+import frc.robot.subsystems.autodrive.Point;
 
 public class DriveTrain extends Component {
     public boolean autoShoot;
@@ -79,26 +80,21 @@ public class DriveTrain extends Component {
         //if there is a target point, PID towards it
         } else if(autoDriving.targetPoint != null){
 
-            //calc powers for X and Y based on target point and rse
-            double distX = autoDriving.targetPoint.x - rse.x;
-            double distY = autoDriving.targetPoint.y - rse.y;
-
-            //PID and limit magnitude
-            double r = Math.sqrt(distX*distX + distY*distY);
-            double rPwr = Util.limit(r * k.AD_AutoDriveKP, k.AD_MaxPower);
-            double theta = Math.atan2(distY,distX);
-
-            double autoX = rPwr * Math.cos(theta);
-            double autoY = rPwr * Math.sin(theta);
+            //get x,y drive Point (power) from autoDrive
+            Point p = autoDriving.getDrivePower();
             
             //double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
             //double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
 
             //get rot power form pidOrient
-            double autoRot = pidOrient();
+            double autoRot;
+            if(autoDriving.enableAutoTurn) autoRot = pidOrient();
+            else autoRot = 0;
             
             //field swerve
-            fieldSwerve(autoX, autoY, autoRot);
+            fieldSwerve(p.x, p.y, autoRot);
+        } else {
+            swerve(0,0,0);
         }
     }
 
@@ -297,12 +293,23 @@ public class DriveTrain extends Component {
             }
             SmartDashboard.putNumber("Error " + i, error);
             
-            double anglePower = k.DRV_SwerveAngKP * error;
-            outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);
+            if(k.DRV_PIDOnSpark){
+                outError[i] = -error;
+            } else {
+                double anglePower = k.DRV_SwerveAngKP * error;
+                outError[i] = Math.max(Math.min(k.DRV_SwerveMaxAnglePwr, anglePower), -k.DRV_SwerveMaxAnglePwr);    
+            }
+
         }
 
         out.setSwerveDrivePower(outR[0], outR[1], outR[2], outR[3]);
-        out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
+
+        if(k.DRV_PIDOnSpark){
+            out.setSwerveDriveTurnAngle(outError[0], outError[1], outError[2], outError[3]);
+        } else {
+            out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
+        }
+        
         SmartDashboard.putNumberArray("Drive Power", outR);
         SmartDashboard.putNumberArray("Turn Power", outError);
     }
@@ -322,7 +329,11 @@ public class DriveTrain extends Component {
             } else {
                 swerve(0,distPwr,turnPwr);
             }
-            autoShoot = vd.distance < 15 && Math.abs(deltaAngle) < 5;
+            if(k.SCR_ScorpioSelected) {
+                autoShoot = vd.distance < 15 && Math.abs(deltaAngle) < 5;
+            } else {
+                autoShoot = true;
+            }
         } else {
             //get angle and distance from ALL targets
             double vOffset = k.DRV_CamTargetY0; //How close to drive to all targets
@@ -332,7 +343,8 @@ public class DriveTrain extends Component {
             double angleLimit = 1.5;
             if (in.cargoNotHatch) angleLimit = 3;   
             if (Math.abs(vd.angleTo)>angleLimit /*5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) 
-            {vOffset2 = 15; } //was 5//was vOffset = 8
+            {vOffset2 = 15; } //was 5//was vOffset = 8 in non-scorpio mode
+            
             //for all cargo deliveries, add extra inches
             if (in.cargoNotHatch) {vOffset-=4;}//0
             // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
@@ -381,7 +393,14 @@ public class DriveTrain extends Component {
             double allowableAngle = 1.5;
             //if (!in.cargoNotHatch && !sense.hasHatch) allowableAngle = 6;
             autoShoot = vd.distance-vOffset < in.autoShootDist && Math.abs(vd.angleTo) < allowableAngle;
-/*
+	
+			if(autoShoot && sense.hasHatch){ //override driving to compress bumpers
+				swerve(0, -k.DRV_CamHatchDeliverForwardPower, 0);
+			} else {
+				swerve(vX, vY, rotPower);
+			}
+			
+			/*
             //turn angle into a x distance
             double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
             double distY = vd.distance - k.DRV_CamTargetY0;

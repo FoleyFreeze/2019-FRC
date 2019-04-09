@@ -20,8 +20,15 @@ public class Calibrations{
 
     // drive cals
     
+    public double DRV_TurnGearRatio = 20/60.0 * 20/60.0 * 38/64.0;
+    public boolean DRV_PIDOnSpark = true;
+    public double DRV_TurnSparkKP = 0.25;
+    public double DRV_TurnSparkKI = 0;
+    public double DRV_TurnSparkKD = 0.2;
+    public double DRV_TurnSparkKDFilt = 0.5;
+    public double DRV_TurnSparkKF = 0;
     public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double   DRV_InchesPRev = 10.0/24.0*0.5*3.0*Math.PI;
+    public double   DRV_InchesPRev = 10.0/24.0*0.5*2.7*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
@@ -48,24 +55,28 @@ public class Calibrations{
     public final double[] DRV_EleHeightAxis = {0,20,78};
     public final double[] DRV_PowerTable = {1, 1, 0.2};
     public double DRV_AutoRotateKP = 0.01; //power per degres of error
-    public double DRV_AutoRotateKD = 0.01;
+    public double DRV_AutoRotateKD = 0.01; //via late night testing
     public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
-    public double DRV_CamCargoThetaKP = 0.02; //power per degree
+    public double DRV_CamCargoThetaKP = 0.01; //power per degree
     public double DRV_CamCargoThetaKD = 0.01;
     public double DRV_CamCargoDistKP = -0.02; //power per inch
     public double DRV_CamCargoPwrLim = 0.5;
+	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
-    public double AD_MaxPower = 0.5;
-    public double AD_AutoDriveKP = -0.02; //power per inch
+    public double AD_MaxPower = 0.4;
+    public double AD_AutoDriveKP = -0.01; //power per inch
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;
     public double AD_HabY = 48;
-    public double AD_HabEdgeX = 64;
+    public double AD_HabEdgeX = 64;//real measurement is 64in
     public double AD_MidEdgeX = 24;
     public double AD_LoadingStationX = 135;
+    public double AD_AccelLim = 0.5; //x% per second accel
+    public double AD_MaxPowerHab = 0.2; //max power on the hab polygons (0 and 18)
+    public double AD_BlendDist = 20;//in inches begin blending next target point
 
     //sensor cals
     public double SEN_AbsAngleFL;
@@ -138,7 +149,6 @@ public class Calibrations{
     public double SCR_PartOutPosition = 500;   
     public double SCR_AllowFloorLimit = 500;
     
-    
 
     // elevator cals
     public double ELE_MotorPwr = 0.1; // set to actual value later
@@ -174,7 +184,6 @@ public class Calibrations{
     public double CLM_Zone_Power_2 = 1;
     public double CLM_Zone_Power_3 = 0.05;
     public double CLM_DrivePower = 0.4; // .3 //how fast to drive at the wall after/during the climb
-
 
     
     // input cals
