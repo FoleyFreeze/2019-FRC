@@ -334,25 +334,65 @@ public class DriveTrain extends Component {
             } else {
                 autoShoot = true;
             }
-        } else {
-            //get angle and distance from ALL targets
-            double vOffset = k.DRV_CamTargetY0; //How close to drive to all targets
-            double vOffset2 = 0;
-            //Arc into target aka target 8 inches away first, then drive in when angle is low enoug
-            //also target a far distance when the elevator isn't up yet
-            double angleLimit = 1.5;
-            if (in.cargoNotHatch) angleLimit = 3;   
-            if (Math.abs(vd.angleTo)>angleLimit /*5/*7.8*//*10*/ || Math.abs(elevator.getElevatorError()) > 5 ) 
-            {vOffset2 = 15; } //was 5//was vOffset = 8 in non-scorpio mode
+        } else { //vision target is not cargo
+
+            double vOffset;
+            double angleLimit;
+
+            if(k.SCR_ScorpioSelected) angleLimit = k.CAM_SCR_AngleLimit;
+            else angleLimit = k.CAM_GTH_AngleLimit;
+
+            //5 different vision targets: loading station, rocket hatch, rocket cargo, cargoship hatch, cargoship cargo
+            if(in.cargoNotHatch){
+                //if in cargo mode
+                if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO){
+                    //cargo ship
+                    if(k.SCR_ScorpioSelected) {
+                        vOffset = k.CAM_SCR_Cargo_CS_Offset;
+                        angleLimit = k.CAM_SCR_Cargo_CS_AngleLimit;
+                    } else {
+                        vOffset = k.CAM_GTH_Cargo_CS_Offset;
+                        angleLimit = k.CAM_GTH_Cargo_CS_AngleLimit;
+                    }
+                } else {
+                    //rocket
+                    if(k.SCR_ScorpioSelected) vOffset = k.CAM_SCR_Cargo_RKT_Offset;
+                    else                      vOffset = k.CAM_GTH_Cargo_RKT_Offset;
+                }
+            } else {
+                //hatch mode
+                if(sense.hasHatch){
+                    if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO){
+                        //cargo ship
+                        if(k.SCR_ScorpioSelected) vOffset = k.CAM_SCR_Hatch_CS_Offset;
+                        else                      vOffset = k.CAM_GTH_Hatch_CS_Offset;
+                    } else {
+                        //rocket
+                        if(k.SCR_ScorpioSelected) vOffset = k.CAM_SCR_Hatch_RKT_Offset;
+                        else                      vOffset = k.CAM_GTH_Hatch_RKT_Offset;
+                    }
+                } else {
+                    //loading station
+                    if(k.SCR_ScorpioSelected) vOffset = k.CAM_SCR_Hatch_LS_Offset;
+                    else                      vOffset = k.CAM_GTH_Hatch_LS_Offset;
+                }
+            }
+            if(k.SCR_ScorpioSelected){
+                vOffset += k.CAM_SCR_MainTargetOffset; //main offset to all positions
+            } else {
+                vOffset += k.CAM_GTH_MainTargetOffset; //main offset to all positions
+            }
+
+            //if the angle indicates that we should be in stage 1
+            boolean disableAutoShoot = elevator.getElevatorError() > 5; //disable auto shoot while in stage 1 or elevator not ready
+            if(Math.abs(vd.angleTo) > angleLimit) {
+                if(k.SCR_ScorpioSelected) vOffset += k.CAM_SCR_Stage1Offset;
+                else vOffset += k.CAM_GTH_Stage1Offset;
+                disableAutoShoot = true;
+            }
             
-            //for all cargo deliveries, add extra inches
-            if (in.cargoNotHatch) {vOffset-=4;}//0
-            // if we have a hatch and not cargoship (aka rocket) add 2 inches to avoid bumper rubbing
-            if (sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO) {vOffset+=0;}//was, changed for scorpio2;}
-            //add extra drive to pick up hatch
-            if (!sense.hasHatch && !in.cargoNotHatch) {vOffset -= 2;}
-            if (sense.hasHatch && !in.cargoNotHatch && in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {vOffset -= 0;}
-            double vDist = vd.distance-vOffset-vOffset2;
+
+            double vDist = vd.distance-vOffset;
             double vXErr = (vd.distance + 15) * Math.tan(Angle.toRad(vd.angleTo));
             //Calculate actual angle to (From front of bot, not camera)
             double vAngle = Math.atan(vXErr/(vDist));
@@ -361,7 +401,13 @@ public class DriveTrain extends Component {
                 else {vAngle+= Math.PI;}
             }
 
-            vAngle *= 1; //was 1.3 MrC
+            if(k.SCR_ScorpioSelected){
+                vAngle *= 1;
+            } else {
+                vAngle *= 1.25;
+            }
+            
+            
             //PID to distance amplitude of vector
             double vHypot = Math.sqrt(vXErr*vXErr + vDist*vDist);//Math.abs((vDist)/Math.cos(vAngle));
             double velMag = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy) / sense.dt;
@@ -386,45 +432,26 @@ public class DriveTrain extends Component {
             else {
                 swerve(vX, vY, rotPower);
             }
-            
-
             SmartDashboard.putNumber("vHypot",vHypot);
-            SmartDashboard.putNumber("autoShootDist", in.autoShootDist);
-            double allowableAngle = 1.5;
-            //if (!in.cargoNotHatch && !sense.hasHatch) allowableAngle = 6;
-            autoShoot = vd.distance-vOffset < in.autoShootDist && Math.abs(vd.angleTo) < allowableAngle;
+
+
+            double allowableAngle;
+            if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO){
+                if(k.SCR_ScorpioSelected) allowableAngle = k.CAM_SCR_AllowShootCargoCSAngle;
+                else allowableAngle = k.CAM_GTH_AllowShootCargoCSAngle;
+            } else {
+                if(k.SCR_ScorpioSelected) allowableAngle = k.CAM_SCR_AllowShootAngle;
+                else allowableAngle = k.CAM_GTH_AllowShootAngle;
+            }
+
+            autoShoot = !disableAutoShoot && vd.distance-vOffset < 0 && Math.abs(vd.angleTo) < allowableAngle;
 	
 			if(autoShoot && sense.hasHatch){ //override driving to compress bumpers
 				swerve(0, -k.DRV_CamHatchDeliverForwardPower, 0);
 			} else {
 				swerve(vX, vY, rotPower);
 			}
-			
-			/*
-            //turn angle into a x distance
-            double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
-            double distY = vd.distance - k.DRV_CamTargetY0;
-
-            //PID x and y powers to x y distances
-            double xPower = Util.limit(distX * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_X);
-            double yPower = Util.limit(distY * k.DRV_TargetDistanceKP, k.DRV_CamDriveMaxPwr_Y);
-
-            if(Math.abs(distX) < k.DRV_CamDistShootX) xPower = 0;
-            if(Math.abs(distY) < k.DRV_CamDistShootY) yPower = 0;
-            if(Math.abs(xPower) < k.DRV_CamDriveMinPwr_X) xPower = k.DRV_CamDriveMinPwr_X * Math.signum(xPower);
-            if(Math.abs(yPower) < k.DRV_CamDriveMinPwr_Y) yPower = k.DRV_CamDriveMinPwr_Y * Math.signum(yPower);
-
-            double rotPower = pidOrient();
-
-            //normalize y power based on applied x power
-            yPower *= 1 - Math.abs(xPower) / k.DRV_CamDriveMaxPwr_X;
-
-            //call swerve w/ x and y powers & auto rotate power
-            swerve(xPower, yPower, rotPower);
-
-            //determine if we should autoShoot
-            autoShoot = Math.abs(distX) < k.DRV_CamDistShootX && distY < k.DRV_CamDistShootY;
-*/            
+			            
         }
     }
 

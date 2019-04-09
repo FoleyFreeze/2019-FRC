@@ -67,7 +67,6 @@ public class Inputs extends Component {
     public boolean autoDriveRising;
 
     public boolean autoShootHold;
-    public double autoShootDist;
     public boolean actionLeft;
     public boolean prevActionLeft; 
     public boolean actionLeftRising;
@@ -305,8 +304,6 @@ public class Inputs extends Component {
                     sense.hasCargo = false;
                 }
 
-                autoShootDist = k.CAM_AutoShootCargoDist;
-
             } else {// auto hatch
                 gatherCargo = false; 
                 releaseCargo = false;                           //dont start gathering immediately after shooting
@@ -319,8 +316,6 @@ public class Inputs extends Component {
                     sense.hasHatch = false;
                 }
 
-                if(sense.hasHatch) autoShootDist = k.CAM_AutoShootHatchDist;
-                else autoShootDist = k.CAM_AutoGatherHatchDist;
             } 
 
             //autoDrive logic //replaced ready button with fake auto button
@@ -377,7 +372,6 @@ public class Inputs extends Component {
             visionCargo = cargoNotHatch && actionRight && !sense.hasCargo && gamePad.camDrive;
 
         } else { //manual mode
-            autoShootDist = -910;
             if (cargoNotHatch){
                 gatherCargo = gather && !shift;
                 releaseCargo = shoot;
