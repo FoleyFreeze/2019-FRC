@@ -44,38 +44,38 @@ public class Pathfinder extends Component {
                  new int[]{1},
                  true, null, 2);
         
-        makePoly(new double[]{23, 28, 28, 58, 58},
-                 new double[]{220, 246, 256, 256, 190},
+        makePoly(new double[]{23, 28, 20, 50, 58},
+                 new double[]{220, 246, 250, 250, 190},
                  new int[]{4},
                  new int[]{8},
                  false, null, 3);
         
-        makePoly(new double[]{28, 28, 58, 58},
-                 new double[]{256, 278, 278, 256},
+        makePoly(new double[]{20, 20, 58, 58}, //20s were 28s
+                 new double[]{250, 272, 272, 250},
                  new int[]{3},
                  new int[]{7},
                  true, null, 4);
         
-        makePoly(new double[]{28, 28, 58, 58},
-                 new double[]{278, 300, 300, 278},
+        makePoly(new double[]{20, 20, 58, 58},
+                 new double[]{272, 294, 294, 272},
                  new int[]{3},
                  new int[]{7},
                  true, null, 5);
         
-        makePoly(new double[]{28, 28, 58, 58},
-                 new double[]{300, 322, 322, 300},
+        makePoly(new double[]{20, 20, 58, 58},
+                 new double[]{294, 316, 316, 294},
                  new int[]{3},
                  new int[]{7},
                  true, null, 6);
         
         makePoly(new double[]{58, 58, 58, 58, 161, 161, 104},
-                 new double[]{256, 278, 300, 322, 322, 288, 256},
+                 new double[]{250, 272, 294, 322, 322, 288, 256},
                  new int[]{0, 1, 2, 3, 6},
                  new int[]{8, 4, 5, 6, 9},
                  false, null, 7);
         
         makePoly(new double[]{58, 58, 104, 104},
-                 new double[]{190, 256, 256, 202},
+                 new double[]{190, 250, 256, 202},
                  new int[]{0, 1, 2, 3},
                  new int[]{12, 3, 7, 10},
                  false, null, 8);
@@ -106,14 +106,14 @@ public class Pathfinder extends Component {
         
         makePoly(new double[]{75, 75, 108, 108, 90},
                  new double[]{48, 95, 95, 48, 48},
-                 new int[]{2, 3, 4},
-                 new int[]{12, 14, 15},
+                 new int[]{2, 4},
+                 new int[]{12, 15},
                  false, null, 13);
         
         makePoly(new double[]{108, 108, 161, 161},
-                 new double[]{48, 95, 95, 48},
-                 new int[]{0, 1, 2},
-                 new int[]{16, 13, 12},
+                 new double[]{20, 95, 95, 20},  //30s were 48s
+                 new int[]{0, 2},
+                 new int[]{16, 12},
                  false, null, 14);
         
         makePoly(new double[]{90, 90, 108, 108},
@@ -123,7 +123,7 @@ public class Pathfinder extends Component {
                  false, null, 15);
         
         makePoly(new double[]{108, 108, 161, 161},
-                 new double[]{0, 48, 48, 0},
+                 new double[]{0, 20, 20, 0},    //30s were 48s
                  new int[]{2},
                  new int[]{14},
                  true, null, 16);

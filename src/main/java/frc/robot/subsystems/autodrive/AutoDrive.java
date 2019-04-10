@@ -5,6 +5,7 @@ import java.util.Stack;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Component;
 import frc.robot.util.Util;
+import frc.robot.util.Filter;
 
 public class AutoDrive extends Component{
     
@@ -50,9 +51,9 @@ public class AutoDrive extends Component{
                 path.pop();
                 //if there is more than 1 step in the path, disable turning for the first step
                 enableAutoTurn = path.size() <= 1;
-                //for(Node n : path){
-                    //System.out.println("Poly: " + n.poly.id + " Edge: " + n.location.x + "," + n.location.y);
-                //}
+                for(Node n : path){
+                    System.out.println("Poly: " + n.poly.id + " Edge: " + n.location.x + "," + n.location.y);
+                }
                 if(!path.isEmpty()){
                     Node n = path.peek();
                     edgeStatus = getEdgeCrossing(n.location, n.edgePoint,rse.x,rse.y);
@@ -100,6 +101,7 @@ public class AutoDrive extends Component{
 
     double powerLim;
     Point retPoint = new Point();
+    private Filter lpf = new Filter(0.5, true, 0.06, 0);
     public Point getDrivePower(){
 
         if(path.isEmpty()) {
@@ -120,7 +122,7 @@ public class AutoDrive extends Component{
         
         if(powerLim < endPowerLim){
             powerLim += k.AD_AccelLim * sense.dt;
-            powerLim = Math.max(powerLim, endPowerLim);
+            powerLim = Math.min(powerLim, endPowerLim);
         }
 
         //calc powers for X and Y based on target point and rse
@@ -133,17 +135,20 @@ public class AutoDrive extends Component{
         //PID and limit magnitude
         double r = Math.sqrt(distX*distX + distY*distY);
         double blendLim; 
-        if (path.size() >= 2) blendLim = Math.max(powerLim*r/k.AD_BlendDist, powerLim);
+        if (path.size() >= 2) blendLim = Math.min(powerLim*r/k.AD_BlendDist, powerLim);
         else blendLim = powerLim;
-        double rPwr = Util.limit(r * k.AD_AutoDriveKP, blendLim);//powerLim);//blendlim
+        double velMag = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy) / sense.dt;
+        double filtVel = lpf.run(velMag);
+        double rPwr = Util.limit(r * k.AD_AutoDriveKP + filtVel * k.AD_AutoDriveKD, blendLim);//powerLim);//blendlim
         double theta = Math.atan2(distY,distX);
         lastDist = r;
         double autoX = rPwr * Math.cos(theta);
         double autoY = rPwr * Math.sin(theta);
 
         //if power is low, get the next point and add its value
+        
         if(rPwr < powerLim && path.size() >= 2){
-            double blendPwr = powerLim - rPwr;
+            double blendPwr = powerLim - Math.abs(rPwr);
             
             Node n2 = path.get(path.size() - 2); //get the second thing off the stack
 

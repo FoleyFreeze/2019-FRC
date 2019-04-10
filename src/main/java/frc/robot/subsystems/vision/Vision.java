@@ -63,13 +63,13 @@ public class Vision extends Component {
                     SmartDashboard.putString("VisionTargetHigh", data);
                     String[] parts = data.split(",");
 
-                    int seqNum = Integer.parseInt(parts[0]);
-                    SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
-                    lastSeqNum = seqNum;
+                    //int seqNum = Integer.parseInt(parts[0]);
+                    //SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
+                    //lastSeqNum = seqNum;
 
-                    vd.distance = Double.parseDouble(parts[1]);
-                    vd.angleTo = Double.parseDouble(parts[2]);
-                    vd.angleOf = Double.parseDouble(parts[3]);
+                    vd.distance = Double.parseDouble(parts[2]);
+                    vd.angleTo = Double.parseDouble(parts[3]);
+                    vd.angleOf = Double.parseDouble(parts[4]);
 
                     vd.timeStamp = Timer.getFPGATimestamp();
                     vd.robotAngle = sense.robotAngle.getDeg();
@@ -94,9 +94,10 @@ public class Vision extends Component {
                     //vd.rseY = rse.y;
 
                     double captureTime = Double.parseDouble(parts[0]);
-                    double latency = (vd.timeStamp - captureTime) / 2;
+                    double processTime = Double.parseDouble(parts[1]);
+                    double latency = (vd.timeStamp - captureTime - processTime) / 2;
                     SmartDashboard.putNumber("VisionLatency",latency);
-                    Point p = rse.getPositionAtTime(vd.timeStamp - latency);
+                    Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
                     vd.rseX = p.x;
                     vd.rseY = p.y;
                     
@@ -118,7 +119,7 @@ public class Vision extends Component {
                 
                 //don't trust the camera when hatch panel is in the way
                 if(!in.cargoNotHatch && sense.elevatorEncoder > 16 && sense.elevatorEncoder < 35) return;
-                //if(in.cargoNotHatch && sense.elevatorEncoder > 20 && sense.elevatorEncoder < 33) return;
+                if(!k.SCR_ScorpioSelected && in.cargoNotHatch && sense.elevatorEncoder > 20 && sense.elevatorEncoder < 33) return;
                 
                 try{
                     VisionData vd = new VisionData();
@@ -126,13 +127,13 @@ public class Vision extends Component {
                     SmartDashboard.putString("VisionTargetLow", data);
                     String[] parts = data.split(",");
 
-                    int seqNum = Integer.parseInt(parts[0]);
-                    SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
-                    lastSeqNum = seqNum;
+                    //int seqNum = Integer.parseInt(parts[0]);
+                    //SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
+                    //lastSeqNum = seqNum;
 
-                    vd.distance = Double.parseDouble(parts[1]);
-                    vd.angleTo = Double.parseDouble(parts[2]);
-                    vd.angleOf = Double.parseDouble(parts[3]);
+                    vd.distance = Double.parseDouble(parts[2]);
+                    vd.angleTo = Double.parseDouble(parts[3]);
+                    vd.angleOf = Double.parseDouble(parts[4]);
 
                     vd.timeStamp = Timer.getFPGATimestamp();
                     vd.robotAngle = sense.robotAngle.getDeg();
@@ -163,9 +164,10 @@ public class Vision extends Component {
                     //vd.rseY = rse.y;
 
                     double captureTime = Double.parseDouble(parts[0]);
-                    double latency = (vd.timeStamp - captureTime) / 2;
+                    double processTime = Double.parseDouble(parts[1]);
+                    double latency = (vd.timeStamp - captureTime - processTime) / 2;
                     SmartDashboard.putNumber("VisionLatency",latency);
-                    Point p = rse.getPositionAtTime(vd.timeStamp - latency);
+                    Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
                     vd.rseX = p.x;
                     vd.rseY = p.y;
 
@@ -190,8 +192,8 @@ public class Vision extends Component {
                     SmartDashboard.putString("VisionCargo", data);
                     String[] parts = data.split(",");
 
-                    vd.distance = Double.parseDouble(parts[1]);
-                    vd.angleTo = Double.parseDouble(parts[2]);
+                    vd.distance = Double.parseDouble(parts[2]);
+                    vd.angleTo = Double.parseDouble(parts[3]);
                     vd.angleOf = 0; //default 0 because angleOf is now a slope internally
                     
                     vd.timeStamp = Timer.getFPGATimestamp();
@@ -211,6 +213,14 @@ public class Vision extends Component {
                         vd.dDist = 0;
                         vd.dAngle = 0;
                     }
+
+                    double captureTime = Double.parseDouble(parts[0]);
+                    double processTime = Double.parseDouble(parts[1]);
+                    double latency = (vd.timeStamp - captureTime - processTime) / 2;
+                    SmartDashboard.putNumber("VisionLatency",latency);
+                    Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
+                    vd.rseX = p.x;
+                    vd.rseY = p.y;
                     
                     //transform the camera distance vector into a field relative position
                     /*double camRad = vd.angleTo * Math.PI / 180;

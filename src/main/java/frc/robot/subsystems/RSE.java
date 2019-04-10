@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.Util;
+import frc.robot.io.ControlBoard.NearFarCargo;
+import frc.robot.io.ControlBoard.RocketCargoshipPosition;
 import frc.robot.subsystems.autodrive.Point;
 
 public class RSE extends Component {
@@ -38,9 +40,12 @@ public class RSE extends Component {
 		reset();
     }
 
+    int selection;
+
     public void reset() {
-        int selection = startSelector.getSelected();
+        //int selection = startSelector.getSelected();
         y = k.AD_RobotHeight/2 + k.AD_HabY;
+        
         switch(selection){
             case 0:
                 x = -k.AD_HabEdgeX + k.AD_RobotWidth/2;
@@ -71,16 +76,41 @@ public class RSE extends Component {
 
     }
 
+    public String habStartLoc;
 
     public void run() {
+
+        //run settings for re-zero
+        if(in.leftNotRight){
+            //if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO && in.controlBoard.rocketCargoState == RocketCargoshipPosition.FRONT){
+            //    habStartLoc = "MID LEFT";
+            //    selection = 1;
+            //} else {
+                habStartLoc = "FAR LEFT";
+                selection = 0;
+            //}
+        } else {
+            //if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO && in.controlBoard.rocketCargoState == RocketCargoshipPosition.FRONT){
+            //    habStartLoc = "MID RIGHT";
+            //    selection = 2;
+            //} else {
+                habStartLoc = "FAR RIGHT";
+                selection = 3;
+            //}
+        }
+        SmartDashboard.putString("HabStartLoc",habStartLoc);
 
         //determine when to re-zero (only when picking up hatches for now)
         if(sense.hasHatchEdge && sense.hasHatch && !in.shift) {
             if(in.autoDrive){ //if in autoDrive, use left/right switch to know which loading station we are at
                 if(in.leftNotRight){
+                    SmartDashboard.putNumber("RSE_ErrX",x - -k.AD_LoadingStationX);
+                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = -k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 } else {
+                    SmartDashboard.putNumber("RSE_ErrX",x - k.AD_LoadingStationX);
+                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 }
@@ -88,9 +118,13 @@ public class RSE extends Component {
                 double dist1 = Util.dist(-k.AD_LoadingStationX,k.AD_RobotHeight/2, x,y);
                 double dist2 = Util.dist(k.AD_LoadingStationX,k.AD_RobotHeight/2, x,y);
                 if(dist1 < dist2){
+                    SmartDashboard.putNumber("RSE_ErrX",x - -k.AD_LoadingStationX);
+                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = -k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 } else {
+                    SmartDashboard.putNumber("RSE_ErrX",x - k.AD_LoadingStationX);
+                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 }
@@ -198,8 +232,8 @@ public class RSE extends Component {
             int idx = (i+idxOffset) % length;
 
             double frac = (t - timestamps[idxMinus1])/(timestamps[idx]-timestamps[idxMinus1]);
-            retPoint.x = frac*(rseYs[idx] - rseYs[idxMinus1]) + rseYs[idxMinus1];
-            retPoint.x = frac*(rseYs[idx] - rseYs[idxMinus1]) + rseYs[idxMinus1];
+            retPoint.x = frac*(rseXs[idx] - rseXs[idxMinus1]) + rseXs[idxMinus1];
+            retPoint.y = frac*(rseYs[idx] - rseYs[idxMinus1]) + rseYs[idxMinus1];
         }
         
         return retPoint;

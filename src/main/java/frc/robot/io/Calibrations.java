@@ -14,7 +14,7 @@ public class Calibrations{
     public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
-    public boolean GTH_DisableGather = true;
+    public boolean GTH_DisableGather = false;
     public boolean SCR_ScorpioSelected = false; //enable scorpio instead of normal gatherer
     public boolean MIL_Disabled = false;
 
@@ -28,7 +28,8 @@ public class Calibrations{
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
     public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double   DRV_InchesPRev = 10.0/24.0*0.5*2.7*Math.PI;
+    public double DRV_WheelDiameter = 2.9;
+    public double   DRV_InchesPRev = 10.0/24.0*0.5*DRV_WheelDiameter*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
@@ -40,12 +41,12 @@ public class Calibrations{
     public double   DRV_SwerveStrKD = 0;
     public double   DRV_SwerveStrKP = -0.0;//rotation power per degree
     public double   DRV_DriveStraightDelay = 0.3; //seconds
-    public double   DRV_CamDriveMaxPwr_X = 0.3;
-    public double   DRV_CamDriveMaxPwr_Y = 0.3;//.2
-    public double   DRV_CamDriveMinPwr_X = 0.06; //was .03 MrC
+    public double   DRV_CamDriveMaxPwr_X = 0.25;
+    public double   DRV_CamDriveMaxPwr_Y = 0.25;//.2
+    public double   DRV_CamDriveMinPwr_X = 0.02; //was .03 MrC
     public double   DRV_CamDriveMinPwr_Y = 0.00; //was .03 MrC
-    public double   DRV_TargetDistanceKP = -0.017;//-0.011 //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0.005;
+    public double   DRV_TargetDistanceKP = -0.04;//-0.011 //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0.01;
     public double   DRV_CamTargetYoffset = 0;//-2; //Drive 2 inches CLOSER to all targets
     public double   DRV_CamDistShootX = 2;
     public double   DRV_CamDistShootY = 2 - DRV_CamTargetYoffset;
@@ -66,16 +67,17 @@ public class Calibrations{
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
-    public double AD_MaxPower = 0.4;
+    public double AD_MaxPower = 0.7;
     public double AD_AutoDriveKP = -0.01; //power per inch
+    public double AD_AutoDriveKD = 0.0025;
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;
     public double AD_HabY = 48;
     public double AD_HabEdgeX = 64;//real measurement is 64in
     public double AD_MidEdgeX = 24;
     public double AD_LoadingStationX = 135;
-    public double AD_AccelLim = 0.5; //x% per second accel
-    public double AD_MaxPowerHab = 0.2; //max power on the hab polygons (0 and 18)
+    public double AD_AccelLim = 0.4; //x% per second accel
+    public double AD_MaxPowerHab = 0.05; //max power on the hab polygons (0 and 18)
     public double AD_BlendDist = 20;//in inches begin blending next target point
 
     //sensor cals
@@ -98,7 +100,7 @@ public class Calibrations{
     public double GTH_ArmExtraIdlePwr = 0.20; //power applied after closing to prevent backdriving
     public double GTH_StartTimer = 0.75; //seconds after enabled before the gatherer can run
 
-    public double GTH_CurrLimit = 14.0;
+    public double GTH_CurrLimit = 14.0;//14
     public double GTH_CargoIntakeSpeed = 0.5;
     public double GTH_CargoShootSpeedFast = 0.2;//0.16;//0.13;//0.27;// 0.4; //.2 
     public double GTH_CargoShootSpeedSlow = 0.2;//0.16;//0.13;//0.27;//0.4; //.2
@@ -162,7 +164,7 @@ public class Calibrations{
     public double ELE_PositionOffset = 0.5; //add this number to all the positions
     public final double[] ELE_PositionArray = {
         //FLOOR, LOADING_STATION, ROCKET_1_CARGO, ROCKET_1_HATCH, ROCKET_2_CARGO, ROCKET_2_HATCH, ROCKET_3_CARGO, ROCKET_3_HATCH, SHIP_CARGO, SHIP_HATCH 
-            -1,        11,           20,              11,              50,              40,           76.5,            68,            34,          11
+            -1,        11.5,           20,              11,              50,              40,           76.5,            68,            34,          11
     };
     //in case scorpio needs different elevator positions
     public final double[] ELE_PositionScorpioArray = {
@@ -207,7 +209,7 @@ public class Calibrations{
     public double CAM_ExpireTime = 0.125; //seconds until image is deleted
     public double CAM_Location_X = 5.125;
     public double CAM_Location_Y = 0;
-    public double CAM_ShootDist = 3;//inches
+    public double CAM_ShootDist = 2;//inches
     public boolean CAM_DebugCargo = false;
     public boolean CAM_DebugTargetHigh = false;
     public boolean CAM_DebugTargetLow = false;
@@ -223,26 +225,26 @@ public class Calibrations{
     public double CAM_SCR_Hatch_CS_Offset = 18;//scorpio hatch in cargo ship offset
     public double CAM_SCR_Hatch_RKT_Offset = 18;//scorpio hatch in rocket offset
     public double CAM_SCR_Hatch_LS_Offset = 16;//scorpio hatch in loading station offset
-    public double CAM_SCR_Cargo_CS_AngleLimit = 5;//scorpio angle limit for cargo on cargo ship
-    public double CAM_SCR_Cargo_RKT_AngleLimit = 5;//arm gather angle limit for cargo in rocket
-    public double CAM_SCR_AngleLimit = 1.5;//scorpio angle limit for everything else
-    public double CAM_SCR_AllowShootAngle = 1.5; //autoShoot true when within this angle
-    public double CAM_SCR_AllowShootCargoCSAngle = 10;//overrides angle when cargo going to cargo ship
-    public double CAM_SCR_AllowShootCargoRKTAngle = 10;//overrides angle when cargo going to cargo ship
+    public double CAM_SCR_Cargo_CS_XErrLimit = 5;//scorpio angle limit for cargo on cargo ship
+    public double CAM_SCR_Cargo_RKT_XErrLimit = 5;//arm gather angle limit for cargo in rocket
+    public double CAM_SCR_XErrLimit = 1.5;//scorpio angle limit for everything else
+    public double CAM_SCR_AllowShootXErr = 1.5; //autoShoot true when within this angle
+    public double CAM_SCR_AllowShootCargoCSXErr = 10;//overrides angle when cargo going to cargo ship
+    public double CAM_SCR_AllowShootCargoRKTXErr = 10;//overrides angle when cargo going to cargo ship
 
     public double CAM_GTH_MainTargetOffset = 0; //subtract this offset from all targets
     public double CAM_GTH_Stage1Offset = 6;//8 //extra offset when the angle isn't aligned yet
-    public double CAM_GTH_Cargo_CS_Offset = -2;//arm gather cargo in cargo ship offset 
+    public double CAM_GTH_Cargo_CS_Offset = 2;//arm gather cargo in cargo ship offset 
     public double CAM_GTH_Cargo_RKT_Offset = -2;//arm gather cargo in rocket offset
     public double CAM_GTH_Hatch_CS_Offset = 0;//arm gather hatch in cargo ship offset
     public double CAM_GTH_Hatch_RKT_Offset = 2;//arm gather hatch in rocket offset
-    public double CAM_GTH_Hatch_LS_Offset = 2;//arm gather hatch in loading station offset
-    public double CAM_GTH_Cargo_CS_AngleLimit = 6;//arm gather angle limit for cargo on cargo ship
-    public double CAM_GTH_Cargo_RKT_AngleLimit = 3;//arm gather angle limit for cargo in rocket
-    public double CAM_GTH_AngleLimit = 2;//1.5;//arm gather angle limit for everything else
-    public double CAM_GTH_AllowShootAngle = 2;//1.5; //autoShoot true when within this angle
-    public double CAM_GTH_AllowShootCargoCSAngle = 5;//overrides angle when cargo going to cargo ship
-    public double CAM_GTH_AllowShootCargoRKTAngle = 3;//arm gather angle limit for cargo in rocket
+    public double CAM_GTH_Hatch_LS_Offset = -1;//arm gather hatch in loading station offset
+    public double CAM_GTH_Cargo_CS_XErrLimit = 15;//arm gather angle limit for cargo on cargo ship
+    public double CAM_GTH_Cargo_RKT_XErrLimit = 2;//arm gather angle limit for cargo in rocket
+    public double CAM_GTH_XErrLimit = 1;//1.5;//arm gather angle limit for everything else
+    public double CAM_GTH_AllowShootXErr = 0.5;//1.5; //autoShoot true when within this angle
+    public double CAM_GTH_AllowShootCargoCSXErr = 5;//overrides angle when cargo going to cargo ship
+    public double CAM_GTH_AllowShootCargoRKTXErr = 2;//arm gather angle limit for cargo in rocket
 
     public Calibrations(){
         

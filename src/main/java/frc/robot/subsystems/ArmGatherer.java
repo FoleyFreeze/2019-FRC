@@ -29,10 +29,6 @@ public class ArmGatherer extends Component{
     private boolean cargoShootTimerActive;
     private boolean hatchGatherTimerActive;
     private boolean hatchShootTimerActive;
-    private boolean cargoGatherComplete;
-    private boolean cargoShootComplete;
-    private boolean hatchGatherComplete;
-    private boolean hatchShootComplete;
 
     public void run() {
         if(k.GTH_DisableGather) return;
@@ -100,37 +96,25 @@ public class ArmGatherer extends Component{
         if(cargoGatherTimerActive) {
             cargoGatherTimerActive = Timer.getFPGATimestamp() <= cargoGatherTimer && in.autoNotManualMode;
             if(!cargoGatherTimerActive){ //falling edge
-                cargoGatherComplete = true;
-                cargoShootComplete = false;
-                hatchGatherComplete = false;
-                hatchShootComplete = false;
+                
             }
         }
         if(cargoShootTimerActive) {
             cargoShootTimerActive = Timer.getFPGATimestamp() <= cargoShootTimer && in.autoNotManualMode;
             if(!cargoShootTimerActive){ //falling edge
-                cargoGatherComplete = false;
-                cargoShootComplete = true;
-                hatchGatherComplete = false;
-                hatchShootComplete = false;
+                sense.hasCargo = false;
             }
         }
         if(hatchGatherTimerActive) {
             hatchGatherTimerActive = Timer.getFPGATimestamp() <= hatchGatherTimer && in.autoNotManualMode;
             if(!cargoGatherTimerActive){ //falling edge
-                hatchGatherComplete = false;
-                cargoShootComplete = false;
-                hatchGatherComplete = true;
-                hatchShootComplete = false;
+                
             }
         }
         if(hatchShootTimerActive) {
             hatchShootTimerActive = Timer.getFPGATimestamp() <= hatchShootTimer && in.autoNotManualMode;
             if(!hatchShootTimerActive){ //falling edge
-                cargoGatherComplete = false;
-                cargoShootComplete = false;
-                hatchGatherComplete = false;
-                hatchShootComplete = true;
+                sense.hasHatch = false;
             }
         }
 
@@ -174,7 +158,7 @@ public class ArmGatherer extends Component{
             }
         }
         //  releases hatch
-        else if(in.releaseHatch){
+        else if(in.releaseHatch || hatchShootTimerActive){
             if(!hatchShootTimerActive){
                 hatchShootTimerActive = true;
                 hatchShootTimer = Timer.getFPGATimestamp() + k.GTH_HatchShootTime;
@@ -195,19 +179,6 @@ public class ArmGatherer extends Component{
             }
         } 
 
-    }
-
-    public boolean cargoGatherComplete(){
-        return cargoGatherComplete && in.autoNotManualMode;
-    }
-    public boolean cargoShootComplete(){
-        return cargoShootComplete && in.autoNotManualMode;
-    }
-    public boolean hatchGatherComplete(){
-        return hatchGatherComplete && in.autoNotManualMode;
-    }
-    public boolean hatchShootComplete(){
-        return hatchShootComplete && in.autoNotManualMode;
     }
 
     public boolean scorpioActive(){
