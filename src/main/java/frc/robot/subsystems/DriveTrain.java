@@ -406,6 +406,17 @@ public class DriveTrain extends Component {
                 else {vAngle+= Math.PI;}
             }
 
+            //correct for RSE distance covered
+            double dRSEx = rse.x - vd.rseX;
+            double dRSEy = rse.y - vd.rseY;
+            //rotate by the robot angle to get the robot relative dx an dy
+            double robotAngleRad = -sense.robotAngle.getRad();
+            double dRobotX = dRSEx * Math.cos(robotAngleRad) - dRSEy * Math.sin(robotAngleRad);
+            double dRobotY = dRSEx * Math.sin(robotAngleRad) + dRSEy * Math.cos(robotAngleRad);
+            //subtract diff value to compensate for movement between now and last image
+            vDist -= dRobotX;
+            vXErr -= dRobotY;
+
             if(k.SCR_ScorpioSelected){
                 vAngle *= 1;
             } else {

@@ -86,6 +86,10 @@ public class Vision extends Component {
                         vd.dDist = 0;
                         vd.dAngle = 0;
                     }
+
+                    //saving the RSE values from when the picture was recieved
+                    vd.rseX = rse.x;
+                    vd.rseY = rse.y;
                     
                     
                     //transform the camera distance vector into a field relative position
@@ -144,6 +148,10 @@ public class Vision extends Component {
                         vd.dDist = 0;
                         vd.dAngle = 0;
                     }
+
+                    //saving the RSE values from when the picture was recieved
+                    vd.rseX = rse.x;
+                    vd.rseY = rse.y;
 
                     /*/transform the camera distance vector into a field relative position
                     double camRad = vd.angleTo * Math.PI / 180;
