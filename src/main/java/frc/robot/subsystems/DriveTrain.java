@@ -429,6 +429,9 @@ public class DriveTrain extends Component {
             double velMag = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy) / sense.dt;
             double filtVel = lpf.run(velMag);
             double vPwr = vHypot * k.DRV_TargetDistanceKP + filtVel * k.DRV_TargetDistanceKD;
+            if(Math.abs(vPwr) < k.DRV_CamDriveMinPwr_X){
+                vPwr += Math.signum(vPwr) * k.DRV_CamDriveMinPwr_X;
+            }
             double vAmplitude = Util.limit(vPwr, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
             
             SmartDashboard.putNumber("vDist", vDist);

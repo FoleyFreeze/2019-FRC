@@ -108,8 +108,11 @@ public class AutoDrive extends Component{
             return retPoint;
         }
 
+        Node n = path.peek();
+        int thisPoly = n.poly.id;
+
         double endPowerLim;
-        if(startingPolyId == 0 || startingPolyId == 18){
+        if(thisPoly == 0 || thisPoly == 18){
             endPowerLim = k.AD_MaxPowerHab;
         } else {
             endPowerLim = k.AD_MaxPower;

@@ -191,7 +191,7 @@ public class Inputs extends Component {
         prevActionLeft = actionLeft;
         
         //had to OR with the new "autoDrive" button (which is actually fakeAuto)
-        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || gamePad.fakeAuto;
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || (gamePad.fakeAuto && !sense.hasHatchEdge && !sense.hasCargoEdge) ;
         actionRightRising = actionRight && !prevActionRight;
         actionRightFalling = !actionRight && prevActionRight;
         prevActionRight = actionRight;
@@ -282,12 +282,6 @@ public class Inputs extends Component {
 		} else {
 			sense.hasCargo = false;
 		}
-
-        if(cargoNotHatch){
-            sense.hasHatch = false;
-        } else {
-            sense.hasCargo = false;
-        }
 
         //automatic state handling
         if(autoNotManualMode){

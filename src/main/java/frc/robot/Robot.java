@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    Component.sense.init();// zero the navx, but only at the beginning of a match
+    Component.sense.init();// zero the navx and RSE, but only at the beginning of a match
     Component.sense.isDisabled = false;
     Component.sense.isAuto = true;
     Component.sense.isTeleop = false;

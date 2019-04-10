@@ -179,7 +179,8 @@ public class OutputsCompBot extends Outputs {
         if(!k.GTH_DisableGather){
             //gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushed);
             gatherArmMotor = new TalonSRX(ElectroJendz.GTH_ArmMotorID);
-            //gatherArmMotor.setSelectedSensorPosition(0);
+            gatherArmMotor.setSelectedSensorPosition(0);
+            //gatherArmMotor.getEncoder().setPosition(0);
             gatherArmMotor.setNeutralMode(NeutralMode.Brake);
 
             gatherMotorL = new CANSparkMax(ElectroJendz.GTH_MotorL_ID, MotorType.kBrushless);
@@ -342,6 +343,7 @@ public class OutputsCompBot extends Outputs {
     public void resetEleEnc(){
         elevatorMotor.getEncoder().setPosition(0);
         gatherArmMotor.setSelectedSensorPosition(0);
+        //gatherArmMotor.getEncoder().setPotition(0);
     }
 
 }

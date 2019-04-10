@@ -14,8 +14,8 @@ public class Calibrations{
     public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
-    public boolean GTH_DisableGather = false;
-    public boolean SCR_ScorpioSelected = true;//false;//enable scorpio instead of normal gatherer
+    public boolean GTH_DisableGather = true;
+    public boolean SCR_ScorpioSelected = false; //enable scorpio instead of normal gatherer
     public boolean MIL_Disabled = false;
 
     // drive cals
@@ -42,10 +42,10 @@ public class Calibrations{
     public double   DRV_DriveStraightDelay = 0.3; //seconds
     public double   DRV_CamDriveMaxPwr_X = 0.3;
     public double   DRV_CamDriveMaxPwr_Y = 0.3;//.2
-    public double   DRV_CamDriveMinPwr_X = 0.10; //was .03 MrC
-    public double   DRV_CamDriveMinPwr_Y = 0.08; //was .03 MrC
-    public double   DRV_TargetDistanceKP = -0.011;//-0.03;//-0.014;//-0.0145;//-0.016; //camera drive kp based on dist
-    public double   DRV_TargetDistanceKD = 0.0;//0.4;//0.15;
+    public double   DRV_CamDriveMinPwr_X = 0.06; //was .03 MrC
+    public double   DRV_CamDriveMinPwr_Y = 0.00; //was .03 MrC
+    public double   DRV_TargetDistanceKP = -0.017;//-0.011 //camera drive kp based on dist
+    public double   DRV_TargetDistanceKD = 0.005;
     public double   DRV_CamTargetYoffset = 0;//-2; //Drive 2 inches CLOSER to all targets
     public double   DRV_CamDistShootX = 2;
     public double   DRV_CamDistShootY = 2 - DRV_CamTargetYoffset;
@@ -231,7 +231,7 @@ public class Calibrations{
     public double CAM_SCR_AllowShootCargoRKTAngle = 10;//overrides angle when cargo going to cargo ship
 
     public double CAM_GTH_MainTargetOffset = 0; //subtract this offset from all targets
-    public double CAM_GTH_Stage1Offset = 8; //extra offset when the angle isn't aligned yet
+    public double CAM_GTH_Stage1Offset = 6;//8 //extra offset when the angle isn't aligned yet
     public double CAM_GTH_Cargo_CS_Offset = -2;//arm gather cargo in cargo ship offset 
     public double CAM_GTH_Cargo_RKT_Offset = -2;//arm gather cargo in rocket offset
     public double CAM_GTH_Hatch_CS_Offset = 0;//arm gather hatch in cargo ship offset
@@ -239,8 +239,8 @@ public class Calibrations{
     public double CAM_GTH_Hatch_LS_Offset = 2;//arm gather hatch in loading station offset
     public double CAM_GTH_Cargo_CS_AngleLimit = 6;//arm gather angle limit for cargo on cargo ship
     public double CAM_GTH_Cargo_RKT_AngleLimit = 3;//arm gather angle limit for cargo in rocket
-    public double CAM_GTH_AngleLimit = 1.5;//arm gather angle limit for everything else
-    public double CAM_GTH_AllowShootAngle = 1.5; //autoShoot true when within this angle
+    public double CAM_GTH_AngleLimit = 2;//1.5;//arm gather angle limit for everything else
+    public double CAM_GTH_AllowShootAngle = 2;//1.5; //autoShoot true when within this angle
     public double CAM_GTH_AllowShootCargoCSAngle = 5;//overrides angle when cargo going to cargo ship
     public double CAM_GTH_AllowShootCargoRKTAngle = 3;//arm gather angle limit for cargo in rocket
 
