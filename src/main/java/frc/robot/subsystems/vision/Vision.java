@@ -5,13 +5,13 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.subsystems.Component;
 import frc.robot.util.Angle;
 import frc.robot.util.LimitedStack;
+import frc.robot.subsystems.autodrive.Point;
 
 public class Vision extends Component {
 
@@ -25,6 +25,7 @@ public class Vision extends Component {
     NetworkTableEntry piFindCargo;
     NetworkTableEntry piFindTargetHigh;
     NetworkTableEntry piFindTargetLow;
+    NetworkTableEntry timestamp;
 
     double lastFrameTime;
     int lastSeqNum;
@@ -48,6 +49,7 @@ public class Vision extends Component {
         piFindCargo = piCommands.getEntry("FindCargo");
         piFindTargetHigh = piCommands.getEntry("FindTargetHigh");
         piFindTargetLow = piCommands.getEntry("FindTargetLow");
+        timestamp = piCommands.getEntry("Timestamp");
 
         targetHighStack = new LimitedStack<>(5);
         targetLowStack = new LimitedStack<>(5);
@@ -88,8 +90,15 @@ public class Vision extends Component {
                     }
 
                     //saving the RSE values from when the picture was recieved
-                    vd.rseX = rse.x;
-                    vd.rseY = rse.y;
+                    //vd.rseX = rse.x;
+                    //vd.rseY = rse.y;
+
+                    double captureTime = Double.parseDouble(parts[0]);
+                    double latency = (vd.timeStamp - captureTime) / 2;
+                    SmartDashboard.putNumber("VisionLatency",latency);
+                    Point p = rse.getPositionAtTime(vd.timeStamp - latency);
+                    vd.rseX = p.x;
+                    vd.rseY = p.y;
                     
                     
                     //transform the camera distance vector into a field relative position
@@ -150,8 +159,15 @@ public class Vision extends Component {
                     }
 
                     //saving the RSE values from when the picture was recieved
-                    vd.rseX = rse.x;
-                    vd.rseY = rse.y;
+                    //vd.rseX = rse.x;
+                    //vd.rseY = rse.y;
+
+                    double captureTime = Double.parseDouble(parts[0]);
+                    double latency = (vd.timeStamp - captureTime) / 2;
+                    SmartDashboard.putNumber("VisionLatency",latency);
+                    Point p = rse.getPositionAtTime(vd.timeStamp - latency);
+                    vd.rseX = p.x;
+                    vd.rseY = p.y;
 
                     /*/transform the camera distance vector into a field relative position
                     double camRad = vd.angleTo * Math.PI / 180;
@@ -246,7 +262,10 @@ public class Vision extends Component {
         piFindCargo.setBoolean(in.searchingCargo || k.CAM_DebugCargo);
         piFindTargetHigh.setBoolean(PiHighSearch || k.CAM_DebugTargetHigh);//(in.visionTargetHigh || k.CAM_DebugTargetHigh);//
         piFindTargetLow.setBoolean((!PiHighSearch && !in.searchingCargo && !sense.isDisabled) || k.CAM_DebugTargetLow);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);
-            //piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
+        
+        timestamp.setNumber(Timer.getFPGATimestamp());
+        
+        //piFindTargetHigh.setBoolean(in.scoringCargo || k.CAM_DebugTargetHigh);
         //piFindTargetLow.setBoolean(in.searchingHatch || k.CAM_DebugTargetLow);
 
         //SmartDashboard.putNumber("InterruptDT", deltaIntTime);

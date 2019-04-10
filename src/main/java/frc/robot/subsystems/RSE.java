@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.Util;
+import frc.robot.subsystems.autodrive.Point;
 
 public class RSE extends Component {
 
@@ -28,7 +30,11 @@ public class RSE extends Component {
         startSelector.addOption("Mid Right", 2);
         startSelector.addOption("Far Right", 3);
         //SmartDashboard.putData("StartLocation",startSelector);
-		
+        
+        timestamps = new double[20]; //20ms loop * 20 captures the past 400ms
+        rseXs = new double[20];
+        rseYs = new double[20];
+
 		reset();
     }
 
@@ -150,10 +156,53 @@ public class RSE extends Component {
         x += dx;
         y += dy;
 
+        //update the rse history
+        rseXs[idxOffset] = x;
+        rseYs[idxOffset] = y;
+        timestamps[idxOffset] = Timer.getFPGATimestamp();
+        idxOffset++;
+        if(idxOffset >= rseXs.length) idxOffset = 0;
+
         SmartDashboard.putNumber("RSE dX", sumDX);
         SmartDashboard.putNumber("RSE dY", sumDY);
         SmartDashboard.putNumber("RSE X", x);
         SmartDashboard.putNumber("RSE Y", y);
+    }
+
+    private double[] timestamps;
+    private double[] rseXs;
+    private double[] rseYs;
+    private int idxOffset = 0;
+    private Point retPoint = new Point();
+    public Point getPositionAtTime(double t){
+
+        int length = timestamps.length;
+        int end = idxOffset - 1;
+        if(end < 0) end += length;
+
+        if(t <= timestamps[idxOffset]) {
+            retPoint.x = rseXs[idxOffset];
+            retPoint.y = rseYs[idxOffset];
+        } else if(t >= timestamps[end]) {
+            retPoint.x = rseXs[end];
+            retPoint.y = rseYs[end];
+        } else {
+            int i=0;
+            for(;i<length;i++){
+                if(t < timestamps[(i+idxOffset) % length]){
+                    break;
+                }
+            }
+
+            int idxMinus1 = (i-1+idxOffset) % length;
+            int idx = (i+idxOffset) % length;
+
+            double frac = (t - timestamps[idxMinus1])/(timestamps[idx]-timestamps[idxMinus1]);
+            retPoint.x = frac*(rseYs[idx] - rseYs[idxMinus1]) + rseYs[idxMinus1];
+            retPoint.x = frac*(rseYs[idx] - rseYs[idxMinus1]) + rseYs[idxMinus1];
+        }
+        
+        return retPoint;
     }
 
 }
