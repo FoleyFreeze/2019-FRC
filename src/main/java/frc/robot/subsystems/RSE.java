@@ -100,8 +100,8 @@ public class RSE extends Component {
         }
         SmartDashboard.putString("HabStartLoc",habStartLoc);
 
-        //determine when to re-zero (only when picking up hatches for now)
-        if(sense.hasHatchEdge && sense.hasHatch && !in.shift) {
+        //determine when to re-zero (only when picking up hatches for now, and NOT when not facing a loading station)
+        if(sense.hasHatchEdge && sense.hasHatch && !in.shift && Math.abs(sense.robotAngle.subDeg(180)) < 10) {
             if(in.autoDrive){ //if in autoDrive, use left/right switch to know which loading station we are at
                 if(in.leftNotRight){
                     SmartDashboard.putNumber("RSE_ErrX",x - -k.AD_LoadingStationX);
