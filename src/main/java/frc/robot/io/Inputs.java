@@ -3,6 +3,7 @@ package frc.robot.io;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.io.ControlBoard.NearFarCargo;
+import frc.robot.io.ControlBoard.RocketCargoshipPosition;
 import frc.robot.subsystems.Component;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorPosition;
@@ -253,7 +254,8 @@ public class Inputs extends Component {
                 cargoNotHatch = false;
                 elevatorLockout = true;
             }
-            if(temp && shift){
+            if(controlBoard.nearFarCargo == NearFarCargo.DEFAULT
+                && controlBoard.rocketCargoState == RocketCargoshipPosition.DEFAULT){
                 elevatorLockout = false;
             }
             fallingEdgeClimb = prevClimb && !climb;
