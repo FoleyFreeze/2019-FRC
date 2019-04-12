@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ControlBoard {
 
+    public boolean controlBoardIsBad = false;
+
     //2019 Practice board values!!!!!!!!!!!!!!!!!!!!!!!!
     private int IN_high = 13;
     private int IN_middle = 12;
@@ -58,26 +60,70 @@ public class ControlBoard {
     private Joystick joy;
 
     public ControlBoard(int port){
-        joy = new Joystick(port);
+        if(controlBoardIsBad){
+            joy = new Joystick(2);
+        } else {
+            joy = new Joystick(port);
+        }
     }
 
     public void read(boolean hasThing) {
 
-        jogUp = joy.getRawButton(IN_jogUp);
-        jogDown = joy.getRawButton(IN_jogDown);
-        gather = joy.getRawButton(IN_gather);
-        joy.setOutput(OUT_gather, hasThing);
-        shoot = joy.getRawButton(IN_shoot);
-        joy.setOutput(OUT_shoot, hasThing);
-        lOrR = joy.getRawButton(IN_lOrR);
-        autoOrSemi = joy.getRawButton(IN_AutoOrSemi);
-        climb = joy.getRawButton(IN_climb);
-        joy.setOutput(OUT_climb, climb);
-        shift = joy.getRawButton(IN_shift);
-        joy.setOutput(OUT_shift, hasThing);
-        pitMode = joy.getRawButton(IN_pitMode);
-        cargoOrHatch = joy.getRawButton(IN_cargoOrHatch);
-        parseControlBoard();
+        if(controlBoardIsBad){
+            
+            jogUp = false;
+            jogDown = false;
+            pitMode = true;//this is inverted
+            shoot = false;
+            autoOrSemi = true;//always in auto/
+
+            lOrR = joy.getRawButton(1);
+            gather = joy.getRawAxis(3) > 0.25;
+            shift = joy.getRawAxis(2) > 0.25;
+            cargoOrHatch = joy.getRawButton(5);
+            climb = joy.getRawButton(4);
+
+            boolean far = joy.getRawButton(2);
+            boolean cargo = joy.getRawButton(3);
+            if(far){
+                nearFarCargo = NearFarCargo.FAR;
+            } else if(cargo) {
+                nearFarCargo = NearFarCargo.CARGO;
+            } else {
+                nearFarCargo = NearFarCargo.NEAR;
+            }
+
+            boolean high = joy.getRawButton(6);
+            boolean low = joy.getRawButton(7);
+            boolean front = joy.getRawButton(8);
+            if(high){
+                rocketCargoState = RocketCargoshipPosition.HI;
+            } else if(low){
+                rocketCargoState = RocketCargoshipPosition.LO;
+            } else if(front){
+                rocketCargoState = RocketCargoshipPosition.FRONT;
+            } else {
+                rocketCargoState = RocketCargoshipPosition.MID;
+            }
+            
+        } else {
+            jogUp = joy.getRawButton(IN_jogUp);
+            jogDown = joy.getRawButton(IN_jogDown);
+            gather = joy.getRawButton(IN_gather);
+            joy.setOutput(OUT_gather, hasThing);
+            shoot = joy.getRawButton(IN_shoot);
+            joy.setOutput(OUT_shoot, hasThing);
+            lOrR = joy.getRawButton(IN_lOrR);
+            autoOrSemi = joy.getRawButton(IN_AutoOrSemi);
+            climb = joy.getRawButton(IN_climb);
+            joy.setOutput(OUT_climb, climb);
+            shift = joy.getRawButton(IN_shift);
+            joy.setOutput(OUT_shift, hasThing);
+            pitMode = joy.getRawButton(IN_pitMode);
+            cargoOrHatch = joy.getRawButton(IN_cargoOrHatch);
+            parseControlBoard();
+        }
+        
     }
 
     public enum RocketCargoshipPosition {

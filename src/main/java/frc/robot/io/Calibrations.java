@@ -60,10 +60,10 @@ public class Calibrations{
     public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
-    public double DRV_CamCargoThetaKP = 0.01; //power per degree
-    public double DRV_CamCargoThetaKD = 0.01;
-    public double DRV_CamCargoDistKP = -0.02; //power per inch
-    public double DRV_CamCargoPwrLim = 0.5;
+    public double DRV_CamCargoThetaKP = 0.015;// msc  0.01; //power per degree
+    public double DRV_CamCargoThetaKD = 0.015; // mscc 0.01;
+    public double DRV_CamCargoDistKP = -0.02;//-0.03; // msc -0.02; //power per inch
+    public double DRV_CamCargoPwrLim = 0.6;//0.5; // msc 0.5;
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
@@ -101,7 +101,7 @@ public class Calibrations{
     public double GTH_StartTimer = 0.75; //seconds after enabled before the gatherer can run
 
     public double GTH_CurrLimit = 14.0;//14
-    public double GTH_CargoIntakeSpeed = 0.5;
+    public double GTH_CargoIntakeSpeed = 0.5;//0.6; // msc 0.5;
     public double GTH_CargoShootSpeedFast = 0.2;//0.16;//0.13;//0.27;// 0.4; //.2 
     public double GTH_CargoShootSpeedSlow = 0.2;//0.16;//0.13;//0.27;//0.4; //.2
     public double GTH_HatchIntakeSpeed = 0.5;
@@ -156,7 +156,7 @@ public class Calibrations{
     public double ELE_MotorPwr = 0.1; // set to actual value later
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
     public double ELE_PIDLimitUp = 0.9;
-    public double ELE_PIDLimitDown = 0.7;//0.5;//0.7
+    public double ELE_PIDLimitDown = 0.8; //0.7;//0.5;//0.7
     public double ELE_PIDLimitDownLow = 0.25;//0.1;
     public double ELE_LowLimitPosition = 10;
     public double ELE_PositionKP = 0.1;
@@ -236,7 +236,7 @@ public class Calibrations{
     public double CAM_GTH_Stage1Offset = 6;//8 //extra offset when the angle isn't aligned yet
     public double CAM_GTH_Cargo_CS_Offset = 2;//arm gather cargo in cargo ship offset 
     public double CAM_GTH_Cargo_RKT_Offset = -2;//arm gather cargo in rocket offset
-    public double CAM_GTH_Hatch_CS_Offset = 0;//arm gather hatch in cargo ship offset
+    public double CAM_GTH_Hatch_CS_Offset = 1;//2; // msc 0;//arm gather hatch in cargo ship offset
     public double CAM_GTH_Hatch_RKT_Offset = 2;//arm gather hatch in rocket offset
     public double CAM_GTH_Hatch_LS_Offset = -1;//arm gather hatch in loading station offset
     public double CAM_GTH_Cargo_CS_XErrLimit = 15;//arm gather angle limit for cargo on cargo ship
