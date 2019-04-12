@@ -445,12 +445,7 @@ public class DriveTrain extends Component {
             double vY = vAmplitude * Math.cos(vAngle);
             //Send to drivetrain
             double rotPower = pidOrient();
-            if(gatherer.scorpioActive()){
-                swerve(0,0,0);
-            }
-            else {
-                swerve(vX, vY, rotPower);
-            }
+            
             SmartDashboard.putNumber("vHypot",vHypot);
 
 
@@ -474,12 +469,14 @@ public class DriveTrain extends Component {
             } else {//all else
                 autoShoot = !disableAutoShoot && vDist < k.CAM_ShootDist && Math.abs(vXErr) < allowableXErr;
             }
-            
-			if(autoShoot && sense.hasHatch && !k.SCR_ScorpioSelected){ //override driving to compress bumpers
+            // no drive forward into cargo ship
+			if(autoShoot && sense.hasHatch && in.controlBoard.nearFarCargo != NearFarCargo.CARGO && !k.SCR_ScorpioSelected){ //override driving to compress bumpers
 				swerve(0, -k.DRV_CamHatchDeliverForwardPower, 0);
-            } /*case is covered above else {
-				swerve(vX, vY, rotPower);
-			}*/
+            } else if(gatherer.scorpioActive()){
+                swerve(0,0,0);
+            } else {
+                swerve(vX, vY, rotPower);
+            }
             SmartDashboard.putNumber("camDrive_AllowableAngle",allowableXErr);
             SmartDashboard.putBoolean("disableAutoShoot",disableAutoShoot);
             SmartDashboard.putNumber("vOffset",vOffset);

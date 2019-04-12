@@ -238,6 +238,21 @@ public class Vision extends Component {
 
     }
 
+    public boolean last3TargetsGood(){
+        //determine if we are looking for high or low targets
+        LimitedStack<VisionData> stack;
+        if(in.scoringCargo && in.controlBoard.nearFarCargo != NearFarCargo.CARGO){
+            //looking for high targets
+            stack = targetHighStack;
+        } else {
+            //looking for low targets
+            stack = targetLowStack;
+        }
+
+        //check that we have seen the target 3 times in rapid succession
+        return stack.size() >= 3 && Timer.getFPGATimestamp() - stack.get(2).timeStamp < 0.5;
+    }
+
     public boolean goodCargoImage(){
         VisionData vd = cargoStack.peek();
         return vd != null && Timer.getFPGATimestamp() - vd.timeStamp < k.CAM_ExpireTime;

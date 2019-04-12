@@ -69,7 +69,8 @@ public class AutoDrive extends Component{
             return; //cant follow path if there is no path
         }
 
-        if(path.isEmpty()) {
+        //also complete the path when we have seen 3 good vision targets
+        if(path.isEmpty() || path.size() == 1 && view.last3TargetsGood()) {
             //indicate that the path is complete
             pathComplete = true;
             targetPoint = null;

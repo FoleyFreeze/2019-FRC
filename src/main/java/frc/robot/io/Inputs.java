@@ -35,6 +35,7 @@ public class Inputs extends Component {
     private boolean prevClimb;
     public boolean fallingEdgeClimb;
     public boolean reverseClimb;
+    private boolean elevatorLockout;
 
     public boolean manualElevatorUp;
     public boolean manualElevatorDown; 
@@ -191,7 +192,7 @@ public class Inputs extends Component {
         prevActionLeft = actionLeft;
         
         //had to OR with the new "autoDrive" button (which is actually fakeAuto)
-        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || (gamePad.fakeAuto && !sense.hasHatchEdge && !sense.hasCargoEdge) ;
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || (gamePad.fakeAuto && !sense.hasHatchEdge && !sense.hasCargoEdge);
         actionRightRising = actionRight && !prevActionRight;
         actionRightFalling = !actionRight && prevActionRight;
         prevActionRight = actionRight;
@@ -247,8 +248,14 @@ public class Inputs extends Component {
         if(!k.CLM_disable){
             boolean temp = controlBoard.climb;
             climb = temp && !shift;
-            reverseClimb = (temp && shift);
-            if(climb) cargoNotHatch = false;
+            reverseClimb = false;// never backdrive the climber //(temp && shift);
+            if(climb) {
+                cargoNotHatch = false;
+                elevatorLockout = true;
+            }
+            if(temp && shift){
+                elevatorLockout = false;
+            }
             fallingEdgeClimb = prevClimb && !climb;
             prevClimb = climb;
         }
@@ -301,7 +308,7 @@ public class Inputs extends Component {
             } else {// auto hatch
                 gatherCargo = false; 
                 releaseCargo = false;                           //dont start gathering immediately after shooting
-                gatherHatch = !sense.hasHatch && actionLeftRising || gatherHatch && actionLeft && !sense.hasHatch;
+                gatherHatch = !sense.hasHatch && actionLeftRising || gatherHatch && actionLeft && !sense.hasHatch || controlBoard.gather;
                 releaseHatch = sense.hasHatch && actionLeftRising;
                 //the overide
                 if(!sense.hasHatch && shift && gather) {
@@ -343,6 +350,9 @@ public class Inputs extends Component {
                     autoOrientRobot = true;
                 } else {
                     allowAutoAutoRotation = false;
+                    
+                    //TODO: does this help?
+                    autoOrientRobot = false;
                     //by not calling any elevator or orientation functions, the variables retain their previous values
                 }
             } else {
@@ -352,6 +362,7 @@ public class Inputs extends Component {
 
                 //allow auto auto rotation if the rot axis has not moved since the falling edge of ready
                 if(Math.abs(rotAxisDrive) > gamePad.IN_rotDeadband) allowAutoAutoRotation = false;
+
                 if(allowAutoAutoRotation){
                     autoOrientRobot = true;
                     setRobotOrientation();
@@ -487,7 +498,7 @@ public class Inputs extends Component {
             return;
         }
 
-        if(climb) {
+        if(climb || elevatorLockout) {
             //elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
             //return;
             controlBoard.rocketCargoState = ControlBoard.RocketCargoshipPosition.LO;

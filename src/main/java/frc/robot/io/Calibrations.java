@@ -28,7 +28,7 @@ public class Calibrations{
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
     public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double DRV_WheelDiameter = 3; //2.9 prac
+    public double DRV_WheelDiameter = 3.084;//2.916;//msc was 3; //2.9 prac
     public double   DRV_InchesPRev = 10.0/24.0*0.5*DRV_WheelDiameter*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
@@ -156,8 +156,8 @@ public class Calibrations{
     public double ELE_MotorPwr = 0.1; // set to actual value later
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
     public double ELE_PIDLimitUp = 0.9;
-    public double ELE_PIDLimitDown = 0.5;//0.7
-    public double ELE_PIDLimitDownLow = 0.1;
+    public double ELE_PIDLimitDown = 0.7;//0.5;//0.7
+    public double ELE_PIDLimitDownLow = 0.25;//0.1;
     public double ELE_LowLimitPosition = 10;
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
