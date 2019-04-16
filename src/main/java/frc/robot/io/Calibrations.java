@@ -14,7 +14,7 @@ public class Calibrations{
     public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
-    public boolean GTH_DisableGather = false;
+    public boolean GTH_DisableGather = true;
     public boolean SCR_ScorpioSelected = false; //enable scorpio instead of normal gatherer
     public boolean MIL_Disabled = false;
 
