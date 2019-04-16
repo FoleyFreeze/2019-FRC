@@ -15,6 +15,7 @@ public class LEDs extends Component{
     private Solenoid lowerLED_Right;
     private Solenoid camLED;
     private Spark mainLeds;
+    private Solenoid cargoLED;
 
     public LEDs(){
         lowerLED_Left = new Solenoid(ElectroJendz.lowerLeftLED);
@@ -24,6 +25,7 @@ public class LEDs extends Component{
         gearFlake_G = new Solenoid(ElectroJendz.gearFlake_G);
         camLED = new Solenoid(ElectroJendz.camLED);
         mainLeds = new Spark(0);
+        cargoLED = new Solenoid(ElectroJendz.cargoLED);
     }
 
     private double BLINK_TIME_ON = 0.10;
@@ -40,6 +42,7 @@ public class LEDs extends Component{
         //lowerLED_Left.set(true);
         //lowerLED_Right.set(true);
         camLED.set(in.camLightsOn);
+        cargoLED.set(!in.camLightsOn);
 
         SmartDashboard.putBoolean("LEDs", lowerLED_Left.get());
 

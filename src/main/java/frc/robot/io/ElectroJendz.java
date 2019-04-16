@@ -33,5 +33,6 @@ public class ElectroJendz {
     public static final int gearFlake_G = 1;
     public static final int gearFlake_B = 0;
     public static final int camLED = 5;
+    public static final int cargoLED = 3;
 
 }
