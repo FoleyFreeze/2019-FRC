@@ -224,6 +224,12 @@ public class RSE extends Component {
         x += dx;
         y += dy;
 
+        //stay in the field
+        if(x > k.AD_FieldMaxX) x = k.AD_FieldMaxX;
+        else if(x < -k.AD_FieldMaxX) x = -k.AD_FieldMaxX;
+        if(y > k.AD_FieldMaxY) y = k.AD_FieldMaxY;
+        else if(y < 0) y = 0;
+
         //update the rse history
         rseXs[idxOffset] = x;
         rseYs[idxOffset] = y;

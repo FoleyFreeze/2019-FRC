@@ -85,6 +85,8 @@ public class Calibrations{
     public double AD_MaxPowerHab = 0.05; //max power on the hab polygons (0 and 18)
     public double AD_BlendDist = 20;//in inches begin blending next target point
     public double AD_MaxDistError = 40;//maximum error allowed for rse reset
+    public double AD_FieldMaxX = 161 - (AD_RobotHeight/2);
+    public double AD_FieldMaxY = 648 - (AD_RobotHeight/2);
 
     //sensor cals
     public double SEN_AbsAngleFL;
