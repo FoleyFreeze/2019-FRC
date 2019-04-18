@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.Util;
 
 public class Elevator extends Component {
     
@@ -62,8 +63,7 @@ public class Elevator extends Component {
             }
 
             //force slowing down when the elevator is low and moving down
-            double lowPowerLimit = k.ELE_PIDLimitDown;
-            if(sense.elevatorEncoder < k.ELE_LowLimitPosition) lowPowerLimit = k.ELE_PIDLimitDownLow;
+            double lowPowerLimit = Util.interpolate(k.ELE_EleHeightAxis, k.ELE_DownPowerTable, sense.elevatorEncoder);
 
             double error = setpoint - sense.elevatorEncoder;
             double power = error*k.ELE_PositionKP;

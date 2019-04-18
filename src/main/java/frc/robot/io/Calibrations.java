@@ -162,9 +162,8 @@ public class Calibrations{
     public double ELE_MotorPwr = 0.1; // set to actual value later
     public double ELE_InchesPRev = 13.0/50.0*20.0/50.0*2.0*Math.PI*75.0/70.0;
     public double ELE_PIDLimitUp = 0.9;
-    public double ELE_PIDLimitDown = 0.8; //0.7;//0.5;//0.7
-    public double ELE_PIDLimitDownLow = 0.25;//0.1;
-    public double ELE_LowLimitPosition = 10;
+    public final double[] ELE_EleHeightAxis = {0, 5, 20};
+    public final double[] ELE_DownPowerTable = {0.25, 0.25, 0.8};
     public double ELE_PositionKP = 0.1;
     public double ELE_StageHeight = 14;
     public double ELE_PositionOffset = 0.5; //add this number to all the positions
