@@ -51,6 +51,7 @@ public class Elevator extends Component {
                     setpoint = k.ELE_ScorpioFloor;
                 }
             } else {
+
                 setpoint = k.ELE_PositionArray[position.ordinal()] + k.ELE_PositionOffset;
             }
 

@@ -27,7 +27,7 @@ public class Calibrations{
     public double DRV_TurnSparkKD = 0.2;
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
-    public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
+    //Not Used public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
     public double DRV_WheelDiameter = 3.044; //3.084;//2.916;//msc was 3; //2.9 prac
     public double   DRV_InchesPRev = 10.0/24.0*0.5*DRV_WheelDiameter*Math.PI;
     public double   DRV_RotCentX = 0.0;
@@ -41,15 +41,15 @@ public class Calibrations{
     public double   DRV_SwerveStrKD = 0;
     public double   DRV_SwerveStrKP = -0.0;//rotation power per degree
     public double   DRV_DriveStraightDelay = 0.3; //seconds
-    public double   DRV_CamDriveMaxPwr_X = 0.25;
+    //Not Used public double   DRV_CamDriveMaxPwr_X = 0.25;
     public double   DRV_CamDriveMaxPwr_Y = 0.25;//.2
     public double   DRV_CamDriveMinPwr_X = 0.02; //was .03 MrC
-    public double   DRV_CamDriveMinPwr_Y = 0.00; //was .03 MrC
+    //Not Used public double   DRV_CamDriveMinPwr_Y = 0.00; //was .03 MrC
     public double   DRV_TargetDistanceKP = -0.04;//-0.011 //camera drive kp based on dist
     public double   DRV_TargetDistanceKD = 0.01;
-    public double   DRV_CamTargetYoffset = 0;//-2; //Drive 2 inches CLOSER to all targets
-    public double   DRV_CamDistShootX = 2;
-    public double   DRV_CamDistShootY = 2 - DRV_CamTargetYoffset;
+    //Not Used b/c DRV_CamDistShootY isn't used public double   DRV_CamTargetYoffset = 0;//-2; //Drive 2 inches CLOSER to all targets
+    //Not Used public double   DRV_CamDistShootX = 2;
+    //Not Used public double   DRV_CamDistShootY = 2 - DRV_CamTargetYoffset;
     public double   DRV_WaitForParkTime = 1;//seconds //was 2
     public final double[] DRV_WheelLocX = {-12.375,12.375,-12.375,12.375};
     public final double[] DRV_WheelLocY = {10.625,10.625,-10.625,-10.625};
@@ -76,9 +76,15 @@ public class Calibrations{
     public double AD_HabEdgeX = 64;//real measurement is 64in
     public double AD_MidEdgeX = 24;
     public double AD_LoadingStationX = 135;
+    public double AD_RocketXHatch = 131;
+    public double AD_NearRocketYHatch = 197.5;
+    public double AD_FarRocketYHatch = 260;
+    public double AD_RocketXCargo = 117.5;
+    public double AD_RocketYCargo = 229;
     public double AD_AccelLim = 0.4; //x% per second accel
     public double AD_MaxPowerHab = 0.05; //max power on the hab polygons (0 and 18)
     public double AD_BlendDist = 20;//in inches begin blending next target point
+    public double AD_MaxDistError = 40;//maximum error allowed for rse reset
 
     //sensor cals
     public double SEN_AbsAngleFL;
@@ -109,7 +115,7 @@ public class Calibrations{
     public double GTH_HatchShootSpeedSlow = 0.4;
     public double GTH_CargoHoldSpeed = 0.1; //0.2;
     public double GTH_HatchHoldSpeed = 0.05;
-    public double GTH_ReleaseTime = 0.2; //time to spend auto shooting/gathering
+    //Not Used public double GTH_ReleaseTime = 0.2; //time to spend auto shooting/gathering
     
     public double GTH_CargoGatherTime = 0;
     public double GTH_CargoShootTime = 0.5;
@@ -135,10 +141,10 @@ public class Calibrations{
     public double SCR_ShortExtendTime = 0.02;
 
     public double SCR_ArmPositionKP = 0.002;//0.002;
-    public double SCR_ArmPositionKD = 0;
+    //Not Used public double SCR_ArmPositionKD = 0;
     public double SCR_ArmIdleHoldPower = -0.15;//-0.15;
-    public double SCR_ArmInPower = -0.7;
-    public double SCR_ArmOutPower = .7;  //0.9;//was .7
+    //Not Used public double SCR_ArmInPower = -0.7;
+    //Not Used public double SCR_ArmOutPower = .7;  //0.9;//was .7
     public double SCR_ArmPowerLimit = 0.7;
     public double SCR_ArmInPowerLimit = 0.4;
 
@@ -175,7 +181,7 @@ public class Calibrations{
 
 
     // climb cals
-    public double CLM_MotorSpeedUp = 0.15;
+    //Not Used public double CLM_MotorSpeedUp = 0.15;
     public double CLM_MotorSpeedDn = 0.15;
     public double CLM_EncoderLimit = 65;
     public double CLM_Zone_1 = 20;
@@ -191,12 +197,12 @@ public class Calibrations{
     // input cals
     public double IN_DodgingMin = 0.2;
     public int IN_DixonSize = 6;
-    public int IN_dodgingL = 2;
-    public int IN_dodgingR = 3;
+    //Not Used public int IN_dodgingL = 2;
+    //Not Used public int IN_dodgingR = 3;
 
     //mils
-    public int MIL_livepi = 0;
-    public int MIL_trackpi = 0;
+    //Not Used public int MIL_livepi = 0;
+    //Not Used public int MIL_trackpi = 0;
     public double MIL_CurrResetTime = 5;//seconds to set pit mode when limit exceeded
     public double MIL_CurrFilt = 1; //time constant of 1/val seconds
     public boolean MIL_CLDisabled = false;
@@ -207,8 +213,8 @@ public class Calibrations{
 
     // Vision cals
     public double CAM_ExpireTime = 0.125; //seconds until image is deleted
-    public double CAM_Location_X = 5.125;
-    public double CAM_Location_Y = 0;
+    //Not Used public double CAM_Location_X = 5.125;
+    //Not Used public double CAM_Location_Y = 0;
     public double CAM_ShootDist = 2;//inches
     public boolean CAM_DebugCargo = false;
     public boolean CAM_DebugTargetHigh = false;

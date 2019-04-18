@@ -217,7 +217,6 @@ public class Inputs extends Component {
         //releaseHatch = false;
         //gatherHatch = false;
         //gatherCargo = false;
-        elevatorStage = false;
         visionTargetHigh = false;
         visionTargetLow = false;
         visionCargo = false;
@@ -373,6 +372,11 @@ public class Inputs extends Component {
                 }
 
             }
+            //always start in staging
+            elevatorStage |= actionRightRising;
+            //when we see a target, leave staging
+            elevatorStage &= !view.lastTargetsGood(2);
+            //TODO: determine if we need to do anything special when in autodrive
 
             visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO && sense.hasCargo) && actionRight && gamePad.camDrive;
             visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive && controlBoard.nearFarCargo != NearFarCargo.CARGO;
@@ -432,6 +436,7 @@ public class Inputs extends Component {
             prevAutoDrive = false;
             allowAutoAutoRotation = false;
             autoOrientRobot = false;
+            elevatorStage = false;
         }
 
         searchingCargo = !sense.isDisabled && cargoNotHatch && !sense.hasCargo;

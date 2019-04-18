@@ -100,7 +100,7 @@ public class RSE extends Component {
         }
         SmartDashboard.putString("HabStartLoc",habStartLoc);
 
-        //determine when to re-zero (only when picking up hatches for now, and NOT when not facing a loading station)
+        //determine when to re-zero (only when picking up hatches and facing a loading station)
         if(sense.hasHatchEdge && sense.hasHatch && !in.shift && Math.abs(sense.robotAngle.subDeg(180)) < 10) {
             if(in.autoDrive){ //if in autoDrive, use left/right switch to know which loading station we are at
                 if(in.leftNotRight){
@@ -136,6 +136,40 @@ public class RSE extends Component {
                 prevEnc[i] = sense.driveEnc[i];
                 prevWheelAngle[i] = sense.angles[i].getDeg(); 
             } 
+
+        //reset on rocket hatch deliveries
+        } else if(sense.hasHatchEdge && !sense.hasHatch && !in.shift && in.controlBoard.nearFarCargo != NearFarCargo.CARGO){
+            double xSign = 1;
+            if(in.leftNotRight) xSign = -1;
+            if(in.controlBoard.nearFarCargo == NearFarCargo.NEAR){
+                double xDest = k.AD_RocketXHatch * xSign;
+                double yDest = k.AD_NearRocketYHatch;
+                double distError = Util.dist(x, y, xDest, yDest);
+                if(distError < k.AD_MaxDistError){
+                    x = xDest;
+                    y = yDest;
+                }
+            }else{
+                double xDest = k.AD_RocketXHatch * xSign;
+                double yDest = k.AD_FarRocketYHatch;
+                double distError = Util.dist(x, y, xDest, yDest);
+                if(distError < k.AD_MaxDistError){
+                    x = xDest;
+                    y = yDest;
+                }
+            }
+        
+        //reset on rocket cargo deliveries
+        } else if(sense.hasCargoEdge && !sense.hasCargo && !in.shift){
+            double xSign = 1;
+            if(in.leftNotRight) xSign = -1;
+            double xDest = k.AD_RocketXCargo * xSign;
+            double yDest = k.AD_RocketYCargo;
+            double distError = Util.dist(x, y, xDest, yDest);
+            if(distError < k.AD_MaxDistError){
+                x = xDest;
+                y = yDest;
+            }
         }
 
 

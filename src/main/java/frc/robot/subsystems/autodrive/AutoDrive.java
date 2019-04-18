@@ -70,7 +70,7 @@ public class AutoDrive extends Component{
         }
 
         //also complete the path when we have seen 3 good vision targets
-        if(path.isEmpty() || path.size() == 1 && view.last3TargetsGood()) {
+        if(path.isEmpty() || path.size() == 1 && view.lastTargetsGood(3)) {
             //indicate that the path is complete
             pathComplete = true;
             targetPoint = null;

@@ -238,7 +238,7 @@ public class Vision extends Component {
 
     }
 
-    public boolean last3TargetsGood(){
+    public boolean lastTargetsGood(int count){
         //determine if we are looking for high or low targets
         LimitedStack<VisionData> stack;
         if(in.scoringCargo && in.controlBoard.nearFarCargo != NearFarCargo.CARGO){
@@ -250,7 +250,8 @@ public class Vision extends Component {
         }
 
         //check that we have seen the target 3 times in rapid succession
-        return stack.size() >= 3 && Timer.getFPGATimestamp() - stack.get(2).timeStamp < 0.5;
+        double timeLimit = 0.125 * count;
+        return stack.size() >= count && Timer.getFPGATimestamp() - stack.get(count-1).timeStamp < timeLimit;
     }
 
     public boolean goodCargoImage(){
