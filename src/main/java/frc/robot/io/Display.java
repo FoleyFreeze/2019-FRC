@@ -2,6 +2,7 @@ package frc.robot.io;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.Component;
 
 public class Display extends Component{
@@ -17,15 +18,17 @@ public class Display extends Component{
 	NetworkTableEntry startLocName;
 
     public Display(){
-        hasHatch = Shuffleboard.getTab("CompTab").add("hasHatch",false).getEntry();
-        hasCargo = Shuffleboard.getTab("CompTab").add("hasCargo",false).getEntry();
-        rseX = Shuffleboard.getTab("CompTab").add("rseX",0.0).getEntry();
-        rseY = Shuffleboard.getTab("CompTab").add("rseY",0.0).getEntry();
-		eleEnc = Shuffleboard.getTab("CompTab").add("EleEnc",0.0).getEntry();
-		currPoly = Shuffleboard.getTab("CompTab").add("CurrPoly",0).getEntry();
-		lastDist = Shuffleboard.getTab("CompTab").add("LastRSEdist",0).getEntry();
-		//Shuffleboard.getTab("CompTab").add("StartLocation",rse.startSelector);
-		startLocName = Shuffleboard.getTab("CompTab").add("HabStartLoc","None").getEntry();
+
+		ShuffleboardTab compTab = Shuffleboard.getTab("CompTab");
+
+        hasHatch = compTab.add("hasHatch",false).withPosition(0,0).getEntry();
+        hasCargo = compTab.add("hasCargo",false).withPosition(0,1).getEntry();
+        rseX = compTab.add("rseX",0.0).withPosition(2,0).getEntry();
+        rseY = compTab.add("rseY",0.0).withPosition(2,1).getEntry();
+		eleEnc = compTab.add("EleEnc",0.0).withPosition(3,0).getEntry();
+		currPoly = compTab.add("CurrPoly",0).withPosition(1,1).getEntry();
+		lastDist = compTab.add("LastRSEdist",0).withPosition(2,2).getEntry();
+		startLocName = compTab.add("HabStartLoc","None").withPosition(1,0).getEntry();
     }
 	
 	public void run(){
