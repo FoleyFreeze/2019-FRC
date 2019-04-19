@@ -13,7 +13,7 @@ public class Pathfinder extends Component {
 
     PriorityQueue<Node> pq;
 
-    int numPolygons = 18;
+    int numPolygons = 22;
     int totalPolygons = numPolygons * 2;
 
     public Pathfinder(){
@@ -26,113 +26,137 @@ public class Pathfinder extends Component {
 
         polygonList = new Polygon[totalPolygons];
 
-        makePoly(new double[]{0, 75, 75, 0}, //x vertex values
-                 new double[]{48, 48, 95, 95}, //y vertex values
-                 new int[]{3},  //2?                       //there is an edge between these verticies
+        makePoly(new double[]{0, 36, 36, 0}, //Hab1   X-Values
+                 new double[]{48, 48, 105, 105}, //Y-Values
+                 new int[]{3}, //2? //there is an edge between these verticies
                  new int[]{1},                         //that edge connects to this polygon ID
-                 false, null, 0);                      //dest polygon, override edge point, this ID number 
-        
-        makePoly(new double[]{0, 75, 58, 23, 0},
-                 new double[]{95, 95, 190, 190, 190},
+                 false, null, 0);                      //dest polygon, override edge point, this ID number
+
+        makePoly(new double[]{0, 75, 58, 23, 0}, //Mojave   X-Values
+                 new double[]{105, 105, 190, 190, 190}, //Y-Values
                  new int[]{0, 1, 2, 3, 4},
-                 new int[]{19, 0, 12, 17, 2},//please check*************************
+                 new int[]{19, 0, 12, 17, 2},
                  false, null, 1);
-        
-        makePoly(new double[]{ 0, 23, 23, 0},
-                 new double[]{190, 190, 220, 220},
+
+        makePoly(new double[]{0, 23, 23, 0}, //CargoFront   X-Values
+                 new double[]{190, 190, 220, 220}, //Y-Values
                  new int[]{1},
                  new int[]{1},
                  true, null, 2);
-        
-        makePoly(new double[]{23, 28, 20, 50, 58},
-                 new double[]{220, 246, 250, 250, 190},
+
+        makePoly(new double[]{23, 28, 28, 58, 58}, //CargoCorner   X-Values
+                 new double[]{220, 246, 249, 249, 190}, //Y-Values
                  new int[]{4},
                  new int[]{8},
                  false, null, 3);
-        
-        makePoly(new double[]{20, 20, 58, 58}, //20s were 28s
-                 new double[]{250, 272, 272, 250},
+
+        makePoly(new double[]{28, 28, 43, 43}, //Cargo1   X-Values
+                 new double[]{249, 271, 271, 249}, //Y-Values
                  new int[]{3},
-                 new int[]{7},
+                 new int[]{19},
                  true, null, 4);
-        
-        makePoly(new double[]{20, 20, 58, 58},
-                 new double[]{272, 294, 294, 272},
+
+        makePoly(new double[]{28, 28, 43, 43}, //Cargo2   X-Values
+                 new double[]{271, 293, 293, 271}, //Y-Values
                  new int[]{3},
-                 new int[]{7},
+                 new int[]{20},
                  true, null, 5);
-        
-        makePoly(new double[]{20, 20, 58, 58},
-                 new double[]{294, 316, 316, 294},
+
+        makePoly(new double[]{28, 28, 43, 43}, //Cargo3   X-Values
+                 new double[]{293, 315, 315, 293}, //Y-Values
                  new int[]{3},
-                 new int[]{7},
+                 new int[]{21},
                  true, null, 6);
-        
-        makePoly(new double[]{58, 58, 58, 58, 161, 161, 104},
-                 new double[]{250, 272, 294, 322, 322, 288, 256},
+
+        makePoly(new double[]{58, 58, 58, 58, 161, 153, 104}, //Sahara   X-Values
+                 new double[]{249, 271, 293, 315, 315, 288, 256}, //Y-Values
                  new int[]{0, 1, 2, 3, 6},
-                 new int[]{8, 4, 5, 6, 9},
+                 new int[]{8, 19, 20, 21, 9},
                  false, null, 7);
-        
-        makePoly(new double[]{58, 58, 104, 104},
-                 new double[]{190, 250, 256, 202},
+
+        makePoly(new double[]{58, 58, 104, 104}, //Ohio   X-Values
+                 new double[]{190, 249, 256, 202}, //Y-Values
                  new int[]{0, 1, 2, 3},
                  new int[]{12, 3, 7, 10},
                  false, null, 8);
-        
-        makePoly(new double[]{134, 104, 161, 161},
-                 new double[]{239, 256, 288, 254},
+
+        makePoly(new double[]{134, 104, 153, 153}, //FarRocket   X-Values
+                 new double[]{239, 256, 288, 254}, //Y-Values
                  new int[]{2},
                  new int[]{7},
                  true, null, 9);
-        
-        makePoly(new double[]{104, 104, 134, 134},
-                 new double[]{202, 256, 239, 220},
+
+        makePoly(new double[]{104, 104, 134, 134}, //MiddleRocket   X-Values
+                 new double[]{202, 256, 239, 220}, //Y-Values
                  new int[]{1},
                  new int[]{8},
                  true, null, 10);
-        
-        makePoly(new double[]{104, 134, 161, 161},
-                 new double[]{202, 220, 205, 170},
+
+        makePoly(new double[]{104, 134, 153, 153}, //CloseRocket   X-Values
+                 new double[]{202, 220, 205, 170}, //Y-Values
                  new int[]{0},
                  new int[]{12},
                  true, null, 11);
-        
-        makePoly(new double[]{75, 58, 104, 161, 161, 108},
-                 new double[]{95, 190, 202, 170, 95, 95},
+
+        makePoly(new double[]{75, 58, 104, 153, 161, 108}, //House   X-Values
+                 new double[]{105, 190, 202, 170, 95, 95}, //Y-Values
                  new int[]{0, 1, 2, 3, 5},
                  new int[]{13, 1, 8, 11, 14},
                  false, null, 12);
-        
-        makePoly(new double[]{75, 75, 108, 108, 90},
-                 new double[]{48, 95, 95, 48, 48},
+
+        makePoly(new double[]{75, 75, 108, 108, 90}, //ByDepot   X-Values
+                 new double[]{48, 105, 95, 48, 48}, //Y-Values
                  new int[]{2, 4},
                  new int[]{12, 15},
                  false, null, 13);
-        
-        makePoly(new double[]{108, 108, 161, 161},
-                 new double[]{20, 95, 95, 20},  //30s were 48s
+
+        makePoly(new double[]{108, 108, 161, 161}, //ByLoadStation   X-Values
+                 new double[]{48, 95, 95, 48}, //Y-Values
                  new int[]{0, 2},
                  new int[]{16, 12},
                  false, null, 14);
-        
-        makePoly(new double[]{90, 90, 108, 108},
-                 new double[]{0, 48, 48, 0},
+
+        makePoly(new double[]{90, 90, 108, 108}, //NextToLoadingStation   X-Values
+                 new double[]{0, 48, 48, 0}, //Y-Values
                  new int[]{2, 3},
                  new int[]{13, 16},
                  false, null, 15);
-        
-        makePoly(new double[]{108, 108, 161, 161},
-                 new double[]{0, 20, 20, 0},    //30s were 48s
+
+        makePoly(new double[]{108, 108, 161, 161}, //Loading Station   X-Values
+                 new double[]{0, 48, 48, 0}, //Y-Values
                  new int[]{2},
                  new int[]{14},
                  true, null, 16);
-                 
-        makePoly(new double[]{23, 23, 58},
-                 new double[]{190, 220, 190},
+
+        makePoly(new double[]{23, 23, 58}, //NoZone   X-Values
+                 new double[]{190, 220, 190}, //Y-Values
                  new int[]{0},
                  new int[]{1},
                  false, null, 17);
+
+        makePoly(new double[]{36, 36, 75, 75}, //Start   X-Values
+                 new double[]{48, 105, 105, 48}, //Y-Values
+                 new int[]{2},
+                 new int[]{1},
+                 false, null, 18);
+
+        makePoly(new double[]{43, 43, 58, 58}, //AlignC1   X-Values
+                 new double[]{249, 271, 271, 249}, //Y-Values
+                 new int[]{1,3},
+                 new int[]{4,7},
+                 false, null, 19);
+
+        makePoly(new double[]{43, 43, 58, 58}, //Align C2   X-Values
+                 new double[]{271, 293, 293, 271}, //Y-Values
+                 new int[]{1, 3},
+                 new int[]{5, 7},
+                 false, null, 20);
+
+        makePoly(new double[]{43, 43, 58, 58}, //Align C3   X-Values
+                 new double[]{293, 315, 315, 293}, //Y-Values
+                 new int[]{1, 3},
+                 new int[]{6, 7},
+                 false, null, 21);
     }
 
     public void makePoly(double[] x, double[] y, int[] edges, int[] neighbors, boolean dest, Point edgePoint, int id){
