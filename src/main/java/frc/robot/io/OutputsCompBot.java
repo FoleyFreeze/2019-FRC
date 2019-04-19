@@ -101,10 +101,10 @@ public class OutputsCompBot extends Outputs {
             backRightMotorTurn = new CANSparkMax(ElectroJendz.RR_TURN_ID, MotorType.kBrushless);
             backRightMotorDrive = new CANSparkMax(ElectroJendz.RR_DRIVE_ID, MotorType.kBrushless);
             
-            frontLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
-            frontRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
-            backLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
-            backRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
+            //frontLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
+            //frontRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
+            //backLeftMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
+            //backRightMotorDrive.getEncoder().setPositionConversionFactor(k.DRV_InchesPRev);
 
             if (k.OUT_DriveBrakeMode){
                 frontLeftMotorDrive.setIdleMode(IdleMode.kBrake);
@@ -204,10 +204,10 @@ public class OutputsCompBot extends Outputs {
 
     public void getEnc(){
         if(!k.DRV_Disable) {
-            sense.driveEnc[0] = frontLeftMotorDrive.getEncoder().getPosition();//value in inches
-            sense.driveEnc[1] = frontRightMotorDrive.getEncoder().getPosition();//value in inches
-            sense.driveEnc[2] = backLeftMotorDrive.getEncoder().getPosition();//value in inches
-            sense.driveEnc[3] = backRightMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[0] = k.DRV_WheelGearRatio * k.DRV_WheelDiameterFL * frontLeftMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[1] = k.DRV_WheelGearRatio * k.DRV_WheelDiameterFR * frontRightMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[2] = k.DRV_WheelGearRatio * k.DRV_WheelDiameterRL * backLeftMotorDrive.getEncoder().getPosition();//value in inches
+            sense.driveEnc[3] = k.DRV_WheelGearRatio * k.DRV_WheelDiameterRR * backRightMotorDrive.getEncoder().getPosition();//value in inches
         }
         if(!k.ELE_Disable){
             sense.elevatorEncoder = elevatorMotor.getEncoder().getPosition() + k.SEN_ElevatorEncOffset;//value in inches

@@ -28,8 +28,11 @@ public class Calibrations{
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
     //Not Used public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double DRV_WheelDiameter = 3.044; //3.084;//2.916;//msc was 3; //2.9 prac
-    public double   DRV_InchesPRev = 10.0/24.0*0.5*DRV_WheelDiameter*Math.PI;
+    public double DRV_WheelDiameterFL = 2.998; //3.084;//2.916;//msc was 3; //2.9 prac
+    public double DRV_WheelDiameterFR = 2.964;
+    public double DRV_WheelDiameterRL = 3.065;
+    public double DRV_WheelDiameterRR = 3.009;
+    public double   DRV_WheelGearRatio = 10.0/24.0*0.5*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
     public double   DRV_SwerveAngKP = -0.002;
