@@ -26,16 +26,18 @@ public class Pathfinder extends Component {
 
         polygonList = new Polygon[totalPolygons];
 
-        makePoly(new double[]{0, 36, 36, 0}, //Hab1   X-Values
-                 new double[]{48, 48, 105, 105}, //Y-Values
+        int f = numPolygons;
+
+        makePoly(new double[]{0, 25, 25, 0}, //Hab1   X-Values
+                 new double[]{48, 48, 110, 110}, //Y-Values
                  new int[]{3}, //2? //there is an edge between these verticies
                  new int[]{1},                         //that edge connects to this polygon ID
                  false, null, 0);                      //dest polygon, override edge point, this ID number
 
-        makePoly(new double[]{0, 75, 58, 23, 0}, //Mojave   X-Values
-                 new double[]{105, 105, 190, 190, 190}, //Y-Values
-                 new int[]{0, 1, 2, 3, 4},
-                 new int[]{19, 0, 12, 17, 2},
+        makePoly(new double[]{0, 25, 64, 58, 23, 0}, //Mojave   X-Values
+                 new double[]{110, 110, 110, 190, 190, 190}, //Y-Values
+                 new int[]{0, 1, 2, 3, 4, 5},
+                 new int[]{f+1, 0, 18, 12, 17, 2},
                  false, null, 1);
 
         makePoly(new double[]{0, 23, 23, 0}, //CargoFront   X-Values
@@ -68,16 +70,16 @@ public class Pathfinder extends Component {
                  new int[]{21},
                  true, null, 6);
 
-        makePoly(new double[]{58, 58, 58, 58, 161, 153, 104}, //Sahara   X-Values
-                 new double[]{249, 271, 293, 315, 315, 288, 256}, //Y-Values
-                 new int[]{0, 1, 2, 3, 6},
-                 new int[]{8, 19, 20, 21, 9},
+        makePoly(new double[]{58, 58, 58, 161, 153, 104}, //Sahara   X-Values
+                 new double[]{271, 293, 315, 315, 288, 256}, //Y-Values
+                 new int[]{0, 1, 2, 5},
+                 new int[]{19, 20, 21, 9},
                  false, null, 7);
 
-        makePoly(new double[]{58, 58, 104, 104}, //Ohio   X-Values
-                 new double[]{190, 249, 256, 202}, //Y-Values
-                 new int[]{0, 1, 2, 3},
-                 new int[]{12, 3, 7, 10},
+        makePoly(new double[]{58, 58, 58, 104, 104}, //Ohio   X-Values
+                 new double[]{190, 249, 271, 256, 202}, //Y-Values
+                 new int[]{0, 1, 2, 3, 4},
+                 new int[]{12, 3, 4, 7, 10},
                  false, null, 8);
 
         makePoly(new double[]{134, 104, 153, 153}, //FarRocket   X-Values
@@ -98,14 +100,14 @@ public class Pathfinder extends Component {
                  new int[]{12},
                  true, null, 11);
 
-        makePoly(new double[]{75, 58, 104, 153, 161, 108}, //House   X-Values
-                 new double[]{105, 190, 202, 170, 95, 95}, //Y-Values
+        makePoly(new double[]{64, 58, 104, 153, 161, 108}, //Gobi   X-Values
+                 new double[]{110, 190, 202, 170, 95, 95}, //Y-Values
                  new int[]{0, 1, 2, 3, 5},
                  new int[]{13, 1, 8, 11, 14},
                  false, null, 12);
 
-        makePoly(new double[]{75, 75, 108, 108, 90}, //ByDepot   X-Values
-                 new double[]{48, 105, 95, 48, 48}, //Y-Values
+        makePoly(new double[]{64, 64, 108, 108, 90}, //ByDepot   X-Values
+                 new double[]{48, 110, 95, 48, 48}, //Y-Values
                  new int[]{2, 4},
                  new int[]{12, 15},
                  false, null, 13);
@@ -134,8 +136,8 @@ public class Pathfinder extends Component {
                  new int[]{1},
                  false, null, 17);
 
-        makePoly(new double[]{36, 36, 75, 75}, //Start   X-Values
-                 new double[]{48, 105, 105, 48}, //Y-Values
+        makePoly(new double[]{25, 25, 64, 64}, //Start   X-Values
+                 new double[]{48, 110, 110, 48}, //Y-Values
                  new int[]{2},
                  new int[]{1},
                  false, null, 18);
@@ -143,7 +145,7 @@ public class Pathfinder extends Component {
         makePoly(new double[]{43, 43, 58, 58}, //AlignC1   X-Values
                  new double[]{249, 271, 271, 249}, //Y-Values
                  new int[]{1,3},
-                 new int[]{4,7},
+                 new int[]{4,8},
                  false, null, 19);
 
         makePoly(new double[]{43, 43, 58, 58}, //Align C2   X-Values

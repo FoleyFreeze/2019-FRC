@@ -28,8 +28,8 @@ public class Calibrations{
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
     //Not Used public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double DRV_WheelDiameterFL = 2.998; //3.084;//2.916;//msc was 3; //2.9 prac
-    public double DRV_WheelDiameterFR = 2.964;
+    public double DRV_WheelDiameterFL = 2.908;//2.998;
+    public double DRV_WheelDiameterFR = 2.905;//2.985;
     public double DRV_WheelDiameterRL = 3.065;
     public double DRV_WheelDiameterRR = 3.009;
     public double   DRV_WheelGearRatio = 10.0/24.0*0.5*Math.PI;
@@ -59,7 +59,7 @@ public class Calibrations{
     public final double[] DRV_EleHeightAxis = {0,20,78};
     public final double[] DRV_PowerTable = {1, 1, 0.2};
     public double DRV_AutoRotateKP = 0.01; //power per degres of error
-    public double DRV_AutoRotateKD = 0.01; //via late night testing
+    public double DRV_AutoRotateKD = 0.015; //via late night testing
     public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
@@ -70,9 +70,9 @@ public class Calibrations{
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
-    public double AD_MaxPower = 0.7;
-    public double AD_AutoDriveKP = -0.01; //power per inch
-    public double AD_AutoDriveKD = 0.0025;
+    public double AD_MaxPower = 1;
+    public double AD_AutoDriveKP = -0.02; //power per inch
+    public double AD_AutoDriveKD = 0.005;
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;
     public double AD_HabY = 48;
@@ -84,9 +84,10 @@ public class Calibrations{
     public double AD_FarRocketYHatch = 260;
     public double AD_RocketXCargo = 117.5;
     public double AD_RocketYCargo = 229;
-    public double AD_AccelLim = 0.4; //x% per second accel
-    public double AD_MaxPowerHab = 0.05; //max power on the hab polygons (0 and 18)
-    public double AD_BlendDist = 20;//in inches begin blending next target point
+    public double AD_AccelLim = 0.9; //x% per second accel
+    public double AD_AccelLimHab = 0.3;
+    public double AD_MaxPowerHab = 0.3; //max power on the hab polygons (0 and 18)
+    public double AD_BlendDist = 10;//in inches begin blending next target point
     public double AD_MaxDistError = 40;//maximum error allowed for rse reset
     public double AD_FieldMaxX = 161 - (AD_RobotHeight/2);
     public double AD_FieldMaxY = 648 - (AD_RobotHeight/2);

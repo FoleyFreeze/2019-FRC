@@ -56,4 +56,13 @@ public class Util{
         //else normalize the remaining part of the axis to 0 - 1
         return Math.signum(value) * (Math.abs(value) - deadband) / (1 - deadband);
     }
+
+    public static double lineDist(Point v1, Point v2, double targetX, double targetY){
+
+        double a = v1.y - v2.y;
+        double b = -1*(v1.x - v2.x);
+        double c = -b*v1.y - a*v1.x;
+        double d = ((a*targetX) + (b*targetY) + c)/Math.sqrt(a*a+b*b);
+        return Math.abs(d);
+    }
 }

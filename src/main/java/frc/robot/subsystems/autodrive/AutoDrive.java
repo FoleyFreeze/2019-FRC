@@ -52,7 +52,7 @@ public class AutoDrive extends Component{
                 //if there is more than 1 step in the path, disable turning for the first step
                 enableAutoTurn = path.size() <= 1;
                 for(Node n : path){
-                    System.out.println("Poly: " + n.poly.id + " Edge: " + n.location.x + "," + n.location.y);
+                    System.out.println("Poly: " + n.poly.id + " Target: " + n.location.x + "," + n.location.y);
                 }
                 if(!path.isEmpty()){
                     Node n = path.peek();
@@ -70,7 +70,7 @@ public class AutoDrive extends Component{
         }
 
         //also complete the path when we have seen 3 good vision targets
-        if(path.isEmpty() || path.size() == 1 && view.lastTargetsGood(3)) {
+        if(path.isEmpty() || path.size() == 1 && in.gamePad.camDrive && view.lastTargetsGood(3)) {
             //indicate that the path is complete
             pathComplete = true;
             targetPoint = null;
@@ -80,7 +80,7 @@ public class AutoDrive extends Component{
         currPolyId = n.poly.id;
         //until we cross the edge, PID to its center point
         //or if we get within 6in of target
-        boolean isClose = Util.dist(new Point(rse.x,rse.y), n.location) < 6;
+        boolean isClose = Util.dist(new Point(rse.x,rse.y), n.location) < 3;
 
         //edge check is true if we have not yet broken the plane to leave the current poly
         boolean edgeCheck = edgeStatus == getEdgeCrossing(n.location,n.edgePoint,rse.x,rse.y);
@@ -100,7 +100,7 @@ public class AutoDrive extends Component{
 
     }
 
-    double powerLim;
+    public double powerLim;
     Point retPoint = new Point();
     private Filter lpf = new Filter(0.5, true, 0.06, 0);
     public Point getDrivePower(){
@@ -112,32 +112,40 @@ public class AutoDrive extends Component{
         }
 
         Node n = path.peek();
-        int thisPoly = n.poly.id;
+        int thisPoly = n.prevNode.poly.id;
 
+
+        //limit power further if on the hab
         double endPowerLim;
-        if(thisPoly == 0 || thisPoly == 18){
+        double accelLim;
+        if(thisPoly == 18 || thisPoly == pathfinder.numPolygons + 18){
             endPowerLim = k.AD_MaxPowerHab;
+            accelLim = k.AD_AccelLimHab;
         } else {
             endPowerLim = k.AD_MaxPower;
+            accelLim = k.AD_AccelLim;
         }
         
+        //limit power increase per timestep
         if(powerLim < endPowerLim){
-            powerLim += k.AD_AccelLim * sense.dt;
+            powerLim += accelLim * sense.dt;
+            powerLim = Math.min(powerLim, endPowerLim);
+        } else {
             powerLim = Math.min(powerLim, endPowerLim);
         }
 
         //calc powers for X and Y based on target point and rse
-        double distX = targetPoint.x - rse.x;
-        double distY = targetPoint.y - rse.y;
+        double distX = n.location.x - rse.x;
+        double distY = n.location.y - rse.y;
 
-
-        //limit power increase per timestep
+        //determine blend power
+        double blendLim; 
+        double blendDist = Util.lineDist(n.location, n.edgePoint, rse.x, rse.y);
+        if (path.size() >= 2) blendLim = Math.min(powerLim*blendDist/k.AD_BlendDist, powerLim);
+        else blendLim = powerLim;
 
         //PID and limit magnitude
         double r = Math.sqrt(distX*distX + distY*distY);
-        double blendLim; 
-        if (path.size() >= 2) blendLim = Math.min(powerLim*r/k.AD_BlendDist, powerLim);
-        else blendLim = powerLim;
         double velMag = Math.sqrt(rse.dx*rse.dx + rse.dy*rse.dy) / sense.dt;
         double filtVel = lpf.run(velMag);
         double rPwr = Util.limit(r * k.AD_AutoDriveKP + filtVel * k.AD_AutoDriveKD, blendLim);//powerLim);//blendlim
@@ -146,6 +154,9 @@ public class AutoDrive extends Component{
         double autoX = rPwr * Math.cos(theta);
         double autoY = rPwr * Math.sin(theta);
 
+        SmartDashboard.putNumber("AD_pwr_x1",autoX);
+        SmartDashboard.putNumber("AD_pwr_y1",autoY);
+
         //if power is low, get the next point and add its value
         
         if(rPwr < powerLim && path.size() >= 2){
@@ -153,13 +164,20 @@ public class AutoDrive extends Component{
             
             Node n2 = path.get(path.size() - 2); //get the second thing off the stack
 
-            double distX2 = n2.edgePoint.x - rse.x;
-            double distY2 = n2.edgePoint.y - rse.y;
+            SmartDashboard.putNumber("BlendTargetX", n2.location.x);
+            SmartDashboard.putNumber("BlendTargetY", n2.location.y);
+
+            double distX2 = n2.location.x - rse.x;
+            double distY2 = n2.location.y - rse.y;
             double r2 = Math.sqrt(distX2*distX2 + distY2*distY2);
             double rPwr2 = Util.limit(r2 * k.AD_AutoDriveKP, blendPwr);
+            double theta2 = Math.atan2(distY2,distX2);
 
-            double xPwr2 = rPwr2 * Math.cos(theta);
-            double yPwr2 = rPwr2 * Math.sin(theta);
+            double xPwr2 = rPwr2 * Math.cos(theta2);
+            double yPwr2 = rPwr2 * Math.sin(theta2);
+
+            SmartDashboard.putNumber("AD_pwr_x2",xPwr2);
+            SmartDashboard.putNumber("AD_pwr_y2",yPwr2);
 
             //add them together
             autoX += xPwr2;

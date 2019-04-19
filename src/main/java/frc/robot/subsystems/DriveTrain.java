@@ -86,9 +86,9 @@ public class DriveTrain extends Component {
             //double autoX = Util.limit(distX * k.AD_AutoDriveKP, k.AD_MaxPower);
             //double autoY = Util.limit(distY * k.AD_AutoDriveKP, k.AD_MaxPower);
 
-            //get rot power form pidOrient
+            //get rot power form pidOrient, scale rotate power by autodrive power
             double autoRot;
-            if(autoDriving.enableAutoTurn) autoRot = pidOrient();
+            if(autoDriving.enableAutoTurn) autoRot = pidOrient() * autoDriving.powerLim;
             else autoRot = 0;
             
             //field swerve
@@ -255,7 +255,7 @@ public class DriveTrain extends Component {
          
         //park if not moving
         if(in.fallingEdgeClimb) startTime = 0; //goto park immediately after climb
-        double elapsedTime = Timer.getFPGATimestamp() - startTime; 
+        double elapsedTime = Timer.getFPGATimestamp() - startTime;
         if(maxPwr < 0.02 && elapsedTime > k.DRV_WaitForParkTime) {
         
             outR[0] = 0;

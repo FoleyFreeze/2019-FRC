@@ -352,11 +352,11 @@ public class Inputs extends Component {
                 } else {
                     allowAutoAutoRotation = false;
                     
-                    //TODO: does this help?
-                    autoOrientRobot = false;
                     //by not calling any elevator or orientation functions, the variables retain their previous values
                 }
             } else {
+                if(latchReady || sense.hasHatchEdge || sense.hasCargoEdge) allowAutoAutoRotation = false;
+
                 latchReady = false;
                 //not ready, so keep elevator down
                 setElevatorHeight(false);
