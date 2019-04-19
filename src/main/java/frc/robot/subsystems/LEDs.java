@@ -88,10 +88,17 @@ public class LEDs extends Component{
     boolean climbLatch;
 
     private void setMains(){
+        //rainbow when climbing
+        //white when shooting
+        //red when cargo
+        //green when hatch
+        //blue otherwise
 
         if(in.climb && !sense.isDisabled || climbLatch){
             climbLatch = !sense.hasHatchEdge && !sense.hasCargoEdge;
             mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Rainbow);
+        } else if(drive.autoShoot){
+            mainLeds.set(LED_Driver_Table.Solid_Colors_White);
         } else if(sense.hasCargo){
             mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
         } else if(sense.hasHatch){
