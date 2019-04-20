@@ -120,16 +120,15 @@ public class ArmGatherer extends Component{
 
         // conditions for gathering
         if(in.gatherCargo || cargoGatherTimerActive){
-            if(!cargoGatherTimerActive){
-                cargoGatherTimerActive = true;
-                cargoGatherTimer = Timer.getFPGATimestamp() + k.GTH_CargoGatherTime;
-            }
             out.setGatherMotor(k.GTH_CargoIntakeSpeed, -k.GTH_CargoIntakeSpeed);
 
             //do current sense
             if(sense.pdp.getCurrent(ElectroJendz.GTH_MotorL_ID) + sense.pdp.getCurrent(ElectroJendz.GTH_MotorR_ID) > k.GTH_CurrLimit*2){
-                cargoGatherTimer = 0; //so next iter it will complete
-                sense.hasCargo = true;
+                if(!cargoGatherTimerActive){
+                    cargoGatherTimerActive = true;
+                    cargoGatherTimer = Timer.getFPGATimestamp() + k.GTH_CargoGatherTime;
+                    sense.hasCargo = true;
+                }
             }
         }
         //  releases cargo

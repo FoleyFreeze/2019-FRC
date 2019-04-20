@@ -70,16 +70,16 @@ public class Pathfinder extends Component {
                  new int[]{21},
                  true, null, 6);
 
-        makePoly(new double[]{58, 58, 58, 161, 153, 104}, //Sahara   X-Values
-                 new double[]{271, 293, 315, 315, 288, 256}, //Y-Values
-                 new int[]{0, 1, 2, 5},
-                 new int[]{19, 20, 21, 9},
+        makePoly(new double[]{58, 58, 161, 153, 104}, //Sahara   X-Values
+                 new double[]{293, 315, 315, 288, 256}, //Y-Values
+                 new int[]{0, 1, 4},
+                 new int[]{8, 21, 9},
                  false, null, 7);
 
-        makePoly(new double[]{58, 58, 58, 104, 104}, //Ohio   X-Values
-                 new double[]{190, 249, 271, 256, 202}, //Y-Values
-                 new int[]{0, 1, 2, 3, 4},
-                 new int[]{12, 3, 4, 7, 10},
+        makePoly(new double[]{58, 58, 58, 58, 104, 104}, //Ohio   X-Values
+                 new double[]{190, 249, 271, 293, 256, 202}, //Y-Values
+                 new int[]{0, 1, 2, 3, 4, 5},
+                 new int[]{12, 3, 19, 20, 7, 10},
                  false, null, 8);
 
         makePoly(new double[]{134, 104, 153, 153}, //FarRocket   X-Values
@@ -151,7 +151,7 @@ public class Pathfinder extends Component {
         makePoly(new double[]{43, 43, 58, 58}, //Align C2   X-Values
                  new double[]{271, 293, 293, 271}, //Y-Values
                  new int[]{1, 3},
-                 new int[]{5, 7},
+                 new int[]{5, 8},
                  false, null, 20);
 
         makePoly(new double[]{43, 43, 58, 58}, //Align C3   X-Values

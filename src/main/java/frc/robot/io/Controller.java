@@ -31,7 +31,7 @@ public class Controller {
     public boolean autoShootEnable;
 
     // added by Nico
-    public boolean fakeAuto;
+    public boolean autoDrive;
 
     public boolean resetGyro;
     public boolean resetElePart1;
@@ -41,7 +41,7 @@ public class Controller {
     public boolean flipOrientation;
     public boolean pitMode;
     public boolean hatchGather;
-    public boolean autoDrive;
+    public boolean fakeAuto;
     public boolean camDrive;
     public double xDriveAxis;
     public double yDriveAxis;
@@ -111,8 +111,8 @@ public class Controller {
         if(IN_autoShootEnable != 0) autoShootEnable = joy.getRawButton(IN_autoShootEnable);
         else autoShootEnable = false;
 
-        if(IN_fakeAuto != 0) fakeAuto = joy.getRawButton(IN_fakeAuto);
-        else fakeAuto = false;
+        if(IN_fakeAuto != 0) autoDrive = joy.getRawButton(IN_fakeAuto);
+        else autoDrive = false;
 
         if(IN_resetGyro != 0) resetGyro = joy.getRawButton(IN_resetGyro);
         else resetGyro = false;
@@ -153,8 +153,8 @@ public class Controller {
         if(IN_resetElePart2 != 0) resetElePart2 = joy.getRawButton(IN_resetElePart2);
         else resetElePart2 = false;
 
-        if(IN_autoDriveEnable != 0) autoDrive = joy.getRawButton(IN_autoDriveEnable);
-        else autoDrive = false;
+        if(IN_autoDriveEnable != 0) fakeAuto = joy.getRawButton(IN_autoDriveEnable);
+        else fakeAuto = false;
 
         if(IN_camDriveEnable != 0) camDrive = joy.getRawButton(IN_camDriveEnable);
         else camDrive = false;

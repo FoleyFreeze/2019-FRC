@@ -30,8 +30,8 @@ public class OutputsCompBot extends Outputs {
     //if scorpio, use only gatherMotorL and gatherArmMotor
     private CANSparkMax gatherMotorL;
     private CANSparkMax gatherMotorR;
-    private CANSparkMax gatherArmMotor;
-    //private TalonSRX gatherArmMotor;
+    //private CANSparkMax gatherArmMotor;
+    private TalonSRX gatherArmMotor;
 
     private CANSparkMax climbMotor;
 
@@ -177,8 +177,8 @@ public class OutputsCompBot extends Outputs {
         }
 
         if(!k.GTH_DisableGather){
-            gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushed);
-            //gatherArmMotor = new TalonSRX(ElectroJendz.GTH_ArmMotorID);
+            //gatherArmMotor = new CANSparkMax(ElectroJendz.GTH_ArmMotorID, MotorType.kBrushed);
+            gatherArmMotor = new TalonSRX(ElectroJendz.GTH_ArmMotorID);
             //gatherArmMotor.setSelectedSensorPosition(0);
             //gatherArmMotor.getEncoder().setPosition(0);
             //gatherArmMotor.setNeutralMode(NeutralMode.Brake);
@@ -216,8 +216,8 @@ public class OutputsCompBot extends Outputs {
             sense.climberEncoder = climbMotor.getEncoder().getPosition();//value in motor rotations
         }
         if(!k.GTH_DisableGather && k.SCR_ScorpioSelected){
-            sense.scorpioArmEnc = gatherArmMotor.getEncoder().getPosition();
-            //sense.scorpioArmEnc = -gatherArmMotor.getSelectedSensorPosition();
+            //sense.scorpioArmEnc = gatherArmMotor.getEncoder().getPosition();
+            sense.scorpioArmEnc = -gatherArmMotor.getSelectedSensorPosition();
         }
         
         SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
@@ -321,8 +321,8 @@ public class OutputsCompBot extends Outputs {
         gatherMotorR.set(limit(rightSpeed/*, gatherRMil*/));
     }
     public void setGatherArm(double armGather) {
-        //gatherArmMotor.set(ControlMode.PercentOutput, limit(-armGather, gatherArmMil));
-        gatherArmMotor.set(limit(armGather, gatherArmMil)); //ES -armGather
+        gatherArmMotor.set(ControlMode.PercentOutput, limit(-armGather, gatherArmMil));
+        //gatherArmMotor.set(limit(armGather, gatherArmMil)); //ES -armGather
     }
 
     //scorpio gathering

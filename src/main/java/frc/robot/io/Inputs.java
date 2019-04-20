@@ -67,6 +67,9 @@ public class Inputs extends Component {
     public boolean autoDrive;
     private boolean prevAutoDrive;
     public boolean autoDriveRising;
+    private boolean pauseAutoDrive;
+    private double pauseAutoDriveTimer;
+    private boolean pauseAutoDriveFallingEdge;
 
     public boolean autoShootHold;
     public boolean actionLeft;
@@ -192,8 +195,8 @@ public class Inputs extends Component {
         actionLeftFalling = !actionLeft && prevActionLeft;
         prevActionLeft = actionLeft;
         
-        //had to OR with the new "autoDrive" button (which is actually fakeAuto)
-        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || (gamePad.fakeAuto && !sense.hasHatchEdge && !sense.hasCargoEdge);
+        //had to OR with the new "autoDrive" button , but pulse off for one tick when pauseAutoDrive falls
+        actionRight = gamePad.rightTrigger > k.IN_DodgingMin || (gamePad.autoDrive || pauseAutoDrive) && !pauseAutoDriveFallingEdge;
         actionRightRising = actionRight && !prevActionRight;
         actionRightFalling = !actionRight && prevActionRight;
         prevActionRight = actionRight;
@@ -322,9 +325,20 @@ public class Inputs extends Component {
 
             //autoDrive logic //replaced ready button with fake auto button
             //autoDrive = gamePad.autoDrive && actionRight && !sense.hasHatchEdge && !sense.hasCargoEdge;
-            autoDrive = gamePad.fakeAuto && !sense.hasHatchEdge && !sense.hasCargoEdge;
+            autoDrive = gamePad.autoDrive && !pauseAutoDrive;
             autoDriveRising = autoDrive && !prevAutoDrive;
             prevAutoDrive = autoDrive;
+
+            if(gamePad.autoDrive && (sense.hasHatchEdge || sense.hasCargoEdge)){
+                pauseAutoDrive = true;
+                pauseAutoDriveTimer = Timer.getFPGATimestamp() + k.AD_ScoreDelayTime;
+            } else if(Timer.getFPGATimestamp() < pauseAutoDriveTimer){
+                pauseAutoDrive = false;
+                pauseAutoDriveFallingEdge = true;
+            } else {
+                pauseAutoDriveFallingEdge = false;
+            }
+
 
             SmartDashboard.putBoolean("AutoDrive", autoDrive);
 
@@ -499,8 +513,8 @@ public class Inputs extends Component {
     
     //set elevator position based on control board state
     public void setElevatorHeight(boolean ready){
-        //to help with the start hatch position (only in auto)          //replaced from gamePad.fakeAuto
-        if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.autoDrive ) {
+        //to help with the start hatch position (only in auto)
+        if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.fakeAuto ) {
             elevatorTarget = ElevatorPosition.DONT_MOVE;
             return;
         }

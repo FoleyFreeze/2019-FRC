@@ -141,6 +141,7 @@ public class AutoDrive extends Component{
         //determine blend power
         double blendLim; 
         double blendDist = Util.lineDist(n.location, n.edgePoint, rse.x, rse.y);
+        SmartDashboard.putNumber("BlendDist",blendDist);
         if (path.size() >= 2) blendLim = Math.min(powerLim*blendDist/k.AD_BlendDist, powerLim);
         else blendLim = powerLim;
 

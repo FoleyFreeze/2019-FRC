@@ -14,7 +14,7 @@ public class Calibrations{
     public boolean CLM_disable = false;
     public boolean DRV_Disable = false;
     public boolean ELE_Disable = false;
-    public boolean GTH_DisableGather = true;
+    public boolean GTH_DisableGather = false;
     public boolean SCR_ScorpioSelected = false; //enable scorpio instead of normal gatherer
     public boolean MIL_Disabled = false;
 
@@ -63,14 +63,14 @@ public class Calibrations{
     public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
-    public double DRV_CamCargoThetaKP = 0.015;// msc  0.01; //power per degree
-    public double DRV_CamCargoThetaKD = 0.015; // mscc 0.01;
-    public double DRV_CamCargoDistKP = -0.02;//-0.03; // msc -0.02; //power per inch
-    public double DRV_CamCargoPwrLim = 0.6;//0.5; // msc 0.5;
+    public double DRV_CamCargoThetaKP = 0.025;//0.020; //MSC was 0.015;// msc  0.01; //power per degree
+    public double DRV_CamCargoThetaKD = 0.04;//MSC was 0.015; // mscc 0.01;
+    public double DRV_CamCargoDistKP = -0.06;//-0.06;//-0.04;//MSC was -0.02;//-0.03; // msc -0.02; //power per inch
+    public double DRV_CamCargoPwrLim = 0.8;//MSC was 0.6;//0.5; // msc 0.5;
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
-    public double AD_MaxPower = 1;
+    public double AD_MaxPower = 0.9;
     public double AD_AutoDriveKP = -0.02; //power per inch
     public double AD_AutoDriveKD = 0.005;
     public double AD_RobotWidth = 39; //with bumpers
@@ -84,13 +84,14 @@ public class Calibrations{
     public double AD_FarRocketYHatch = 260;
     public double AD_RocketXCargo = 117.5;
     public double AD_RocketYCargo = 229;
-    public double AD_AccelLim = 0.9; //x% per second accel
+    public double AD_AccelLim = 0.75; //x% per second accel
     public double AD_AccelLimHab = 0.3;
     public double AD_MaxPowerHab = 0.3; //max power on the hab polygons (0 and 18)
-    public double AD_BlendDist = 10;//in inches begin blending next target point
+    public double AD_BlendDist = 15;//in inches begin blending next target point
     public double AD_MaxDistError = 40;//maximum error allowed for rse reset
     public double AD_FieldMaxX = 161 - (AD_RobotHeight/2);
     public double AD_FieldMaxY = 648 - (AD_RobotHeight/2);
+    public double AD_ScoreDelayTime = 0.5;
 
     //sensor cals
     public double SEN_AbsAngleFL;
@@ -123,7 +124,7 @@ public class Calibrations{
     public double GTH_HatchHoldSpeed = 0.05;
     //Not Used public double GTH_ReleaseTime = 0.2; //time to spend auto shooting/gathering
     
-    public double GTH_CargoGatherTime = 0;
+    public double GTH_CargoGatherTime = 0.5;
     public double GTH_CargoShootTime = 0.5;
     public double GTH_HatchGatherTime = 0.2;
     public double GTH_HatchShootTime = 0.25;
