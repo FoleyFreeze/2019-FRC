@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.io.ControlBoard;
 import frc.robot.io.ElectroJendz;
+import frc.robot.io.ControlBoard.RocketCargoshipPosition;
 import frc.robot.util.LED_Driver_Table;
 
 public class LEDs extends Component{
@@ -31,6 +33,9 @@ public class LEDs extends Component{
     private double BLINK_TIME_ON = 0.10;
     private double BLINK_TIME_OFF = 0.05;
     private int BLINK_COUNT = 5;
+    private double FAST_BLINK_TIME_ON = 0.05;
+    private double FAST_BLINK_TIME_OFF = 0.025;
+    private boolean FAST = false;
 
     int blinkCount = BLINK_COUNT;
     double blinkTimer;
@@ -58,13 +63,24 @@ public class LEDs extends Component{
         }*/
 
         if(blinkCount < BLINK_COUNT){
-            if(blinkState && Timer.getFPGATimestamp() - blinkTimer > BLINK_TIME_ON) {
-                blinkState = false;
-                blinkTimer = Timer.getFPGATimestamp();
-            } else if(!blinkState && Timer.getFPGATimestamp() - blinkTimer > BLINK_TIME_OFF){
-                blinkState = true;
-                blinkTimer = Timer.getFPGATimestamp();
-                blinkCount++;
+            if(!FAST){
+                if(blinkState && Timer.getFPGATimestamp() - blinkTimer > BLINK_TIME_ON) {
+                    blinkState = false;
+                    blinkTimer = Timer.getFPGATimestamp();
+                } else if(!blinkState && Timer.getFPGATimestamp() - blinkTimer > BLINK_TIME_OFF){
+                    blinkState = true;
+                    blinkTimer = Timer.getFPGATimestamp();
+                    blinkCount++;
+                }
+            }else{
+                if(blinkState && Timer.getFPGATimestamp() - blinkTimer > FAST_BLINK_TIME_ON) {
+                    blinkState = false;
+                    blinkTimer = Timer.getFPGATimestamp();
+                } else if(!blinkState && Timer.getFPGATimestamp() - blinkTimer > FAST_BLINK_TIME_OFF){
+                    blinkState = true;
+                    blinkTimer = Timer.getFPGATimestamp();
+                    blinkCount++;
+                }
             }
         }
 
@@ -100,9 +116,52 @@ public class LEDs extends Component{
         } else if(drive.autoShoot){
             mainLeds.set(LED_Driver_Table.Solid_Colors_White);
         } else if(sense.hasCargo){
-            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
+            if(in.leftNotRight){
+                if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.HI){
+                    FAST = true;
+                    if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Dark_red);
+                    else mainLeds.set(LED_Driver_Table.Solid_Colors_Black);
+                }else if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.MID){
+                    FAST = false;
+                    if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Red);
+                    else mainLeds.set(LED_Driver_Table.Solid_Colors_Black);
+                }else if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.LO || in.controlBoard.rocketCargoState == RocketCargoshipPosition.FRONT){
+                    FAST = false;
+                    mainLeds.set(LED_Driver_Table.Solid_Colors_Hot_Pink);
+                }else{
+                    mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
+                }
+            }else{
+                if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.HI){
+                    FAST = true;
+                    if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Dark_red);
+                    else mainLeds.set(LED_Driver_Table.Solid_Colors_Black);
+                }else if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.MID){
+                    FAST = false;
+                    if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Red);
+                    else mainLeds.set(LED_Driver_Table.Solid_Colors_Black);
+                }else if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.LO || in.controlBoard.rocketCargoState == RocketCargoshipPosition.FRONT){
+                    FAST = false;
+                    mainLeds.set(LED_Driver_Table.Solid_Colors_Hot_Pink);
+                }else{
+                    mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
+                }
+            }
         } else if(sense.hasHatch){
-            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Forest);
+            if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.HI){
+                FAST = true;
+                if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Dark_Green);
+                else mainLeds.set(LED_Driver_Table.Solid_Colors_Black);
+            }else if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.MID){
+                FAST = false;
+                if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Lawn_Green);
+                else mainLeds.set(LED_Driver_Table.Solid_Colors_Black);
+            }else if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.LO || in.controlBoard.rocketCargoState == RocketCargoshipPosition.FRONT){
+                FAST = false;
+                mainLeds.set(LED_Driver_Table.Solid_Colors_Lime);
+            }else{
+                mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Forest);
+            }
         } else {
             mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Ocean);
         } 
