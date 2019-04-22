@@ -99,6 +99,8 @@ public class Sensors extends Component {
 
         SmartDashboard.putBoolean("HasCargo",hasCargo);
         SmartDashboard.putBoolean("HasHatch",hasHatch);
+
+        SmartDashboard.putNumber("AccelZ", navx.getWorldLinearAccelZ());
     }
 
     public double nxX = 0;
