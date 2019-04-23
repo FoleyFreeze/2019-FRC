@@ -75,7 +75,7 @@ public class Calibrations{
     public double AD_AutoDriveKD = 0.005;
     public double AD_RobotWidth = 39; //with bumpers
     public double AD_RobotHeight = 35;
-    public double AD_HabY = 48;
+    public double AD_HabY = 48+19;
     public double AD_HabEdgeX = 64;//real measurement is 64in
     public double AD_MidEdgeX = 24;
     public double AD_LoadingStationX = 135;
@@ -87,8 +87,16 @@ public class Calibrations{
     public double AD_AccelLim = 0.75; //x% per second accel
     public double AD_AccelLimHab = 0.3;
     public double AD_MaxPowerHab = 0.3; //max power on the hab polygons (0 and 18)
+    public double AD_AccelLimHab2 = 1.0; //go a lot faster if starting from level 2 
+    public double AD_MaxPowerHab2 = 0.5;
+    public double AD_Hab2ResetAccel = 1.5;
+    public double AD_Hab2_RSE_Yoffset = -39;//offset when leaving hab2
+    public double AD_CargoShip_Xoffset = 0;//extra offset (from center of field) when running cargo ship, set diff in prac bot
+    public double AD_CargoShip_Yoffset = 3;//extra cargo ship Y offset
+    public double AD_RocketShip_Yoffset = 18;//extra offset (from wall) when running far rocket ship
+    public double AD_LoadingStation_Yoffset = -6;//extra offset for loading station pickup 
     public double AD_BlendDist = 15;//in inches begin blending next target point
-    public double AD_MaxDistError = 40;//maximum error allowed for rse reset
+    public double AD_MaxDistError = 80;//maximum error allowed for rse reset
     public double AD_FieldMaxX = 161 - (AD_RobotHeight/2);
     public double AD_FieldMaxY = 648 - (AD_RobotHeight/2);
     public double AD_ScoreDelayTime = 0.5;
@@ -111,7 +119,7 @@ public class Calibrations{
     public double GTH_Arm2CargoTimer = 0.5;
     public double GTH_Arm2HatchTimer = 1.75;
     public double GTH_ArmExtraIdlePwr = 0.20; //power applied after closing to prevent backdriving
-    public double GTH_StartTimer = 0.75; //seconds after enabled before the gatherer can run
+    public double GTH_StartTimer = 0.5; //seconds after enabled before the elevator can run
 
     public double GTH_CurrLimit = 14.0;//14
     public double GTH_CargoIntakeSpeed = 0.5;//0.6; // msc 0.5;
@@ -124,7 +132,7 @@ public class Calibrations{
     public double GTH_HatchHoldSpeed = 0.05;
     //Not Used public double GTH_ReleaseTime = 0.2; //time to spend auto shooting/gathering
     
-    public double GTH_CargoGatherTime = 0.5;
+    public double GTH_CargoGatherTime = 0.15;
     public double GTH_CargoShootTime = 0.5;
     public double GTH_HatchGatherTime = 0.2;
     public double GTH_HatchShootTime = 0.25;

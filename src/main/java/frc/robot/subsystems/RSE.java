@@ -3,10 +3,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.util.Util;
 import frc.robot.io.ControlBoard.NearFarCargo;
-import frc.robot.io.ControlBoard.RocketCargoshipPosition;
 import frc.robot.subsystems.autodrive.Point;
+import frc.robot.util.Angle;
+import frc.robot.util.Util;
 
 public class RSE extends Component {
 
@@ -146,6 +146,8 @@ public class RSE extends Component {
                 double yDest = k.AD_NearRocketYHatch;
                 double distError = Util.dist(x, y, xDest, yDest);
                 if(distError < k.AD_MaxDistError){
+                    SmartDashboard.putNumber("RSE_ErrX",x - xDest);
+                    SmartDashboard.putNumber("RSE_ErrY",y - yDest);
                     x = xDest;
                     y = yDest;
                 }
@@ -154,6 +156,8 @@ public class RSE extends Component {
                 double yDest = k.AD_FarRocketYHatch;
                 double distError = Util.dist(x, y, xDest, yDest);
                 if(distError < k.AD_MaxDistError){
+                    SmartDashboard.putNumber("RSE_ErrX",x - xDest);
+                    SmartDashboard.putNumber("RSE_ErrY",y - yDest);
                     x = xDest;
                     y = yDest;
                 }
@@ -167,8 +171,22 @@ public class RSE extends Component {
             double yDest = k.AD_RocketYCargo;
             double distError = Util.dist(x, y, xDest, yDest);
             if(distError < k.AD_MaxDistError){
+                SmartDashboard.putNumber("RSE_ErrX",x - xDest);
+                SmartDashboard.putNumber("RSE_ErrY",y - yDest);
                 x = xDest;
                 y = yDest;
+            }
+
+
+        //reset on falling off hab2
+        } else if(in.autoDrive && autoDriving.startingHab2 && Math.abs(sense.zAccel) > k.AD_Hab2ResetAccel){
+            autoDriving.startingHab2 = false;
+            if(in.leftNotRight){
+                x = -k.AD_HabEdgeX + k.AD_RobotWidth/2; 
+                y = k.AD_HabY + k.AD_RobotHeight/2 + k.AD_Hab2_RSE_Yoffset;
+            } else {
+                x = k.AD_HabEdgeX - k.AD_RobotWidth/2; 
+                y = k.AD_HabY + k.AD_RobotHeight/2 + k.AD_Hab2_RSE_Yoffset;
             }
         }
 
@@ -216,13 +234,19 @@ public class RSE extends Component {
 
         //convert to field dx 
         //TODO: consider using prevAngle + half the deltaAngle
-        double radAngle = prevRobotAngle * Math.PI / 180;
+        //using prev - delta because at this point, prev contains the current angle
+        double radAngle = Angle.toRad(prevRobotAngle - deltaRobotAngle*0.5);
         dx = sumDX * Math.cos(radAngle) - sumDY * Math.sin(radAngle);
         dy = sumDX * Math.sin(radAngle) + sumDY * Math.cos(radAngle);
 
         // update stored x and y 
-        x += dx;
-        y += dy;
+        if(autoDriving.startingHab2){
+            //dont update x and y when on hab2
+        } else {
+            x += dx;
+            y += dy;
+        }
+
 
         //stay in the field
         if(x > k.AD_FieldMaxX) x = k.AD_FieldMaxX;

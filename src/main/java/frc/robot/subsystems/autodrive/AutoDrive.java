@@ -3,6 +3,7 @@ package frc.robot.subsystems.autodrive;
 import java.util.Stack;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.io.ControlBoard.NearFarCargo;
 import frc.robot.subsystems.Component;
 import frc.robot.util.Util;
 import frc.robot.util.Filter;
@@ -20,12 +21,18 @@ public class AutoDrive extends Component{
     public int currPolyId;
     public double lastDist;
 
+    public boolean startingHab2 = false;
+
     public AutoDrive(){
         targetPoint = null;
         pathComplete = false;
+        startingHab2 = false;
     }
 
     public void run(){
+        if(in.controlBoard.jogDown && sense.isDisabled) startingHab2 = true;
+        if(in.controlBoard.jogUp) startingHab2 = false;
+
         if(targetPoint != null){
             SmartDashboard.putNumber("TargetX", targetPoint.x);
             SmartDashboard.putNumber("TargetY", targetPoint.y);
@@ -118,12 +125,35 @@ public class AutoDrive extends Component{
         //limit power further if on the hab
         double endPowerLim;
         double accelLim;
-        if(thisPoly == 18 || thisPoly == pathfinder.numPolygons + 18){
+        double xOffset;
+        double yOffset;
+        if(startingHab2){
+            endPowerLim = k.AD_MaxPowerHab2;
+            accelLim = k.AD_AccelLimHab2;
+            xOffset = 0;
+        } else if(thisPoly % pathfinder.numPolygons == 18){
             endPowerLim = k.AD_MaxPowerHab;
             accelLim = k.AD_AccelLimHab;
+            xOffset = 0;
         } else {
             endPowerLim = k.AD_MaxPower;
             accelLim = k.AD_AccelLim;
+            if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO) xOffset = k.AD_CargoShip_Xoffset;
+            else xOffset = 0;
+            if(in.leftNotRight) xOffset = -xOffset;
+        }
+
+        if(in.controlBoard.nearFarCargo == NearFarCargo.FAR) {
+            yOffset = k.AD_RocketShip_Yoffset;
+        } else if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO){
+            yOffset = k.AD_CargoShip_Yoffset;
+        } else {
+            yOffset = 0;
+        }
+    
+        //no y offset when going to loading station
+        if(thisPoly % pathfinder.numPolygons == 16){
+            yOffset = k.AD_LoadingStation_Yoffset;
         }
         
         //limit power increase per timestep
@@ -134,9 +164,18 @@ public class AutoDrive extends Component{
             powerLim = Math.min(powerLim, endPowerLim);
         }
 
+        //if we are driving off hab2, just drive and exit early
+        if(startingHab2){
+            retPoint.x = 0;
+            retPoint.y = -powerLim;
+            return retPoint;
+        }
+
         //calc powers for X and Y based on target point and rse
         double distX = n.location.x - rse.x;
         double distY = n.location.y - rse.y;
+        distX += xOffset;
+        distY += yOffset;
 
         //determine blend power
         double blendLim; 
@@ -170,6 +209,9 @@ public class AutoDrive extends Component{
 
             double distX2 = n2.location.x - rse.x;
             double distY2 = n2.location.y - rse.y;
+            distX2 += xOffset;
+            distY2 += yOffset;
+
             double r2 = Math.sqrt(distX2*distX2 + distY2*distY2);
             double rPwr2 = Util.limit(r2 * k.AD_AutoDriveKP, blendPwr);
             double theta2 = Math.atan2(distY2,distX2);

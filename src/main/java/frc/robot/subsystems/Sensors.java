@@ -34,6 +34,7 @@ public class Sensors extends Component {
     public boolean isAuto;
     public boolean isTeleop;
     public boolean navxGood;
+    public double zAccel;
 
     public double dt;
     private double prevTime;
@@ -100,7 +101,8 @@ public class Sensors extends Component {
         SmartDashboard.putBoolean("HasCargo",hasCargo);
         SmartDashboard.putBoolean("HasHatch",hasHatch);
 
-        SmartDashboard.putNumber("AccelZ", navx.getWorldLinearAccelZ());
+        zAccel = navx.getWorldLinearAccelZ();
+        SmartDashboard.putNumber("AccelZ", zAccel);
     }
 
     public double nxX = 0;

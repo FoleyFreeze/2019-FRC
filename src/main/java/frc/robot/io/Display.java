@@ -16,6 +16,8 @@ public class Display extends Component{
 	NetworkTableEntry currPoly;
 	NetworkTableEntry lastDist;
 	NetworkTableEntry startLocName;
+	NetworkTableEntry hab2Status;
+	NetworkTableEntry robotAngle;
 
     public Display(){
 
@@ -29,6 +31,8 @@ public class Display extends Component{
 		currPoly = compTab.add("CurrPoly",0).withPosition(1,1).getEntry();
 		lastDist = compTab.add("LastRSEdist",0).withPosition(2,2).getEntry();
 		startLocName = compTab.add("HabStartLoc","None").withPosition(1,0).getEntry();
+		hab2Status = compTab.add("Hab2Start",false).withPosition(0,2).getEntry();
+		robotAngle = compTab.add("RobotAngle",0).withPosition(0,3).getEntry();
     }
 	
 	public void run(){
@@ -40,6 +44,8 @@ public class Display extends Component{
 		currPoly.setDouble(autoDriving.currPolyId);
 		lastDist.setDouble(autoDriving.lastDist);
 		startLocName.setString(rse.habStartLoc);
+		hab2Status.setBoolean(autoDriving.startingHab2);
+		robotAngle.setDouble(sense.robotAngle.getDeg());
 	}
 
 }

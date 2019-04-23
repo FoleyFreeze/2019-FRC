@@ -325,8 +325,11 @@ public class Inputs extends Component {
 
             //autoDrive logic //replaced ready button with fake auto button
             //autoDrive = gamePad.autoDrive && actionRight && !sense.hasHatchEdge && !sense.hasCargoEdge;
+            SmartDashboard.putNumber("MatchTime", Timer.getMatchTime());
+            //boolean startingAuton = sense.isAuto && Timer.getMatchTime() < 14.2 || !sense.isAuto;
             autoDrive = gamePad.autoDrive && !pauseAutoDrive;
             autoDriveRising = autoDrive && !prevAutoDrive;
+            boolean autoDriveFalling = !autoDrive && prevAutoDrive;
             prevAutoDrive = autoDrive;
 
             if(gamePad.autoDrive && (sense.hasHatchEdge || sense.hasCargoEdge)){
@@ -369,7 +372,7 @@ public class Inputs extends Component {
                     //by not calling any elevator or orientation functions, the variables retain their previous values
                 }
             } else {
-                if(latchReady || sense.hasHatchEdge || sense.hasCargoEdge) allowAutoAutoRotation = false;
+                if(autoDriveFalling || pauseAutoDrive || latchReady || sense.hasHatchEdge || sense.hasCargoEdge) allowAutoAutoRotation = false;
 
                 latchReady = false;
                 //not ready, so keep elevator down
@@ -390,7 +393,7 @@ public class Inputs extends Component {
             elevatorStage |= actionRightRising;
             //when we see a target, leave staging
             elevatorStage &= !view.lastTargetsGood(2);
-            //TODO: determine if we need to do anything special when in autodrive
+            //TODO: stage also needs to check that angle is close to target
 
             visionTargetLow = (!cargoNotHatch || controlBoard.nearFarCargo == NearFarCargo.CARGO && sense.hasCargo) && actionRight && gamePad.camDrive;
             visionTargetHigh = cargoNotHatch && actionRight && sense.hasCargo && gamePad.camDrive && controlBoard.nearFarCargo != NearFarCargo.CARGO;
@@ -515,6 +518,7 @@ public class Inputs extends Component {
     public void setElevatorHeight(boolean ready){
         //to help with the start hatch position (only in auto)
         if((Timer.getFPGATimestamp() < gatherTimer && sense.isAuto) || gamePad.fakeAuto ) {
+            gatherHatch = true;
             elevatorTarget = ElevatorPosition.DONT_MOVE;
             return;
         }
@@ -548,7 +552,12 @@ public class Inputs extends Component {
         if(!ready && autoNotManualMode){
             //if not ready, stay down
             if(cargoNotHatch){
-                elevatorTarget = ElevatorPosition.FLOOR;
+                if(sense.hasCargo){
+                    //once we have a cargo, stage to level 1 hatch
+                    elevatorTarget = ElevatorPosition.ROCKET_1_HATCH;
+                } else {
+                    elevatorTarget = ElevatorPosition.FLOOR;
+                }
             } else {
                 elevatorTarget = ElevatorPosition.LOADING_STATION;
             }

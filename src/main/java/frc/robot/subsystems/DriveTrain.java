@@ -37,7 +37,7 @@ public class DriveTrain extends Component {
             return;
         }
 
-        if(!k.DRV_DisableAutoOrient && in.autoOrientRobot && Math.abs(in.robotOrientation) < 360){
+        if(!k.DRV_DisableAutoOrient && in.autoOrientRobot && !sense.isAuto && Math.abs(in.robotOrientation) < 360){
             double rotPower = pidOrient();
             if(in.fieldOriented)fieldSwerve(in.xAxisDrive, in.yAxisDrive, rotPower);
             else swerve(in.xAxisDrive, in.yAxisDrive, rotPower);
@@ -88,7 +88,7 @@ public class DriveTrain extends Component {
 
             //get rot power form pidOrient, scale rotate power by autodrive power
             double autoRot;
-            if(autoDriving.enableAutoTurn) autoRot = pidOrient() * autoDriving.powerLim;
+            if(autoDriving.enableAutoTurn && !autoDriving.startingHab2) autoRot = pidOrient() * autoDriving.powerLim;
             else autoRot = 0;
             
             //field swerve
@@ -137,6 +137,8 @@ public class DriveTrain extends Component {
     }
 
     private double pidOrient(){
+        if(autoDriving.startingHab2 && sense.isAuto) return 0;
+        
         //PID rotation until robot angle equals robotOrientation
         double angleErr = sense.robotAngle.subDeg(in.robotOrientation);
         SmartDashboard.putNumber("autoRotateError", angleErr);
