@@ -5,6 +5,7 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 import frc.robot.subsystems.Component;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Pathfinder extends Component {
 
@@ -258,13 +259,18 @@ public class Pathfinder extends Component {
     }
 
     private int getDestPolyHelper(){
-        if(!sense.hasHatch && !in.cargoNotHatch){
+        
+        //go to loading station to gather a hatch (except at the beginning of auton)
+        if( !sense.hasHatch && Timer.getFPGATimestamp() > in.gatherTimer && !in.cargoNotHatch){
             return 16;
         }
+
+        //cant help find cargo
         if(!sense.hasCargo && in.cargoNotHatch){
             return -1;//auto drive cannot help find cargo
         }
 
+        //select destination polygon based on button states
         switch(in.controlBoard.nearFarCargo){
             case CARGO:
                 switch(in.controlBoard.rocketCargoState){

@@ -49,7 +49,7 @@ public class Inputs extends Component {
     public boolean pitMode;
     public boolean shoot;
     public boolean gather;
-    private double gatherTimer; 
+    public double gatherTimer;
 
     public boolean leftNotRight;
     public boolean autoNotManualMode;
