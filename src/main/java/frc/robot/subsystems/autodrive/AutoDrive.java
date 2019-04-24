@@ -123,10 +123,14 @@ public class AutoDrive extends Component{
 
 
         //limit power further if on the hab
+        //also offset x and y as an easy hack when there are repeatable errors in the path following
         double endPowerLim;
         double accelLim;
         double xOffset;
         double yOffset;
+        Node finalNode = path.get(0);
+        int num = finalNode.poly.id % pathfinder.numPolygons;
+
         if(startingHab2){
             endPowerLim = k.AD_MaxPowerHab2;
             accelLim = k.AD_AccelLimHab2;
@@ -138,21 +142,28 @@ public class AutoDrive extends Component{
         } else {
             endPowerLim = k.AD_MaxPower;
             accelLim = k.AD_AccelLim;
-            if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO) xOffset = k.AD_CargoShip_Xoffset;
-            else xOffset = 0;
+            //if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO) {
+            if(num >= 4 || num <= 6) {
+                xOffset = k.AD_CargoShip_Xoffset / path.size();
+            } else {
+                xOffset = 0;
+            }
             if(in.leftNotRight) xOffset = -xOffset;
         }
 
-        if(in.controlBoard.nearFarCargo == NearFarCargo.FAR) {
-            yOffset = k.AD_RocketShip_Yoffset;
-        } else if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO){
-            yOffset = k.AD_CargoShip_Yoffset;
+        //if(in.controlBoard.nearFarCargo == NearFarCargo.FAR) {
+        if(num == 9) {
+            yOffset = k.AD_RocketShip_Yoffset / path.size();
+        //} else if(in.controlBoard.nearFarCargo == NearFarCargo.CARGO){
+        } else if(num >= 4 || num <= 6) {
+            yOffset = k.AD_CargoShip_Yoffset / path.size();
         } else {
             yOffset = 0;
         }
     
         //no y offset when going to loading station
         if(thisPoly % pathfinder.numPolygons == 16){
+        //if(num == 16) {
             yOffset = k.AD_LoadingStation_Yoffset;
         }
         
