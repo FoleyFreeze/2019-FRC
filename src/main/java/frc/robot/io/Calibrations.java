@@ -196,7 +196,7 @@ public class Calibrations{
 
     // climb cals
     //Not Used public double CLM_MotorSpeedUp = 0.15;
-    public double CLM_MotorSpeedDn = 0.15;
+    public double CLM_MotorSpeedDn = -1;//now shift climb is full power up
     public double CLM_EncoderLimit = 65;
     public double CLM_Zone_1 = 20;
     public double CLM_Zone_Half = 10;
