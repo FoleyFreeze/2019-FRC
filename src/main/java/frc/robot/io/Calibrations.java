@@ -20,7 +20,7 @@ public class Calibrations{
 
     // drive cals
     
-    public double DRV_TurnGearRatio = 20/60.0 * 20/60.0 * 38/64.0;
+    public double DRV_TurnGearRatio = 20/60.0 * 20/60.0 * 40/64.0;
     public boolean DRV_PIDOnSpark = true;
     public double DRV_TurnSparkKP = 0.25;
     public double DRV_TurnSparkKI = 0;
@@ -63,9 +63,9 @@ public class Calibrations{
     public double DRV_AutoRotatePwr = 0.3; //max auto rotate power
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
-    public double DRV_CamCargoThetaKP = 0.025;//0.020; //MSC was 0.015;// msc  0.01; //power per degree
+    public double DRV_CamCargoThetaKP = 0.020;//0.025;//0.020; //MSC was 0.015;// msc  0.01; //power per degree
     public double DRV_CamCargoThetaKD = 0.04;//MSC was 0.015; // mscc 0.01;
-    public double DRV_CamCargoDistKP = -0.06;//-0.06;//-0.04;//MSC was -0.02;//-0.03; // msc -0.02; //power per inch
+    public double DRV_CamCargoDistKP = -0.04;//-0.06;//-0.06;//-0.04;//MSC was -0.02;//-0.03; // msc -0.02; //power per inch
     public double DRV_CamCargoPwrLim = 0.8;//MSC was 0.6;//0.5; // msc 0.5;
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
@@ -252,13 +252,13 @@ public class Calibrations{
     public double CAM_SCR_AllowShootCargoCSXErr = 10;//overrides angle when cargo going to cargo ship
     public double CAM_SCR_AllowShootCargoRKTXErr = 10;//overrides angle when cargo going to cargo ship
 
-    public double CAM_GTH_MainTargetOffset = 0; //subtract this offset from all targets
+    public double CAM_GTH_MainTargetOffset = -3; //subtract this offset from all targets
     public double CAM_GTH_Stage1Offset = 6;//8 //extra offset when the angle isn't aligned yet
     public double CAM_GTH_Cargo_CS_Offset = 2;//arm gather cargo in cargo ship offset 
     public double CAM_GTH_Cargo_RKT_Offset = -2;//arm gather cargo in rocket offset
     public double CAM_GTH_Hatch_CS_Offset = 1;//2; // msc 0;//arm gather hatch in cargo ship offset
     public double CAM_GTH_Hatch_RKT_Offset = 2;//arm gather hatch in rocket offset
-    public double CAM_GTH_Hatch_LS_Offset = -1;//arm gather hatch in loading station offset
+    public double CAM_GTH_Hatch_LS_Offset = -2;//arm gather hatch in loading station offset
     public double CAM_GTH_Cargo_CS_XErrLimit = 15;//arm gather angle limit for cargo on cargo ship
     public double CAM_GTH_Cargo_RKT_XErrLimit = 2;//arm gather angle limit for cargo in rocket
     public double CAM_GTH_XErrLimit = 1;//1.5;//arm gather angle limit for everything else

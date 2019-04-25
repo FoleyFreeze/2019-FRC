@@ -116,7 +116,7 @@ public class LEDs extends Component{
         } else if(drive.autoShoot){
             mainLeds.set(LED_Driver_Table.Solid_Colors_White);
         } else if(sense.hasCargo){
-            if(in.leftNotRight){
+            /*if(in.leftNotRight){
                 if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.HI){
                     FAST = true;
                     if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Dark_red);
@@ -146,9 +146,10 @@ public class LEDs extends Component{
                 }else{
                     mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
                 }
-            }
+            }*/
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Lave);
         } else if(sense.hasHatch){
-            if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.HI){
+           /* if(in.controlBoard.rocketCargoState == RocketCargoshipPosition.HI){
                 FAST = true;
                 if(blinkState)mainLeds.set(LED_Driver_Table.Solid_Colors_Dark_Green);
                 else mainLeds.set(LED_Driver_Table.Solid_Colors_Black);
@@ -162,7 +163,7 @@ public class LEDs extends Component{
             }else{
                 mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Forest);
             }
-        } else {
+        } else {*/
             mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Ocean);
         } 
     }
