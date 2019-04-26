@@ -251,7 +251,7 @@ public class Inputs extends Component {
         if(!k.CLM_disable){
             boolean temp = controlBoard.climb;
             climb = temp && !shift;
-            reverseClimb = false;// never backdrive the climber //(temp && shift);
+            reverseClimb = (temp && shift);
             if(climb) {
                 cargoNotHatch = false;
                 elevatorLockout = true;
@@ -528,7 +528,8 @@ public class Inputs extends Component {
             //return;
             controlBoard.rocketCargoState = ControlBoard.RocketCargoshipPosition.LO;
             controlBoard.nearFarCargo = ControlBoard.NearFarCargo.NEAR;
-            if(climber.stage > 1){
+            //if(climber.stage > 1){
+            if(sense.climberEncoder >= k.CLM_LowerEleHeight){
                 elevatorTarget = ElevatorPosition.FLOOR; //does this need to be cargo?
             } else {
                 elevatorTarget = ElevatorPosition.ROCKET_1_HATCH; //does this need to be cargo?

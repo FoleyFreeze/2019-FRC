@@ -21,11 +21,11 @@ public class Climber extends Component{
 
                 if(sense.climberEncoder < k.CLM_Zone_1){
                     out.climbMotor(k.CLM_Zone_Power_1);
-                    if(sense.climberEncoder < k.CLM_Zone_Half){
-                        stage = 0;
-                    } else {
+                    //if(sense.climberEncoder < k.CLM_Zone_Half){
+                    //    stage = 0;
+                    //} else {
                         stage = 1;
-                    }
+                    //}
                 } 
                 else if(sense.climberEncoder < k.CLM_Zone_2){
                     out.climbMotor(k.CLM_Zone_Power_2);

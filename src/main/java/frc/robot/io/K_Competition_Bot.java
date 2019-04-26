@@ -13,9 +13,9 @@ public class K_Competition_Bot extends Calibrations{
 
             AD_CargoShip_Xoffset = 3;
         } else {
-            SEN_AbsAngleFL = .08789;
+            SEN_AbsAngleFL = -2.08;//.08789;
             SEN_AbsAngleFR = 21.533;
-            SEN_AbsAngleRL = -105.117;
+            SEN_AbsAngleRL = -34.7;//-105.117;
             SEN_AbsAngleRR = -39.814;
         }
 

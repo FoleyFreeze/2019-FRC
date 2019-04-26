@@ -195,6 +195,7 @@ public class OutputsCompBot extends Outputs {
         if(!k.CLM_disable){
             climbMotor = new CANSparkMax(ElectroJendz.CLM_MotorID, MotorType.kBrushless);
             climbMotor.setIdleMode(IdleMode.kBrake);
+            climbMotor.setSmartCurrentLimit(k.CLM_StallCurrentLimit, k.CLM_CurrentLimit);
         }
     }
 
@@ -342,6 +343,7 @@ public class OutputsCompBot extends Outputs {
     @Override
     public void resetEleEnc(){
         elevatorMotor.getEncoder().setPosition(0);
+        climbMotor.getEncoder().setPosition(0);
         //gatherArmMotor.setSelectedSensorPosition(0);
         //gatherArmMotor.getEncoder().setPotition(0);
     }

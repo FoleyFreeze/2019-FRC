@@ -161,10 +161,14 @@ public class LEDs extends Component{
                 FAST = false;
                 mainLeds.set(LED_Driver_Table.Solid_Colors_Lime);
             }else{
-                mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Forest);
+                
             }
         } else {*/
+            mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Forest);
+        }
+         else {
             mainLeds.set(LED_Driver_Table.Fixed_Palette_Pattern_Rainbow_Ocean);
-        } 
+         }
+          
     }
 }

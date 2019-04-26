@@ -28,10 +28,10 @@ public class Calibrations{
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
     //Not Used public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double DRV_WheelDiameterFL = 3.756; //b4 CMP was: 2.908;//2.998;
-    public double DRV_WheelDiameterFR = 3.756; //b4 CMP was: 2.905;//2.985;
-    public double DRV_WheelDiameterRL = 3.756; //b4 CMP was: 3.065;
-    public double DRV_WheelDiameterRR = 3.756; //b4 CMP was: 3.009;
+    public double DRV_WheelDiameterFL = 3;//3.594;//3.565; //3.756; //b4 CMP was: 2.908;//2.998;
+    public double DRV_WheelDiameterFR = 3;//3.594;//3.565; //3.756; //b4 CMP was: 2.905;//2.985;
+    public double DRV_WheelDiameterRL = 3;//3.594;//3.565; //3.756; //b4 CMP was: 3.065;
+    public double DRV_WheelDiameterRR = 3;//3.594;//3.565; //3.756; //b4 CMP was: 3.009;
     public double   DRV_WheelGearRatio = 10.0/24.0*0.5*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
@@ -64,9 +64,9 @@ public class Calibrations{
     public double DRV_AxisExpo = 1.4; //drive axes are powered by this value
     public boolean DRV_DisableAutoOrient = false; //disable PID to correct robot orientation
     public double DRV_CamCargoThetaKP = 0.020;//0.025;//0.020; //MSC was 0.015;// msc  0.01; //power per degree
-    public double DRV_CamCargoThetaKD = 0.04;//MSC was 0.015; // mscc 0.01;
+    public double DRV_CamCargoThetaKD = 0.02;//MSC was 0.015; // mscc 0.01;
     public double DRV_CamCargoDistKP = -0.04;//-0.06;//-0.06;//-0.04;//MSC was -0.02;//-0.03; // msc -0.02; //power per inch
-    public double DRV_CamCargoPwrLim = 0.8;//MSC was 0.6;//0.5; // msc 0.5;
+    public double DRV_CamCargoPwrLim = 0.7;//MSC was 0.6;//0.5; // msc 0.5;
 	public double DRV_CamHatchDeliverForwardPower = 0.2;
 
     //auto drive cals
@@ -198,15 +198,17 @@ public class Calibrations{
     //Not Used public double CLM_MotorSpeedUp = 0.15;
     public double CLM_MotorSpeedDn = -1;//now shift climb is full power up
     public double CLM_EncoderLimit = 65;
-    public double CLM_Zone_1 = 20;
-    public double CLM_Zone_Half = 10;
-    public double CLM_Zone_2 = 60;
+    public double CLM_LowerEleHeight = 20;
+    public double CLM_Zone_1 = 20;//15;//30;//20;
+    public double CLM_Zone_2 = 60;//83;//75;//67;//60;
     public double CLM_Zone_3 = CLM_EncoderLimit;
     public double CLM_Zone_Power_1 = 0.6; //.6
     public double CLM_Zone_Power_2 = 1;
     public double CLM_Zone_Power_3 = 0.05;
     public double CLM_DrivePower = 0.4; // .3 //how fast to drive at the wall after/during the climb
-
+    public int CLM_StallCurrentLimit = 100;
+    public int CLM_CurrentLimit = 60;
+    
     
     // input cals
     public double IN_DodgingMin = 0.2;
