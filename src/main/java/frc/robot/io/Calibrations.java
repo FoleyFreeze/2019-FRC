@@ -197,17 +197,17 @@ public class Calibrations{
     // climb cals
     //Not Used public double CLM_MotorSpeedUp = 0.15;
     public double CLM_MotorSpeedDn = -1;//now shift climb is full power up
-    public double CLM_EncoderLimit = 65;
+    public double CLM_EncoderLimit = 70;
     public double CLM_LowerEleHeight = 20;
-    public double CLM_Zone_1 = 20;//15;//30;//20;
-    public double CLM_Zone_2 = 60;//83;//75;//67;//60;
+    public double CLM_Zone_1 = 15;//15;//30;//20;
+    public double CLM_Zone_2 = 61;//83;//75;//67;//60;
     public double CLM_Zone_3 = CLM_EncoderLimit;
-    public double CLM_Zone_Power_1 = 0.6; //.6
+    public double CLM_Zone_Power_1 = 0.7; //.6
     public double CLM_Zone_Power_2 = 1;
-    public double CLM_Zone_Power_3 = 0.05;
+    public double CLM_Zone_Power_3 = 0.15;
     public double CLM_DrivePower = 0.4; // .3 //how fast to drive at the wall after/during the climb
     public int CLM_StallCurrentLimit = 100;
-    public int CLM_CurrentLimit = 60;
+    public int CLM_CurrentLimit = 70;
     
     
     // input cals

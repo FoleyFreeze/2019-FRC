@@ -215,6 +215,8 @@ public class OutputsCompBot extends Outputs {
         }
         if(!k.CLM_disable){
             sense.climberEncoder = climbMotor.getEncoder().getPosition();//value in motor rotations
+            SmartDashboard.putNumber("ClimbMotorCurrent",climbMotor.getOutputCurrent());
+            SmartDashboard.putNumber("ClimbMotorVoltage",climbMotor.getBusVoltage());
         }
         if(!k.GTH_DisableGather && k.SCR_ScorpioSelected){
             sense.scorpioArmEnc = gatherArmMotor.getEncoder().getPosition();
