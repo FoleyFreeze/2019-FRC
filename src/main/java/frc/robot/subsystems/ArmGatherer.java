@@ -40,7 +40,7 @@ public class ArmGatherer extends Component{
        
         //out.suction(in.hatchGather);
         
-        SmartDashboard.putString("GatherArmState", gatherState.name());
+        //SALwasHere-SmartDashboard.putString("GatherArmState", gatherState.name());
 
         switch(gatherState){
             case WAIT:

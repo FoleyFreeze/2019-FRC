@@ -34,13 +34,13 @@ public class AutoDrive extends Component{
         if(in.controlBoard.jogUp) startingHab2 = false;
 
         if(targetPoint != null){
-            SmartDashboard.putNumber("TargetX", targetPoint.x);
-            SmartDashboard.putNumber("TargetY", targetPoint.y);
+            //SALwasHere-SmartDashboard.putNumber("TargetX", targetPoint.x);
+            //SALwasHere-SmartDashboard.putNumber("TargetY", targetPoint.y);
         } else {
-            SmartDashboard.putNumber("TargetX", 0);
-            SmartDashboard.putNumber("TargetY", 0);
+            //SALwasHere-SmartDashboard.putNumber("TargetX", 0);
+            //SALwasHere-SmartDashboard.putNumber("TargetY", 0);
         }
-        SmartDashboard.putBoolean("pathComplete", pathComplete);
+        //SALwasHere-SmartDashboard.putBoolean("pathComplete", pathComplete);
 
         if(k.AD_Disabled || !in.autoDrive) {
             pathComplete = false;
@@ -191,7 +191,7 @@ public class AutoDrive extends Component{
         //determine blend power
         double blendLim; 
         double blendDist = Util.lineDist(n.location, n.edgePoint, rse.x, rse.y);
-        SmartDashboard.putNumber("BlendDist",blendDist);
+        //SALwasHere-SmartDashboard.putNumber("BlendDist",blendDist);
         if (path.size() >= 2) blendLim = Math.min(powerLim*blendDist/k.AD_BlendDist, powerLim);
         else blendLim = powerLim;
 
@@ -205,8 +205,8 @@ public class AutoDrive extends Component{
         double autoX = rPwr * Math.cos(theta);
         double autoY = rPwr * Math.sin(theta);
 
-        SmartDashboard.putNumber("AD_pwr_x1",autoX);
-        SmartDashboard.putNumber("AD_pwr_y1",autoY);
+        //SALwasHere-SmartDashboard.putNumber("AD_pwr_x1",autoX);
+        //SALwasHere-SmartDashboard.putNumber("AD_pwr_y1",autoY);
 
         //if power is low, get the next point and add its value
         
@@ -215,8 +215,8 @@ public class AutoDrive extends Component{
             
             Node n2 = path.get(path.size() - 2); //get the second thing off the stack
 
-            SmartDashboard.putNumber("BlendTargetX", n2.location.x);
-            SmartDashboard.putNumber("BlendTargetY", n2.location.y);
+            //SALwasHere-SmartDashboard.putNumber("BlendTargetX", n2.location.x);
+            //SALwasHere-SmartDashboard.putNumber("BlendTargetY", n2.location.y);
 
             double distX2 = n2.location.x - rse.x;
             double distY2 = n2.location.y - rse.y;
@@ -230,8 +230,8 @@ public class AutoDrive extends Component{
             double xPwr2 = rPwr2 * Math.cos(theta2);
             double yPwr2 = rPwr2 * Math.sin(theta2);
 
-            SmartDashboard.putNumber("AD_pwr_x2",xPwr2);
-            SmartDashboard.putNumber("AD_pwr_y2",yPwr2);
+            //SALwasHere-SmartDashboard.putNumber("AD_pwr_x2",xPwr2);
+            //SALwasHere-SmartDashboard.putNumber("AD_pwr_y2",yPwr2);
 
             //add them together
             autoX += xPwr2;

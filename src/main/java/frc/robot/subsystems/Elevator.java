@@ -35,7 +35,7 @@ public class Elevator extends Component {
                 elevate = "I'm going no where...";
             }
         }
-        SmartDashboard.putString("Elevator Status", elevate);
+        //SALwasHere-SmartDashboard.putString("Elevator Status", elevate);
     }
 
     // elevator goes to set position value

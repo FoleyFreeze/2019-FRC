@@ -121,7 +121,7 @@ public class Calibrations{
     public double GTH_ArmExtraIdlePwr = 0.20; //power applied after closing to prevent backdriving
     public double GTH_StartTimer = 0.5; //seconds after enabled before the elevator can run
 
-    public double GTH_CurrLimit = 14.0;//14
+    public double GTH_CurrLimit = 15.0;//14
     public double GTH_CargoIntakeSpeed = 0.5;//0.6; // msc 0.5;
     public double GTH_CargoShootSpeedFast = 0.2;//0.16;//0.13;//0.27;// 0.4; //.2 
     public double GTH_CargoShootSpeedSlow = 0.2;//0.16;//0.13;//0.27;//0.4; //.2

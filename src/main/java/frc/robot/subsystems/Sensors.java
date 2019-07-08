@@ -84,13 +84,13 @@ public class Sensors extends Component {
         //SmartDashboard.putNumberArray("WheelAngles", rawAngles);
 
         navxGood = navx.isConnected();
-        SmartDashboard.putBoolean("navxgood", navxGood);
+        //SALwasHere-SmartDashboard.putBoolean("navxgood", navxGood);
         estNavxPosition();
 
         robotAngle.setDeg(-navx.getYaw() + k.SEN_NAVX_Offset); 
         deltaRobotAngle = robotAngle.subDeg(prevRobotAngle);
         prevRobotAngle = robotAngle.getDeg();
-        SmartDashboard.putNumber("Angle of Robot", robotAngle.getDeg());
+        //SALwasHere-SmartDashboard.putNumber("Angle of Robot", robotAngle.getDeg());
         out.getEnc();
 
         double time = Timer.getFPGATimestamp();
@@ -98,11 +98,11 @@ public class Sensors extends Component {
         prevTime = time;
         SmartDashboard.putNumber("dt",dt);
 
-        SmartDashboard.putBoolean("HasCargo",hasCargo);
-        SmartDashboard.putBoolean("HasHatch",hasHatch);
+        //SALwasHere-SmartDashboard.putBoolean("HasCargo",hasCargo);
+        //SALwasHere-SmartDashboard.putBoolean("HasHatch",hasHatch);
 
         zAccel = navx.getWorldLinearAccelZ();
-        SmartDashboard.putNumber("AccelZ", zAccel);
+        //SALwasHere-SmartDashboard.putNumber("AccelZ", zAccel);
     }
 
     public double nxX = 0;
@@ -120,8 +120,8 @@ public class Sensors extends Component {
         nxX = nxOffsetX + navx.getDisplacementX() * 100/2.54;//convert from meters to inches
         nxY = nxOffsetY + navx.getDisplacementY() * 100/2.54;
 
-        SmartDashboard.putNumber("NavxX", nxX);
-        SmartDashboard.putNumber("NavxY", nxY);
+        //SALwasHere-SmartDashboard.putNumber("NavxX", nxX);
+        //SALwasHere-SmartDashboard.putNumber("NavxY", nxY);
     }
 }
 

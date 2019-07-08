@@ -160,7 +160,7 @@ public class Inputs extends Component {
         if(dixon)stopDixon = "Stop messing with the joysticks, Dixon!";
         else stopDixon = "   ";
 
-        SmartDashboard.putString("Dixon Detector", stopDixon);
+        //SALwasHere-SmartDashboard.putString("Dixon Detector", stopDixon);
 
         //add joystick expo
         xAxisDrive = Math.signum(xAxisDrive) * Math.pow(Math.abs(xAxisDrive), k.DRV_AxisExpo);
@@ -188,7 +188,7 @@ public class Inputs extends Component {
         
         if(actionRightFalling) autoShootHold = false;
         if(drive.autoShoot) autoShootHold = true;
-        SmartDashboard.putBoolean("autoShootHold", autoShootHold);
+        //SALwasHere-SmartDashboard.putBoolean("autoShootHold", autoShootHold);
 
         actionLeft = gamePad.leftTrigger > k.IN_DodgingMin || !k.CAM_AutoShootDisabled && autoShootHold;
         actionLeftRising = actionLeft && !prevActionLeft;
@@ -210,10 +210,10 @@ public class Inputs extends Component {
         shoot = controlBoard.shoot;
         if(sense.isDisabled) gatherTimer = Timer.getFPGATimestamp() + k.GTH_StartTimer;
         gather = controlBoard.gather /*&& Timer.getFPGATimestamp() > gatherTimer*/;
-        SmartDashboard.putBoolean("Pit Mode", pitMode);
+        //SALwasHere-SmartDashboard.putBoolean("Pit Mode", pitMode);
 
-        SmartDashboard.putBoolean("ActionLeft", actionLeft);
-        SmartDashboard.putBoolean("ActionRight", actionRight);  
+        //SALwasHere-SmartDashboard.putBoolean("ActionLeft", actionLeft);
+        //SALwasHere-SmartDashboard.putBoolean("ActionRight", actionRight);  
 
         autoElevator = true;
         //releaseCargo = false;
@@ -268,23 +268,23 @@ public class Inputs extends Component {
             //when disabled require a new button press before moving
             elevatorTarget = ElevatorPosition.DONT_MOVE;
         }
-        SmartDashboard.putString("Elevator Location", elevatorTarget.name());
+        //SALwasHere-SmartDashboard.putString("Elevator Location", elevatorTarget.name());
 
         if(flipOrientation){
             flipOrientation();
         }
-        SmartDashboard.putBoolean("Flip Orientation", flipOrientation);
+        //SALwasHere-SmartDashboard.putBoolean("Flip Orientation", flipOrientation);
 
         if(compassDrive){
             compassDrive();
         }
-        SmartDashboard.putBoolean("Compass Drive", compassDrive);
+        //SALwasHere-SmartDashboard.putBoolean("Compass Drive", compassDrive);
 
-        SmartDashboard.putBoolean("Pit Mode", pitMode);
+        //SALwasHere-SmartDashboard.putBoolean("Pit Mode", pitMode);
 
         //double remainingShootTime = autoShootTime - Timer.getFPGATimestamp();
 
-        SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
+        //SALwasHere-SmartDashboard.putBoolean("AutoShoot", drive.autoShoot);
 
         if(sense.isDisabled) allowAutoAutoRotation = false;
 		
@@ -325,7 +325,7 @@ public class Inputs extends Component {
 
             //autoDrive logic //replaced ready button with fake auto button
             //autoDrive = gamePad.autoDrive && actionRight && !sense.hasHatchEdge && !sense.hasCargoEdge;
-            SmartDashboard.putNumber("MatchTime", Timer.getMatchTime());
+            //SALwasHere-SmartDashboard.putNumber("MatchTime", Timer.getMatchTime());
             //boolean startingAuton = sense.isAuto && Timer.getMatchTime() < 14.2 || !sense.isAuto;
             autoDrive = gamePad.autoDrive && !pauseAutoDrive;
             autoDriveRising = autoDrive && !prevAutoDrive;
@@ -343,7 +343,7 @@ public class Inputs extends Component {
             }
 
 
-            SmartDashboard.putBoolean("AutoDrive", autoDrive);
+            //SALwasHere-SmartDashboard.putBoolean("AutoDrive", autoDrive);
 
             //handle sense.hasThing rising and falling edges
             sense.hasHatchEdge = sense.hasHatch != sense.prevHasHatch;
@@ -463,8 +463,8 @@ public class Inputs extends Component {
         enableCamera = targetAnything || k.CAM_DebugCargo || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow;
         camLightsOn = scoringCargo || searchingHatch || k.CAM_DebugTargetHigh || k.CAM_DebugTargetLow; //no lights for cargo targeting
         
-        SmartDashboard.putNumber("TargetOrientation", robotOrientation);
-        SmartDashboard.putBoolean("latchReady",latchReady);
+        //SALwasHere-SmartDashboard.putNumber("TargetOrientation", robotOrientation);
+        //SALwasHere-SmartDashboard.putBoolean("latchReady",latchReady);
         
     }
 

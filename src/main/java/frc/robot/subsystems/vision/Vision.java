@@ -13,7 +13,9 @@ import frc.robot.util.Angle;
 import frc.robot.util.LimitedStack;
 import frc.robot.subsystems.autodrive.Point;
 
-public class Vision extends Component {
+//public class Vision extends Component {
+
+public class Vision extends Component implements PiEvent {
 
     DigitalInput testInput;
 
@@ -33,7 +35,7 @@ public class Vision extends Component {
     double lastIntTime;
     double deltaIntTime;
 
-    public Vision() {
+    public Vision() {   //Vision Constructor
         /*
         lastIntTime = Timer.getFPGATimestamp();
         testInput = new DigitalInput(1);
@@ -46,6 +48,7 @@ public class Vision extends Component {
         });*/
 
         piCommands = NetworkTableInstance.getDefault().getTable("PiControl");
+        NetworkTableInstance.getDefault().setUpdateRate(.020);
         piFindCargo = piCommands.getEntry("FindCargo");
         piFindTargetHigh = piCommands.getEntry("FindTargetHigh");
         piFindTargetLow = piCommands.getEntry("FindTargetLow");
@@ -54,189 +57,164 @@ public class Vision extends Component {
         targetHighStack = new LimitedStack<>(5);
         targetLowStack = new LimitedStack<>(5);
         cargoStack = new LimitedStack<>(5);
-        if(!k.CAM_Disabled){
-            NetworkTable nt = NetworkTableInstance.getDefault().getTable("Vision");
-            nt.addEntryListener("vis_target_high", (table,key,entry,value,flags) -> {
-                try{
-                    VisionData vd = new VisionData();
-                    String data = value.getString(); //seqNum, dist, angleTo, angleOf, etc?
-                    SmartDashboard.putString("VisionTargetHigh", data);
-                    String[] parts = data.split(",");
 
-                    //int seqNum = Integer.parseInt(parts[0]);
-                    //SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
-                    //lastSeqNum = seqNum;
+        // Start listening for messages from the Pi
+        PiListener pl = new PiListener(this, 65432, "10.9.10.2");
+        Thread t = new Thread(null, pl, "PiListener");
+        t.start();
 
-                    vd.distance = Double.parseDouble(parts[2]);
-                    vd.angleTo = Double.parseDouble(parts[3]);
-                    vd.angleOf = Double.parseDouble(parts[4]);
+    } //end of Vision Constructor
 
-                    vd.timeStamp = Timer.getFPGATimestamp();
-                    vd.robotAngle = sense.robotAngle.getDeg();
+    public void eventGet(String s) {
+        if(!k.CAM_Disabled){ // if CAM is NOT disabled...
 
-                    vd.dt = vd.timeStamp - lastFrameTime;
-                    SmartDashboard.putNumber("Image dt",vd.dt);
-                    lastFrameTime = vd.timeStamp;
+            // ***********  H I G H  ***********
 
-                    VisionData oldData = targetHighStack.peek();
-                    if(vd.dt < 0.2 && oldData != null){
-                        vd.dDist = oldData.distance - vd.distance;
-                        vd.dAngle = oldData.angleTo - vd.angleTo;
-                        if(vd.dAngle > 180) vd.dAngle += 360;
-                        if(vd.dAngle < -180) vd.dAngle -= 360;
-                    } else {
-                        vd.dDist = 0;
-                        vd.dAngle = 0;
-                    }
+            if (cmdHighTarget) {
+                VisionData vd = new VisionData();
+                SmartDashboard.putString("VisionTargetHigh", s);
+                String[] parts = s.split(",");
 
-                    //saving the RSE values from when the picture was recieved
-                    //vd.rseX = rse.x;
-                    //vd.rseY = rse.y;
+                vd.distance = Double.parseDouble(parts[2]);
+                vd.angleTo = Double.parseDouble(parts[3]);
+                vd.angleOf = Double.parseDouble(parts[4]);
 
-                    double captureTime = Double.parseDouble(parts[0]);
-                    double processTime = Double.parseDouble(parts[1]);
-                    double latency = (vd.timeStamp - captureTime - processTime) / 2;
-                    SmartDashboard.putNumber("VisionLatency",latency);
-                    Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
-                    vd.rseX = p.x;
-                    vd.rseY = p.y;
-                    
-                    
-                    //transform the camera distance vector into a field relative position
-                    /*double camRad = vd.angleTo * Math.PI / 180;
-                    double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;
-                    double robotY = vd.distance * Math.cos(camRad) + k.CAM_Location_Y;
-                    vd.targetX = robotX * Math.cos(sense.robotAngle.getRad()) - robotY * Math.sin(sense.robotAngle.getRad()) + rse.x;
-                    vd.targetY = robotX * Math.sin(sense.robotAngle.getRad()) + robotY * Math.cos(sense.robotAngle.getRad()) + rse.y;
-*/
-                    targetHighStack.push(vd);
-                } catch(Exception e){
-                    e.printStackTrace();
+                vd.timeStamp = Timer.getFPGATimestamp();
+                vd.robotAngle = sense.robotAngle.getDeg();
+
+                vd.dt = vd.timeStamp - lastFrameTime;
+                SmartDashboard.putNumber("Image dt",vd.dt);
+                lastFrameTime = vd.timeStamp;
+
+                VisionData oldData = targetHighStack.peek();
+                if(vd.dt < 0.2 && oldData != null){
+                    vd.dDist = oldData.distance - vd.distance;
+                    vd.dAngle = oldData.angleTo - vd.angleTo;
+                    if(vd.dAngle > 180) vd.dAngle += 360;
+                    if(vd.dAngle < -180) vd.dAngle -= 360;
+                } else {
+                    vd.dDist = 0;
+                    vd.dAngle = 0;
                 }
-            }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
-            nt.addEntryListener("vis_target_low", (table,key,entry,value,flags) -> {
+                //saving the RSE values from when the picture was recieved
+                //vd.rseX = rse.x;
+                //vd.rseY = rse.y;
+
+                double captureTime = Double.parseDouble(parts[0]);
+                double processTime = Double.parseDouble(parts[1]);
+                double latency = (vd.timeStamp - captureTime - processTime) / 2;
+                SmartDashboard.putNumber("VisionLatency",latency);
+                Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
+                vd.rseX = p.x;
+                vd.rseY = p.y;
+                                
+                targetHighStack.push(vd);
+            } //End of HIGH
+            
+            // ***********  L O W  ***********
+
+            boolean hatch_in_the_way; //flat do test if cargo is going to block the camera
+            //don't trust the camera when hatch panel is in the way
+            hatch_in_the_way = (!in.cargoNotHatch && sense.elevatorEncoder > 16 && sense.elevatorEncoder < 35) ||
+                               (!k.SCR_ScorpioSelected && in.cargoNotHatch && sense.elevatorEncoder > 20 && sense.elevatorEncoder < 33);
+
+            if (cmdLowTarget && !hatch_in_the_way) { //If LOW and No elevator blocking us
+                VisionData vd = new VisionData();
+                SmartDashboard.putString("VisionTargetHigh", s);
+                String[] parts = s.split(",");
+
+                vd.distance = Double.parseDouble(parts[2]);
+                vd.angleTo = Double.parseDouble(parts[3]);
+                vd.angleOf = Double.parseDouble(parts[4]);
+
+                vd.timeStamp = Timer.getFPGATimestamp();
+                vd.robotAngle = sense.robotAngle.getDeg();
+
+                double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
+                double distY = vd.distance;
                 
-                //don't trust the camera when hatch panel is in the way
-                if(!in.cargoNotHatch && sense.elevatorEncoder > 16 && sense.elevatorEncoder < 35) return;
-                if(!k.SCR_ScorpioSelected && in.cargoNotHatch && sense.elevatorEncoder > 20 && sense.elevatorEncoder < 33) return;
+                //SALwasHere-SmartDashboard.putNumber("vdX" , distX);
+                //SALwasHere-SmartDashboard.putNumber("vdY", distY);
+
+                vd.dt = vd.timeStamp - lastFrameTime;
+                SmartDashboard.putNumber("Image dt",vd.dt);
+                lastFrameTime = vd.timeStamp;
+
+                VisionData oldData = targetLowStack.peek();
+                if(vd.dt < 0.2 && oldData != null){
+                    vd.dDist = oldData.distance - vd.distance;
+                    vd.dAngle = oldData.angleTo - vd.angleTo;
+                    if(vd.dAngle > 180) vd.dAngle += 360;
+                    if(vd.dAngle < -180) vd.dAngle -= 360;
+                } else {
+                    vd.dDist = 0;
+                    vd.dAngle = 0;
+                }
+
+                //saving the RSE values from when the picture was recieved
+                //vd.rseX = rse.x;
+                //vd.rseY = rse.y;
+
+                double captureTime = Double.parseDouble(parts[0]);
+                double processTime = Double.parseDouble(parts[1]);
+                double latency = (vd.timeStamp - captureTime - processTime) / 2;
+                SmartDashboard.putNumber("VisionLatency",latency);
+                Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
+                vd.rseX = p.x;
+                vd.rseY = p.y;
+
+                targetLowStack.push(vd);
+
+            } // end of LOW
+
+
+            // ***********  C A R G O  ***********
+            
+            if (cmdCargoTarget) {
+                VisionData vd = new VisionData();
+                SmartDashboard.putString("Cargo-Data", s);
+                String[] parts = s.split(",");
+
+                vd.distance = Double.parseDouble(parts[2]);
+                vd.angleTo = Double.parseDouble(parts[3]);
+                vd.angleOf = 0; //default 0 because angleOf is now a slope internally
                 
-                try{
-                    VisionData vd = new VisionData();
-                    String data = value.getString(); //seqNum, dist, angleTo, angleOf, etc?
-                    SmartDashboard.putString("VisionTargetLow", data);
-                    String[] parts = data.split(",");
+                vd.timeStamp = Timer.getFPGATimestamp();
+                vd.robotAngle = sense.robotAngle.getDeg();
 
-                    //int seqNum = Integer.parseInt(parts[0]);
-                    //SmartDashboard.putNumber("Image dSq",seqNum - lastSeqNum);
-                    //lastSeqNum = seqNum;
+                vd.dt = vd.timeStamp - lastFrameTime;
+                SmartDashboard.putNumber("Image dt",vd.dt);
+                lastFrameTime = vd.timeStamp;
 
-                    vd.distance = Double.parseDouble(parts[2]);
-                    vd.angleTo = Double.parseDouble(parts[3]);
-                    vd.angleOf = Double.parseDouble(parts[4]);
-
-                    vd.timeStamp = Timer.getFPGATimestamp();
-                    vd.robotAngle = sense.robotAngle.getDeg();
-
-                    double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
-                    double distY = vd.distance;
-                    
-                    SmartDashboard.putNumber("vdX" , distX);
-                    SmartDashboard.putNumber("vdY", distY);
-
-                    vd.dt = vd.timeStamp - lastFrameTime;
-                    SmartDashboard.putNumber("Image dt",vd.dt);
-                    lastFrameTime = vd.timeStamp;
-
-                    VisionData oldData = targetLowStack.peek();
-                    if(vd.dt < 0.2 && oldData != null){
-                        vd.dDist = oldData.distance - vd.distance;
-                        vd.dAngle = oldData.angleTo - vd.angleTo;
-                        if(vd.dAngle > 180) vd.dAngle += 360;
-                        if(vd.dAngle < -180) vd.dAngle -= 360;
-                    } else {
-                        vd.dDist = 0;
-                        vd.dAngle = 0;
-                    }
-
-                    //saving the RSE values from when the picture was recieved
-                    //vd.rseX = rse.x;
-                    //vd.rseY = rse.y;
-
-                    double captureTime = Double.parseDouble(parts[0]);
-                    double processTime = Double.parseDouble(parts[1]);
-                    double latency = (vd.timeStamp - captureTime - processTime) / 2;
-                    SmartDashboard.putNumber("VisionLatency",latency);
-                    Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
-                    vd.rseX = p.x;
-                    vd.rseY = p.y;
-
-                    /*/transform the camera distance vector into a field relative position
-                    double camRad = vd.angleTo * Math.PI / 180;
-                    double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;
-                    double robotY = vd.distance * Math.cos(camRad) + k.CAM_Location_Y;
-                    vd.targetX = robotX * Math.cos(sense.robotAngle.getRad()) - robotY * Math.sin(sense.robotAngle.getRad()) + rse.x;
-                    vd.targetY = robotX * Math.sin(sense.robotAngle.getRad()) + robotY * Math.cos(sense.robotAngle.getRad()) + rse.y;
-                    */
-                    targetLowStack.push(vd);
-                } catch(Exception e){
-                    e.printStackTrace();
+                VisionData oldData = cargoStack.peek();
+                if(vd.dt < 0.2 && oldData != null){
+                    vd.dDist = oldData.distance - vd.distance;
+                    vd.dAngle = oldData.angleTo - vd.angleTo;
+                    if(vd.dAngle > 180) vd.dAngle += 360;
+                    if(vd.dAngle < -180) vd.dAngle -= 360;
+                } else {
+                    vd.dDist = 0;
+                    vd.dAngle = 0;
                 }
-            }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
-            nt.addEntryListener("vis_cargo", (table,key,entry,value,flags) -> {
-                try{
-                    VisionData vd = new VisionData();
+                double captureTime = Double.parseDouble(parts[0]);
+                double processTime = Double.parseDouble(parts[1]);
+                double latency = (vd.timeStamp - captureTime - processTime) / 2;
+                SmartDashboard.putNumber("VisionLatency",latency);
+                Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
+                vd.rseX = p.x;
+                vd.rseY = p.y;
+                
+                cargoStack.push(vd);
 
-                    String data = value.getString(); //seqNum, dist, angle, x, y, radius
-                    SmartDashboard.putString("VisionCargo", data);
-                    String[] parts = data.split(",");
+            }// End of CARGO 
 
-                    vd.distance = Double.parseDouble(parts[2]);
-                    vd.angleTo = Double.parseDouble(parts[3]);
-                    vd.angleOf = 0; //default 0 because angleOf is now a slope internally
-                    
-                    vd.timeStamp = Timer.getFPGATimestamp();
-                    vd.robotAngle = sense.robotAngle.getDeg();
 
-                    vd.dt = vd.timeStamp - lastFrameTime;
-                    SmartDashboard.putNumber("Image dt",vd.dt);
-                    lastFrameTime = vd.timeStamp;
+        }//End of IF CAM not disabled
 
-                    VisionData oldData = cargoStack.peek();
-                    if(vd.dt < 0.2 && oldData != null){
-                        vd.dDist = oldData.distance - vd.distance;
-                        vd.dAngle = oldData.angleTo - vd.angleTo;
-                        if(vd.dAngle > 180) vd.dAngle += 360;
-                        if(vd.dAngle < -180) vd.dAngle -= 360;
-                    } else {
-                        vd.dDist = 0;
-                        vd.dAngle = 0;
-                    }
+    }//End of eventGet()
 
-                    double captureTime = Double.parseDouble(parts[0]);
-                    double processTime = Double.parseDouble(parts[1]);
-                    double latency = (vd.timeStamp - captureTime - processTime) / 2;
-                    SmartDashboard.putNumber("VisionLatency",latency);
-                    Point p = rse.getPositionAtTime(vd.timeStamp - latency - processTime);
-                    vd.rseX = p.x;
-                    vd.rseY = p.y;
-                    
-                    //transform the camera distance vector into a field relative position
-                    /*double camRad = vd.angleTo * Math.PI / 180;
-                    double robotX = -vd.distance * Math.sin(camRad) + k.CAM_Location_X;
-                    double robotY = vd.distance * Math.cos(camRad) + k.CAM_Location_Y;
-                    vd.targetX = robotX * Math.cos(sense.robotAngle.getRad()) - robotY * Math.sin(sense.robotAngle.getRad()) + rse.x;
-                    vd.targetY = robotX * Math.sin(sense.robotAngle.getRad()) + robotY * Math.cos(sense.robotAngle.getRad()) + rse.y;
-*/
-                    cargoStack.push(vd);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-        }
-
-    }
 
     public boolean lastTargetsGood(int count){
         //determine if we are looking for high or low targets
@@ -283,11 +261,17 @@ public class Vision extends Component {
         return targetLowStack.peek();
     }
 
+    public boolean cmdHighTarget;
+    public boolean cmdLowTarget;
+    public boolean cmdCargoTarget;
     public void run(){
         boolean PiHighSearch = in.scoringCargo && in.controlBoard.nearFarCargo != NearFarCargo.CARGO;
-        piFindCargo.setBoolean(in.searchingCargo || k.CAM_DebugCargo);
-        piFindTargetHigh.setBoolean(PiHighSearch || k.CAM_DebugTargetHigh);//(in.visionTargetHigh || k.CAM_DebugTargetHigh);//
-        piFindTargetLow.setBoolean((!PiHighSearch && !in.searchingCargo && !sense.isDisabled) || k.CAM_DebugTargetLow);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);
+        cmdCargoTarget = in.searchingCargo || k.CAM_DebugCargo;
+        piFindCargo.setBoolean(cmdCargoTarget);
+        cmdHighTarget = PiHighSearch || k.CAM_DebugTargetHigh;
+        piFindTargetHigh.setBoolean(cmdHighTarget);//(in.visionTargetHigh || k.CAM_DebugTargetHigh);//
+        cmdLowTarget = (!PiHighSearch && !in.searchingCargo && !sense.isDisabled) || k.CAM_DebugTargetLow;
+        piFindTargetLow.setBoolean(cmdLowTarget);//(in.visionTargetLow || k.CAM_DebugTargetLow);//(in.searchingHatch || k.CAM_DebugTargetLow);
         
         timestamp.setNumber(Timer.getFPGATimestamp());
         

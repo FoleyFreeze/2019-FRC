@@ -48,19 +48,19 @@ public class DriveTrain extends Component {
         if(in.dodgingL){
             dodge(firstDodge, -1);
             mode = "Dodge Left";
-            SmartDashboard.putString("Mode", mode);
+            //SALwasHere-SmartDashboard.putString("Mode", mode);
         }else if(in.dodgingR){
             dodge(firstDodge, 1);
             mode = "Dodge Right";
-            SmartDashboard.putString("Mode", mode);
+            //SALwasHere-SmartDashboard.putString("Mode", mode);
         }else if(in.fieldOriented) {
             fieldSwerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
             mode = "Field Oriented";
-            SmartDashboard.putString("Mode", mode);
+            //SALwasHere-SmartDashboard.putString("Mode", mode);
         }else{
             swerve(in.xAxisDrive, in.yAxisDrive, in.rotAxisDrive);
             mode = "Regular Swerve";
-            SmartDashboard.putString("Mode", mode);
+            //SALwasHere-SmartDashboard.putString("Mode", mode);
         }
     }
 
@@ -139,7 +139,7 @@ public class DriveTrain extends Component {
         
         //PID rotation until robot angle equals robotOrientation
         double angleErr = sense.robotAngle.subDeg(in.robotOrientation);
-        SmartDashboard.putNumber("autoRotateError", angleErr);
+        //SALwasHere-SmartDashboard.putNumber("autoRotateError", angleErr);
         double rotPower = angleErr * k.DRV_AutoRotateKP + sense.deltaRobotAngle * k.DRV_AutoRotateKD;
         rotPower = Math.max(-k.DRV_AutoRotatePwr, Math.min(k.DRV_AutoRotatePwr, rotPower));
         return rotPower;
@@ -173,7 +173,7 @@ public class DriveTrain extends Component {
         if(Math.abs(deltaDegSum) >= 360) turnPower = 0;
 
         fieldSwerve(dodgeDirX, dodgeDirY, turnPower);
-        SmartDashboard.putNumber("Turned Since Dodge:", deltaDegSum);
+        //SALwasHere-SmartDashboard.putNumber("Turned Since Dodge:", deltaDegSum);
     }
 
     //field oriented swerve
@@ -276,8 +276,8 @@ public class DriveTrain extends Component {
             parkMode = true;
             return;
         }
-        SmartDashboard.putBoolean("Park Mode?", parkMode);
-        SmartDashboard.putNumberArray("TargetAngles", outTheta);
+        //SALwasHere-SmartDashboard.putBoolean("Park Mode?", parkMode);
+        //SALwasHere-SmartDashboard.putNumberArray("TargetAngles", outTheta);
 
         //pid to target angle (theta)
         for(int i=0; i<4; i++){
@@ -291,7 +291,7 @@ public class DriveTrain extends Component {
 
                 outR[i] = -outR[i];
             }
-            SmartDashboard.putNumber("Error " + i, error);
+            //SALwasHere-SmartDashboard.putNumber("Error " + i, error);
             
             if(k.DRV_PIDOnSpark){
                 outError[i] = -error;
@@ -310,8 +310,8 @@ public class DriveTrain extends Component {
             out.setSwerveDriveTurn(outError[0], outError[1], outError[2], outError[3]);
         }
         
-        SmartDashboard.putNumberArray("Drive Power", outR);
-        SmartDashboard.putNumberArray("Turn Power", outError);
+        //SALwasHere-SmartDashboard.putNumberArray("Drive Power", outR);
+        //SALwasHere-SmartDashboard.putNumberArray("Turn Power", outError);
     }
 
     private Filter lpf = new Filter(0.5, true, 0.06, 0);
@@ -402,7 +402,7 @@ public class DriveTrain extends Component {
             vDist -= dRobotY;
             vXErr -= dRobotX;
 
-            SmartDashboard.putBoolean("Stage2", true);
+            //SALwasHere-SmartDashboard.putBoolean("Stage2", true);
 
             //if the angle indicates that we should be in stage 1
             boolean disableAutoShoot = Math.abs(elevator.getElevatorError()) > 2; //disable auto shoot while in stage 1 or elevator not ready
@@ -411,7 +411,7 @@ public class DriveTrain extends Component {
                 if(k.SCR_ScorpioSelected) vDist -= k.CAM_SCR_Stage1Offset;
                 else vDist -= k.CAM_GTH_Stage1Offset;
                 disableAutoShoot = true;
-                SmartDashboard.putBoolean("Stage2", false);
+                //SALwasHere-SmartDashboard.putBoolean("Stage2", false);
             }
             
             //Calculate actual angle to (From front of bot, not camera)
@@ -434,10 +434,10 @@ public class DriveTrain extends Component {
             }
             double vAmplitude = Util.limit(vPwr, k.DRV_CamDriveMaxPwr_Y);// - k.DRV_CamDriveMinPwr_Y;
             
-            SmartDashboard.putNumber("vDist", vDist);
-            SmartDashboard.putNumber("vXErr", vXErr);
-            SmartDashboard.putNumber("vAngle", vAngle);
-            SmartDashboard.putNumber("vAmplitude", vAmplitude);
+            //SALwasHere-SmartDashboard.putNumber("vDist", vDist);
+            //SALwasHere-SmartDashboard.putNumber("vXErr", vXErr);
+            //SALwasHere-SmartDashboard.putNumber("vAngle", vAngle);
+            //SALwasHere-SmartDashboard.putNumber("vAmplitude", vAmplitude);
 
 
             //Break vector into X and Y components
@@ -446,7 +446,7 @@ public class DriveTrain extends Component {
             //Send to drivetrain
             double rotPower = pidOrient();
             
-            SmartDashboard.putNumber("vHypot",vHypot);
+            //SALwasHere-SmartDashboard.putNumber("vHypot",vHypot);
 
 
             double allowableXErr;
@@ -477,9 +477,9 @@ public class DriveTrain extends Component {
             } else {
                 swerve(vX, vY, rotPower);
             }
-            SmartDashboard.putNumber("camDrive_AllowableAngle",allowableXErr);
-            SmartDashboard.putBoolean("disableAutoShoot",disableAutoShoot);
-            SmartDashboard.putNumber("vOffset",vOffset);
+            //SALwasHere-SmartDashboard.putNumber("camDrive_AllowableAngle",allowableXErr);
+            //SALwasHere-SmartDashboard.putBoolean("disableAutoShoot",disableAutoShoot);
+            //SALwasHere-SmartDashboard.putNumber("vOffset",vOffset);
             
             
         }

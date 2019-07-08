@@ -98,19 +98,19 @@ public class RSE extends Component {
                 selection = 3;
             //}
         }
-        SmartDashboard.putString("HabStartLoc",habStartLoc);
+        //SALwasHere-SmartDashboard.putString("HabStartLoc",habStartLoc);
 
         //determine when to re-zero (only when picking up hatches and facing a loading station)
         if(sense.hasHatchEdge && sense.hasHatch && !in.shift && Math.abs(sense.robotAngle.subDeg(180)) < 10) {
             if(in.autoDrive){ //if in autoDrive, use left/right switch to know which loading station we are at
                 if(in.leftNotRight){
-                    SmartDashboard.putNumber("RSE_ErrX",x - -k.AD_LoadingStationX);
-                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrX",x - -k.AD_LoadingStationX);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = -k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 } else {
-                    SmartDashboard.putNumber("RSE_ErrX",x - k.AD_LoadingStationX);
-                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrX",x - k.AD_LoadingStationX);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 }
@@ -118,13 +118,13 @@ public class RSE extends Component {
                 double dist1 = Util.dist(-k.AD_LoadingStationX,k.AD_RobotHeight/2, x,y);
                 double dist2 = Util.dist(k.AD_LoadingStationX,k.AD_RobotHeight/2, x,y);
                 if(dist1 < dist2){
-                    SmartDashboard.putNumber("RSE_ErrX",x - -k.AD_LoadingStationX);
-                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrX",x - -k.AD_LoadingStationX);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = -k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 } else {
-                    SmartDashboard.putNumber("RSE_ErrX",x - k.AD_LoadingStationX);
-                    SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrX",x - k.AD_LoadingStationX);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrY",y - k.AD_RobotHeight/2);
                     x = k.AD_LoadingStationX;
                     y = k.AD_RobotHeight/2;
                 }
@@ -146,8 +146,8 @@ public class RSE extends Component {
                 double yDest = k.AD_NearRocketYHatch;
                 double distError = Util.dist(x, y, xDest, yDest);
                 if(distError < k.AD_MaxDistError){
-                    SmartDashboard.putNumber("RSE_ErrX",x - xDest);
-                    SmartDashboard.putNumber("RSE_ErrY",y - yDest);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrX",x - xDest);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrY",y - yDest);
                     x = xDest;
                     y = yDest;
                 }
@@ -156,8 +156,8 @@ public class RSE extends Component {
                 double yDest = k.AD_FarRocketYHatch;
                 double distError = Util.dist(x, y, xDest, yDest);
                 if(distError < k.AD_MaxDistError){
-                    SmartDashboard.putNumber("RSE_ErrX",x - xDest);
-                    SmartDashboard.putNumber("RSE_ErrY",y - yDest);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrX",x - xDest);
+                    //SALwasHere-SmartDashboard.putNumber("RSE_ErrY",y - yDest);
                     x = xDest;
                     y = yDest;
                 }
@@ -171,8 +171,8 @@ public class RSE extends Component {
             double yDest = k.AD_RocketYCargo;
             double distError = Util.dist(x, y, xDest, yDest);
             if(distError < k.AD_MaxDistError){
-                SmartDashboard.putNumber("RSE_ErrX",x - xDest);
-                SmartDashboard.putNumber("RSE_ErrY",y - yDest);
+                //SALwasHere-SmartDashboard.putNumber("RSE_ErrX",x - xDest);
+                //SALwasHere-SmartDashboard.putNumber("RSE_ErrY",y - yDest);
                 x = xDest;
                 y = yDest;
             }
@@ -195,7 +195,7 @@ public class RSE extends Component {
         // read navx
         double deltaRobotAngle = sense.robotAngle.subDeg(prevRobotAngle);
         prevRobotAngle = sense.robotAngle.getDeg();
-        SmartDashboard.putNumber("RSEdTheta", deltaRobotAngle);
+        //SALwasHere-SmartDashboard.putNumber("RSEdTheta", deltaRobotAngle);
         double sumDX = 0;
         double sumDY = 0;
 
@@ -204,17 +204,17 @@ public class RSE extends Component {
             double deltaWheelAng = sense.angles[i].subDeg(prevWheelAngle[i]);
             double avgWheelAng = deltaWheelAng*.5 + prevWheelAngle[i];
             prevWheelAngle[i] = sense.angles[i].getDeg();
-            SmartDashboard.putNumber("RSEwheelAngle"+i,avgWheelAng);
+            //SALwasHere-SmartDashboard.putNumber("RSEwheelAngle"+i,avgWheelAng);
             
             // delta of wheel encoders
             double deltaDriveEnc = sense.driveEnc[i] - prevEnc[i];
             prevEnc[i] = sense.driveEnc[i];
-            SmartDashboard.putNumber("RSEdDriveEnc"+i, deltaDriveEnc);
+            //SALwasHere-SmartDashboard.putNumber("RSEdDriveEnc"+i, deltaDriveEnc);
 
             //wheel r, theta
             double r = deltaDriveEnc;
             double theta = avgWheelAng + deltaWheelAng/2;
-            SmartDashboard.putNumber("RSEWheeltheta"+i, theta);
+            //SALwasHere-SmartDashboard.putNumber("RSEWheeltheta"+i, theta);
 
                 // back to radians
             theta *= Math.PI/180;
@@ -261,10 +261,10 @@ public class RSE extends Component {
         idxOffset++;
         if(idxOffset >= rseXs.length) idxOffset = 0;
 
-        SmartDashboard.putNumber("RSE dX", sumDX);
-        SmartDashboard.putNumber("RSE dY", sumDY);
-        SmartDashboard.putNumber("RSE X", x);
-        SmartDashboard.putNumber("RSE Y", y);
+        //SALwasHere-SmartDashboard.putNumber("RSE dX", sumDX);
+        //SALwasHere-SmartDashboard.putNumber("RSE dY", sumDY);
+        //SALwasHere-SmartDashboard.putNumber("RSE X", x);
+        //SALwasHere-SmartDashboard.putNumber("RSE Y", y);
     }
 
     private double[] timestamps;

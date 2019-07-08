@@ -215,21 +215,21 @@ public class OutputsCompBot extends Outputs {
         }
         if(!k.CLM_disable){
             sense.climberEncoder = climbMotor.getEncoder().getPosition();//value in motor rotations
-            SmartDashboard.putNumber("ClimbMotorCurrent",climbMotor.getOutputCurrent());
-            SmartDashboard.putNumber("ClimbMotorVoltage",climbMotor.getBusVoltage());
+            //SALwasHere-SmartDashboard.putNumber("ClimbMotorCurrent",climbMotor.getOutputCurrent());
+            //SALwasHere-SmartDashboard.putNumber("ClimbMotorVoltage",climbMotor.getBusVoltage());
         }
         if(!k.GTH_DisableGather && k.SCR_ScorpioSelected){
             sense.scorpioArmEnc = gatherArmMotor.getEncoder().getPosition();
             //sense.scorpioArmEnc = -gatherArmMotor.getSelectedSensorPosition();
         }
         
-        SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
-        SmartDashboard.putNumber("Enc FR", sense.driveEnc[1]);
-        SmartDashboard.putNumber("Enc RL", sense.driveEnc[2]);
-        SmartDashboard.putNumber("Enc RR", sense.driveEnc[3]);
-        SmartDashboard.putNumber("Enc Ele", sense.elevatorEncoder);
-        SmartDashboard.putNumber("Enc Climb", sense.climberEncoder);
-        SmartDashboard.putNumber("Enc SCR", sense.scorpioArmEnc);
+        //SALwasHere-SmartDashboard.putNumber("Enc FL", sense.driveEnc[0]);
+        //SALwasHere-SmartDashboard.putNumber("Enc FR", sense.driveEnc[1]);
+        //SALwasHere-SmartDashboard.putNumber("Enc RL", sense.driveEnc[2]);
+        //SALwasHere-SmartDashboard.putNumber("Enc RR", sense.driveEnc[3]);
+        //SALwasHere-SmartDashboard.putNumber("Enc Ele", sense.elevatorEncoder);
+        //SALwasHere-SmartDashboard.putNumber("Enc Climb", sense.climberEncoder);
+        //SALwasHere-SmartDashboard.putNumber("Enc SCR", sense.scorpioArmEnc);
     }
 
     public void resetEnc(){
@@ -248,10 +248,10 @@ public class OutputsCompBot extends Outputs {
         double lb = limit(powerLB*k.DRV_SwerveDrivePwrScale/*, rLDriveMil*/);
         double rb = limit(powerRB*k.DRV_SwerveDrivePwrScale/*, rRDriveMil*/);
         
-        SmartDashboard.putNumber("Drive_LF",lf);
-        SmartDashboard.putNumber("Drive_RF",rf);
-        SmartDashboard.putNumber("Drive_LB",lb);
-        SmartDashboard.putNumber("Drive_RB",rb);
+        //SALwasHere-SmartDashboard.putNumber("Drive_LF",lf);
+        //SALwasHere-SmartDashboard.putNumber("Drive_RF",rf);
+        //SALwasHere-SmartDashboard.putNumber("Drive_LB",lb);
+        //SALwasHere-SmartDashboard.putNumber("Drive_RB",rb);
 
         frontLeftMotorDrive.set(lf);
         frontRightMotorDrive.set(rf);
