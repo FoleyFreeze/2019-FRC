@@ -54,6 +54,6 @@ public class Climber extends Component{
            out.climbMotor(0); 
            climb = "Nope";
         }
-        //SALwasHere-SmartDashboard.putString("Climb Status", climb);
+        SmartDashboard.putString("Climb Status", climb);
     }
 }

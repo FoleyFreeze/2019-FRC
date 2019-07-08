@@ -27,7 +27,7 @@ public class CurrentLimit extends Component{
          current = sense.pdp.getCurrent(channel);
         } catch (Error e){
             System.out.println(e.getMessage());
-            //SALwasHere-SmartDashboard.putNumber("TimeOfPDPError", Timer.getFPGATimestamp());
+            SmartDashboard.putNumber("TimeOfPDPError", Timer.getFPGATimestamp());
             current = 0;
         }
         if(current>limitCurr){

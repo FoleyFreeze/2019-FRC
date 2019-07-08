@@ -207,7 +207,7 @@ public class ScorpioGatherer extends ArmGatherer {
                 break;
             }
 
-            //SALwasHere-SmartDashboard.putString("ScorpioState",armState.name());
+            SmartDashboard.putString("ScorpioState",armState.name());
         }
     }
 

@@ -193,8 +193,8 @@ public class ControlBoard {
         joy.setOutput(OUT_cargoShip, nearFarCargo == NearFarCargo.CARGO 
                         || nearFarCargo == NearFarCargo.DEFAULT);
 
-        //SALwasHere-SmartDashboard.putString("RocketState",rocketCargoState.name());
-        //SALwasHere-SmartDashboard.putString("NearFarCargoState",nearFarCargo.name());
+        SmartDashboard.putString("RocketState",rocketCargoState.name());
+        SmartDashboard.putString("NearFarCargoState",nearFarCargo.name());
     }
 
 

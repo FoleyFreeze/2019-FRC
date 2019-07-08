@@ -134,8 +134,8 @@ public class Vision extends Component implements PiEvent {
                 double distX = (vd.distance + 16) * Math.tan(Angle.toRad(vd.angleTo));
                 double distY = vd.distance;
                 
-                //SALwasHere-SmartDashboard.putNumber("vdX" , distX);
-                //SALwasHere-SmartDashboard.putNumber("vdY", distY);
+                SmartDashboard.putNumber("vdX" , distX);
+                SmartDashboard.putNumber("vdY", distY);
 
                 vd.dt = vd.timeStamp - lastFrameTime;
                 SmartDashboard.putNumber("Image dt",vd.dt);

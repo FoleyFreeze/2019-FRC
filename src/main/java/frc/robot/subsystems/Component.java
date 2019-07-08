@@ -105,7 +105,7 @@ public class Component {
         out.run();
         leds.run();
 	    display.run();
-        //SALwasHere-SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());
+        SmartDashboard.putString("Which bot?", Calibrations.BOT_Version.toString());
     }
 
 }

@@ -25,8 +25,8 @@ public class MilEncoder extends Component{
 
     public boolean isActive() {
         if(k.MIL_Disabled) return false;
-        //SALwasHere-SmartDashboard.putBoolean("Mil " + name, status);
-        //SALwasHere-SmartDashboard.putNumber("Mil val " + name, filt.getVal());
+        SmartDashboard.putBoolean("Mil " + name, status);
+        SmartDashboard.putNumber("Mil val " + name, filt.getVal());
         return status;
     }
 
