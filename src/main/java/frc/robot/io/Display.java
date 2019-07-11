@@ -18,6 +18,7 @@ public class Display extends Component{
 	NetworkTableEntry startLocName;
 	NetworkTableEntry hab2Status;
 	NetworkTableEntry robotAngle;
+	NetworkTableEntry climbEnc;
 
     public Display(){
 
@@ -33,6 +34,7 @@ public class Display extends Component{
 		startLocName = compTab.add("HabStartLoc","None").withPosition(1,0).getEntry();
 		hab2Status = compTab.add("Hab2Start",false).withPosition(0,2).getEntry();
 		robotAngle = compTab.add("RobotAngle",0).withPosition(0,3).getEntry();
+		climbEnc = compTab.add("ClimbEnc", 0).withPosition(3,1).getEntry();
     }
 	
 	public void run(){
@@ -46,6 +48,7 @@ public class Display extends Component{
 		startLocName.setString(rse.habStartLoc);
 		hab2Status.setBoolean(autoDriving.startingHab2);
 		robotAngle.setDouble(sense.robotAngle.getDeg());
+		climbEnc.setDouble(sense.climberEncoder);
 	}
 
 }

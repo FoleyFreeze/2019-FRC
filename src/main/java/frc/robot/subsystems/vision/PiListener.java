@@ -59,10 +59,11 @@ public class PiListener implements Runnable {
             }
 		} catch (IOException e) {
             System.out.println("PiListener exception of some sort: exit");
-            e.printStackTrace();
-			System.exit(1);
+			e.printStackTrace();
+			//System.exit(1);
 		} finally {
 			try {
+				clientSocket.close();
 				serverSocket.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

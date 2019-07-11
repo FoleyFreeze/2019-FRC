@@ -28,10 +28,10 @@ public class Calibrations{
     public double DRV_TurnSparkKDFilt = 0.5;
     public double DRV_TurnSparkKF = 0;
     //Not Used public double   DRV_CountsPerDegree = 4161.0/3600.0;//4161 in 10 rotations
-    public double DRV_WheelDiameterFL = 3;//3.594;//3.565; //3.756; //b4 CMP was: 2.908;//2.998;
-    public double DRV_WheelDiameterFR = 3;//3.594;//3.565; //3.756; //b4 CMP was: 2.905;//2.985;
-    public double DRV_WheelDiameterRL = 3;//3.594;//3.565; //3.756; //b4 CMP was: 3.065;
-    public double DRV_WheelDiameterRR = 3;//3.594;//3.565; //3.756; //b4 CMP was: 3.009;
+    public double DRV_WheelDiameterFL = 3.034;//3;//3.594;//3.565; //3.756; //b4 CMP was: 2.908;//2.998;
+    public double DRV_WheelDiameterFR = 3.007;//3;//3.594;//3.565; //3.756; //b4 CMP was: 2.905;//2.985;
+    public double DRV_WheelDiameterRL = 3.016;//3;//3.594;//3.565; //3.756; //b4 CMP was: 3.065;
+    public double DRV_WheelDiameterRR = 3.027;//3;//3.594;//3.565; //3.756; //b4 CMP was: 3.009;
     public double   DRV_WheelGearRatio = 10.0/24.0*0.5*Math.PI;
     public double   DRV_RotCentX = 0.0;
     public double   DRV_RotCentY = 0.0;
@@ -199,8 +199,8 @@ public class Calibrations{
     public double CLM_MotorSpeedDn = -1;//now shift climb is full power up
     public double CLM_EncoderLimit = 70;
     public double CLM_LowerEleHeight = 20;
-    public double CLM_Zone_1 = 15;//15;//30;//20;
-    public double CLM_Zone_2 = 61;//83;//75;//67;//60;
+    public double CLM_Zone_1 = 17;//15;//15;//30;//20;
+    public double CLM_Zone_2 = 67;//61;//83;//75;//67;//60;
     public double CLM_Zone_3 = CLM_EncoderLimit;
     public double CLM_Zone_Power_1 = 0.7; //.6
     public double CLM_Zone_Power_2 = 1;
