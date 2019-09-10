@@ -1,5 +1,7 @@
 package frc.robot.subsystems.vision;
 import java.net.*;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.*;
 
@@ -33,30 +35,45 @@ public class PiListener implements Runnable {
 		String inputLine;
 		Socket clientSocket = null;
 
-        BufferedReader in;
+		BufferedReader in;
+		BufferedWriter out;
 		try {
-            InetAddress addr = InetAddress.getByName(ip_address);
+			
+			while(true) {
+				InetAddress addr = InetAddress.getByName(ip_address);
 
-            serverSocket = new ServerSocket(port, BACKLOG, addr); 
-            //serverSocket = new ServerSocket();
-            serverSocket.setReuseAddress(true);
+				serverSocket = new ServerSocket(port, BACKLOG, addr); 
+				//serverSocket = new ServerSocket();
+				serverSocket.setReuseAddress(true);
 
-			SmartDashboard.putString("SocketStatus", "Waiting for connection.....");
+				SmartDashboard.putString("SocketStatus", "Waiting for connection.....");
 
-            clientSocket = serverSocket.accept();
-            clientSocket.setKeepAlive(true);
-            SmartDashboard.putString("SocketStatus","Connection successful");
+				clientSocket = serverSocket.accept();			
+				//clientSocket.setKeepAlive(true);
+				clientSocket.setSoTimeout(1000);
+				SmartDashboard.putString("SocketStatus","Connection successful");
 
-			// Retrieve string from socket 
-			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				// Retrieve string from socket 
+				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				//out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
-			while (true) {
-                inputLine = in.readLine();    // Get message
-                if (inputLine != null){
-                    SmartDashboard.putBoolean("BufferEmpty",!in.ready());
-                    event.eventGet(inputLine); // Send message
-                }
-            }
+				int count = 0;
+				try{
+					while (true) {
+						inputLine = in.readLine();    // Get message
+						if (inputLine != null){
+							SmartDashboard.putBoolean("BufferEmpty",!in.ready());
+							event.eventGet(inputLine); // Send message
+							//out.write(count++);
+							Vision.recieveCountNT.setNumber(count++);
+						}
+					}
+				} catch(SocketTimeoutException e){
+					//took too long, reset
+					System.out.println("Socket timeout at " + Timer.getFPGATimestamp());
+				}	
+
+			}
 		} catch (IOException e) {
             System.out.println("PiListener exception of some sort: exit");
 			e.printStackTrace();

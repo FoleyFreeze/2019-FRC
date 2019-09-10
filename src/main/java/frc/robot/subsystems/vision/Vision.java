@@ -28,6 +28,7 @@ public class Vision extends Component implements PiEvent {
     NetworkTableEntry piFindTargetHigh;
     NetworkTableEntry piFindTargetLow;
     NetworkTableEntry timestamp;
+    public static NetworkTableEntry recieveCountNT;
 
     double lastFrameTime;
     int lastSeqNum;
@@ -53,6 +54,7 @@ public class Vision extends Component implements PiEvent {
         piFindTargetHigh = piCommands.getEntry("FindTargetHigh");
         piFindTargetLow = piCommands.getEntry("FindTargetLow");
         timestamp = piCommands.getEntry("Timestamp");
+        recieveCountNT = piCommands.getEntry("RecieveCount");
 
         targetHighStack = new LimitedStack<>(5);
         targetLowStack = new LimitedStack<>(5);
